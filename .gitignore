@@ -1,0 +1,10 @@
+.venv
+*.egg-info
+__pycache__
+env.sh
+asc.db
+requirements.txt
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

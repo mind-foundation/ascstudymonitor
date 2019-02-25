@@ -1,0 +1,122 @@
+<html>
+<head>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel='stylesheet' id='datatables'  href='https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css' type='text/css' media='all' />
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+    <script>
+        function renderAuthors(data, type, row) {
+            if (data && data.length) {
+                return data.map(function(author) {
+                    const first_name = author.first_name ? author.first_name : '';
+                    const last_name = author.last_name ? author.last_name : '';
+                    return [first_name, last_name].join(' ');
+                }).join('<br \>');
+            }
+            else {
+                return '';
+            }
+        }
+
+        function furtherInfo(doc) {
+            const abstractHtml = `
+                <h2 class="furtherInfoHeader">Abstract</h2>
+                <div class="furtherInfoText">${doc.abstract}</div>
+            `;
+            const citationHtml = `
+                <h2 class="furtherInfoHeader">Citation</h2>
+                <div class="furtherInfoText">${doc.citation}</div>
+            `;
+
+            const abstract = doc.abstract ? abstractHtml : '';
+            const citation = doc.citation ? citationHtml : '';
+            const website = doc.websites ? `<a href="${doc.websites[0]}">Show on Publisher Website</a>` : '';
+            const download = doc.file_attached ? `<a href="/download/${doc.id}">Download full text</a>` : '';
+
+            return `
+                <div class="furtherInfo">
+                    <div class="furtherInfoContent">
+                        ${abstract}
+                        ${citation}
+                    </div>
+                    <div class="furtherInfoAction">
+                        <h2 class="furtherInfoHeader"></h2>
+                        ${website}
+                        ${download}
+                    </div>
+                </div>
+            `
+        }
+
+        $(document).ready(function() {
+            const table = $('#ascTable').DataTable({
+                "ajax": {
+                    "url": "/documents.json",
+                    "dataSrc": "",
+                },
+                "columns": [
+                    {"data": "title", "width": "20%"},
+                    {"data": "authors", "render": renderAuthors, "width": "10%"},
+                    {"data": "year", "defaultContent": "", "width": "5%"},
+                    {"data": "discipline", "defaultContent": "", "width": "10%"},
+                    {"data": "source", "defaultContent": "", "width": "15%"},
+                    ],
+                "pageLength": 20,
+                "dom": 'f t p i',
+                "language": {
+                    "paginate": {
+                        "first":      "<<",
+                        "last":       ">>",
+                        "next":       ">",
+                        "previous":   "<"
+                    },
+                }
+            });
+
+            $('#ascTable tBody').on('click', 'tr', function() {
+                const tr = $(this).closest('tr');
+                const row = table.row(tr);
+                if (row.child.isShown()) {
+                    row.child.hide();
+                    tr.removeClass('shown');
+                } else {
+                    row.child(furtherInfo(row.data())).show();
+                    tr.addClass('shown');
+                }
+            });
+        });
+    </script>
+    <style>
+        .furtherInfo {
+            display: grid;
+            grid-template-columns: auto 15%;
+            grid-column-gap: 20px;
+        }
+        .furtherInfoContent {
+            grid-column: 1;
+        }
+        .furtherInfoAction {
+            grid-column: 2;
+        }
+        .furtherInfoAction a {
+            display: block;
+        }
+        .furtherInfoHeader {
+            font-size: 20;
+        }
+    </style>
+</head>
+<body>
+    <table id="ascTable" class="display">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Authors</th>
+                <th>Year</th>
+                <th>Discipline</th>
+                <th>Published in</th>
+            </tr>
+        </thead>
+    </table>
+</body>
+</html>
