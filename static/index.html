@@ -18,6 +18,14 @@
             }
         }
 
+        function transformIdentifiers(data, type, row) {
+            return data ? Object.values(data).join(' ') : '';
+        }
+
+        function transformKeywords(data, type, row) {
+            return data ? data.join(' ') : '';
+        }
+
         function furtherInfo(doc) {
             const abstractHtml = `
                 <h2 class="furtherInfoHeader">Abstract</h2>
@@ -60,7 +68,13 @@
                     {"data": "year", "defaultContent": "", "width": "5%"},
                     {"data": "discipline", "defaultContent": "", "width": "10%"},
                     {"data": "source", "defaultContent": "", "width": "15%"},
-                    ],
+
+                    // hidden but searchable columns
+                    {"data": "abstract", "defaultContent": "", "visible": false},
+                    {"data": "keywords", "defaultContent": "", "render": transformKeywords, "visible": false},
+                    {"data": "identifiers", "defaultContent": "", "render": transformIdentifiers, "visible": false},
+                    {"data": "year", "defaultContent": "", "visible": false},
+                ],
                 "pageLength": 20,
                 "dom": 'f t p i',
                 "language": {
