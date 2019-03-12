@@ -1,7 +1,7 @@
 """ ASC Study Monitor Infrastructure """
 __version__ = '0.1.0'
 
-from flask import Flask, jsonify, redirect, abort
+from flask import Flask, Response, jsonify, redirect, abort
 
 app = Flask(__name__, static_folder='../static')
 
@@ -19,18 +19,28 @@ def documents():
 
 @app.route('/download/<doc_id>')
 def download(doc_id):
+    """ Download a attached PDF document """
     download_url = mendeleur.get_download_url(doc_id)
     return redirect(download_url, code=301)
 
 
 @app.route('/download_backroom/<doc_id>')
 def download_backroom(doc_id):
+    """ TODO: download page with sci-hub links """
     return abort(404)
 
 
 @app.route('/search_fulltext/<query>')
 def search_fulltext(query):
+    """ TODO: fulltext search in file archive """
     return abort(404)
+
+
+@app.route('/update')
+def update():
+    """ Update bibliography """
+    mendeleur.update()
+    return Response('success', mimetype='text/plain')
 
 
 @app.route('/')

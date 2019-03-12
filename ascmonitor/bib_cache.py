@@ -1,7 +1,7 @@
 """
 Stores the document library in a database
 """
-# pylint: disable=missing-docstring
+# pylint: disable=missing-docstring,too-few-public-methods
 from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy

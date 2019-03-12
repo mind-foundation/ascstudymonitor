@@ -33,10 +33,15 @@ class Mendeleur:
     def documents(self):
         """ Return documents as list """
         if cache.needs_update():
-            documents = self._fetch_documents_from_mendeley()
-            cache.update_documents(documents)
+            documents = self.update()
         else:
             documents = cache.get_documents()
+        return documents
+
+    def update(self):
+        """ Update the document cache and return documents """
+        documents = self._fetch_documents_from_mendeley()
+        cache.update_documents(documents)
         return documents
 
     def get_download_url(self, document_id):
