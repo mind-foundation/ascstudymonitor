@@ -1,0 +1,9 @@
+TODO
+
+ - citation generator
+ - show 1. figure
+
+Twitter Bot
+ - /update endpoint
+ - CRON job calling update every 5 minutes
+ - on update: tweet new papers
