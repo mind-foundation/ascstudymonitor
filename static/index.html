@@ -76,7 +76,7 @@
                     {"data": "year", "defaultContent": "", "visible": false},
                 ],
                 "pageLength": 20,
-                "dom": 'f t p i',
+                "dom": 't p i',
                 "ordering": false,
                 "language": {
                     "paginate": {
@@ -99,6 +99,12 @@
                     tr.addClass('shown');
                 }
             });
+
+            $('#ascSearch').on('change keyup', function(event) {
+                console.log(event);
+                const query = $('#ascSearch').val();
+                table.search(query).draw();
+            });
         });
     </script>
     <style>
@@ -119,9 +125,20 @@
         .furtherInfoHeader {
             font-size: 20;
         }
+
+        #ascSearch {
+            padding: 0px 5px;
+            margin: 0;
+            height: 30px;
+            width: 100%;
+            font-size: 17px;
+        }
     </style>
 </head>
 <body>
+    <p>
+        <input type="text" id="ascSearch" placeholder="Search...">
+    </p>
     <table id="ascTable" class="display">
         <thead>
             <tr>

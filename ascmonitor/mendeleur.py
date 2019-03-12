@@ -10,9 +10,11 @@ class Mendeleur:
     """ Access documents on mendeley """
 
     def __init__(self, client_id, client_secret, redirect_uri, user, password):
+        """ Initialize the Mendeley client """
         self._authenticate(client_id, client_secret, redirect_uri, user, password)
 
     def _authenticate(self, client_id, client_secret, redirect_uri, user, password):
+        """ Authenticate the mendeley client """
         mendeley = Mendeley(
             client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri
         )
