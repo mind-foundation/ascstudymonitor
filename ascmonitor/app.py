@@ -2,6 +2,7 @@
 
 from ascmonitor import app
 
+# alias for AWS
 application = app
 
 if __name__ == '__main__':

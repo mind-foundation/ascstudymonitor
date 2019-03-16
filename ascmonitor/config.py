@@ -1,9 +1,9 @@
 """ Configuration for ASC Study Monitor """
 
-from datetime import timedelta
 import os
 
-mendeley = {
+
+mendeley_authinfo = {
     'client_id': os.environ['MENDELEY_CLIENT_ID'],
     'client_secret': os.environ['MENDELEY_CLIENT_SECRET'],
     'redirect_uri': os.environ['MENDELEY_REDIRECT_URI'],
@@ -11,10 +11,7 @@ mendeley = {
     'password': os.environ['MENDELEY_PASSWORD'],
 }
 
-if 'RDS_HOSTNAME' in os.environ:
-    # running on aws
-    ascdb_uri = f"mysql://{os.environ['RDS_USERNAME']}:{os.environ['RDS_PASSWORD']}@{os.environ['RDS_HOSTNAME']}:{os.environ['RDS_PORT']}/{os.environ['RDS_DB_NAME']}"
-else:
-    ascdb_uri = os.environ['ASCDB_URI']
+redis_config = {'host': 'localhost', 'port': 6379, 'db': 0}
 
-refresh_interval = timedelta(seconds=300)
+# document cache expiry time in seconds
+cache_expires = 300

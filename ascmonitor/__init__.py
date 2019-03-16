@@ -1,26 +1,26 @@
 """ ASC Study Monitor Infrastructure """
 __version__ = '0.1.0'
 
+from redis import Redis
 from flask import Flask, Response, jsonify, redirect, abort
 
+from ascmonitor.config import mendeley_authinfo, redis_config
+from ascmonitor.document_store import MendeleyAuthInfo, DocumentStore
+
 app = Flask(__name__, static_folder='../static')
-
-from ascmonitor.config import mendeley
-from ascmonitor.mendeleur import Mendeleur
-
-mendeleur = Mendeleur(**mendeley)
+document_store = DocumentStore(MendeleyAuthInfo(**mendeley_authinfo), Redis(**redis_config))
 
 
 @app.route('/documents.json')
 def documents():
     """ Return documents as JSON """
-    return jsonify(mendeleur.documents)
+    return jsonify(document_store.documents)
 
 
 @app.route('/download/<doc_id>')
 def download(doc_id):
     """ Download a attached PDF document """
-    download_url = mendeleur.get_download_url(doc_id)
+    download_url = document_store.get_download_url(doc_id)
     return redirect(download_url, code=301)
 
 
@@ -39,7 +39,7 @@ def search_fulltext(query):
 @app.route('/update')
 def update():
     """ Update bibliography """
-    mendeleur.update()
+    document_store.update()
     return Response('success', mimetype='text/plain')
 
 

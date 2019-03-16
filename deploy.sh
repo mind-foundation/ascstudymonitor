@@ -1,11 +1,5 @@
 #!/bin/sh
 
 # deploy the app
-
-source .venv/bin/activate
-
-pip freeze --exclude-editable > requirements.txt
-
-deactivate
-
+poetry run pip freeze --exclude-editable > requirements.txt
 eb deploy
