@@ -25,7 +25,7 @@ def extract_disciplin(document):
         tags = document['tags']
         for tag in tags:
             if tag.lower().startswith('disc:'):
-                disciplines.extend(tag[5:].split(''))
+                disciplines.extend(tag[5:].split(':'))
     return {**document, 'disciplines': disciplines}
 
 
