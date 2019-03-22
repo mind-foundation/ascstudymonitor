@@ -20,6 +20,15 @@
             }
         }
 
+        function renderDisciplines(data, type, row) {
+            if (data && data.length) {
+                return data.join('<br \>');
+            }
+            else {
+                return '';
+            }
+        }
+
         function transformIdentifiers(data, type, row) {
             return data ? Object.values(data).join(' ') : '';
         }
@@ -66,7 +75,7 @@
                     {"data": "title", "width": "auto"},
                     {"data": "authors", "render": renderAuthors, "width": "20%"},
                     {"data": "year", "defaultContent": "", "width": "5%", "className": "dt-center"},
-                    {"data": "discipline", "defaultContent": "", "width": "10%"},
+                    {"data": "disciplines", "defaultContent": "", "render": renderDisciplines, "width": "10%"},
                     {"data": "source", "defaultContent": "", "width": "20%"},
 
                     // column to define order
@@ -193,7 +202,7 @@
                 <th>Title</th>
                 <th>Authors</th>
                 <th>Year</th>
-                <th>Discipline</th>
+                <th>Disciplines</th>
                 <th>Published in</th>
             </tr>
         </thead>
