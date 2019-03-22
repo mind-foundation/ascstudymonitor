@@ -29,6 +29,13 @@
             }
         }
 
+        function renderAbstract(abstract) {
+            /* Convert newlines to paragraphs */
+            return abstract.split('\n').map(function(par) {
+                return '<p>' + par + '</p>';
+            }).join('\n');
+        }
+
         function transformIdentifiers(data, type, row) {
             return data ? Object.values(data).join(' ') : '';
         }
@@ -40,7 +47,7 @@
         function furtherInfo(doc) {
             const abstract = doc.abstract ? `
                 <h2 class="furtherInfoHeader">Abstract</h2>
-                <div class="furtherInfoText">${doc.abstract}</div>
+                <div class="furtherInfoText">${renderAbstract(doc.abstract)}</div>
             ` : '';
             const citation = doc.citation ? `
                 <h2 class="furtherInfoHeader">Citation</h2>
