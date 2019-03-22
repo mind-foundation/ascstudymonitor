@@ -1,0 +1,84 @@
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 12px;
+}
+
+#ascTable {
+  font-size: 12px;
+}
+
+#ascTable tr.shown {
+  font-weight: bold;
+}
+
+#ascTable th {
+  font-size: 14px;
+}
+
+td.furtherInfoRow {
+  border-top: 0px !important;
+}
+
+tr.furtherInfoRow.odd:hover {
+  background-color: #f9f9f9 !important;
+}
+
+tr.furtherInfoRow.even:hover {
+  background-color: #ffffff !important;
+}
+
+.furtherInfoContent {
+  text-align: justify;
+}
+
+.furtherInfoAction {
+  margin: 1em 0;
+}
+
+.furtherInfoAction :last-child {
+  float: right;
+}
+
+.furtherInfoHeader {
+  font-size: 14;
+  margin: 1em 0;
+}
+
+#ascSearch {
+  padding: 0px 5px;
+  margin: 0;
+  height: 30px;
+  width: 100%;
+  font-size: 17px;
+}
+
+
+/*** Spinner ***/ 
+@keyframes rotating {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.datatable-spiner__container {
+  height: 50vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: italic;
+  /* border: 6px solid rgba(0, 0, 0, 0.1);
+  border-top: 6px solid #555;
+  animation: rotating 1.2s infinite cubic-bezier(0.785, 0.135, 0.15, 0.86); */
+}
+
+.datatable-spiner__circle {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  border: 6px solid rgba(0, 0, 0, 0.1);
+  border-top: 6px solid #1a9da5;
+  animation: rotating 1.2s infinite cubic-bezier(0.785, 0.135, 0.15, 0.86);
+}

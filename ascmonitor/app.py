@@ -1,7 +1,7 @@
 """ Flask Web app """
 
 from redis import Redis
-from flask import Flask, Response, jsonify, redirect, abort
+from flask import Flask, Response, jsonify, redirect, abort, send_from_directory
 
 from ascmonitor.config import mendeley_authinfo, mendeley_group_id, redis_config
 from ascmonitor.document_store import MendeleyAuthInfo, DocumentStore
@@ -45,7 +45,12 @@ def update():
     return Response('success', mimetype='text/plain')
 
 
-@app.route('/')
+@app.route("/<path:path>")
+def send_js(path):
+    return send_from_directory(path)
+
+
+@app.route("/")
 def browser():
     """ Show the table as HTML """
     return app.send_static_file('index.html')
