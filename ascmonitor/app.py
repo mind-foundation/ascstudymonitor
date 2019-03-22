@@ -45,9 +45,10 @@ def update():
     return Response('success', mimetype='text/plain')
 
 
-@app.route("/<path:path>")
+@app.route('/static/<path:path>')
 def send_js(path):
-    return send_from_directory(path)
+    print('match')
+    return send_from_directory('static', 'path')
 
 
 @app.route("/")
