@@ -11,6 +11,8 @@ mendeley_authinfo = {
     'password': os.environ['MENDELEY_PASSWORD'],
 }
 
+mendeley_group_id = 'd9389c6c-8ab5-3b8b-86ed-33db09ca0198'
+
 redis_config = {'host': 'localhost', 'port': 6379, 'db': 0}
 
 # document cache expiry time in seconds

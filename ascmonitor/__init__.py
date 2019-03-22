@@ -4,11 +4,14 @@ __version__ = '0.1.0'
 from redis import Redis
 from flask import Flask, Response, jsonify, redirect, abort
 
-from ascmonitor.config import mendeley_authinfo, redis_config
+from ascmonitor.config import mendeley_authinfo, mendeley_group_id, redis_config
 from ascmonitor.document_store import MendeleyAuthInfo, DocumentStore
 
 app = Flask(__name__, static_folder='../static')
-document_store = DocumentStore(MendeleyAuthInfo(**mendeley_authinfo), Redis(**redis_config))
+
+authinfo = MendeleyAuthInfo(**mendeley_authinfo)
+redis = Redis(**redis_config)
+document_store = DocumentStore(authinfo=authinfo, group_id=mendeley_group_id, redis=redis)
 
 
 @app.route('/documents.json')

@@ -39,7 +39,7 @@ def transform_documents(documents):
 class Mendeleur:
     """ Manages Mendeley session """
 
-    def __init__(self, authinfo):
+    def __init__(self, authinfo, group_id=None):
         """ Authenticate the Mendeley client """
         mendeley = Mendeley(
             client_id=authinfo.client_id,
@@ -59,12 +59,17 @@ class Mendeleur:
 
         self.session = auth.authenticate(redirect_url)
 
+        if group_id is None:
+            self._documents = self.session.documents
+        else:
+            self._documents = self._find_group(group_id).documents
+
     def all_documents(self):
         """
         Fetch the current library from mendeley.
         :returns: List of dicts with document bibliography
         """
-        library = self.session.documents.iter(sort='created', order='desc', view='all')
+        library = self._documents.iter(sort='created', order='desc', view='all')
         return list(transform_documents(doc.json for doc in library))
 
     def get_download_url(self, document_id):
@@ -76,12 +81,19 @@ class Mendeleur:
             raise ValueError('Document has no file attached')
         return first_file.download_url
 
+    def _find_group(self, group_id):
+        """ Find the group associated with the group id """
+        try:
+            return next(g for g in self.session.groups.iter() if g.id == group_id)
+        except StopIteration:
+            raise ValueError(f'group with id {group_id} not found')
+
 
 class DocumentStore:
     """ Access to documents """
 
-    def __init__(self, authinfo, redis):
-        self._mendeley = Mendeleur(authinfo)
+    def __init__(self, authinfo, redis, group_id=None):
+        self._mendeley = Mendeleur(authinfo, group_id)
         self._cache = DocumentCache(redis, self._mendeley.all_documents, cache_expires)
 
     @property
