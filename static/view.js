@@ -1,7 +1,7 @@
 function templateFactory(templateKey) {
   return function(item, type, row) {
     var template = Handlebars.compile(
-      document.getElementById("template-title-column").innerHTML
+      document.getElementById(templateKey).innerHTML
     )
     return template({ row })
   }
