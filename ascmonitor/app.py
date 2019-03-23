@@ -1,7 +1,7 @@
 """ Flask Web app """
 
 from redis import Redis
-from flask import Flask, Response, jsonify, redirect, abort, send_from_directory
+from flask import Flask, Response, jsonify, redirect, send_from_directory
 
 from ascmonitor.config import mendeley_authinfo, mendeley_group_id, redis_config
 from ascmonitor.document_store import DocumentStore
@@ -27,18 +27,6 @@ def download(doc_id):
     return redirect(download_url, code=301)
 
 
-@app.route('/download_backroom/<doc_id>')
-def download_backroom(doc_id):
-    """ TODO: download page with sci-hub links """
-    return abort(404)
-
-
-@app.route('/search_fulltext/<query>')
-def search_fulltext(query):
-    """ TODO: fulltext search in file archive """
-    return abort(404)
-
-
 @app.route('/update')
 def update():
     """ Update bibliography """
@@ -55,12 +43,6 @@ def send_js(path):
 @app.route("/")
 def browser():
     """ Show the table as HTML """
-    return app.send_static_file('index.html')
-
-
-@app.route('/backroom')
-def backroom():
-    """ Show the table as HTML and give access to backroom downloads """
     return app.send_static_file('index.html')
 
 

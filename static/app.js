@@ -81,7 +81,7 @@ $(document).ready(function() {
 
   setTimeout(startEffect, 0)
 
-  const useCache = false /* edit me */
+  const useCache = true /* edit me */
   let secondsSinceLastAccess = -1
   if (useCache && data) {
     let last = localStorage.getItem(MIND_ASC_STORAGE_KEY_LAST)
@@ -215,6 +215,7 @@ function initDataTable(data) {
   })
 
   setTimeout(() => {
+    $(".data-table thead").show()
     $(".data-table tfoot").remove()
   })
 }
