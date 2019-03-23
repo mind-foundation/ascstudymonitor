@@ -6,4 +6,5 @@
 `export FLASK_APP='ascmonitor.app:app'`
 `export FLASK_ENV=development`
 `poetry run flask run`
+`poetry run flask run --host=0.0.0.0`
 

@@ -23,7 +23,7 @@ class DocumentCache:
     def get(self):
         """ Get the documents """
         documents = self._get_from_cache()
-        #sleep(120);
+        # sleep(120)
         if documents is None:
             documents = self._get_from_source()
         return documents

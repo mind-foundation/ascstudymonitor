@@ -18,6 +18,11 @@
       charset="utf8"
       src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"
     ></script>
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.min.js"
+    ></script>
     <link
       href="https://fonts.googleapis.com/css?family=Open+Sans"
       rel="stylesheet"
@@ -31,23 +36,44 @@
     />
     <script src="https://unpkg.com/feather-icons"></script>
 
+    <script src="./static/view.js"></script>
+    <script src="./static/mindblower.js"></script>
     <script src="./static/app.js"></script>
   </head>
   <body>
-    <p>
-      <input type="text" id="ascSearch" placeholder="Search..." />
-    </p>
-    <table id="ascTable" class="display" style="width:100%">
+    <div class="search-bar__container">
+      <input type="text" class="search-bar__input" placeholder="Search..." />
+    </div>
+    <table class="data-table" class="display" style="width: 100%">
       <thead>
         <tr>
           <th></th>
           <th>Title</th>
           <th>Authors</th>
-          <th>Year</th>
           <th>Disciplines</th>
           <th>Published in</th>
         </tr>
       </thead>
+      <tfoot>
+        <tr>
+          <td colspan="5">
+            <div class="datatable-spinner__row">
+              <div class="datatable-spinner__label">Loading</div>
+              <div class="datatable-spinner__wrapper">
+                <script>
+                  startEffect()
+                </script>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tf>
     </table>
+
+    <script id="template-title-column" type="text/x-handlebars-template">
+      <h3>{{row.title}}</h3>
+      <h4>{{#authors row.authors}}{{ this }}{{/authors}}</h4>
+      <h5>{{#disciplines row.disciplines}}{{ this }}{{/disciplines}}</h5>
+    </script>
   </body>
 </html>
