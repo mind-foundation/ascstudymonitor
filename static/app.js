@@ -74,14 +74,14 @@ function furtherInfo(doc) {
             `
 }
 
-function spinnerDOMStringFactory(label) {}
+// function spinnerDOMStringFactory(label) {}
 
 $(document).ready(function() {
   let data = localStorage.getItem(MIND_ASC_STORAGE_KEY_CACHE)
 
   setTimeout(startEffect, 0)
 
-  const useCache = true /* edit me */
+  const useCache = false /* edit me */
   let secondsSinceLastAccess = -1
   if (useCache && data) {
     let last = localStorage.getItem(MIND_ASC_STORAGE_KEY_LAST)
@@ -134,14 +134,14 @@ function initDataTable(data) {
         data: "title",
         render: templateFactory("template-title-column"),
       },
-      { data: "authors", defaultContent: "", visible: false },
-
       { data: "source", defaultContent: "", width: "20%" },
 
       // column to define order
       { data: "created", visible: false, searchable: false },
 
       // hidden but searchable columns
+      { data: "authors", defaultContent: "", visible: false },
+      { data: "disciplines", defaultContent: "", visible: false },
       { data: "abstract", defaultContent: "", visible: false },
       {
         data: "keywords",

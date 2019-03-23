@@ -89,7 +89,7 @@ tr.furtherInfoRow.even:hover {
   max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  /*white-space: nowrap;*/
 }
 
 .data-table tfoot td {
@@ -114,6 +114,7 @@ tr.furtherInfoRow.even:hover {
   border-radius: 20px;
   display: inline-block;
   margin-right: 5px;
+  margin-bottom: 3px;
 }
 
 .data-table h4 li {

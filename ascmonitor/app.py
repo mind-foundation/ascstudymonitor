@@ -4,7 +4,8 @@ from redis import Redis
 from flask import Flask, Response, jsonify, redirect, abort, send_from_directory
 
 from ascmonitor.config import mendeley_authinfo, mendeley_group_id, redis_config
-from ascmonitor.document_store import MendeleyAuthInfo, DocumentStore
+from ascmonitor.document_store import DocumentStore
+from ascmonitor.mendeleur import MendeleyAuthInfo
 
 app = Flask(__name__, static_folder='../static')
 
