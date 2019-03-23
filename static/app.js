@@ -133,7 +133,6 @@ function initDataTable(data) {
       {
         data: "title",
         render: templateFactory("template-title-column"),
-        width: "50%"
       },
       { data: "authors", defaultContent: "", visible: false },
 
