@@ -1,7 +1,7 @@
 .venv
 *.egg-info
 __pycache__
-env.sh
+*env.sh*
 asc.db
 requirements.txt
 # Elastic Beanstalk Files
