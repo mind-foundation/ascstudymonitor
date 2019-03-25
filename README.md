@@ -1,19 +1,23 @@
+# Requirements
+- env.sh file with environment variables (ask team members)
+- [conda](https://docs.conda.io/en/latest/)
+
 # Installation
 
-`conda install poetry`
-`poetry config settings.virtualenvs.in-project true`
-`poetry install`
+- `conda install poetry`
+- `poetry config settings.virtualenvs.in-project true`
+- `poetry install`
 
 # Start
 
-`source ./env.sh`
-`export FLASK_APP='ascmonitor.app:app'`
-`export FLASK_ENV=development`
-`poetry run flask run`
+- `source ./env.sh`
+- `export FLASK_APP='ascmonitor.app:app'`
+- `export FLASK_ENV=development`
+- `poetry run flask run`
 
 ### Expose in network
 
-`poetry run flask run --host=0.0.0.0`
+- `poetry run flask run --host=0.0.0.0`
 
 # FAQ
 
