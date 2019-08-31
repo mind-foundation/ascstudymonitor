@@ -45,16 +45,16 @@
     <script id="template-entry" type="text/x-handlebars-template">
       <div class="entry">
         <ul class="entry__disciplines">{{#each disciplines}}
-          <li><a onClick="updateSearchValue('{{this}}')">{{ this }}</a></li>
+          <li><a onClick="App.search('{{this}}')">{{ this }}</a></li>
         {{/each}}</ul>
         <h3>{{title}}</h3>
 
         <ul class="entry__authors">
           {{#each authors}}
-            <li><a onClick="updateSearchValue('{{this.last_name}}')">{{ this.last_name }} {{this.first_name }}</a></li>
+            <li><a onClick="App.search('{{this.last_name}}')">{{ this.last_name }} {{this.first_name }}</a></li>
           {{/each}}
         </ul>
-        <a onClick="updateSearchValue('{{year}}')">{{year}}</a>
+        <a onClick="App.search('{{year}}')">{{year}}</a>
         {{source}}
       </div>
     </script>
@@ -95,7 +95,7 @@
   <body>
     <div id="mindblower">
       <div id="mindblower__effect-container"></div>
-      <div class="mindblower__label">Loading</div>
+      <div class="mindblower__label"></div>
     </div>
 
     <div id="main" data-off-canvas-content>

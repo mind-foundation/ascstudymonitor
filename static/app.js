@@ -1,71 +1,68 @@
-window.App = {}
+window.App = {
+  search(newValue) {
+    console.log('[Search] Update term: %s', newValue)
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
 
-const MIND_ASC_STORAGE_KEY_CACHE = 'mind-asc-cache'
-const MIND_ASC_STORAGE_KEY_LAST = 'mind-asc-last'
+    // update value of input and simulate enter press
+    const $el = $('.title-bar__input')
+    $el.val(newValue)
+    setTimeout(() => {
+      $el.trigger('keyup')
+    }, 0)
+    return false
+    // smooth scroll up
+  },
 
-var $table
+  data: async function() {
+    console.log('fetching data')
+    const MIND_ASC_STORAGE_KEY_CACHE = 'mind-asc-cache'
+    const MIND_ASC_STORAGE_KEY_LAST = 'mind-asc-last'
 
-function updateSearchValue(newValue) {
-  console.log('[Search] Update term: %s', newValue)
-  window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+    let lastCacheEntryDate = localStorage.getItem(MIND_ASC_STORAGE_KEY_LAST)
+    let data = null
 
-  // update value of input and simulate enter press
-  const $el = $('.title-bar__input')
-  $el.val(newValue)
-  setTimeout(() => {
-    $el.trigger('keyup')
-  }, 0)
-  return false
-  // smooth scroll up
-}
+    if (lastCacheEntryDate) {
+      console.log('has cache entry')
+      let cachedData = localStorage.getItem(MIND_ASC_STORAGE_KEY_CACHE)
 
-// function spinnerDOMStringFactory(label) {}
+      let msSinceLastAcccess = -1
+      const ONE_HOUR = 3600e3
+      if (typeof cachedData === 'string') {
+        let lastDate = new Date(lastCacheEntryDate)
+        msSinceLastAcccess = (+new Date() - lastDate) / 1000
+        if (msSinceLastAcccess <= ONE_HOUR) {
+          console.log('got data', cachedData)
+          data = JSON.parse(cachedData)
+          data.length = 10
 
-$(document).ready(function() {
-  $table = $('.data-table')
-
-  let data = localStorage.getItem(MIND_ASC_STORAGE_KEY_CACHE)
-  window.__Mindblower__.start()
-
-  const useCache = true /* edit me */
-  let msSinceLastAcccess = -1
-  if (useCache && data) {
-    const ONE_HOUR = 3600e3
-    let last = localStorage.getItem(MIND_ASC_STORAGE_KEY_LAST)
-    if (last) {
-      let lastDate = new Date(last)
-      msSinceLastAcccess = (+new Date() - lastDate) / 1000
-      if (msSinceLastAcccess > ONE_HOUR) {
-        console.info('[Cache] Expired! %s seconds old', msSinceLastAcccess)
-        localStorage.removeItem(MIND_ASC_STORAGE_KEY_LAST)
-        localStorage.removeItem(MIND_ASC_STORAGE_KEY_CACHE)
-        return fetchNew()
+          console.info(
+            '[Cache] Hit: Loading %s entries from %ss ago',
+            data.length,
+            Math.round(msSinceLastAcccess / 1000)
+          )
+        }
       }
     }
 
-    data = JSON.parse(data)
-    data.length = 10
+    if (!data) {
+      data = await $.getJSON('/documents.json')
+    }
+    console.log('fetching data.. done!')
 
-    console.info(
-      '[Cache] Hit: Loading %s entries from %ss ago',
-      data.length,
-      Math.round(msSinceLastAcccess / 1000)
-    )
-    App.Datatable.init($table, data)
-  } else {
-    console.info('[Cache] None found.')
+    return data
+  },
+  async onDOMReady() {
     window.__Mindblower__.start()
-    fetchNew()
-  }
-})
+    console.log('on dom raedy called')
 
-function fetchNew() {
-  console.info('[Cache] Refreshing..')
-  $.getJSON('/documents.json', function(data) {
-    console.info('[Cache] Refreshing.. Done!')
-    localStorage.setItem(MIND_ASC_STORAGE_KEY_CACHE, JSON.stringify(data))
-    localStorage.setItem(MIND_ASC_STORAGE_KEY_LAST, new Date().toISOString())
+    const data = await App.data()
+    console.log('data is ready', data)
 
-    App.Datatable.init($table, data)
-  })
+    App.Datatable.init(data)
+    setTimeout(() => window.__Mindblower__.stop(), 10)
+
+    // const hasData = await this.data
+  },
 }
+
+$(document).ready(App.onDOMReady)

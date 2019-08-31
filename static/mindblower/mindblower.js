@@ -33,7 +33,7 @@ class Mindblower {
   }
 
   stop() {
-    $('#mindblower').fadeOut(300)
+    $('#mindblower').fadeOut(500)
   }
 }
 
