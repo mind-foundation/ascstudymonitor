@@ -1,9 +1,10 @@
 version: "3.7"
 services:
   app:
+    image: mindfoundation/asc-studymonitor
     build: .
     ports:
-      - "8000:8000"
+      - "80:8000"
     secrets:
       - mendeley-secret
     stop_signal: SIGINT
@@ -13,4 +14,4 @@ services:
 
 secrets:
   mendeley-secret:
-    file: ./mendeley-secret.json
+    file: mendeley-secret.json
