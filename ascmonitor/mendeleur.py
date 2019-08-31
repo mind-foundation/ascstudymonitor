@@ -81,6 +81,12 @@ class Mendeleur:
             document.json["authors"] = []
         return document
 
+    def ensure_year(self, document):
+        """ Ensure year is present or None """
+        if document.year is None:
+            document.json["year"] = None
+        return document
+
     def fix_file_attached(self, document):
         """ Test file_attached attribute """
         if document.file_attached:
@@ -92,5 +98,6 @@ class Mendeleur:
         for document in documents:
             document = self.extract_disciplines(document)
             document = self.ensure_authors(document)
+            document = self.ensure_year(document)
             document = self.fix_file_attached(document)
             yield document.json
