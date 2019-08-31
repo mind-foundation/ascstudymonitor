@@ -73,7 +73,7 @@ body {
 }
 
 .menu__filter_header{
-  padding: 10px 16px;
+  padding: 14px 16px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -111,8 +111,9 @@ body {
 
 .menu__chev {
   margin-top: 6px;
-  height: 14px;
+  height: 10px;
   float: right; 
+  transform: rotate(90deg);
 }
 
 .menu__chev .a1 {
