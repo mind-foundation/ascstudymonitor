@@ -56,10 +56,14 @@
         </ul>
         <a onClick="App.search('{{year}}')">{{year}}</a>
         {{source}}
+        <div class="entry__abstract">{{abstract}}</div>
       </div>
     </script>
 
     <script id="template-menu" type="text/x-handlebars-template">
+      <li class="menu__filter_header">
+        <span>Filter</span>
+        </li>
       {{#each items}}
         <li>
           <a href="#" class="menu__category-link">
@@ -111,7 +115,7 @@
           <input
             type="text"
             class="title-bar__input"
-            placeholder="Enter search term..."
+            placeholder="Search all articles..."
           />
         </div>
       </div>
