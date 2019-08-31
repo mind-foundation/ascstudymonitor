@@ -1,19 +1,19 @@
-MIND_ASC_STORAGE_KEY_CACHE = "mind-asc-cache"
-MIND_ASC_STORAGE_KEY_LAST = "mind-asc-last"
+MIND_ASC_STORAGE_KEY_CACHE = "mind-asc-cache";
+MIND_ASC_STORAGE_KEY_LAST = "mind-asc-last";
 
-var $table
+var $table;
 
 function updateSearchValue(newValue) {
-  console.log("[Search] Update term: %s", newValue)
-  window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
+  console.log("[Search] Update term: %s", newValue);
+  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
   // update value of input and simulate enter press
-  const $el = $(".title-bar__input")
-  $el.val(newValue)
+  const $el = $(".title-bar__input");
+  $el.val(newValue);
   setTimeout(() => {
-    $el.trigger("keyup")
-  }, 0)
-  return false
+    $el.trigger("keyup");
+  }, 0);
+  return false;
   // smooth scroll up
 }
 
@@ -22,17 +22,17 @@ function renderAbstract(abstract) {
   return abstract
     .split("\n")
     .map(function(par) {
-      return "<p>" + par + "</p>"
+      return "<p>" + par + "</p>";
     })
-    .join("\n")
+    .join("\n");
 }
 
 function transformIdentifiers(data, type, row) {
-  return data ? Object.values(data).join(" ") : ""
+  return data ? Object.values(data).join(" ") : "";
 }
 
 function transformKeywords(data, type, row) {
-  return data ? data.join(" ") : ""
+  return data ? data.join(" ") : "";
 }
 
 function furtherInfo(doc) {
@@ -42,16 +42,18 @@ function furtherInfo(doc) {
                   doc.abstract
                 )}</div>
             `
-    : ""
+    : "";
 
   const website = doc.websites
     ? `<a target="_blank" rel="noopener noreferrer" href="${
         doc.websites[0]
       }">Show on Publisher Website</a>`
-    : ""
+    : "";
   const download = doc.file_attached
-    ? `<a target="_blank" rel="noopener noreferrer" href="/download/${doc.id}">Download full text</a>`
-    : "<span>Fulltext available from Publisher</span>"
+    ? `<a target="_blank" rel="noopener noreferrer" href="/download/${
+        doc.id
+      }">Download full text</a>`
+    : "<span>Fulltext available from Publisher</span>";
 
   return `
                 <div class="furtherInfo">
@@ -63,63 +65,63 @@ function furtherInfo(doc) {
                         ${download}
                     </div>
                 </div>
-            `
+            `;
 }
 
 // function spinnerDOMStringFactory(label) {}
 
 $(document).ready(function() {
-  $table = $(".data-table")
-  let data = localStorage.getItem(MIND_ASC_STORAGE_KEY_CACHE)
-  window.__Mindblower__.start()
+  $table = $(".data-table");
+  let data = localStorage.getItem(MIND_ASC_STORAGE_KEY_CACHE);
+  window.__Mindblower__.start();
 
-  const useCache = true /* edit me */
-  let msSinceLastAcccess = -1
+  const useCache = true; /* edit me */
+  let msSinceLastAcccess = -1;
   if (useCache && data) {
-    const ONE_HOUR = 3600e3
-    let last = localStorage.getItem(MIND_ASC_STORAGE_KEY_LAST)
+    const ONE_HOUR = 3600e3;
+    let last = localStorage.getItem(MIND_ASC_STORAGE_KEY_LAST);
     if (last) {
-      let lastDate = new Date(last)
-      msSinceLastAcccess = (+new Date() - lastDate) / 1000
+      let lastDate = new Date(last);
+      msSinceLastAcccess = (+new Date() - lastDate) / 1000;
       if (msSinceLastAcccess > ONE_HOUR) {
-        console.info("[Cache] Expired! %s seconds old", msSinceLastAcccess)
-        localStorage.removeItem(MIND_ASC_STORAGE_KEY_LAST)
-        localStorage.removeItem(MIND_ASC_STORAGE_KEY_CACHE)
-        return fetchNew()
+        console.info("[Cache] Expired! %s seconds old", msSinceLastAcccess);
+        localStorage.removeItem(MIND_ASC_STORAGE_KEY_LAST);
+        localStorage.removeItem(MIND_ASC_STORAGE_KEY_CACHE);
+        return fetchNew();
       }
     }
 
-    data = JSON.parse(data)
-    // data.length = 10
+    data = JSON.parse(data);
+    data.length = 10;
 
     console.info(
       "[Cache] Hit: Loading %s entries from %ss ago",
       data.length,
       Math.round(msSinceLastAcccess / 1000)
-    )
-    initDataTable(data)
+    );
+    initDataTable(data);
   } else {
-    console.info("[Cache] None found.")
-    window.__Mindblower__.start()
-    fetchNew()
+    console.info("[Cache] None found.");
+    window.__Mindblower__.start();
+    fetchNew();
   }
-})
+});
 
 function fetchNew() {
-  console.info("[Cache] Refreshing..")
+  console.info("[Cache] Refreshing..");
   $.getJSON("/documents.json", function(data) {
-    console.info("[Cache] Refreshing.. Done!")
-    localStorage.setItem(MIND_ASC_STORAGE_KEY_CACHE, JSON.stringify(data))
-    localStorage.setItem(MIND_ASC_STORAGE_KEY_LAST, new Date().toISOString())
+    console.info("[Cache] Refreshing.. Done!");
+    localStorage.setItem(MIND_ASC_STORAGE_KEY_CACHE, JSON.stringify(data));
+    localStorage.setItem(MIND_ASC_STORAGE_KEY_LAST, new Date().toISOString());
 
-    initDataTable(data)
-  })
+    initDataTable(data);
+  });
 }
 
 function initDataTable(data) {
-  setTimeout(window.__Mindblower__.stop, 0)
-  window.data = data
-  bootstrapMenu(data)
+  setTimeout(window.__Mindblower__.stop, 0);
+  window.data = data;
+  bootstrapMenu(data);
   const dataTable = $table.DataTable({
     data,
     deferRender: true,
@@ -150,38 +152,38 @@ function initDataTable(data) {
       }
     },
     drawCallback: () => {
-      setTimeout(feather.replace, 10)
+      setTimeout(feather.replace, 10);
     },
     autoWidth: false
-  })
+  });
 
   $(".data-table tBody").on("click", "tr", function() {
-    const tr = $(this).closest("tr")
+    const tr = $(this).closest("tr");
 
     if (tr.hasClass("furtherInfoRow")) {
       // clicked on child
-      return
+      return;
     }
 
-    const row = dataTable.row(tr)
-    const handle = dataTable.cell(row, 0).node()
-    const title = dataTable.cell(row, 1)
+    const row = dataTable.row(tr);
+    const handle = dataTable.cell(row, 0).node();
+    const title = dataTable.cell(row, 1);
 
-    const evenOdd = row.node().classList.contains("even") ? "even" : "odd"
+    const evenOdd = row.node().classList.contains("even") ? "even" : "odd";
 
     if (row.child.isShown()) {
-      row.child.hide()
-      tr.removeClass("shown")
-      handle.innerHTML = '<i data-feather="arrow-down"></i>'
+      row.child.hide();
+      tr.removeClass("shown");
+      handle.innerHTML = '<i data-feather="arrow-down"></i>';
     } else {
-      row.child(furtherInfo(row.data()), `${evenOdd} furtherInfoRow`)
-      row.child.show()
-      tr.addClass("shown")
-      handle.innerHTML = '<i data-feather="arrow-up"></i>'
+      row.child(furtherInfo(row.data()), `${evenOdd} furtherInfoRow`);
+      row.child.show();
+      tr.addClass("shown");
+      handle.innerHTML = '<i data-feather="arrow-up"></i>';
     }
 
-    feather.replace()
-  })
+    feather.replace();
+  });
 
   $(".title-bar__input").on("change keyup", function(event) {
     dataTable
@@ -190,16 +192,16 @@ function initDataTable(data) {
           .valueOf()
           .trim()
       )
-      .draw()
-  })
+      .draw();
+  });
 
   setTimeout(() => {
-    $(".data-table tfoot").remove()
-  })
+    $(".data-table tfoot").remove();
+  });
 }
 
 function authorToText(author) {
-  return `${author.first_name} ${author.last_name}`
+  return `${author.first_name} ${author.last_name}`;
 }
 
 // var DataTablesLinkify = function(dataTable) {
