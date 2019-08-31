@@ -4,6 +4,7 @@ Stores the document library in a database
 import msgpack
 from time import sleep
 
+
 class DocumentCache:
     """ Provides access to stored document data. """
 
@@ -30,11 +31,11 @@ class DocumentCache:
 
     def expire(self):
         """ Clear cache """
-        self._redis.delete('documents')
+        self._redis.delete("documents")
 
     def _get_from_cache(self):
         """ Return from cache or None """
-        data = self._redis.get('documents')
+        data = self._redis.get("documents")
         if data is not None:
             data = msgpack.unpackb(data, raw=False)
         return data
@@ -48,4 +49,4 @@ class DocumentCache:
     def put(self, documents):
         """ Serialize documents, set in redis and set expiration """
         packed = msgpack.packb(documents, use_bin_type=True)
-        self._redis.set('documents', packed, ex=self._expires)
+        self._redis.set("documents", packed, ex=self._expires)
