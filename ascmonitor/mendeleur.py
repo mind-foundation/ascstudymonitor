@@ -1,5 +1,6 @@
 """ Access the Mendeley Database """
 
+import re
 from typing import NamedTuple
 
 import requests
@@ -32,10 +33,10 @@ class Mendeleur:
         response = requests.post(
             login_url,
             allow_redirects=False,
-            data={'username': authinfo.user, 'password': authinfo.password},
+            data={"username": authinfo.user, "password": authinfo.password},
         )
-        redirect_url = response.headers['Location']
-        redirect_url = redirect_url.replace('http://', 'https://')
+        redirect_url = response.headers["Location"]
+        redirect_url = redirect_url.replace("http://", "https://")
 
         self.session = auth.authenticate(redirect_url)
         self.group = self.session.groups.get(group_id)
@@ -45,7 +46,7 @@ class Mendeleur:
         Fetch the current library from mendeley.
         :returns: List of dicts with document bibliography
         """
-        library = self.group.documents.iter(sort='created', order='desc', view='all')
+        library = self.group.documents.iter(sort="created", order="desc", view="all")
         return list(self.transform_documents(doc for doc in library))
 
     def get_download_url(self, document_id):
@@ -54,7 +55,7 @@ class Mendeleur:
             files = self.session.documents.get(document_id).files
             first_file = next(files.iter())
         except StopIteration:
-            raise ValueError('Document has no file attached')
+            raise ValueError("Document has no file attached")
         return first_file.download_url
 
     def extract_disciplines(self, document):
@@ -62,15 +63,19 @@ class Mendeleur:
         disciplines = []
         if document.tags:
             for tag in document.tags:
-                if tag.lower().startswith('disc:'):
-                    disciplines.extend(tag[5:].split(':'))
-            document.json['disciplines'] = disciplines
+                if tag.lower().startswith("disc:"):
+                    disciplines.extend(tag[5:].split(":"))
+
+            # strip bad characters
+            disciplines = [re.sub(r"[^\w]", "", disc) for disc in disciplines]
+
+            document.json["disciplines"] = disciplines
         return document
 
     def fix_file_attached(self, document):
         """ Test file_attached attribute """
         if document.file_attached:
-            document.json['file_attached'] = bool(list(document.files.iter()))
+            document.json["file_attached"] = bool(list(document.files.iter()))
         return document
 
     def transform_documents(self, documents):
