@@ -70,6 +70,15 @@ class Mendeleur:
             disciplines = [re.sub(r"[^\w]", "", disc) for disc in disciplines]
 
             document.json["disciplines"] = disciplines
+        else:
+            document.json["disciplines"] = []
+
+        return document
+
+    def ensure_authors(self, document):
+        """ Ensure authors are present in document """
+        if document.authors is None:
+            document.json["authors"] = []
         return document
 
     def fix_file_attached(self, document):
@@ -82,5 +91,6 @@ class Mendeleur:
         """ Generator that transforms mendeley documents """
         for document in documents:
             document = self.extract_disciplines(document)
+            document = self.ensure_authors(document)
             document = self.fix_file_attached(document)
             yield document.json
