@@ -38,13 +38,12 @@ function furtherInfo(doc) {
 }
 
 class Datatable {
-  init($table, data) {
-    this.$table = $table
+  init(data) {
+    const $table = $('.data-table')
     this.data = data
 
-    setTimeout(window.__Mindblower__.stop, 0)
-    window.data = data
     bootstrapMenu(data)
+
     const dataTable = $table.DataTable({
       data,
       deferRender: true,
@@ -64,7 +63,7 @@ class Datatable {
         },
         { data: 'year', defaultContent: '', visible: false },
       ],
-      pageLength: 20,
+      pageLength: 50,
       dom: 't p i',
       ordering: true,
       order: [[2, 'desc']],

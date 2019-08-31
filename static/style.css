@@ -1,5 +1,5 @@
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 12px;
 }
 
@@ -225,6 +225,10 @@ tr.furtherInfoRow.even:hover {
   table-layout: fixed;
 }
 
+tbody, tfoot, thead {
+  border: 0px;
+}
+
 .data-table tbody td {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -308,12 +312,65 @@ tr.furtherInfoRow.even:hover {
 }
 
 .data-table td.dataTables_empty {
-  padding: 0px !important;
+  padding: 0.5em !important;
+} 
+
+/** Paginate & Info footer **/
+
+.dataTables_wrapper .dataTables_info {
+  clear: both;
+  float: right;
+  padding-top: 0.755em;
+  padding-right: 1em;
+  padding-bottom: 2em;
 }
 
-table.dataTable thead th,
-.data-table.dataTable.no-footer {
-  border-bottom: 1px solid #ccc;
+.dataTables_wrapper .dataTables_paginate {
+  float: right;
+  text-align: right;
+  padding-top: 0.25em;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: 1.5em;
+  padding: 0.5em 1em;
+  margin-left: 2px;
+  text-align: center;
+  text-decoration: none !important;
+  cursor: pointer;
+  color: #333 !important;
+  border: 0px solid transparent;
+  border-radius: 0px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  color: #333 !important;
+  background: #f3f3f3;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+  cursor: default;
+  color: #666 !important;
+  background: transparent;
+  box-shadow: none;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  color: white !important;
+  background-color: #585858;
+  background: #333333;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:active {
+  outline: none;
+  background-color: #2b2b2b;
+  background: #333333;
+}
+.dataTables_wrapper .dataTables_paginate .ellipsis {
+  padding: 0 1em;
 }
 
 /* table.dataTable tbody td { */
