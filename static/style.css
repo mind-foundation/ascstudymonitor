@@ -283,6 +283,11 @@ tbody, tfoot, thead {
 
 .data-table td.dataTables_empty {
   padding: 0.5em !important;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: visible;
+  text-align: left;
+  display: inline !important;
 } 
 
 /** Paginate & Info footer **/
