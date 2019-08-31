@@ -67,7 +67,7 @@ class Mendeleur:
                     disciplines.extend(tag[5:].split(":"))
 
             # strip bad characters
-            disciplines = [re.sub(r"[^\w]", "", disc) for disc in disciplines]
+            disciplines = [re.sub(r"[^\w\s]", "", disc).strip() for disc in disciplines]
 
             document.json["disciplines"] = disciplines
         else:
