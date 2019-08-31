@@ -1,15 +1,15 @@
-version: '3.7'
+version: "3.7"
 services:
   app:
     build: .
     ports:
-      - "8000"
+      - "8000:8000"
     secrets:
       - mendeley-secret
-    restart: "always"
+    stop_signal: SIGINT
 
   redis:
-    image: "redis:alpine"
+    image: redis:alpine
 
 secrets:
   mendeley-secret:

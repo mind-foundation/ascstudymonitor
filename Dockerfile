@@ -1,6 +1,6 @@
 FROM python:3.7-alpine
 
-Expose 80
+Expose 8000
 WORKDIR /app
 
 RUN pip install poetry
@@ -9,4 +9,4 @@ RUN poetry install
 
 ADD . /app
 
-CMD poetry run gunicorn -w 4 ascmonitor.app:app
+CMD ["poetry", "run", "gunicorn", "-w", "4", "--bind", "0.0.0.0:8000", "ascmonitor.app:app"]

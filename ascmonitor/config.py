@@ -6,16 +6,18 @@ import os
 
 def in_docker():
     """ Returns: True if running in a Docker container, else False """
+    if not os.path.exists("/proc/1/cgroup"):
+        # not on linux
+        return False
+
     with open("/proc/1/cgroup", "rt") as ifh:
         return "docker" in ifh.read()
 
 
 if in_docker():
     with open("/run/secrets/mendeley-secret") as f:
-        print("Running in docker")
         env = json.load(f)
 else:
-    print("Running locally")
     env = os.environ
 
 mendeley_authinfo = {
