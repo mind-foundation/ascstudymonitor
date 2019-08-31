@@ -20,8 +20,9 @@ window.App = {
 
     let lastCacheEntryDate = localStorage.getItem(MIND_ASC_STORAGE_KEY_LAST)
     let data = null
+    const useCache = true // change me
 
-    if (lastCacheEntryDate) {
+    if (useCache && lastCacheEntryDate) {
       console.log('has cache entry')
       let cachedData = localStorage.getItem(MIND_ASC_STORAGE_KEY_CACHE)
 

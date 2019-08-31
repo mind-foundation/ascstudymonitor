@@ -43,7 +43,7 @@
     />
 
     <script id="template-entry" type="text/x-handlebars-template">
-      <div class="entry">
+      <div class="entry" data-id="{{id}}">
         <ul class="entry__disciplines">{{#each disciplines}}
           <li><a onClick="App.search('{{this}}')">{{ this }}</a></li>
         {{/each}}</ul>
