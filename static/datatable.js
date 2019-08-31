@@ -61,7 +61,12 @@ class Datatable {
               document.getElementById('template-entry').innerHTML
             )(row),
         },
+
+        // columns to filter by
         { data: 'year', defaultContent: '', visible: false },
+        { data: 'disciplines', defaultContent: '', visible: false},
+        { data: 'source', defaultContent: '', visible: false},
+        { data: 'authors', defaultContent: '', visible: false},
       ],
       pageLength: 50,
       dom: 't p i',

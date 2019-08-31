@@ -1,4 +1,32 @@
 window.App = {
+  addFilter(column, label) {
+    if (!App.filters) {
+      App.filters = {}
+    }
+
+    if (!App.filters[column]) {
+      App.filters[column] = []
+    }
+
+    App.filters[column].push(label)
+  },
+
+  removeFilter(column, label) {
+    if (!App.filters) {
+      return
+    }
+
+    if (!App.filters[column]) {
+      return
+    }
+
+    App.filters[column] = App.filters[column].filter(item => item != label)
+  },
+
+  applyFilters() {
+    // Filter by specific colu,n
+  },
+
   search(newValue) {
     console.log('[Search] Update term: %s', newValue)
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
@@ -52,6 +80,7 @@ window.App = {
 
     return data
   },
+
   async onDOMReady() {
     window.__Mindblower__.start()
     console.log('on dom raedy called')

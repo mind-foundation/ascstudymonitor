@@ -1,3 +1,11 @@
+function filterItemClick(item, column, label) {
+  console.log(item)
+  console.log(column)
+  console.log(label)
+
+  App.addFilter(column, label)
+}
+
 function bootstrapMenu(dataWithoutNormalizedAuthors) {
   var data = dataWithoutNormalizedAuthors.map(d => ({
     ...d,
@@ -72,8 +80,10 @@ function bootstrapMenu(dataWithoutNormalizedAuthors) {
         .sort((a, b) => b.label - a.label)
     }
   ]
-  console.log("items", items)
-  // console.log(template({ items }))
+ 
+  // console.log("items", items)
+
   $("#menu-content").html(template({ items }))
+  
   $(document).foundation()
 }
