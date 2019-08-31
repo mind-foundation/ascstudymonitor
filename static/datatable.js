@@ -38,6 +38,36 @@ function furtherInfo(doc) {
 }
 
 class Datatable {
+  getChevronToggleHTMLString(id) {
+    const $div = $(
+      `<div onClick="App.Datatable.toggle('${id}')" class='entry__chevron-wrapper'>&nbsp;</div>`
+    )
+    $div.append(HTML_CHEVRON_RIGHT)
+    return $div[0].outerHTML
+  }
+
+  toggle(id) {
+    const isVisible = $(`div.entry[data-id="${id}"] .entry__abstract`).is(
+      ':visible'
+    )
+    if (isVisible) {
+      $(`div.entry[data-id="${id}"]`)
+        .closest('tr')
+        .find('.entry__chevron-wrapper svg')
+        .css({
+          transform: 'rotate(0deg)',
+        })
+    } else {
+      $(`div.entry[data-id="${id}"]`)
+        .closest('tr')
+        .find('.entry__chevron-wrapper svg')
+        .css({
+          transform: 'rotate(-90deg)',
+        })
+    }
+    $(`div.entry[data-id="${id}"] .entry__abstract`).slideToggle()
+  }
+
   init(data) {
     const $table = $('.data-table')
     this.data = data
@@ -51,7 +81,9 @@ class Datatable {
         {
           data: null,
           orderable: false,
-          defaultContent: HTML_CHEVRON_DOWN,
+          render: (data, type, row, meta) => {
+            return this.getChevronToggleHTMLString(row.id)
+          },
           width: '100px',
         },
         {
@@ -63,7 +95,7 @@ class Datatable {
         },
         { data: 'year', defaultContent: '', visible: false },
       ],
-      pageLength: 50,
+      pageLength: 20,
       dom: 't p i',
       ordering: true,
       order: [[2, 'desc']],
@@ -77,32 +109,6 @@ class Datatable {
         },
       },
       autoWidth: false,
-    })
-
-    $('.data-table tBody').on('click', 'tr', function() {
-      const tr = $(this).closest('tr')
-
-      if (tr.hasClass('furtherInfoRow')) {
-        // clicked on child
-        return
-      }
-
-      const row = dataTable.row(tr)
-      const handle = dataTable.cell(row, 0).node()
-      const title = dataTable.cell(row, 1)
-
-      const evenOdd = row.node().classList.contains('even') ? 'even' : 'odd'
-
-      if (row.child.isShown()) {
-        row.child.hide()
-        tr.removeClass('shown')
-        handle.innerHTML = HTML_CHEVRON_DOWN
-      } else {
-        row.child(furtherInfo(row.data()), `${evenOdd} furtherInfoRow`)
-        row.child.show()
-        tr.addClass('shown')
-        handle.innerHTML = HTML_CHEVRON_RIGHT
-      }
     })
 
     $('.title-bar__input').on('change keyup', function(event) {

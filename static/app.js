@@ -23,7 +23,6 @@ window.App = {
     const useCache = true // change me
 
     if (useCache && lastCacheEntryDate) {
-      console.log('has cache entry')
       let cachedData = localStorage.getItem(MIND_ASC_STORAGE_KEY_CACHE)
 
       let msSinceLastAcccess = -1
@@ -32,7 +31,6 @@ window.App = {
         let lastDate = new Date(lastCacheEntryDate)
         msSinceLastAcccess = (+new Date() - lastDate) / 1000
         if (msSinceLastAcccess <= ONE_HOUR) {
-          console.log('got data', cachedData)
           data = JSON.parse(cachedData)
           data.length = 10
 
@@ -48,16 +46,13 @@ window.App = {
     if (!data) {
       data = await $.getJSON('/documents.json')
     }
-    console.log('fetching data.. done!')
 
     return data
   },
   async onDOMReady() {
     window.__Mindblower__.start()
-    console.log('on dom raedy called')
 
     const data = await App.data()
-    console.log('data is ready', data)
 
     App.Datatable.init(data)
     setTimeout(() => window.__Mindblower__.stop(), 10)
