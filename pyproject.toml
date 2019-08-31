@@ -1,16 +1,17 @@
 [tool.poetry]
 name = "ASCMonitor"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["Felix Peppert <felix.peppert@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.7"
 mendeley = "^0.3.2"
 requests = "^2.5"
-flask = "^1.0"
-redis = "^3.2"
+flask = "^1.1"
+redis = "^3.3"
 msgpack-python = "^0.5.6"
+gunicorn = "^19.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"

@@ -1,19 +1,37 @@
 """ Configuration for ASC Study Monitor """
 
+import json
 import os
 
 
+def in_docker():
+    """ Returns: True if running in a Docker container, else False """
+    with open("/proc/1/cgroup", "rt") as ifh:
+        return "docker" in ifh.read()
+
+
+if in_docker():
+    with open("/run/secrets/mendeley-secret") as f:
+        print("Running in docker")
+        env = json.load(f)
+else:
+    print("Running locally")
+    env = os.environ
+
 mendeley_authinfo = {
-    'client_id': os.environ['MENDELEY_CLIENT_ID'],
-    'client_secret': os.environ['MENDELEY_CLIENT_SECRET'],
-    'redirect_uri': os.environ['MENDELEY_REDIRECT_URI'],
-    'user': os.environ['MENDELEY_USER'],
-    'password': os.environ['MENDELEY_PASSWORD'],
+    "client_id": env["MENDELEY_CLIENT_ID"],
+    "client_secret": env["MENDELEY_CLIENT_SECRET"],
+    "redirect_uri": env["MENDELEY_REDIRECT_URI"],
+    "user": env["MENDELEY_USER"],
+    "password": env["MENDELEY_PASSWORD"],
 }
 
-mendeley_group_id = 'd9389c6c-8ab5-3b8b-86ed-33db09ca0198'
+mendeley_group_id = "d9389c6c-8ab5-3b8b-86ed-33db09ca0198"
 
-redis_config = {'host': 'localhost', 'port': 6379, 'db': 0}
+if in_docker():
+    redis_config = {"host": "redis", "port": 6379, "db": 0}
+else:
+    redis_config = {"host": "localhost", "port": 6379, "db": 0}
 
 # document cache expiry time in seconds
 cache_expires = 300

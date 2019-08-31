@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+  app:
+    build: .
+    ports:
+      - "8000"
+    secrets:
+      - mendeley-secret
+    restart: "always"
+
+  redis:
+    image: "redis:alpine"
+
+secrets:
+  mendeley-secret:
+    file: ./mendeley-secret.json
