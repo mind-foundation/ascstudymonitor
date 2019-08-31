@@ -1,5 +1,5 @@
-const MIND_ASC_STORAGE_KEY_CACHE = "mind-asc-cache"
-const MIND_ASC_STORAGE_KEY_LAST = "mind-asc-last"
+const MIND_ASC_STORAGE_KEY_CACHE = 'mind-asc-cache'
+const MIND_ASC_STORAGE_KEY_LAST = 'mind-asc-last'
 
 const HTML_CHEVRON_DOWN =
   '<svg xmlns="http://www.w3.org/2000/svg" width="35.912" height="20.077" viewBox="0 0 35.912 20.077"><defs><style>.a{fill:none;stroke:#333;stroke-width:3px;}</style></defs><path class="a" d="M36.107,2581,53,2597.9l-16.9,16.9" transform="translate(2615.851 -35.046) rotate(90)"/></svg>'
@@ -9,14 +9,14 @@ const HTML_CHEVRON_RIGHT =
 var $table
 
 function updateSearchValue(newValue) {
-  console.log("[Search] Update term: %s", newValue)
-  window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
+  console.log('[Search] Update term: %s', newValue)
+  window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
 
   // update value of input and simulate enter press
-  const $el = $(".title-bar__input")
+  const $el = $('.title-bar__input')
   $el.val(newValue)
   setTimeout(() => {
-    $el.trigger("keyup")
+    $el.trigger('keyup')
   }, 0)
   return false
   // smooth scroll up
@@ -25,19 +25,19 @@ function updateSearchValue(newValue) {
 function renderAbstract(abstract) {
   /* Convert newlines to paragraphs */
   return abstract
-    .split("\n")
+    .split('\n')
     .map(function(par) {
-      return "<p>" + par + "</p>"
+      return '<p>' + par + '</p>'
     })
-    .join("\n")
+    .join('\n')
 }
 
 function transformIdentifiers(data, type, row) {
-  return data ? Object.values(data).join(" ") : ""
+  return data ? Object.values(data).join(' ') : ''
 }
 
 function transformKeywords(data, type, row) {
-  return data ? data.join(" ") : ""
+  return data ? data.join(' ') : ''
 }
 
 function furtherInfo(doc) {
@@ -47,16 +47,16 @@ function furtherInfo(doc) {
                   doc.abstract
                 )}</div>
             `
-    : ""
+    : ''
 
   const website = doc.websites
     ? `<a target="_blank" rel="noopener noreferrer" href="${
         doc.websites[0]
       }">Show on Publisher Website</a>`
-    : ""
+    : ''
   const download = doc.file_attached
     ? `<a target="_blank" rel="noopener noreferrer" href="/download/${doc.id}">Download full text</a>`
-    : "<span>Fulltext available from Publisher</span>"
+    : '<span>Fulltext available from Publisher</span>'
 
   return `
                 <div class="furtherInfo">
@@ -74,7 +74,7 @@ function furtherInfo(doc) {
 // function spinnerDOMStringFactory(label) {}
 
 $(document).ready(function() {
-  $table = $(".data-table")
+  $table = $('.data-table')
   let data = localStorage.getItem(MIND_ASC_STORAGE_KEY_CACHE)
   window.__Mindblower__.start()
 
@@ -87,7 +87,7 @@ $(document).ready(function() {
       let lastDate = new Date(last)
       msSinceLastAcccess = (+new Date() - lastDate) / 1000
       if (msSinceLastAcccess > ONE_HOUR) {
-        console.info("[Cache] Expired! %s seconds old", msSinceLastAcccess)
+        console.info('[Cache] Expired! %s seconds old', msSinceLastAcccess)
         localStorage.removeItem(MIND_ASC_STORAGE_KEY_LAST)
         localStorage.removeItem(MIND_ASC_STORAGE_KEY_CACHE)
         return fetchNew()
@@ -98,22 +98,22 @@ $(document).ready(function() {
     data.length = 10
 
     console.info(
-      "[Cache] Hit: Loading %s entries from %ss ago",
+      '[Cache] Hit: Loading %s entries from %ss ago',
       data.length,
       Math.round(msSinceLastAcccess / 1000)
     )
     initDataTable(data)
   } else {
-    console.info("[Cache] None found.")
+    console.info('[Cache] None found.')
     window.__Mindblower__.start()
     fetchNew()
   }
 })
 
 function fetchNew() {
-  console.info("[Cache] Refreshing..")
-  $.getJSON("/documents.json", function(data) {
-    console.info("[Cache] Refreshing.. Done!")
+  console.info('[Cache] Refreshing..')
+  $.getJSON('/documents.json', function(data) {
+    console.info('[Cache] Refreshing.. Done!')
     localStorage.setItem(MIND_ASC_STORAGE_KEY_CACHE, JSON.stringify(data))
     localStorage.setItem(MIND_ASC_STORAGE_KEY_LAST, new Date().toISOString())
 
@@ -133,37 +133,38 @@ function initDataTable(data) {
         data: null,
         orderable: false,
         defaultContent: HTML_CHEVRON_DOWN,
-        width: "100px"
+        width: '100px',
       },
       {
-        data: "content",
-        render: templateFactory("template-entry")
+        data: 'content',
+        render: (item, type, row) =>
+          Handlebars.compile(
+            document.getElementById('template-entry').innerHTML
+          )(row),
       },
-      { data: "year", defaultContent: "", visible: false }
+      { data: 'year', defaultContent: '', visible: false },
     ],
     pageLength: 20,
-    dom: "t p i",
+    dom: 't p i',
     ordering: true,
-    order: [[2, "desc"]],
+    order: [[2, 'desc']],
     orderClasses: false,
     language: {
       paginate: {
-        first: "<<",
-        last: ">>",
-        next: ">",
-        previous: "<"
-      }
+        first: '<<',
+        last: '>>',
+        next: '>',
+        previous: '<',
+      },
     },
-    drawCallback: () => {
-      setTimeout(feather.replace, 10)
-    },
-    autoWidth: false
+
+    autoWidth: false,
   })
 
-  $(".data-table tBody").on("click", "tr", function() {
-    const tr = $(this).closest("tr")
+  $('.data-table tBody').on('click', 'tr', function() {
+    const tr = $(this).closest('tr')
 
-    if (tr.hasClass("furtherInfoRow")) {
+    if (tr.hasClass('furtherInfoRow')) {
       // clicked on child
       return
     }
@@ -172,23 +173,21 @@ function initDataTable(data) {
     const handle = dataTable.cell(row, 0).node()
     const title = dataTable.cell(row, 1)
 
-    const evenOdd = row.node().classList.contains("even") ? "even" : "odd"
+    const evenOdd = row.node().classList.contains('even') ? 'even' : 'odd'
 
     if (row.child.isShown()) {
       row.child.hide()
-      tr.removeClass("shown")
+      tr.removeClass('shown')
       handle.innerHTML = HTML_CHEVRON_DOWN
     } else {
       row.child(furtherInfo(row.data()), `${evenOdd} furtherInfoRow`)
       row.child.show()
-      tr.addClass("shown")
+      tr.addClass('shown')
       handle.innerHTML = HTML_CHEVRON_RIGHT
     }
-
-    feather.replace()
   })
 
-  $(".title-bar__input").on("change keyup", function(event) {
+  $('.title-bar__input').on('change keyup', function(event) {
     dataTable
       .search(
         String(event.target.value)
@@ -199,7 +198,7 @@ function initDataTable(data) {
   })
 
   setTimeout(() => {
-    $(".data-table tfoot").remove()
+    $('.data-table tfoot').remove()
   })
 }
 

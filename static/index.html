@@ -16,11 +16,11 @@
       charset="utf8"
       src="./static/bower_components/handlebars/handlebars.min.js"
     ></script>
-    <script src="/static/bower_components/feather/feather.min.js"></script>
     <script src="/static/bower_components/foundation-sites/dist/js/foundation.min.js"></script>
     <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans"y=Open+Sans:300,400,700&display=swap"
-    rel="stylesheet" />
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap"
+      rel="stylesheet"
+    />
 
     <link
       rel="stylesheet"
@@ -44,18 +44,18 @@
 
     <script id="template-entry" type="text/x-handlebars-template">
       <div class="entry">
-        <ul class="entry__disciplines">{{#each row.disciplines}}
+        <ul class="entry__disciplines">{{#each disciplines}}
           <li><a onClick="updateSearchValue('{{this}}')">{{ this }}</a></li>
         {{/each}}</ul>
-        <h3>{{row.title}}</h3>
+        <h3>{{title}}</h3>
 
         <ul class="entry__authors">
-          {{#each row.authors}}
+          {{#each authors}}
             <li><a onClick="updateSearchValue('{{this.last_name}}')">{{ this.last_name }} {{this.first_name }}</a></li>
           {{/each}}
         </ul>
-        <a onClick="updateSearchValue('{{row.year}}')">{{row.year}}</a>
-        {{row.source}}
+        <a onClick="updateSearchValue('{{year}}')">{{year}}</a>
+        {{source}}
       </div>
     </script>
 
