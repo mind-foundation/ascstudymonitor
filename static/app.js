@@ -1,12 +1,14 @@
 MIND_ASC_STORAGE_KEY_CACHE = "mind-asc-cache"
 MIND_ASC_STORAGE_KEY_LAST = "mind-asc-last"
 
+var $table
+
 function updateSearchValue(newValue) {
   console.log("[Search] Update term: %s", newValue)
   window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
 
   // update value of input and simulate enter press
-  const $el = $(".search-bar__input")
+  const $el = $(".title-bar__input")
   $el.val(newValue)
   setTimeout(() => {
     $el.trigger("keyup")
@@ -36,16 +38,9 @@ function transformKeywords(data, type, row) {
 function furtherInfo(doc) {
   const abstract = doc.abstract
     ? `
-                <h2 class="furtherInfoHeader">Abstract</h2>
                 <div class="furtherInfoText">${renderAbstract(
                   doc.abstract
                 )}</div>
-            `
-    : ""
-  const citation = doc.citation
-    ? `
-                <h2 class="furtherInfoHeader">Citation</h2>
-                <div class="furtherInfoText">${doc.citation}</div>
             `
     : ""
 
@@ -62,7 +57,6 @@ function furtherInfo(doc) {
                 <div class="furtherInfo">
                     <div class="furtherInfoContent">
                         ${abstract}
-                        ${citation}
                     </div>
                     <div class="furtherInfoAction">
                         ${website}
@@ -75,6 +69,7 @@ function furtherInfo(doc) {
 // function spinnerDOMStringFactory(label) {}
 
 $(document).ready(function() {
+  $table = $(".data-table")
   let data = localStorage.getItem(MIND_ASC_STORAGE_KEY_CACHE)
   window.__Mindblower__.start()
 
@@ -95,6 +90,8 @@ $(document).ready(function() {
     }
 
     data = JSON.parse(data)
+    // data.length = 10
+
     console.info(
       "[Cache] Hit: Loading %s entries from %ss ago",
       data.length,
@@ -123,8 +120,9 @@ function initDataTable(data) {
   setTimeout(window.__Mindblower__.stop, 0)
   window.data = data
   bootstrapMenu(data)
-  const table = $(".data-table").DataTable({
+  const dataTable = $table.DataTable({
     data,
+    deferRender: true,
     columns: [
       {
         data: null,
@@ -132,36 +130,16 @@ function initDataTable(data) {
         defaultContent: '<i data-feather="arrow-down">Feather</i>'
       },
       {
-        data: "title",
-        render: templateFactory("template-title-column")
+        data: "content",
+        render: templateFactory("template-entry")
       },
-      { data: "source", defaultContent: "", width: "20%" },
 
-      // column to define order
-      { data: "created", visible: false, searchable: false },
-
-      // hidden but searchable columns
-      { data: "authors", defaultContent: "", visible: false },
-      { data: "disciplines", defaultContent: "", visible: false },
-      { data: "abstract", defaultContent: "", visible: false },
-      {
-        data: "keywords",
-        defaultContent: "",
-        render: transformKeywords,
-        visible: false
-      },
-      {
-        data: "identifiers",
-        defaultContent: "",
-        render: transformIdentifiers,
-        visible: false
-      },
       { data: "year", defaultContent: "", visible: false }
     ],
     pageLength: 20,
     dom: "t p i",
     ordering: true,
-    order: [[6, "desc"], [1, "asc"]],
+    order: [[2, "desc"]],
     orderClasses: false,
     language: {
       paginate: {
@@ -185,11 +163,9 @@ function initDataTable(data) {
       return
     }
 
-    const row = table.row(tr)
-    const handle = table.cell(row, 0).node()
-    const title = table.cell(row, 1)
-
-    console.log(row)
+    const row = dataTable.row(tr)
+    const handle = dataTable.cell(row, 0).node()
+    const title = dataTable.cell(row, 1)
 
     const evenOdd = row.node().classList.contains("even") ? "even" : "odd"
 
@@ -207,8 +183,8 @@ function initDataTable(data) {
     feather.replace()
   })
 
-  $(".search-bar__input").on("change keyup", function(event) {
-    table
+  $(".title-bar__input").on("change keyup", function(event) {
+    dataTable
       .search(
         String(event.target.value)
           .valueOf()
@@ -218,7 +194,6 @@ function initDataTable(data) {
   })
 
   setTimeout(() => {
-    $(".data-table thead").show()
     $(".data-table tfoot").remove()
   })
 }
@@ -226,3 +201,34 @@ function initDataTable(data) {
 function authorToText(author) {
   return `${author.first_name} ${author.last_name}`
 }
+
+// var DataTablesLinkify = function(dataTable) {
+//     this.dataTable = dataTable;
+//     this.url = location.protocol+'//'+location.host+location.pathname;
+//     this.link = function() {
+//         return this.url +
+//             '?dtsearch='+this.dataTable.search() +
+//             '&dtpage='+this.dataTable.page();
+//             //more params like current sorting column could be added here
+//     }
+//     //based on http://stackoverflow.com/a/901144/1407478
+//     this.getParam = function(name) {
+//         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+//         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+//             results = regex.exec(location.search);
+//         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+//     }
+//     this.restore = function() {
+//         var page = this.getParam('dtpage'),
+//             search = this.getParam('dtsearch');
+//         if (search) this.dataTable.search(search).draw(false);
+//         if (page) this.dataTable.page(parseInt(page)).draw(false);
+//         //more params to take care of could be added here
+//     }
+//     this.restore();
+//     return this;
+// };
+
+// function syncURLWithtable() {
+//   linkify = DataTablesLinkify(table)
+// }
