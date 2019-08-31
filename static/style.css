@@ -195,6 +195,10 @@ tr.furtherInfoRow.even:hover {
   table-layout: fixed;
 }
 
+tbody, tfoot, thead {
+  border: 0px;
+}
+
 .data-table tbody td {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -278,13 +282,8 @@ tr.furtherInfoRow.even:hover {
 }
 
 .data-table td.dataTables_empty {
-  padding: 0px !important;
-}
-
-table.dataTable thead th,
-.data-table.dataTable.no-footer {
-  border-bottom: 1px solid #ccc;
-}
+  padding: 0.5em !important;
+} 
 
 /** Paginate & Info footer **/
 
