@@ -64,7 +64,7 @@ class Datatable {
         },
         { data: 'year', defaultContent: '', visible: false },
       ],
-      pageLength: 20,
+      pageLength: 50,
       dom: 't p i',
       ordering: true,
       order: [[2, 'desc']],
