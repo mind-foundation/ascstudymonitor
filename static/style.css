@@ -25,10 +25,20 @@ body {
 }
 #menu-content {
   padding: 10px 0 0 10px;
+  overflow: scroll;
+  padding-bottom: 20px;
 }
 #menu-content a {
   color: #fff;
+  opacity: 0.9;
+  line-height: 1.5;
 }
+
+#menu-content a:hover {
+  opacity: 1;
+}
+
+
 #menu-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
@@ -60,14 +70,30 @@ body {
   font-weight: 700;
 }
 
+.menu__filter_header{
+  padding: 10px 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 1.2em;
+  opacity: 0.5;
+}
+
+
+.menu__filter_icon .b2 circle {
+  fill: white;
+  stroke: none;
+}
+
 .menu__category-link {
   font-size: 1.4em;
-  padding-bottom: 20px !important;
+  padding-top: 20px !important;
+  opacity: 0.9;
 }
 
 .menu__category-link:hover {
   color: #fff;
-  text-decoration: underline;
+  opacity: 1;
 }
 
 .menu__category-link-label {
@@ -82,13 +108,13 @@ body {
 }
 
 .menu__chev {
-  padding-top: 3px;
+  margin-top: 6px;
   height: 14px;
   float: right; 
 }
 
 .menu__chev .a1 {
-  height: 20px;
+  height: 10px;
   fill: none;
   stroke: white;
   stroke-width: 3px;
@@ -102,7 +128,7 @@ body {
 }
 
 .top-bar {
-  padding: 0;
+  padding: 0 !important;
 }
 
 .title-bar {
@@ -110,6 +136,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: stretch;
+  padding: 4px;
+  border-bottom: solid 1px #E0E0E0;
 }
 
 .title-bar__input {
@@ -117,6 +145,8 @@ body {
   background: transparent;
   outline: none;
   color: #5e5e5e;
+  font-weight: 300;
+  letter-spacing: 0;
   display: block;
   font-family: arial, sans-serif;
   font-size: inherit;
