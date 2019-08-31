@@ -3,16 +3,30 @@ body {
   font-size: 12px;
 }
 
-#ascTable {
+body {
+  color: #777;
+}
+
+.menu__toggle-button {
+}
+
+#main {
+  padding: 10px 10px 10px 40px;
+}
+
+.data-table {
   font-size: 12px;
 }
 
-#ascTable tr.shown {
+.data-table tr.shown {
   font-weight: bold;
 }
 
-#ascTable th {
+.data-table th {
   font-size: 14px;
+}
+.data-table th:first-child {
+  width: 50px;
 }
 
 .furtherInfo {
@@ -61,6 +75,8 @@ tr.furtherInfoRow.even:hover {
 /*** Search ***/
 .search-bar__container {
   overflow: hidden;
+  display: flex;
+  flex-direction: row;
 }
 .search-bar__input {
   background: none repeat scroll 0 0 #fafafa;
@@ -140,11 +156,6 @@ order-bottom: 1px solid #111;
 /* table.dataTable tbody td { */
 
 /*** Spinner ***/
-@keyframes rotating {
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
 .datatable-spinner__row {
   height: 70vh;
@@ -157,62 +168,4 @@ order-bottom: 1px solid #111;
   background-color: #fff;
   overflow: hidden;
   position: relative;
-}
-
-.datatable-spinner__label {
-  font-style: italic;
-  color: #fff;
-  transform: translateX(50%);
-  backdrop-filter: blur(2px);
-  width: 80px;
-  height: 80px;
-  border-radius: 40px;
-  font-size: 1.15em;
-  background: rgba(0, 0, 0, 0.7);
-  line-height: 0.8em;
-  z-index: 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.datatable-spinner__wrapper {
-  -webkit-animation: spiral 60s infinite;
-  animation: spiral 60s infinite;
-
-  -webkit-transform: translateZ(0);
-  -moz-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  -o-transform: translateZ(0);
-  transform: translateZ(0);
-}
-
-@-webkit-keyframes spiral {
-  0% {
-    -webkit-transform: rotateZ(0deg);
-  }
-  100% {
-    -webkit-transform: rotateZ(360deg);
-  }
-}
-@keyframes spiral {
-  0% {
-    transform: rotateZ(0deg);
-  }
-  100% {
-    transform: rotateZ(360deg);
-  }
-}
-
-.datatable-spinner__circle-container {
-  width: 0;
-  height: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-}
-.datatable-spinner__circle {
-  border-radius: 50%/50%;
-  border: 2px solid #ccc;
-  position: absolute;
 }

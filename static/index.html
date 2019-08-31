@@ -4,29 +4,24 @@
     <script
       type="text/javascript"
       charset="utf8"
-      src="https://code.jquery.com/jquery-3.3.1.min.js"
-    ></script>
-    <link
-      rel="stylesheet"
-      id="datatables"
-      href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"
-      type="text/css"
-      media="all"
-    />
-    <script
-      type="text/javascript"
-      charset="utf8"
-      src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"
+      src="./static/bower_components/jquery/dist/jquery.min.js"
     ></script>
     <script
       type="text/javascript"
       charset="utf8"
-      src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.min.js"
+      src="./static/bower_components/datatables.net/js/jquery.dataTables.min.js"
     ></script>
-    <link
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="./static/bower_components/handlebars/handlebars.min.js"
+    ></script>
+    <script src="/static/bower_components/feather/feather.min.js"></script>
+    <script src="/static/bower_components/foundation-sites/dist/js/foundation.js"></script>
+    <!-- <link
       href="https://fonts.googleapis.com/css?family=Open+Sans"
       rel="stylesheet"
-    />
+    /> -->
     <link
       rel="stylesheet"
       id="datatables"
@@ -34,44 +29,91 @@
       type="text/css"
       media="all"
     />
-    <script src="https://unpkg.com/feather-icons"></script>
-
-    <script src="./static/view.js"></script>
-    <script src="./static/mindblower.js"></script>
-    <script src="./static/app.js"></script>
-  </head>
-  <body>
-    <div class="search-bar__container">
-      <input type="text" class="search-bar__input" placeholder="Search..." />
-    </div>
-    <table class="data-table" class="display" style="width: 100%">
-      <thead style="display: none">
-        <tr>
-          <th></th>
-          <th>Publication</th>
-          <th>Published in</th>
-        </tr>
-      </thead>
-      <tfoot>
-        <tr>
-          <td colspan="5">
-            <div class="datatable-spinner__row">
-              <div class="datatable-spinner__label">Loading</div>
-              <div class="datatable-spinner__wrapper">
-                <script>
-                  startEffect()
-                </script>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </tf>
-    </table>
+    <link
+      rel="stylesheet"
+      href="./static/bower_components/foundation-sites/dist/css/foundation.css"
+      type="text/css"
+      media="all"
+    />
+    <link
+      rel="stylesheet"
+      href="./static/mindblower/mindblower.css"
+      type="text/css"
+      media="all"
+    />
 
     <script id="template-title-column" type="text/x-handlebars-template">
-      <h3>{{row.title}}</h3>
+      <h3>{{row.title}} ({{row.year}})</h3>
       <h4>{{#authors row.authors}}{{ this }}{{/authors}}</h4>
       <h5>{{#disciplines row.disciplines}}{{ this }}{{/disciplines}}</h5>
     </script>
+
+    <script id="template-menu" type="text/x-handlebars-template">
+      {{#each items}}
+        <li>
+          <a href="#">{{title}}</a>
+          <ul class="menu vertical nested">
+            {{#each data}}
+            <li><a href="#">{{ label }} - {{count}}</a></li>
+            {{/each}}
+          </ul>
+        </li>
+      {{/each}}
+    </script>
+
+    <!-- <li>
+        <a href="#">Item 2</a>
+        <ul class="menu vertical nested">
+          <li><a href="#">Item 2A</a></li>
+          <li><a href="#">Item 2B</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Item 3</a></li> -->
+
+    <script src="./static/view.js"></script>
+    <script src="./static/mindblower/mindblower.js"></script>
+    <script src="./static/ui.js"></script>
+    <script src="./static/app.js"></script>
+  </head>
+  <body>
+    <div id="mindblower">
+      <div id="mindblower__effect-container"></div>
+      <div class="mindblower__label">Loading</div>
+    </div>
+
+    <div id="menu" class="off-canvas position-left" data-off-canvas>
+      <div class="row">
+        <div class="columns">
+          <ul
+            class="vertical menu"
+            data-accordion-menu
+            style="max-width: 250px"
+            id="menu-content"
+          ></ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="main">
+      <div class="search-bar__container">
+        <button type="button" class="menu__toggle-button" data-toggle="menu">
+          Filter</button
+        ><input type="text" class="search-bar__input" placeholder="Search..." />
+      </div>
+      <table class="data-table" class="display" style="width: 100%">
+        <thead style="display: none">
+          <tr>
+            <th></th>
+            <th>Publication</th>
+            <th>Published in</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td colspan="5"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
   </body>
 </html>

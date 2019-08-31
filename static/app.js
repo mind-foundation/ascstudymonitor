@@ -55,9 +55,7 @@ function furtherInfo(doc) {
       }">Show on Publisher Website</a>`
     : ""
   const download = doc.file_attached
-    ? `<a target="_blank" rel="noopener noreferrer" href="/download/${
-        doc.id
-      }">Download full text</a>`
+    ? `<a target="_blank" rel="noopener noreferrer" href="/download/${doc.id}">Download full text</a>`
     : "<span>Fulltext available from Publisher</span>"
 
   return `
@@ -78,18 +76,18 @@ function furtherInfo(doc) {
 
 $(document).ready(function() {
   let data = localStorage.getItem(MIND_ASC_STORAGE_KEY_CACHE)
-
-  setTimeout(startEffect, 0)
+  window.__Mindblower__.start()
 
   const useCache = true /* edit me */
-  let secondsSinceLastAccess = -1
+  let msSinceLastAcccess = -1
   if (useCache && data) {
+    const ONE_HOUR = 3600e3
     let last = localStorage.getItem(MIND_ASC_STORAGE_KEY_LAST)
     if (last) {
       let lastDate = new Date(last)
-      secondsSinceLastAccess = (+new Date() - lastDate) / 1000
-      if (secondsSinceLastAccess > 60) {
-        console.info("[Cache] Expired! %s seconds old", secondsSinceLastAccess)
+      msSinceLastAcccess = (+new Date() - lastDate) / 1000
+      if (msSinceLastAcccess > ONE_HOUR) {
+        console.info("[Cache] Expired! %s seconds old", msSinceLastAcccess)
         localStorage.removeItem(MIND_ASC_STORAGE_KEY_LAST)
         localStorage.removeItem(MIND_ASC_STORAGE_KEY_CACHE)
         return fetchNew()
@@ -100,11 +98,12 @@ $(document).ready(function() {
     console.info(
       "[Cache] Hit: Loading %s entries from %ss ago",
       data.length,
-      Math.round(secondsSinceLastAccess)
+      Math.round(msSinceLastAcccess / 1000)
     )
     initDataTable(data)
   } else {
     console.info("[Cache] None found.")
+    window.__Mindblower__.start()
     fetchNew()
   }
 })
@@ -121,18 +120,20 @@ function fetchNew() {
 }
 
 function initDataTable(data) {
+  setTimeout(window.__Mindblower__.stop, 0)
+  window.data = data
+  bootstrapMenu(data)
   const table = $(".data-table").DataTable({
     data,
     columns: [
       {
         data: null,
         orderable: false,
-        width: "10px",
-        defaultContent: '<i data-feather="arrow-down"></i>'
+        defaultContent: '<i data-feather="arrow-down">Feather</i>'
       },
       {
         data: "title",
-        render: templateFactory("template-title-column"),
+        render: templateFactory("template-title-column")
       },
       { data: "source", defaultContent: "", width: "20%" },
 
@@ -170,7 +171,9 @@ function initDataTable(data) {
         previous: "<"
       }
     },
-    drawCallback: feather.replace,
+    drawCallback: () => {
+      setTimeout(feather.replace, 10)
+    },
     autoWidth: false
   })
 
