@@ -132,22 +132,6 @@ body {
   font-size: 12px;
 }
 
-.data-table tr.shown {
-  font-weight: bold;
-}
-
-.data-table th {
-  font-size: 14px;
-}
-.data-table thead th:nth-child(1) {
-  width: 20px;
-}
-.data-table tbody tr:not(.furtherInfoRow) td:nth-child(1) {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .furtherInfo {
   padding-top: 10px;
   padding-left: 56px;
@@ -205,6 +189,28 @@ tr.furtherInfoRow.even:hover {
 
 .data-table tfoot td {
   width: 100%;
+}
+
+.data-table tr.shown {
+  font-weight: bold;
+}
+
+.data-table th {
+  font-size: 14px;
+}
+.data-table thead {
+  visibility: collapse;
+}
+.data-table thead th:nth-child(1) {
+  width: 20px;
+}
+
+/*  chevron */
+.data-table tbody tr:not(.furtherInfoRow) td:nth-child(1) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 40px;
 }
 
 .entry ul {
