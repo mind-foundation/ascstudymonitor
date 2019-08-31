@@ -1,10 +1,9 @@
 class Mindblower {
   constructor() {}
   start() {
-    console.log("Start effect")
-    const width = $("#mindblower").width()
-    const height = $("#mindblower").height()
-    let circles = ""
+    const width = $('#mindblower').width()
+    const height = $('#mindblower').height()
+    let circles = ''
     const total = 50 // number of overlapping circles
     const size = 900 // diameter of circles (px)
 
@@ -30,11 +29,11 @@ class Mindblower {
     //    + height / 2
     //  + width / 2
 
-    $("#mindblower__effect-container").html(circles)
+    $('#mindblower__effect-container').html(circles)
   }
 
   stop() {
-    $("#mindblower").remove()
+    $('#mindblower').fadeOut(300)
   }
 }
 
