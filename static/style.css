@@ -57,11 +57,12 @@ body {
 .menu-bottom__love {
   display: block;
   font-size: 0.8em;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .menu__category-link {
-  font-size: 1.2em;
+  font-size: 1.4em;
+  padding-bottom: 20px !important;
 }
 
 .menu__category-link:hover {
@@ -70,7 +71,7 @@ body {
 }
 
 .menu__category-link-label {
-  font-weight: 600;
+  font-weight: 700;
   display: inline;
 }
 
@@ -78,6 +79,19 @@ body {
   font-weight: 300;
   letter-spacing: 0.075em;
   color: rgba(255, 255, 255, 0.6);
+}
+
+.menu__chev {
+  padding-top: 3px;
+  height: 14px;
+  float: right; 
+}
+
+.menu__chev .a1 {
+  height: 20px;
+  fill: none;
+  stroke: white;
+  stroke-width: 3px;
 }
 
 /*
