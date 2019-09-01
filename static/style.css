@@ -42,14 +42,22 @@ body {
   color: #fff;
 }
 #menu-content {
-  padding: 10px 0 0 10px;
+  padding: 10px 10px 0 10px;
   overflow: scroll;
   padding-bottom: 20px;
 }
+
+#menu-content > li {
+  margin: 1em 0;
+}
+
+#menu-content ul {
+  margin-top: 1em;
+}
+
 #menu-content a {
   color: #fff;
   opacity: 0.9;
-  line-height: 1.5;
 }
 
 #menu-content a:hover {
@@ -112,7 +120,6 @@ body {
 }
 
 .menu__filter_header {
-  padding: 14px 0px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -123,11 +130,6 @@ body {
 .menu__filter_header span {
   font-size: 1.5em;
   margin-left: 0.5em;
-}
-
-.menu__filter_icon .b2 circle {
-  fill: white;
-  stroke: none;
 }
 
 .menu__category-link {
@@ -173,6 +175,11 @@ body {
 
 .menu__category-collapsed {
   display: none;
+}
+
+.filterItem a {
+  line-height: 1.8;
+  padding: 0 !important;
 }
 
 .filterItem.actveInFiler {
