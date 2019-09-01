@@ -5,6 +5,7 @@ function initMenu() {
       distinct: App.distinct,
       keys: App,
       open: App.Menu.open,
+      filters: App.filters,
       items: {
         disciplines: {
           expanded: false,
@@ -52,24 +53,43 @@ function initMenu() {
       },
       data: App.data,
     },
+    computed: {
+      filterClassObject: function() {
+        console.log('this', this)
+        console.log('label', this.filters)
+        console.log('key', this.key)
+        return {
+          active:
+            this.filters[this.key] && this.filters[this.key].includes(d.label),
+        }
+      },
+    },
     methods: {
       handleMenuCategoryToggle(event) {
         console.log('menu category toggle')
         const $target = $(event.target)
 
-        const key = $target.closest('li').data('key')
+        const $li = $target.closest('li')
+        const key = $li.data('key')
         toggle(App.Menu.open, key)
-        $(`ul[data-key="${key}"]`)
-          .stop()
-          .slideToggle(300)
+        const $ul = $li.find('ul')
+        console.log('query', $ul)
+        $ul.stop().slideToggle(300)
       },
       filterItemClick() {
         const $target = $(event.target)
 
-        const key = $target.closest('ul').data('key')
-        const value = $target.data('value')
+        const key = $target.closest('li[data-key]').data('key')
+        console.log('key', key)
+        const value = $target.closest('li[data-value]').data('value')
+        console.log('value', value)
         console.log('call toggle filer', key, value)
         App.toggleFilter(key, value)
+      },
+      formatLabel(label) {
+        return typeof label !== 'object'
+          ? label
+          : `${label.first_name} ${label.last_name}`
       },
     },
   })

@@ -185,7 +185,6 @@
       <div id="mindblower__effect-container"></div>
       <div class="mindblower__label"></div>
     </div>
-    
 
     <div id="main" data-off-canvas-content>
       <div class="top-bar" data-sticky-container>
@@ -253,18 +252,15 @@
               />
             </svg>
           </a>
-          <ul class="menu vertical nested" v-bind:data-key="key">
-            <li class="filterItem" v-for="d in item.data">
-              <a
-                href="#"
-                v-on:click="filterItemClick($event)"
-                v-bind:data-value="d.label"
-                >{{ typeof d.label == 'object' ? 
-                
-                [d.label.last_name, d.label.first_name].join(', ')
-                : d.label }}
-                ({{ d.count }})</a
-              >
+          <ul class="menu vertical nested">
+            <li
+              class="filterItem"
+              v-for="d in item.data"
+              v-bind:class="filterClassObject"
+              v-bind:data-value="formatLabel(d.label)"
+              v-on:click="filterItemClick($event)"
+            >
+              <a href="#">{{ formatLabel(d.label) }} ({{ d.count }})</a>
             </li>
           </ul>
         </li>
