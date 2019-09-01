@@ -428,8 +428,11 @@ thead {
 
 .entry__year_source a {
   display: inline-block;
-  width: 33px;
   color: #333 !important;
+}
+
+.entry__year_source__year {
+  width: 33px;
 }
 
 .entry__year_source a:hover {

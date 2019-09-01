@@ -14,7 +14,7 @@
     <script
       type="text/javascript"
       charset="utf8"
-      src="./static/bower_components/vue/dist/vue.js"
+      src="./static/bower_components/vue/dist/vue.min.js"
     ></script>
     <script
       type="text/javascript"
@@ -69,7 +69,7 @@
           </div>
           {{#each disciplines}}
             <li>
-              <a onClick="App.search('{{this}}')">{{ this }}</a>
+              <a onClick="App.toggleFilter('disciplines', '{{this}}')">{{ this }}</a>
             </li>
           {{/each}}
         </ul>
@@ -106,7 +106,7 @@
           </div>
           <div class="entry_authors_holder">
             {{#each authors}}
-              <li><a onClick="App.search('{{ this.last_name }}')">{{ this.first_name }} {{ this.last_name }}</a></li>
+              <li><a onClick="App.toggleFilter('authors', '{{ this.first_name }} {{ this.last_name }}')">{{ this.first_name }} {{ this.last_name }}</a></li>
             {{/each}}
           </div>
         </ul>
@@ -127,8 +127,8 @@
 
 
         <div class="entry__year_source">
-          <a onClick="App.search('{{year}}')">{{year}}</a>
-          {{source}}
+          <a class="entry__year_source__year" onClick="App.toggleFilter('year', '{{year}}')">{{ year }}</a>
+          <a onClick="App.toggleFilter('source', '{{ source }}')">{{ source }}</q>
         </div>
 
         <div class="entry__downloads" style="display: none">

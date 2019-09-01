@@ -1,5 +1,5 @@
 function initMenu() {
-  const Menu = new Vue({
+  App.Menu = new Vue({
     el: '#menu-content',
     data: {
       distinct: App.distinct,
@@ -46,7 +46,7 @@ function initMenu() {
           total: App.distinct.year.length,
           data: App.distinct.year.map(year => ({
             active: false,
-            label: year,
+            label: year.toString(),
             count: App.data.filter(d => d.year === year).length,
           })),
         },
@@ -71,7 +71,6 @@ function initMenu() {
         const key = $target.closest('li[data-key]').data('key')
         const value = $target.closest('li[data-value]').data('value')
         App.toggleFilter(key, value)
-        this.$forceUpdate()
       },
       formatLabel(label) {
         return typeof label !== 'object'
@@ -80,13 +79,6 @@ function initMenu() {
       },
     },
   })
-
-  // var data = dataWithoutNormalizedAuthors.map(d => ({
-  //       ...d,
-  //       authors: d.authors
-  //         ? d.authors.map(a => [a.last_name, a.first_name].join(', '))
-  //         : null,
-  //     }))
 }
 
 function toggle(collection, item) {

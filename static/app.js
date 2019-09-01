@@ -6,55 +6,25 @@ function filterPatternAny(labels) {
   return '(' + labels.join('|') + ')'
 }
 
-function filterPatternAll(labels) {
-  // currently not in use
-  return labels.map(label => `(?=.*${label})`).join('') + '.*'
-}
 
 window.App = {
   filters: {},
+  
   toggleFilter(column, label) {
-    if (!App.filters) {
-      App.addFilter(column, label)
-      return
-    }
-
-    if (!App.filters[column]) {
-      App.addFilter(column, label)
-      return
-    }
-
-    if (App.filters[column].includes(label)) {
-      App.removeFilter(column, label)
-    } else {
-      App.addFilter(column, label)
-    }
-  },
-
-  addFilter(column, label) {
-    if (!App.filters) {
-      App.filters = {}
-    }
+    label = label.toString()
 
     if (!App.filters[column]) {
       App.filters[column] = []
     }
 
-    App.filters[column].push(label)
-    App.applyFilters()
-  },
-
-  removeFilter(column, label) {
-    if (!App.filters) {
-      return
+    if (App.filters[column].includes(label)) {
+      App.filters[column] = App.filters[column].filter(item => item != label)
+    } else {
+      App.filters[column].push(label)
     }
 
-    if (!App.filters[column]) {
-      return
-    }
-
-    App.filters[column] = App.filters[column].filter(item => item != label)
     App.applyFilters()
+    App.Menu.$forceUpdate()
   },
 
   applyFilters() {
@@ -66,21 +36,7 @@ window.App = {
     App.Datatable.draw()
   },
 
-  search(newValue) {
-    console.log('[Search] Update term: %s', newValue)
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
-
-    // update value of input and simulate enter press
-    const $el = $('.title-bar__input')
-    $el.val(newValue)
-    setTimeout(() => {
-      $el.trigger('keyup')
-    }, 0)
-    return false
-    // smooth scroll up
-  },
-
-  data: function() {
+  fetch() {
     const MIND_ASC_STORAGE_KEY_CACHE = 'mind-asc-cache'
     const MIND_ASC_STORAGE_KEY_LAST = 'mind-asc-last'
 
@@ -98,7 +54,9 @@ window.App = {
         msSinceLastAccess = (+new Date() - lastDate) / 1000
         if (msSinceLastAccess <= ONE_HOUR) {
           data = JSON.parse(cachedData)
-          data.length = 10
+          
+          // for faster development
+          // data.length = 100
           // data = data.filter(d => d.file_attached)
 
           console.info(
@@ -120,7 +78,7 @@ window.App = {
   async onDOMReady() {
     window.__Mindblower__.start()
 
-    const data = await App.data()
+    const data = await App.fetch()
 
     App.data = data
 
