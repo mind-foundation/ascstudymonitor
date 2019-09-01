@@ -14,6 +14,11 @@
     <script
       type="text/javascript"
       charset="utf8"
+      src="./static/bower_components/vue/dist/vue.js"
+    ></script>
+    <script
+      type="text/javascript"
+      charset="utf8"
       src="./static/bower_components/handlebars/handlebars.min.js"
     ></script>
     <script src="/static/bower_components/foundation-sites/dist/js/foundation.min.js"></script>
@@ -149,33 +154,6 @@
       </div>
     </script>
 
-    <script id="template-menu-outer" type="text/x-handlebars-template">
-      <li class="menu__filter_header">
-        <span>Filter</span>
-      </li>
-      {{#each items}}
-        <li>
-          <a href="#" class="menu__category-link" onClick="window.Menu.handleMenuCategoryToggle('{{key}}')" data-key="{{key}}">
-            <span class="menu__category-link-label">{{ title }}</span>&nbsp;
-            <span class="menu__category-link-count">{{ total }}</span>
-            <svg class="menu__chev" xmlns="http://www.w3.org/2000/svg" width="35.912" height="20.077" viewBox="0 0 35.912 20.077" {{#if expanded }} style="transform: rotate(0deg)" {{/if}}>
-              <path class="a1" d="M36.107,2581,53,2597.9l-16.9,16.9" transform="translate(2615.851 -35.046) rotate(90)"/>
-            </svg>
-          </a>
-        </li>
-      {{/each}}
-    </script>
-
-    <script id="template-menu-inner" type="text/x-handlebars-template">
-      <ul class="menu vertical nested {{#unless item.expanded}} menu__category-collapsed {{/unless}} "> 
-        {{#each item.data}}
-          <li class="filterItem {{#if active}} filterItem__active {{/if}}">
-            <a href="#" onClick="window.Menu.filterItemClick('{{ ../key }}', '{{ label }}', {{ active }})">{{ label }} ({{ count }})</a>
-          </li>
-        {{/each}}
-      </ul>
-    </script>
-
     <!-- <li>
         <a href="#">Item 2</a>
         <ul class="menu vertical nested">
@@ -186,9 +164,10 @@
       <li><a href="#">Item 3</a></li> -->
 
     <script src="./static/mindblower/mindblower.js"></script>
-    <script src="./static/ui.js"></script>
+    <!-- <script src="./static/ui.js"></script> -->
     <script src="./static/app.js"></script>
     <script src="./static/datatable.js"></script>
+    <script src="./static/menu.js"></script>
   </head>
   <body>
     <div id="mindblower">
@@ -218,7 +197,52 @@
     </div>
 
     <div id="menu">
-      <ul style="max-width: 250px" id="menu-content"></ul>
+      <ul style="max-width: 250px" id="menu-content">
+        <li class="menu__filter_header">
+          <span>Filter</span>
+        </li>
+        <li v-for="(item, key) in items" v-bind:data-key="key">
+          <a
+            href="#"
+            class="menu__category-link"
+            v-on:click="handleMenuCategoryToggle($event)"
+          >
+            <span class="menu__category-link-label">{{ item.title }}</span
+            >&nbsp;
+            <span class="menu__category-link-count">{{ item.total }}</span>
+            <svg
+              class="menu__chev"
+              xmlns="http://www.w3.org/2000/svg"
+              width="35.912"
+              height="20.077"
+              viewBox="0 0 35.912 20.077"
+              v-bind:class="{
+                'open': open.includes(key),  
+              }"
+            >
+              <path
+                class="a1"
+                d="M36.107,2581,53,2597.9l-16.9,16.9"
+                transform="translate(2615.851 -35.046) rotate(90)"
+              />
+            </svg>
+          </a>
+          <ul class="menu vertical nested" v-bind:data-key="key">
+            <li class="filterItem" v-for="d in item.data">
+              <a
+                href="#"
+                v-on:click="filterItemClick($event)"
+                v-bind:data-value="d.label"
+                >{{ typeof d.label == 'object' ? 
+                
+                [d.label.last_name, d.label.first_name].join(', ')
+                : d.label }}
+                ({{ d.count }})</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
 
       <div id="menu-bottom">
         <div id="menu-info">

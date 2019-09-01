@@ -19,7 +19,7 @@ window.Menu = {
 
   renderItems(column) {
     console.log("[Menu] render inner", colum)
-    
+
     if (!Menu.templateInner) {
       Menu.templateInner = Handlebars.compile(
         document.getElementById('template-menu-inner').innerHTML
@@ -99,57 +99,8 @@ window.Menu = {
       'year',
     ].map(getDistinct)
 
-    Menu.items = {
-      'discipline': {
-        expanded: false,
-        title: 'Disciplines',
-        total: allDisciplines.length,
-        data: allDisciplines
-          .map(discipline => ({
-            active: false,
-            label: discipline,
-            count: data.filter(
-              d => d.disciplines && d.disciplines.includes(discipline)
-            ).length,
-          })),
-      },
-      'source': {
-        expanded: false,
-        title: 'Journals',
-        total: allSources.length,
-        data: allSources
-          .map(source => ({
-            active: false,
-            label: source,
-            count: data.filter(d => d.source === source).length,
-          })),
-      },
-      'author': {
-        expanded: false,
-        title: 'Authors',
-        total: allAuthors.length,
-        data: allAuthors
-          .map(author => ({
-            active: false,
-            label: author,
-            count: data.filter(d => d.authors && d.authors.includes(author))
-              .length,
-          })),
-      },
-      'year': {
-        expanded: false,
-        title: 'Years',
-        total: allYears.length,
-        data: allYears
-          .map(year => ({
-            active: false,
-            label: year,
-            count: data.filter(d => d.year === year).length,
-          })),
-      },
-    }
 
     // console.log("items", items)
-    Menu.render()
+//    Menu.render()
   },
 }

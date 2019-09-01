@@ -41,8 +41,7 @@ window.App = {
     // smooth scroll up
   },
 
-  data: async function() {
-    console.log('fetching data')
+  data: function() {
     const MIND_ASC_STORAGE_KEY_CACHE = 'mind-asc-cache'
     const MIND_ASC_STORAGE_KEY_LAST = 'mind-asc-last'
 
@@ -72,7 +71,7 @@ window.App = {
     }
 
     if (!data) {
-      data = await $.getJSON('/documents.json')
+      data = $.getJSON('/documents.json')
     }
 
     return data
@@ -83,14 +82,34 @@ window.App = {
 
     const data = await App.data()
 
-    window.Menu.bootstrap(data)
+    App.data = data
+
+    //window.Menu.bootstrap(data)
     App.Datatable.init(data)
 
     setTimeout(() => window.__Mindblower__.stop(), 10)
 
     // const hasData = await this.data
 
-    $("#menu-bottom").foundation()
+    const getDistinct = key =>
+      Array.from(new Set(data.flatMap(d => d[key])))
+        .filter(Boolean)
+        .sort()
+
+    App.Menu = {
+      open: [],
+    }
+
+    App.distinct = ['disciplines', 'source', 'authors', 'year'].reduce(
+      (bag, key) => ({
+        ...bag,
+        [key]: getDistinct(key),
+      }),
+      {}
+    )
+
+    initMenu()
+    setTimeout(() => $(document).foundation(), 1000)
   },
 }
 

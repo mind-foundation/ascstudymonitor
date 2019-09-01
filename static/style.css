@@ -40,6 +40,10 @@ body {
   opacity: 1;
 }
 
+.menu.vertical.nested {
+  display: none;
+}
+
 #menu-bottom {
   display: flex;
   flex-direction: column;
@@ -133,6 +137,10 @@ body {
   float: right;
   transform: rotate(90deg);
   transition: transform 0.2s ease-in;
+}
+
+.menu__chev.open {
+  transform: rotate(0deg) !important;
 }
 
 .menu__chev .a1 {
@@ -287,8 +295,8 @@ thead {
   width: 20px;
 }
 
-.data-table tbody tr:nth-child(even){
-  background-color: #F8F9FB !important;
+.data-table tbody tr:nth-child(even) {
+  background-color: #f8f9fb !important;
 }
 
 /*  chevron */

@@ -68,12 +68,11 @@ class Datatable {
     $(`div.entry[data-id="${id}"] .entry__abstract`).slideToggle()
   }
 
-  init(data) {
+  init() {
     const $table = $('.data-table')
-    this.data = data
 
     const dataTable = $table.DataTable({
-      data,
+      data: App.data,
       deferRender: true,
       columns: [
         {
@@ -94,9 +93,9 @@ class Datatable {
 
         // columns to filter by
         { data: 'year', defaultContent: '', visible: false },
-        { data: 'disciplines', defaultContent: '', visible: false},
-        { data: 'source', defaultContent: '', visible: false},
-        { data: 'authors', defaultContent: '', visible: false},
+        { data: 'disciplines', defaultContent: '', visible: false },
+        { data: 'source', defaultContent: '', visible: false },
+        { data: 'authors', defaultContent: '', visible: false },
       ],
       pageLength: 20,
       dom: 't p i',
