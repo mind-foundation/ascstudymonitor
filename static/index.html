@@ -263,10 +263,10 @@
   <body>
     <div id="mindblower">
       <div id="mindblower__effect-container"></div>
-      <div class="mindblower__label"></div>
+      <div class="mindblower__label" aria-busy="true" role="alert"></div>
     </div>
 
-    <div id="main" data-off-canvas-content>
+    <main id="main" data-off-canvas-content role="main">
       <div class="top-bar" data-sticky-container>
         <div
           class="title-bar"
@@ -278,16 +278,20 @@
             type="text"
             class="title-bar__input"
             placeholder="Search all articles..."
+            role="search"
           />
         </div>
-      </div>
+      </main>
 
       <table class="data-table" class="display" style="width: 100%">
+        <caption>
+          Publications
+        </caption>
         <thead></thead>
       </table>
     </div>
 
-    <div id="menu">
+    <nav id="menu" role="navigation">
       <ul style="max-width: 250px" id="menu-content">
         <li class="menu__filter_header">
           <svg
@@ -325,7 +329,7 @@
           </svg>
           <span>Filter</span>
         </li>
-        <li v-for="(item, key) in items" v-bind:data-key="key">
+        <li v-for="(item, key) in items" v-bind:data-key="key" aria-level="1">
           <a
             href="#"
             class="menu__category-link"
@@ -360,6 +364,7 @@
               v-bind:class="{
                 'activeInFilter': filters[key] && filters[key].includes(formatLabel(d.label)),  
               }"
+              aria-level="2"
             >
               <a href="#">{{ formatLabel(d.label) }} ({{ d.count }})</a>
             </li>
@@ -369,8 +374,8 @@
 
       <div id="menu-bottom">
         <div id="menu-info">
-          <a data-open="modal-about">Info</a>
-          <div class="reveal" id="modal-about" data-reveal>
+          <a aria-haspopup="true" data-open="modal-about">Info</a>
+          <div class="reveal" id="modal-about" data-reveal aria-modal="true">
             <h3>Thank you for being here</h3>
             <p>
               The ASC Study Monitor is a curated, freely accessible, and
@@ -417,7 +422,7 @@
           </span>
         </div>
       </div>
-    </div>
+    </nav>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script
