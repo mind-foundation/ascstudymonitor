@@ -1,19 +1,36 @@
 window.Menu = {
-  render() {
-    console.log("[Menu] render")
-    
-    const $menu = $('#menu-content')
+  getItemsForDisplay() {
+    return Object.entries(Menu.items).map(([key, item]) => ({...item, key}))
+  }
 
-    if (!Menu.template) {
-      Menu.template = Handlebars.compile(
-        document.getElementById('template-menu').innerHTML
+  renderOuter() {
+    console.log("[Menu] render outer")
+
+    if (!Menu.templateOuter) {
+      Menu.templateOuter = Handlebars.compile(
+        document.getElementById('template-menu-outer').innerHTML
       )
     }
 
-    Menu.sortItems()
-    const items = Object.entries(Menu.items).map(([key, item]) => ({...item, key}))
+    const $menu = $('#menu-content')
+    const items = Menu.getItemsForDisplay()
+    $menu.html(Menu.templateOuter({ items }))
+  }
 
-    $menu.html(Menu.template({ items }))
+  renderItems(column) {
+    console.log("[Menu] render inner", colum)
+    
+    if (!Menu.templateInner) {
+      Menu.templateInner = Handlebars.compile(
+        document.getElementById('template-menu-inner').innerHTML
+      )
+    }
+
+    Menu.sortItems(column)
+
+    const item = Menu.items[column]
+    const $menu = $('#menu-content')
+    $menu.html(Menu.templateInner({ item }))
   },
 
   filterItemClick(column, label, currentActive) {
@@ -40,14 +57,8 @@ window.Menu = {
     Menu.render()
   },
 
-  toggleExpanded(column, expanded) {
-    console.log("[Menu] expand", column, expanded)
-    Menu.items[column].expanded = expanded
-    Menu.render()
-  },
-
-  sortItems() {
-    Object.values(Menu.items).map(item => {
+  sortItems(colum) {
+    Menu.items[column] = Menu.items[column].map(item => {
       return item.data.sort((a, b) => {
         if (a.active == b.active) {
           return b.count - a.count
@@ -57,17 +68,15 @@ window.Menu = {
     })
   },
 
+  toggleExpanded(column, expanded) {
+    console.log("[Menu] expand", column, expanded)
+    Menu.items[column].expanded = expanded
+    Menu.render()
+  },
+
   handleMenuCategoryToggle(key) {
-    const $a = $(`.menu__category-link[data-key="${key}"]`)
-    console.log($a)
-    
     var isActive = Menu.items[key].expanded
     Menu.toggleExpanded(key, !isActive)
-
-    $a.data('active', !isActive)
-    $a.find('svg').css({
-      transform: `rotate(${isActive ? 90 : 0}deg)`,
-    })
   },
 
   bootstrap(dataWithoutNormalizedAuthors) {

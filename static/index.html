@@ -106,28 +106,31 @@
       </div>
     </script>
 
-    <script id="template-menu" type="text/x-handlebars-template">
+    <script id="template-menu-outer" type="text/x-handlebars-template">
       <li class="menu__filter_header">
         <span>Filter</span>
-        </li>
+      </li>
       {{#each items}}
         <li>
           <a href="#" class="menu__category-link" onClick="window.Menu.handleMenuCategoryToggle('{{key}}')" data-key="{{key}}">
             <span class="menu__category-link-label">{{ title }}</span>&nbsp;
             <span class="menu__category-link-count">{{ total }}</span>
-            <svg class="menu__chev" xmlns="http://www.w3.org/2000/svg" width="35.912" height="20.077" viewBox="0 0 35.912 20.077">
+            <svg class="menu__chev" xmlns="http://www.w3.org/2000/svg" width="35.912" height="20.077" viewBox="0 0 35.912 20.077" {{#if expanded }} style="transform: rotate(0deg)" {{/if}}>
               <path class="a1" d="M36.107,2581,53,2597.9l-16.9,16.9" transform="translate(2615.851 -35.046) rotate(90)"/>
             </svg>
           </a>
-          <ul class="menu vertical nested {{#unless expanded}} menu__category-collapsed {{/unless}} ">
-            {{#each data}}
-              <li class="filterItem {{#if active}} filterItem__active {{/if}}">
-                <a href="#" onClick="window.Menu.filterItemClick('{{ ../key }}', '{{ label }}', {{ active }})">{{ label }} ({{ count }})</a>
-              </li>
-            {{/each}}
-          </ul>
         </li>
       {{/each}}
+    </script>
+
+    <script id="template-menu-inner" type="text/x-handlebars-template">
+      <ul class="menu vertical nested {{#unless item.expanded}} menu__category-collapsed {{/unless}} "> 
+        {{#each item.data}}
+          <li class="filterItem {{#if active}} filterItem__active {{/if}}">
+            <a href="#" onClick="window.Menu.filterItemClick('{{ ../key }}', '{{ label }}', {{ active }})">{{ label }} ({{ count }})</a>
+          </li>
+        {{/each}}
+      </ul>
     </script>
 
     <!-- <li>
