@@ -1,4 +1,41 @@
+function filterPatternAny(labels) {
+  if (labels.length == 0) {
+    return ""
+  }
+
+  return "(" + labels.join("|") + ")"
+}
+
+function filterPatternAll(labels) {
+  return labels.map(label => `(?=.*${label})`).join("") + ".*"
+}
+
+function filterPatternAllAuthors(authors) {
+  // convert menu author format to search author format, then search by all
+  const authorsLikeContent = authors.map(a => a.split(", ").reverse().join(" "))
+  return filterPatternAll(authorsLikeContent)
+}
+
 window.App = {
+  toggleFilter(column, label) {
+    if (!App.filters) {
+      App.addFilter(column, label)
+      return
+    }
+
+    if (!App.filters[column]) {
+      App.addFilter(column, label)
+      return
+    }
+
+    if (App.filters[column].includes(label)) {
+      App.removeFilter(column, label)
+    }
+    else {
+      App.addFilter(column, label)
+    }
+  },
+
   addFilter(column, label) {
     if (!App.filters) {
       App.filters = {}
@@ -9,6 +46,7 @@ window.App = {
     }
 
     App.filters[column].push(label)
+    App.applyFilters()
   },
 
   removeFilter(column, label) {
@@ -21,10 +59,23 @@ window.App = {
     }
 
     App.filters[column] = App.filters[column].filter(item => item != label)
+    App.applyFilters()
+  },
+
+  filterPatternBuilders: {
+    year: filterPatternAny,
+    disciplines: filterPatternAny,
+    authors: filterPatternAllAuthors,
+    source: filterPatternAny,
   },
 
   applyFilters() {
-    // Filter by specific colu,n
+    // Apply filter state by specific columns
+    Object.entries(App.filters).forEach(([column, labels]) => {
+      App.Datatable.updateColumnFilter(column, labels, App.filterPatternBuilders[column])
+    })
+
+    App.Datatable.draw();
   },
 
   search(newValue) {

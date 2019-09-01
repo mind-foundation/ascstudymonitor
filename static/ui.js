@@ -1,7 +1,7 @@
 window.Menu = {
   getItemsForDisplay() {
     return Object.entries(Menu.items).map(([key, item]) => ({...item, key}))
-  }
+  },
 
   renderOuter() {
     console.log("[Menu] render outer")
@@ -15,7 +15,7 @@ window.Menu = {
     const $menu = $('#menu-content')
     const items = Menu.getItemsForDisplay()
     $menu.html(Menu.templateOuter({ items }))
-  }
+  },
 
   renderItems(column) {
     console.log("[Menu] render inner", colum)
@@ -101,6 +101,6 @@ window.Menu = {
 
 
     // console.log("items", items)
-//    Menu.render()
+    //    Menu.render()
   },
 }

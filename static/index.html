@@ -85,7 +85,7 @@
           </div>
           <div class="entry_authors_holder">
             {{#each authors}}
-              <li><a onClick="App.search('{{this.last_name}}')">{{ this.last_name }} {{this.first_name }}</a></li>
+              <li><a onClick="App.search('{{ this.last_name }}')">{{ this.first_name }} {{ this.last_name }}</a></li>
             {{/each}}
           </div>
         </ul>

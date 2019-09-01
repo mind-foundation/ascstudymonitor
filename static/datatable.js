@@ -68,6 +68,22 @@ class Datatable {
     $(`div.entry[data-id="${id}"] .entry__abstract`).slideToggle()
   }
 
+  updateColumnFilter(columnName, labels, patternBuilderFn) {
+    /*
+    Add a column filter given a column name and list of queries.
+    patternBuilderFn is a callback [string] -> string that builds a regex to search the table.
+    Use Datatable.draw() to render filtered data after all filters have been applied.
+    */
+    const column = this.dataTable.column(`${columnName}:name`)
+    const queryRegex = patternBuilderFn(labels)
+    console.log("[Datatable] set update filter", columnName, queryRegex);
+    column.search(queryRegex, true, false);
+  }
+
+  draw() {
+    this.dataTable.draw()
+  }
+
   init() {
     const $table = $('.data-table')
 
@@ -92,10 +108,10 @@ class Datatable {
         },
 
         // columns to filter by
-        { data: 'year', defaultContent: '', visible: false },
-        { data: 'disciplines', defaultContent: '', visible: false },
-        { data: 'source', defaultContent: '', visible: false },
-        { data: 'authors', defaultContent: '', visible: false },
+        { name: 'year', data: 'year', defaultContent: '', visible: false },
+        { name: 'disciplines', data: 'disciplines', render: disciplines => disciplines.join(" "), defaultContent: '', visible: false},
+        { name: 'source', data: 'source', defaultContent: '', visible: false},
+        { name: 'authors', data: 'authors', defaultContent: '', render: authors => authors.map(author => `${author.first_name} ${author.last_name}`).join(' '), visible: false},
       ],
       pageLength: 20,
       dom: 't p i',
@@ -126,6 +142,8 @@ class Datatable {
     setTimeout(() => {
       $('.data-table tfoot').remove()
     })
+
+    this.dataTable = dataTable;
   }
 }
 window.App.Datatable = new Datatable()
