@@ -11,9 +11,9 @@ function filterPatternAll(labels) {
 }
 
 function filterPatternAllAuthors(authors) {
-  // convert menu author format to search author format, then search by all
-  const authorsLikeContent = authors.map(a => a.split(", ").reverse().join(" "))
-  return filterPatternAll(authorsLikeContent)
+  // authors come as objects
+  const authorsRendered = authors.map(Datatable.renderAuthorForSearch)
+  return filterPatternAll(authorsRendered)
 }
 
 window.App = {
