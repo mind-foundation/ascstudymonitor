@@ -98,7 +98,7 @@ window.App = {
         if (msSinceLastAccess <= ONE_HOUR) {
           data = JSON.parse(cachedData)
           // data.length = 10
-          data = data.filter(d => d.file_attached)
+          // data = data.filter(d => d.file_attached)
 
           console.info(
             '[Cache] Hit: Loading %s entries from %ss ago',

@@ -74,7 +74,9 @@ class Datatable {
         .find('h3')
         .css({cursor: 'text'})
     }
-    $(`div.entry[data-id="${id}"] .entry__abstract`).slideToggle()
+
+    $entry.find('.entry__downloads').fadeToggle(300)
+    $entry.find('.entry__abstract').slideToggle(300)
   }
 
   open(id) {
