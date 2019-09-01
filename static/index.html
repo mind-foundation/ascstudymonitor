@@ -74,7 +74,25 @@
           {{/each}}
         </ul>
 
-        <h3 onClick="App.Datatable.open('{{ id }}')">{{ title }}</h3>
+        <h3 onClick="App.Datatable.open('{{ id }}')">{{ title }}
+
+          <div class="entry__downloads-item big">
+            <div class="entry__downloads-icon entry__downloads-icon__blue">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14.847" height="16.271" viewBox="0 0 14.847 16.271">
+                <defs>
+                    <style>.asc_download_ico{fill:none;stroke:#fff}</style>
+                </defs>
+                <g transform="translate(-1375.217 -461.318)">
+                    <path class="asc_download_ico" d="M1391.141,3120.591h-4.424v12.621h13.847v-12.621h-4.786" transform="translate(-11 -2656.124)" />
+                    <g transform="translate(1379.459 461.318)">
+                        <path class="asc_download_ico" d="M1391.605,3117.109l3.082,3.012,3.082-3.012" transform="translate(-1391.605 -3107.066)" />
+                        <path class="asc_download_ico" d="M1396.051,3105.522v13.247" transform="translate(-1392.973 -3105.522)" />
+                    </g>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </h3>
 
         <ul class="entry__authors">
           <div class="entry__icon">
@@ -252,7 +270,7 @@
         <div id="menu-info">
           <a data-open="modal-about">Info</a>
           <div class="reveal" id="modal-about" data-reveal>
-            <h1>Thank you for being here</h1>
+            <h3>Thank you for being here</h3>
             <p>
               The ASC Study Monitor is a curated, freely accessible, and
               regularly updated database of scholarly publications concerning
@@ -268,13 +286,16 @@
               evidence-based public discussions of consciousness, its
               alterations, capabilities, and pathologies.
             </p>
+            <p>
+              Visit the MIND website for more information and ways to support
+              this project.
+            </p>
             <p class="lead">
               <a
                 href="https://mind-foundation.org/project/asc_studymonitor/"
                 target="_blank"
               >
-                Visit the MIND website for more information and ways to support
-                this project.
+                Go to the MIND website
               </a>
             </p>
             <button
@@ -283,7 +304,7 @@
               aria-label="Close reveal"
               type="button"
             >
-              <span aria-hidden="true">&times;</span>
+              
             </button>
           </div>
         </div>

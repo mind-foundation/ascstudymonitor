@@ -353,6 +353,10 @@ thead {
   margin-right: 8px;
 }
 
+.entry__disciplines a:hover {
+  color: #607A9B
+}
+
 .entry__disciplines .entry__icon {
   width: 32px;
   min-width: 32px;
@@ -377,6 +381,8 @@ thead {
   display: inline-flex;
 }
 
+
+
 .entry__authors svg {
   height: 18px;
   position: relative;
@@ -395,6 +401,10 @@ thead {
   font-weight: 700;
   font-size: 1em;
   margin-right: 8px;
+}
+
+.entry__authors a:hover {
+  color: #607A9B;
 }
 
 .entry__abstract {
@@ -424,6 +434,10 @@ thead {
   display: inline-block;
   width: 33px;
   color: #333 !important;
+}
+
+.entry__year_source a:hover{
+  color: #607A9B
 }
 
 .entry__downloads {
@@ -462,7 +476,13 @@ thead {
 }
 
 .entry__downloads-item a:hover {
-  text-decoration: underline;
+  color: #607A9B;
+  text-decoration: none;
+}
+
+.entry__downloads-item a:hover {
+  text-decoration: none;
+  color: #607A9B;
 }
 
 .entry__downloads-icon {
@@ -475,6 +495,7 @@ thead {
   margin-right: 10px;
 }
 
+
 .entry__downloads-icon__blue {
   background-color: rgb(27, 157, 164);
 }
@@ -482,9 +503,25 @@ thead {
 .entry__downloads-icon svg {
   height: 14px;
   position: relative;
-  right: 0px;
-  top: 0px;
+  right: -0.03em;
+  top: -0.02em;
 }
+
+.entry__downloads-item.big{
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+  border-radius: 24px;
+  /*margin-right: 10px;*/
+}
+
+.entry__downloads-item.big svg{
+  height: 14px;
+  position: relative;
+  right: -0.01em;
+  top: -0.02em;
+}
+
 
 .data-table h3 {
   margin-top: 0;
@@ -582,11 +619,21 @@ thead {
 /*** Modal ***/
 
 .reveal {
-  text-align: center;
+  text-align: left;
+  padding: 30px 45px;
+}
+.reveal h3{
+  text-align: left;
+  color: #333;
+  font-weight: 300;
+
 }
 .reveal p {
-  margin: 0 20px;
-  text-align: center;
+  margin: 0;
+  text-align: left;
+  color: #333;
+  line-height: 1.8;
+  padding-bottom: 20px;
 }
 .reveal a {
   font-weight: 600;
