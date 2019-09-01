@@ -66,7 +66,7 @@
         </li>
       {{#each items}}
         <li>
-          <a href="#" class="menu__category-link">
+          <a href="#" class="menu__category-link" onClick="handleMenuCategoryToggle('{{key}}')" data-key="{{key}}">
             <span class="menu__category-link-label">{{ title }}</span>&nbsp;
             <span class="menu__category-link-count">{{ total }}</span>
             <svg class="menu__chev" xmlns="http://www.w3.org/2000/svg" width="35.912" height="20.077" viewBox="0 0 35.912 20.077">

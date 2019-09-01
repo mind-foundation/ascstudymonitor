@@ -1,3 +1,12 @@
+function handleMenuCategoryToggle(key) {
+  const $a = $(`.menu__category-link[data-key="${key}"]`)
+  var isActive = $a.data('active')
+  $a.data('active', !isActive)
+  $a.find('svg').css({
+    transform: `rotate(${isActive ? 90 : 0}deg)`,
+  })
+}
+
 function filterItemClick(item, column, label) {
   console.log(item)
   console.log(column)
@@ -10,13 +19,13 @@ function bootstrapMenu(dataWithoutNormalizedAuthors) {
   var data = dataWithoutNormalizedAuthors.map(d => ({
     ...d,
     authors: d.authors
-      ? d.authors.map(a => [a.last_name, a.first_name].join(", "))
-      : null
+      ? d.authors.map(a => [a.last_name, a.first_name].join(', '))
+      : null,
   }))
 
-  console.log("bootstrapping menu")
+  console.log('bootstrapping menu')
   var template = Handlebars.compile(
-    document.getElementById("template-menu").innerHTML
+    document.getElementById('template-menu').innerHTML
   )
 
   const getDistinct = key =>
@@ -25,65 +34,65 @@ function bootstrapMenu(dataWithoutNormalizedAuthors) {
       .sort()
 
   var [allDisciplines, allSources, allAuthors, allYears] = [
-    "disciplines",
-    "source",
-    "authors",
-    "year"
+    'disciplines',
+    'source',
+    'authors',
+    'year',
   ].map(getDistinct)
 
   var items = [
     {
-      key: "discipline",
-      title: "Disciplines",
+      key: 'discipline',
+      title: 'Disciplines',
       total: allDisciplines.length,
       data: allDisciplines
         .map(discipline => ({
           label: discipline,
           count: data.filter(
             d => d.disciplines && d.disciplines.includes(discipline)
-          ).length
+          ).length,
         }))
-        .sort((a, b) => b.count - a.count)
+        .sort((a, b) => b.count - a.count),
     },
     {
-      key: "source",
-      title: "Journals",
+      key: 'source',
+      title: 'Journals',
       total: allSources.length,
       data: allSources
         .map(source => ({
           label: source,
-          count: data.filter(d => d.source === source).length
+          count: data.filter(d => d.source === source).length,
         }))
-        .sort((a, b) => b.count - a.count)
+        .sort((a, b) => b.count - a.count),
     },
     {
-      key: "author",
-      title: "Authors",
+      key: 'author',
+      title: 'Authors',
       total: allAuthors.length,
       data: allAuthors
         .map(author => ({
           label: author,
           count: data.filter(d => d.authors && d.authors.includes(author))
-            .length
+            .length,
         }))
-        .sort((a, b) => b.count - a.count)
+        .sort((a, b) => b.count - a.count),
     },
     {
-      key: "year",
-      title: "Years",
+      key: 'year',
+      title: 'Years',
       total: allYears.length,
       data: allYears
         .map(year => ({
           label: year,
-          count: data.filter(d => d.year === year).length
+          count: data.filter(d => d.year === year).length,
         }))
-        .sort((a, b) => b.label - a.label)
-    }
+        .sort((a, b) => b.label - a.label),
+    },
   ]
- 
+
   // console.log("items", items)
 
-  $("#menu-content").html(template({ items }))
-  
+  $('#menu-content').html(template({ items }))
+
   $(document).foundation()
 }

@@ -112,6 +112,7 @@ body {
   height: 10px;
   float: right;
   transform: rotate(90deg);
+  transition: transform 0.2s ease-in;
 }
 
 .menu__chev .a1 {
@@ -336,7 +337,7 @@ thead {
   overflow: visible;
   text-align: left;
   display: inline !important;
-} 
+}
 
 /** Paginate & Info footer **/
 

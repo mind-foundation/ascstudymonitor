@@ -53,19 +53,19 @@ window.App = {
     if (useCache && lastCacheEntryDate) {
       let cachedData = localStorage.getItem(MIND_ASC_STORAGE_KEY_CACHE)
 
-      let msSinceLastAcccess = -1
+      let msSinceLastAccess = -1
       const ONE_HOUR = 3600e3
       if (typeof cachedData === 'string') {
         let lastDate = new Date(lastCacheEntryDate)
-        msSinceLastAcccess = (+new Date() - lastDate) / 1000
-        if (msSinceLastAcccess <= ONE_HOUR) {
+        msSinceLastAccess = (+new Date() - lastDate) / 1000
+        if (msSinceLastAccess <= ONE_HOUR) {
           data = JSON.parse(cachedData)
           data.length = 10
 
           console.info(
             '[Cache] Hit: Loading %s entries from %ss ago',
             data.length,
-            Math.round(msSinceLastAcccess / 1000)
+            Math.round(msSinceLastAccess / 1000)
           )
         }
       }
