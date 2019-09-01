@@ -1,9 +1,9 @@
 function filterPatternAny(labels) {
   if (labels.length == 0) {
-    return ""
+    return ''
   }
 
-  return "(" + labels.join("|") + ")"
+  return '(' + labels.join('|') + ')'
 }
 
 function filterPatternAll(labels) {
@@ -25,8 +25,7 @@ window.App = {
 
     if (App.filters[column].includes(label)) {
       App.removeFilter(column, label)
-    }
-    else {
+    } else {
       App.addFilter(column, label)
     }
   },
@@ -60,10 +59,10 @@ window.App = {
   applyFilters() {
     // Apply filter state by specific columns
     Object.entries(App.filters).forEach(([column, labels]) => {
-      App.Datatable.updateColumnFilter(column, labels, filterPatternAny
+      App.Datatable.updateColumnFilter(column, labels, filterPatternAny)
     })
 
-    App.Datatable.draw();
+    App.Datatable.draw()
   },
 
   search(newValue) {
