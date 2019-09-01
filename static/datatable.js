@@ -72,8 +72,6 @@ class Datatable {
     const $table = $('.data-table')
     this.data = data
 
-    bootstrapMenu(data)
-
     const dataTable = $table.DataTable({
       data,
       deferRender: true,

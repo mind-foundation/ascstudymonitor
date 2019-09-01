@@ -142,6 +142,9 @@ body {
   stroke-width: 3px;
 }
 
+.menu__category-collapsed {
+  display: none;
+}
 /*
  *  Main
  */

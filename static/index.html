@@ -101,17 +101,17 @@
         </li>
       {{#each items}}
         <li>
-          <a href="#" class="menu__category-link" onClick="handleMenuCategoryToggle('{{key}}')" data-key="{{key}}">
+          <a href="#" class="menu__category-link" onClick="window.Menu.handleMenuCategoryToggle('{{key}}')" data-key="{{key}}">
             <span class="menu__category-link-label">{{ title }}</span>&nbsp;
             <span class="menu__category-link-count">{{ total }}</span>
             <svg class="menu__chev" xmlns="http://www.w3.org/2000/svg" width="35.912" height="20.077" viewBox="0 0 35.912 20.077">
               <path class="a1" d="M36.107,2581,53,2597.9l-16.9,16.9" transform="translate(2615.851 -35.046) rotate(90)"/>
             </svg>
           </a>
-          <ul class="menu vertical nested">
+          <ul class="menu vertical nested {{#unless expanded}} menu__category-collapsed {{/unless}} ">
             {{#each data}}
-              <li class="filterItem">
-                <a href="#" onClick="filterItemClick(this, '{{ ../key }}', '{{ label }}')">{{ label }} ({{ count }})</a>
+              <li class="filterItem {{#if active}} filterItem__active {{/if}}">
+                <a href="#" onClick="window.Menu.filterItemClick('{{ ../key }}', '{{ label }}', {{ active }})">{{ label }} ({{ count }})</a>
               </li>
             {{/each}}
           </ul>
@@ -162,8 +162,6 @@
 
     <div id="menu">
       <ul
-        class="vertical menu"
-        data-accordion-menu
         style="max-width: 250px"
         id="menu-content"
       ></ul>

@@ -83,10 +83,14 @@ window.App = {
 
     const data = await App.data()
 
+    window.Menu.bootstrap(data)
     App.Datatable.init(data)
+
     setTimeout(() => window.__Mindblower__.stop(), 10)
 
     // const hasData = await this.data
+
+    $("#menu-bottom").foundation()
   },
 }
 

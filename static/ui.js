@@ -1,98 +1,146 @@
-function handleMenuCategoryToggle(key) {
-  const $a = $(`.menu__category-link[data-key="${key}"]`)
-  var isActive = $a.data('active')
-  $a.data('active', !isActive)
-  $a.find('svg').css({
-    transform: `rotate(${isActive ? 90 : 0}deg)`,
-  })
-}
+window.Menu = {
+  render() {
+    console.log("[Menu] render")
+    
+    const $menu = $('#menu-content')
 
-function filterItemClick(item, column, label) {
-  console.log(item)
-  console.log(column)
-  console.log(label)
+    if (!Menu.template) {
+      Menu.template = Handlebars.compile(
+        document.getElementById('template-menu').innerHTML
+      )
+    }
 
-  App.addFilter(column, label)
-}
+    Menu.sortItems()
+    const items = Object.entries(Menu.items).map(([key, item]) => ({...item, key}))
 
-function bootstrapMenu(dataWithoutNormalizedAuthors) {
-  var data = dataWithoutNormalizedAuthors.map(d => ({
-    ...d,
-    authors: d.authors
-      ? d.authors.map(a => [a.last_name, a.first_name].join(', '))
-      : null,
-  }))
+    $menu.html(Menu.template({ items }))
+  },
 
-  console.log('bootstrapping menu')
-  var template = Handlebars.compile(
-    document.getElementById('template-menu').innerHTML
-  )
+  filterItemClick(column, label, currentActive) {
+    if (currentActive) {
+      console.log("[Menu] deactivate", column, label)
+      Menu.toggleActive(column, label, false)
+      App.removeFilter(column, label)
+    }
+    else {
+      console.log("[Menu] activate", column, label)
+      Menu.toggleActive(column, label, true)
+      App.addFilter(column, label)
+    }
+  },
 
-  const getDistinct = key =>
-    Array.from(new Set(data.flatMap(d => d[key])))
-      .filter(Boolean)
-      .sort()
+  toggleActive(column, label, active) {
+    Menu.items[column] = Menu.items[column].data.map(entry => {
+      if (entry.label == label) {
+        entry.active = active
+      }
+      return entry
+    })
 
-  var [allDisciplines, allSources, allAuthors, allYears] = [
-    'disciplines',
-    'source',
-    'authors',
-    'year',
-  ].map(getDistinct)
+    Menu.render()
+  },
 
-  var items = [
-    {
-      key: 'discipline',
-      title: 'Disciplines',
-      total: allDisciplines.length,
-      data: allDisciplines
-        .map(discipline => ({
-          label: discipline,
-          count: data.filter(
-            d => d.disciplines && d.disciplines.includes(discipline)
-          ).length,
-        }))
-        .sort((a, b) => b.count - a.count),
-    },
-    {
-      key: 'source',
-      title: 'Journals',
-      total: allSources.length,
-      data: allSources
-        .map(source => ({
-          label: source,
-          count: data.filter(d => d.source === source).length,
-        }))
-        .sort((a, b) => b.count - a.count),
-    },
-    {
-      key: 'author',
-      title: 'Authors',
-      total: allAuthors.length,
-      data: allAuthors
-        .map(author => ({
-          label: author,
-          count: data.filter(d => d.authors && d.authors.includes(author))
-            .length,
-        }))
-        .sort((a, b) => b.count - a.count),
-    },
-    {
-      key: 'year',
-      title: 'Years',
-      total: allYears.length,
-      data: allYears
-        .map(year => ({
-          label: year,
-          count: data.filter(d => d.year === year).length,
-        }))
-        .sort((a, b) => b.label - a.label),
-    },
-  ]
+  toggleExpanded(column, expanded) {
+    console.log("[Menu] expand", column, expanded)
+    Menu.items[column].expanded = expanded
+    Menu.render()
+  },
 
-  // console.log("items", items)
+  sortItems() {
+    Object.values(Menu.items).map(item => {
+      return item.data.sort((a, b) => {
+        if (a.active == b.active) {
+          return b.count - a.count
+        } else {
+          return b.active ? 1 : -1
+        }})
+    })
+  },
 
-  $('#menu-content').html(template({ items }))
+  handleMenuCategoryToggle(key) {
+    const $a = $(`.menu__category-link[data-key="${key}"]`)
+    console.log($a)
+    
+    var isActive = Menu.items[key].expanded
+    Menu.toggleExpanded(key, !isActive)
 
-  $(document).foundation()
+    $a.data('active', !isActive)
+    $a.find('svg').css({
+      transform: `rotate(${isActive ? 90 : 0}deg)`,
+    })
+  },
+
+  bootstrap(dataWithoutNormalizedAuthors) {
+    var data = dataWithoutNormalizedAuthors.map(d => ({
+      ...d,
+      authors: d.authors
+        ? d.authors.map(a => [a.last_name, a.first_name].join(', '))
+        : null,
+    }))
+
+    const getDistinct = key =>
+      Array.from(new Set(data.flatMap(d => d[key])))
+        .filter(Boolean)
+        .sort()
+
+    var [allDisciplines, allSources, allAuthors, allYears] = [
+      'disciplines',
+      'source',
+      'authors',
+      'year',
+    ].map(getDistinct)
+
+    Menu.items = {
+      'discipline': {
+        expanded: false,
+        title: 'Disciplines',
+        total: allDisciplines.length,
+        data: allDisciplines
+          .map(discipline => ({
+            active: false,
+            label: discipline,
+            count: data.filter(
+              d => d.disciplines && d.disciplines.includes(discipline)
+            ).length,
+          })),
+      },
+      'source': {
+        expanded: false,
+        title: 'Journals',
+        total: allSources.length,
+        data: allSources
+          .map(source => ({
+            active: false,
+            label: source,
+            count: data.filter(d => d.source === source).length,
+          })),
+      },
+      'author': {
+        expanded: false,
+        title: 'Authors',
+        total: allAuthors.length,
+        data: allAuthors
+          .map(author => ({
+            active: false,
+            label: author,
+            count: data.filter(d => d.authors && d.authors.includes(author))
+              .length,
+          })),
+      },
+      'year': {
+        expanded: false,
+        title: 'Years',
+        total: allYears.length,
+        data: allYears
+          .map(year => ({
+            active: false,
+            label: year,
+            count: data.filter(d => d.year === year).length,
+          })),
+      },
+    }
+
+    // console.log("items", items)
+    Menu.render()
+  },
 }
