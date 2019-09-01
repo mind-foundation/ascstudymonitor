@@ -7,13 +7,8 @@ function filterPatternAny(labels) {
 }
 
 function filterPatternAll(labels) {
+  // currently not in use
   return labels.map(label => `(?=.*${label})`).join("") + ".*"
-}
-
-function filterPatternAllAuthors(authors) {
-  // authors come as objects
-  const authorsRendered = authors.map(Datatable.renderAuthorForSearch)
-  return filterPatternAll(authorsRendered)
 }
 
 window.App = {
@@ -62,17 +57,10 @@ window.App = {
     App.applyFilters()
   },
 
-  filterPatternBuilders: {
-    year: filterPatternAny,
-    disciplines: filterPatternAny,
-    authors: filterPatternAllAuthors,
-    source: filterPatternAny,
-  },
-
   applyFilters() {
     // Apply filter state by specific columns
     Object.entries(App.filters).forEach(([column, labels]) => {
-      App.Datatable.updateColumnFilter(column, labels, App.filterPatternBuilders[column])
+      App.Datatable.updateColumnFilter(column, labels, filterPatternAny
     })
 
     App.Datatable.draw();
