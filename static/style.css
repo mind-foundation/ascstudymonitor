@@ -127,9 +127,8 @@ body {
   font-size: 1.2em;
   opacity: 0.5;
   display: inline-flex;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
-
 }
 
 .menu__filter_header span {
@@ -194,16 +193,16 @@ body {
   padding: 0 !important;
 }
 
-.filterItem.actveInFiler {
+.filterItem.activeInFilter {
   font-weight: 700;
   position: relative;
 }
 
-.filterItem.actveInFiler::before {
-  content: "";
+.filterItem.activeInFilter::before {
+  content: '';
   width: 8px;
   height: 8px;
-  background-color: #F4B477;
+  background-color: #f4b477;
   position: absolute;
   border-radius: 50%;
   left: -1.1em;
@@ -656,7 +655,7 @@ thead {
   font-weight: 600;
   color: #fff;
   background: #;
-  background: linear-gradient(to right, #1a9da4, #34557F);
+  background: linear-gradient(to right, #1a9da4, #34557f);
   padding: 10px 20px;
   line-height: 3em;
 }

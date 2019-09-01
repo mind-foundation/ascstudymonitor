@@ -1,5 +1,5 @@
 function initMenu() {
-  const Menu = new Vue({
+  App.Menu = new Vue({
     el: '#menu-content',
     data: {
       distinct: App.distinct,
