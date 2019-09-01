@@ -1,10 +1,11 @@
 function initMenu() {
-  new Vue({
+  const Menu = new Vue({
     el: '#menu-content',
     data: {
       distinct: App.distinct,
       keys: App,
       open: App.Menu.open,
+      filters: App.filters,
       items: {
         disciplines: {
           expanded: false,
@@ -57,19 +58,25 @@ function initMenu() {
         console.log('menu category toggle')
         const $target = $(event.target)
 
-        const key = $target.closest('li').data('key')
+        const $li = $target.closest('li')
+        const key = $li.data('key')
         toggle(App.Menu.open, key)
-        $(`ul[data-key="${key}"]`)
-          .stop()
-          .slideToggle(300)
+        const $ul = $li.find('ul')
+        console.log('query', $ul)
+        $ul.stop().slideToggle(300)
       },
       filterItemClick() {
         const $target = $(event.target)
 
-        const key = $target.closest('ul').data('key')
-        const value = $target.data('value')
-        console.log('call toggle filer', key, value)
+        const key = $target.closest('li[data-key]').data('key')
+        const value = $target.closest('li[data-value]').data('value')
         App.toggleFilter(key, value)
+        this.$forceUpdate()
+      },
+      formatLabel(label) {
+        return typeof label !== 'object'
+          ? label
+          : `${label.first_name} ${label.last_name}`
       },
     },
   })
