@@ -41,6 +41,22 @@ body {
 }
 
 #menu-bottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  text-align: center;
+}
+
+#menu-info {
+  padding: 10px;
+  cursor: pointer;
+}
+#menu-info a {
+  color: #fff;
+}
+
+#menu-about {
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
   flex-direction: column;
@@ -54,6 +70,10 @@ body {
   display: inline;
   margin: 0 0 2px 0;
   font-size: 1.2em;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .menu-bottom__asc {
@@ -397,7 +417,22 @@ thead {
   padding: 0 1em;
 }
 
-/* table.dataTable tbody td { */
+/*** Modal ***/
+
+.reveal {
+  text-align: center;
+}
+.reveal p {
+  margin: 0 20px;
+  text-align: center;
+}
+.reveal a {
+  font-weight: 600;
+  color: #fff;
+  background-color: #1a9da4;
+  padding: 10px 20px;
+  line-height: 3em;
+}
 
 /*** Spinner ***/
 

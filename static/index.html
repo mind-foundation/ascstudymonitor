@@ -132,14 +132,55 @@
         style="max-width: 250px"
         id="menu-content"
       ></ul>
+
       <div id="menu-bottom">
-        <p>
-          <span class="menu-bottom__asc">ASC</span>
-          <span class="menu-bottom__study-monitor">Study Monitor</span>
-        </p>
-        <span class="menu-bottom__love">
-          Made with &hearts; in Berlin
-        </span>
+        <div id="menu-info">
+          <a data-open="modal-about">Info</a>
+          <div class="reveal" id="modal-about" data-reveal>
+            <h1>Thank you for being here</h1>
+            <p>
+              The ASC Study Monitor is a curated, freely accessible, and
+              regularly updated database of scholarly publications concerning
+              altered states of consciousness (ASCs). The publications included
+              in the ASC Study Monitor mainly cover the field of the “mind &
+              brain sciences” including philosophy, psychology, psychiatry,
+              neuroscience, and medicine as well as natural sciences. Moreover,
+              the monitor covers relevant publications from cultural studies and
+              the social sciences that discuss altered states of consciousness.
+              With the ASC Study Monitor, MIND provides a multidisciplinary
+              reference base to researchers, practitioners, students, and the
+              interested public. This aims to enable high-quality,
+              evidence-based public discussions of consciousness, its
+              alterations, capabilities, and pathologies.
+            </p>
+            <p class="lead">
+              <a
+                href="https://mind-foundation.org/project/asc_studymonitor/"
+                target="_blank"
+              >
+                Visit the MIND website for more information and ways to support
+                this project.
+              </a>
+            </p>
+            <button
+              class="close-button"
+              data-close
+              aria-label="Close reveal"
+              type="button"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
+        <div id="menu-about">
+          <p>
+            <span class="menu-bottom__asc">ASC</span>
+            <span class="menu-bottom__study-monitor">Study Monitor</span>
+          </p>
+          <span class="menu-bottom__love">
+            Made with &hearts; in Berlin
+          </span>
+        </div>
       </div>
     </div>
   </body>
