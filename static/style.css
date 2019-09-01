@@ -289,13 +289,13 @@ thead {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 40px;
+  padding-top: 57px;
   cursor: pointer;
 }
 
 .entry {
   margin: 0;
-  padding: 10px 0;
+  padding: 12px 24px 12px 0 ;
 }
 
 .entry__chevron-wrapper svg {
@@ -309,6 +309,19 @@ thead {
   display: inline-block;
   font-weight: 700;
 }
+
+.entry__icon {
+  width: 34px;
+  min-width: 34px;
+  display: inline-block;
+}
+
+.entry__icon .l{
+  fill: none;
+  stroke: #333;
+  stroke-width: 1px;
+}
+  
 .entry__disciplines {
   list-style: none;
   padding-bottom: 10px;
@@ -317,11 +330,6 @@ thead {
   color: #34557f;
   font-size: 1.2em;
   font-weight: 700;
-}
-
-.entry__disciplines .icon {
-  width: 34px;
-  display: inline-block;
 }
 
 .entry__disciplines svg  {
@@ -337,18 +345,15 @@ thead {
 
 .entry__authors {
   list-style: none;
-  padding-bottom: 5px;
+  padding-bottom: 10px;
   line-height: 2;
+  display: inline-flex;
 }
 
-.entry__authors .icon {
-  width: 34px;
-  display: inline-block;
-}
 
 .entry__authors svg  {
   height: 18px;
-  margin-bottom: -3px;
+  margin-bottom: -4px;
   margin-left: 4px;
 }
 
@@ -369,6 +374,28 @@ thead {
   display: none;
   color: #333;
   line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.entry__abstract_inner {
+  display: inline-flex;
+}
+
+.entry__abstract svg {
+  margin-left: 3px;
+  margin-bottom: -1px;
+}
+
+.entry__year_source {
+  font-size: 0.9em;
+  color: #333;
+  opacity: 0.75;
+}
+
+.entry__year_source a {
+  display: inline-block;
+  width: 30px;
+  color: #333 !important;
 }
 
 .data-table h3 {
