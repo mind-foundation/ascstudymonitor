@@ -17,7 +17,6 @@
   position: absolute;
   top: 50%;
   left: 50%;
-
   -webkit-animation: spiral 60s infinite;
   animation: spiral 60s infinite;
 
@@ -30,7 +29,7 @@
 
 .mindblower__circle {
   border-radius: 50%/50%;
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   position: absolute;
 }
 
@@ -38,16 +37,17 @@
   font-style: italic;
   color: #fff;
   backdrop-filter: blur(2px);
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
   border-radius: 40px;
   font-size: 1.15em;
-  background: rgba(0, 0, 0, 0.7);
+  background: #34557F;
   line-height: 0.8em;
   z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: grow 30s infinite;
 }
 
 @-webkit-keyframes spiral {
@@ -70,5 +70,30 @@
 @keyframes rotating {
   100% {
     transform: rotate(360deg);
+  }
+}
+
+
+@keyframes grow {
+  0% {
+    transform: scaleX(1); 
+  }
+  50%{
+    transform: scale(6);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@-webkit-keyframes grow {
+  0% {
+    transform: scaleX(1); 
+  }
+  50%{
+    transform: scale(3);
+  }
+  100% {
+    transform: scale(1);
   }
 }

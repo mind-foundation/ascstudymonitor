@@ -331,8 +331,8 @@ thead {
 }
 
 .entry__icon {
-  width: 34px;
-  min-width: 34px;
+  width: 35px;
+  min-width: 35px;
   display: inline-block;
 }
 
@@ -353,9 +353,15 @@ thead {
   margin-right: 8px;
 }
 
+.entry__disciplines .entry__icon {
+  width: 32px;
+  min-width: 32px;
+}
+
 .entry__disciplines svg {
   height: 20px;
-  margin-bottom: -6px;
+  position: relative;
+  bottom: -5px;
 }
 
 .entry__disciplines svg .a4 {
@@ -373,8 +379,9 @@ thead {
 
 .entry__authors svg {
   height: 18px;
-  margin-bottom: -4px;
-  margin-left: 4px;
+  position: relative;
+  bottom: -4px;
+  left: 4px;
 }
 
 .entry__authors svg .a3 {
@@ -410,16 +417,18 @@ thead {
   font-size: 0.9em;
   color: #333;
   opacity: 0.75;
+  margin-bottom: 12px;
 }
 
 .entry__year_source a {
   display: inline-block;
-  width: 30px;
+  width: 33px;
   color: #333 !important;
 }
 
 .entry__downloads {
-  margin-top: 10px;
+  display: inline-flex;
+
 }
 
 .entry__downloads-item {
@@ -429,6 +438,23 @@ thead {
   align-items: center;
   justify-content: stretch;
 }
+
+.entry__downloads-item .entry__icon{
+  position: relative;
+  bottom: -3px;
+  left: 5px;
+}
+
+.entry__downloads-item .entry__icon svg{
+  height: 20px;
+}
+
+
+
+/*.entry__downloads-item .entry__icon svg{
+  width: 30px;
+  min-width: 30px;
+}*/
 
 .entry__downloads-item a {
   color: #000;
@@ -440,9 +466,8 @@ thead {
 }
 
 .entry__downloads-icon {
-  height: 20px;
-  width: 20px;
-
+  height: 24px;
+  width: 24px;
   border-radius: 24px;
   display: flex;
   align-items: center;
@@ -455,7 +480,10 @@ thead {
 }
 
 .entry__downloads-icon svg {
-  height: 12px;
+  height: 14px;
+  position: relative;
+  right: 0px;
+  top: 0px;
 }
 
 .data-table h3 {

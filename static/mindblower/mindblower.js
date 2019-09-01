@@ -4,8 +4,8 @@ class Mindblower {
     const width = $('#mindblower').width()
     const height = $('#mindblower').height()
     let circles = ''
-    const total = 50 // number of overlapping circles
-    const size = 900 // diameter of circles (px)
+    const total = 80 // number of overlapping circles
+    const size = 1200 // diameter of circles (px)
 
     const top = index =>
       -(size / 2) + (size / 2) * Math.cos((2 * Math.PI * (index - 1)) / total)
