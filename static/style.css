@@ -185,7 +185,7 @@ body {
   letter-spacing: 0;
   display: block;
   font-size: inherit;
-  padding: 10px 0 9px 24px;
+  padding: 10px 0 9px 32px;
   font-size: 2em;
   font-weight: 300 !important;
   margin: 0;
@@ -304,7 +304,7 @@ thead {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 58px;
+  padding-top: 61px;
   cursor: pointer;
   opacity: 0.9;
 }
@@ -366,6 +366,7 @@ thead {
   height: 20px;
   position: relative;
   bottom: -5px;
+  left: 0.05em;
 }
 
 .entry__disciplines svg .a4 {
