@@ -293,8 +293,13 @@ thead {
   cursor: pointer;
 }
 
+.entry {
+  margin: 0;
+  padding: 10px 0;
+}
+
 .entry__chevron-wrapper svg {
-  transition: transform 0.3s ease-in;
+  transition: transform 0.2s ease-in;
 }
 
 .entry ul {
@@ -306,6 +311,7 @@ thead {
 }
 .entry__disciplines {
   list-style: none;
+  padding-bottom: 10px;
 }
 .entry__disciplines a {
   color: #34557f;
@@ -313,17 +319,56 @@ thead {
   font-weight: 700;
 }
 
+.entry__disciplines .icon {
+  width: 34px;
+  display: inline-block;
+}
+
+.entry__disciplines svg  {
+  height: 20px;
+  margin-bottom: -6px;
+}
+
+.entry__disciplines svg .a4 {
+  fill: none;
+  stroke: #34557f;
+  stroke-width: 1px;
+}
+
 .entry__authors {
   list-style: none;
+  padding-bottom: 5px;
+  line-height: 2;
 }
+
+.entry__authors .icon {
+  width: 34px;
+  display: inline-block;
+}
+
+.entry__authors svg  {
+  height: 18px;
+  margin-bottom: -3px;
+  margin-left: 4px;
+}
+
+.entry__authors svg .a3 {
+  fill: none;
+  stroke: #333;
+  stroke-width: 1px;
+}
+
 .entry__authors a {
   color: #333;
   font-weight: 700;
   font-size: 1em;
+  margin-right: 8px;
 }
 
 .entry__abstract {
   display: none;
+  color: #333;
+  line-height: 1.5;
 }
 
 .data-table h3 {
@@ -332,6 +377,7 @@ thead {
   color: #333;
   font-weight: 700;
   letter-spacing: 0.015em;
+  margin-bottom: 10px;
 }
 
 .data-table h4 ul,

@@ -44,19 +44,54 @@
 
     <script id="template-entry" type="text/x-handlebars-template">
       <div class="entry" data-id="{{id}}">
-        <ul class="entry__disciplines">{{#each disciplines}}
-          <li><a onClick="App.search('{{this}}')">{{ this }}</a></li>
+        <ul class="entry__disciplines">
+          <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25">
+              <g transform="translate(-67.156 -347.19)">
+                <g class="a4" transform="translate(81.6 360.2)">
+                  <circle class="a4" cx="5.5" cy="5.5" r="5.5"/>
+                </g>
+                <g class="a4" transform="translate(68.156 348)">
+                  <rect class="a4" width="9.5" height="9.5"/>
+                </g>
+                <g class="a4" transform="translate(67.156 360.19)">
+                  <path class="a4" d="M6.5,0,13,11H0Z"/>
+                </g>
+                <line class="a4" x2="9.085" y2="9.085" transform="translate(82.628 347.757)"/>
+                <line class="a4" x2="9.085" y2="9.085" transform="translate(91.713 347.757) rotate(90)"/>
+              </g>
+            </svg>
+          </div>
+          {{#each disciplines}}
+          <li><a onClick="App.search('{{this}}')">{{ this }}</a>
+        </li>
         {{/each}}</ul>
         <h3>{{title}}</h3>
 
         <ul class="entry__authors">
+          <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16.586" height="20.954" viewBox="0 0 16.586 20.954">
+              <g transform="translate(-107.915 -182)">
+              <path class="a3" d="M106.969,1409.148s.547-7.886,7.526-7.886,8.066,7.886,8.066,7.886" transform="translate(1.445 -1206.262)"/><g class="a3" transform="translate(110 182)">
+                <circle class="a3" cx="6" cy="6" r="5.5"/>
+                </g>
+              </g>
+            </svg>
+          </div>
+          
           {{#each authors}}
             <li><a onClick="App.search('{{this.last_name}}')">{{ this.last_name }} {{this.first_name }}</a></li>
           {{/each}}
         </ul>
+        <div class="entry__abstract">
+            <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18.494" height="9" viewBox="0 0 18.494 9"><g transform="translate(-173.5 -561)"><line class="a" x2="18.494" transform="translate(173.5 561.5)"/><line class="a" x2="16.082" transform="translate(173.5 565.5)"/><line class="a" x2="8" transform="translate(173.5 569.5)"/></g></svg>
+          </div>
+            <div class="entry__abstract_text">{{#if abstract}}{{abstract}}{{else}}-{{/if}}</div>
+        </div>
         <a onClick="App.search('{{year}}')">{{year}}</a>
         {{source}}
-        <div class="entry__abstract">{{abstract}}</div>
+        
       </div>
     </script>
 
