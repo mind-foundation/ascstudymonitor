@@ -36,7 +36,7 @@ window.App = {
     App.Datatable.draw()
   },
 
-  fetch() {
+  async fetch() {
     const MIND_ASC_STORAGE_KEY_CACHE = 'mind-asc-cache'
     const MIND_ASC_STORAGE_KEY_LAST = 'mind-asc-last'
 
@@ -69,7 +69,9 @@ window.App = {
     }
 
     if (!data) {
-      data = $.getJSON('/documents.json')
+      data = await $.getJSON('/documents.json')
+      localStorage.setItem(MIND_ASC_STORAGE_KEY_CACHE, JSON.stringify(data))
+      localStorage.setItem(MIND_ASC_STORAGE_KEY_LAST, new Date().toISOString())
     }
 
     return data

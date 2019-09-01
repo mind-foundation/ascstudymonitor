@@ -278,7 +278,7 @@
               v-bind:data-value="formatLabel(d.label)"
               v-on:click="filterItemClick($event)"
               v-bind:class="{
-                'actveInFiler': filters[key] && filters[key].includes(formatLabel(d.label)),  
+                'activeInFilter': filters[key] && filters[key].includes(formatLabel(d.label)),  
               }"
             >
               <a href="#">{{ formatLabel(d.label) }} ({{ d.count }})</a>
