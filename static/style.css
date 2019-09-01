@@ -636,6 +636,9 @@ thead {
 .reveal {
   text-align: left;
   padding: 30px 45px;
+  position: relative;
+  left: 12vw;
+  outline: none;
 }
 .reveal h3 {
   text-align: left;
@@ -652,11 +655,15 @@ thead {
 .reveal a {
   font-weight: 600;
   color: #fff;
-  background-color: #1a9da4;
+  background: #;
+  background: linear-gradient(to right, #1a9da4, #34557F);
   padding: 10px 20px;
   line-height: 3em;
 }
 
+.reveal-overlay {
+  background-color: rgba(96, 122, 155, 0.8);
+}
 /*** Spinner ***/
 
 .datatable-spinner__row {
