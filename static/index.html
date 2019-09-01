@@ -210,17 +210,36 @@
     <div id="menu">
       <ul style="max-width: 250px" id="menu-content">
         <li class="menu__filter_header">
-          <svg xmlns="http://www.w3.org/2000/svg" width="28.496" height="20" viewBox="0 0 28.496 20">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28.496"
+            height="20"
+            viewBox="0 0 28.496 20"
+          >
             <g transform="translate(-563.5 -47.177)">
-              <line class="filter_header__svg_a" x1="28.496" transform="translate(563.5 51.071)"/>
-              <line class="filter_header__svg_a" x1="28.496" transform="translate(563.5 63.283)"/>
-              <g class="filter_header__svg_b" transform="translate(568.248 47.177)">
-                <circle class="filter_header__svg_c" cx="4" cy="4" r="4"/>
-                <circle class="filter_header__svg_d" cx="4" cy="4" r="3.5"/>
+              <line
+                class="filter_header__svg_a"
+                x1="28.496"
+                transform="translate(563.5 51.071)"
+              />
+              <line
+                class="filter_header__svg_a"
+                x1="28.496"
+                transform="translate(563.5 63.283)"
+              />
+              <g
+                class="filter_header__svg_b"
+                transform="translate(568.248 47.177)"
+              >
+                <circle class="filter_header__svg_c" cx="4" cy="4" r="4" />
+                <circle class="filter_header__svg_d" cx="4" cy="4" r="3.5" />
               </g>
-              <g class="filter_header__svg_b" transform="translate(579.248 59.177)">
-                <circle class="filter_header__svg_c" cx="4" cy="4" r="4"/>
-                <circle class="filter_header__svg_d" cx="4" cy="4" r="3.5"/>
+              <g
+                class="filter_header__svg_b"
+                transform="translate(579.248 59.177)"
+              >
+                <circle class="filter_header__svg_c" cx="4" cy="4" r="4" />
+                <circle class="filter_header__svg_d" cx="4" cy="4" r="3.5" />
               </g>
             </g>
           </svg>
@@ -256,9 +275,11 @@
             <li
               class="filterItem"
               v-for="d in item.data"
-              v-bind:class="filterClassObject"
               v-bind:data-value="formatLabel(d.label)"
               v-on:click="filterItemClick($event)"
+              v-bind:class="{
+                'actveInFiler': filters[key] && filters[key].includes(formatLabel(d.label)),  
+              }"
             >
               <a href="#">{{ formatLabel(d.label) }} ({{ d.count }})</a>
             </li>
@@ -303,9 +324,7 @@
               data-close
               aria-label="Close reveal"
               type="button"
-            >
-              
-            </button>
+            ></button>
           </div>
         </div>
         <div id="menu-about">

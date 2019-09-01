@@ -1,5 +1,5 @@
 function initMenu() {
-  new Vue({
+  const Menu = new Vue({
     el: '#menu-content',
     data: {
       distinct: App.distinct,
@@ -53,17 +53,6 @@ function initMenu() {
       },
       data: App.data,
     },
-    computed: {
-      filterClassObject: function() {
-        console.log('this', this)
-        console.log('label', this.filters)
-        console.log('key', this.key)
-        return {
-          active:
-            this.filters[this.key] && this.filters[this.key].includes(d.label),
-        }
-      },
-    },
     methods: {
       handleMenuCategoryToggle(event) {
         console.log('menu category toggle')
@@ -80,11 +69,9 @@ function initMenu() {
         const $target = $(event.target)
 
         const key = $target.closest('li[data-key]').data('key')
-        console.log('key', key)
         const value = $target.closest('li[data-value]').data('value')
-        console.log('value', value)
-        console.log('call toggle filer', key, value)
         App.toggleFilter(key, value)
+        this.$forceUpdate()
       },
       formatLabel(label) {
         return typeof label !== 'object'
