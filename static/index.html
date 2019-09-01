@@ -68,10 +68,13 @@
             </svg>
           </div>
           {{#each disciplines}}
-          <li><a onClick="App.search('{{this}}')">{{ this }}</a>
-        </li>
-        {{/each}}</ul>
-        <h3>{{title}}</h3>
+            <li>
+              <a onClick="App.search('{{this}}')">{{ this }}</a>
+            </li>
+          {{/each}}
+        </ul>
+
+        <h3 onClick="App.Datatable.open('{{ id }}')">{{ title }}</h3>
 
         <ul class="entry__authors">
           <div class="entry__icon">

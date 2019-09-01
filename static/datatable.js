@@ -50,23 +50,41 @@ class Datatable {
     const isVisible = $(`div.entry[data-id="${id}"] .entry__abstract`).is(
       ':visible'
     )
+    const $entry = $(`div.entry[data-id="${id}"]`);
     if (isVisible) {
-      $(`div.entry[data-id="${id}"]`)
+        $entry
         .closest('tr')
         .find('.entry__chevron-wrapper svg')
         .css({
           transform: 'rotate(0deg)',
         })
+
+        $entry
+        .find('h3')
+        .css({cursor: 'pointer'})
     } else {
-      $(`div.entry[data-id="${id}"]`)
+        $entry
         .closest('tr')
         .find('.entry__chevron-wrapper svg')
         .css({
           transform: 'rotate(-90deg)',
         })
+
+        $entry
+        .find('h3')
+        .css({cursor: 'text'})
     }
     $(`div.entry[data-id="${id}"] .entry__abstract`).slideToggle()
   }
+
+  open(id) {
+    const isVisible = $(`div.entry[data-id="${id}"] .entry__abstract`).is(
+      ':visible'
+    )
+    if (!isVisible) {
+      App.Datatable.toggle(id)
+    }
+  } 
 
   updateColumnFilter(columnName, labels, patternBuilderFn) {
     /*

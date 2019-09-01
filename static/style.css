@@ -493,6 +493,7 @@ thead {
   font-weight: 700;
   letter-spacing: 0.015em;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .data-table h4 ul,
