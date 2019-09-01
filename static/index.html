@@ -45,7 +45,7 @@
     <script id="template-entry" type="text/x-handlebars-template">
       <div class="entry" data-id="{{id}}">
         <ul class="entry__disciplines">
-          <div class="icon">
+          <div class="entry__icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25">
               <g transform="translate(-67.156 -347.19)">
                 <g class="a4" transform="translate(81.6 360.2)">
@@ -69,7 +69,7 @@
         <h3>{{title}}</h3>
 
         <ul class="entry__authors">
-          <div class="icon">
+          <div class="entry__icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="16.586" height="20.954" viewBox="0 0 16.586 20.954">
               <g transform="translate(-107.915 -182)">
               <path class="a3" d="M106.969,1409.148s.547-7.886,7.526-7.886,8.066,7.886,8.066,7.886" transform="translate(1.445 -1206.262)"/><g class="a3" transform="translate(110 182)">
@@ -78,19 +78,30 @@
               </g>
             </svg>
           </div>
-          
-          {{#each authors}}
-            <li><a onClick="App.search('{{this.last_name}}')">{{ this.last_name }} {{this.first_name }}</a></li>
-          {{/each}}
+          <div class="entry_authors_holder">
+            {{#each authors}}
+              <li><a onClick="App.search('{{this.last_name}}')">{{ this.last_name }} {{this.first_name }}</a></li>
+            {{/each}}  
+          </div>
         </ul>
         <div class="entry__abstract">
-            <div class="icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18.494" height="9" viewBox="0 0 18.494 9"><g transform="translate(-173.5 -561)"><line class="a" x2="18.494" transform="translate(173.5 561.5)"/><line class="a" x2="16.082" transform="translate(173.5 565.5)"/><line class="a" x2="8" transform="translate(173.5 569.5)"/></g></svg>
+          <div class="entry__abstract_inner">
+            <div class="entry__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18.494" height="9" viewBox="0 0 18.494 9">
+                <g transform="translate(-173.5 -561)">
+                  <line class="l" x2="18.494" transform="translate(173.5 561.5)"/>
+                  <line class="l" x2="16.082" transform="translate(173.5 565.5)"/>
+                  <line class="l" x2="8" transform="translate(173.5 569.5)"/></g></svg>
+            </div>
+            <div class="entry__abstract_text">
+              {{#if abstract}}{{abstract}}{{else}}Abstract missing.{{/if}}
+            </div>
           </div>
-            <div class="entry__abstract_text">{{#if abstract}}{{abstract}}{{else}}-{{/if}}</div>
         </div>
-        <a onClick="App.search('{{year}}')">{{year}}</a>
-        {{source}}
+        <div class="entry__year_source">
+          <a onClick="App.search('{{year}}')">{{year}}</a>
+          {{source}}
+        </div>
         
       </div>
     </script>
