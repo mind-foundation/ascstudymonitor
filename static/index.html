@@ -81,7 +81,7 @@
           <div class="entry_authors_holder">
             {{#each authors}}
               <li><a onClick="App.search('{{this.last_name}}')">{{ this.last_name }} {{this.first_name }}</a></li>
-            {{/each}}  
+            {{/each}}
           </div>
         </ul>
         <div class="entry__abstract">
@@ -98,11 +98,54 @@
             </div>
           </div>
         </div>
+
+
         <div class="entry__year_source">
           <a onClick="App.search('{{year}}')">{{year}}</a>
           {{source}}
         </div>
-        
+
+        <div class="entry__downloads">
+
+          {{#each websites}}
+            <div class="entry__downloads-item">
+              <div class="entry__downloads-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15.682" height="14.677" viewBox="0 0 15.682 14.677">
+                  <defs>
+                      <style>.asc_link_ico{fill:none;stroke:#333;}</style>
+                  </defs>
+                  <g transform="translate(-680.995 -991.003)">
+                      <path class="asc_link_ico" d="M1166.614,481.586l-3.439,3.439H1159.5v-3.439l5-5h5.483" transform="translate(-478 520.155)" />
+                      <path class="asc_link_ico" d="M7.118,5,3.679,8.434H0V5L5,0h5.483" transform="translate(696.021 1000.119) rotate(-179)" />
+                  </g>
+              </svg>
+              </div>
+              <a target="_blank" rel="noopener noreferrer" href="{{this}}">Visit publisher website</a>
+            </div>
+          {{/each}}
+
+          {{#if file_attached}}
+            <div class="entry__downloads-item">
+              <div class="entry__downloads-icon entry__downloads-icon__blue">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14.847" height="16.271" viewBox="0 0 14.847 16.271">
+                  <defs>
+                      <style>.asc_download_ico{fill:none;stroke:#fff}</style>
+                  </defs>
+                  <g transform="translate(-1375.217 -461.318)">
+                      <path class="asc_download_ico" d="M1391.141,3120.591h-4.424v12.621h13.847v-12.621h-4.786" transform="translate(-11 -2656.124)" />
+                      <g transform="translate(1379.459 461.318)">
+                          <path class="asc_download_ico" d="M1391.605,3117.109l3.082,3.012,3.082-3.012" transform="translate(-1391.605 -3107.066)" />
+                          <path class="asc_download_ico" d="M1396.051,3105.522v13.247" transform="translate(-1392.973 -3105.522)" />
+                      </g>
+                  </g>
+                </svg>
+              </div>
+              <a target="_blank" rel="noopener noreferrer" href="/download/{{id}}">Download full text</a>
+            </div>
+          {{/if}}
+        </div>
+
+
       </div>
     </script>
 
@@ -172,10 +215,7 @@
     </div>
 
     <div id="menu">
-      <ul
-        style="max-width: 250px"
-        id="menu-content"
-      ></ul>
+      <ul style="max-width: 250px" id="menu-content"></ul>
 
       <div id="menu-bottom">
         <div id="menu-info">
