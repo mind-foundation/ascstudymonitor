@@ -133,12 +133,13 @@ class Datatable {
     })
 
     $table.on('click',  function(event) {
-      const target = event.target
-      const nodeName = target.nodeName.toLowerCase()
+      const $target = $(event.target)
+      const nodeName = event.target.nodeName.toLowerCase()
 
       if (nodeName == 'div' || nodeName == 'svg' || nodeName == 'td' || nodeName == 'path') {
-        const $target = $(target)
-        const $chevron = $target.closest('div').find('svg')
+        event.stopPropagation()
+
+        const $chevron = $target.closest('td').find('svg')
 
         if ($chevron.hasClass('toggles_datatable')) {
           const id = $chevron.attr('data-id')
