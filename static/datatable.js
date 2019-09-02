@@ -1,8 +1,6 @@
 class Datatable {
   getChevronToggleHTMLString(id) {
-    const $div = $(
-      `<div class='entry__chevron-wrapper'>&nbsp;</div>`
-    )
+    const $div = $(`<div class='entry__chevron-wrapper'>&nbsp;</div>`)
 
     const html_chevron = `
       <svg xmlns="http://www.w3.org/2000/svg" class='toggles_datatable' data-id='${id}' width="35.912" height="20.077" viewBox="0 0 35.912 20.077" style="transform:rotate(-90deg);">
@@ -10,7 +8,7 @@ class Datatable {
       <path class="a" d="M36.107,2581,53,2597.9l-16.9,16.9" transform="translate(2615.851 -35.046) rotate(90)"/>
       </svg>
     `
-    
+
     $div.append(html_chevron)
     return $div[0].outerHTML
   }
@@ -19,33 +17,33 @@ class Datatable {
     const isVisible = $(`div.entry[data-id="${id}"] .entry__abstract`).is(
       ':visible'
     )
-    const $entry = $(`div.entry[data-id="${id}"]`);
+    const $entry = $(`div.entry[data-id="${id}"]`)
     if (isVisible) {
-        $entry
+      $entry
         .closest('tr')
         .find('.entry__chevron-wrapper svg')
         .css({
           transform: 'rotate(-90deg)',
         })
 
-        $entry
-        .find('h3')
-        .css({cursor: 'pointer'})
+      $entry.find('h3').css({ cursor: 'pointer' })
+      $entry.find('.entry__downloads').fadeTo('fast', 0)
     } else {
-        $entry
+      $entry
         .closest('tr')
         .find('.entry__chevron-wrapper svg')
         .css({
           transform: 'rotate(0deg)',
         })
 
-        $entry
-        .find('h3')
-        .css({cursor: 'text'})
+      $entry.find('h3').css({ cursor: 'text' })
+      $entry.find('.entry__downloads').fadeTo('fast', 1)
     }
 
-    $entry.find('.entry__downloads').fadeToggle(300)
-    $entry.find('.entry__abstract').slideToggle(300)
+    $entry
+      .find('.entry__abstract')
+      .stop()
+      .slideToggle(300)
   }
 
   open(id) {
@@ -55,7 +53,7 @@ class Datatable {
     if (!isVisible) {
       App.Datatable.toggle(id)
     }
-  } 
+  }
 
   updateColumnFilter(columnName, labels, patternBuilderFn) {
     /*
@@ -65,8 +63,8 @@ class Datatable {
     */
     const column = this.dataTable.column(`${columnName}:name`)
     const queryRegex = patternBuilderFn(labels)
-    console.log("[Datatable] set update filter", columnName, queryRegex);
-    column.search(queryRegex, true, false);
+    console.log('[Datatable] set update filter', columnName, queryRegex)
+    column.search(queryRegex, true, false)
   }
 
   draw() {
@@ -98,9 +96,21 @@ class Datatable {
 
         // columns to filter by
         { name: 'year', data: 'year', defaultContent: '', visible: false },
-        { name: 'disciplines', data: 'disciplines', render: disciplines => disciplines.join(" "), defaultContent: '', visible: false},
-        { name: 'source', data: 'source', defaultContent: '', visible: false},
-        { name: 'authors', data: 'authorLabels', defaultContent: '', render: authors => authors.join(" "), visible: false},
+        {
+          name: 'disciplines',
+          data: 'disciplines',
+          render: disciplines => disciplines.join(' '),
+          defaultContent: '',
+          visible: false,
+        },
+        { name: 'source', data: 'source', defaultContent: '', visible: false },
+        {
+          name: 'authors',
+          data: 'authorLabels',
+          defaultContent: '',
+          render: authors => authors.join(' '),
+          visible: false,
+        },
       ],
       pageLength: 20,
       dom: 't p i',
@@ -128,11 +138,16 @@ class Datatable {
         .draw()
     })
 
-    $table.on('click',  function(event) {
+    $table.on('click', function(event) {
       const $target = $(event.target)
       const nodeName = event.target.nodeName.toLowerCase()
 
-      if (nodeName == 'div' || nodeName == 'svg' || nodeName == 'td' || nodeName == 'path') {
+      if (
+        nodeName == 'div' ||
+        nodeName == 'svg' ||
+        nodeName == 'td' ||
+        nodeName == 'path'
+      ) {
         event.stopPropagation()
 
         const $chevron = $target.closest('td').find('svg')
@@ -148,7 +163,7 @@ class Datatable {
       $('.data-table tfoot').remove()
     })
 
-    this.dataTable = dataTable;
+    this.dataTable = dataTable
   }
 }
 window.App.Datatable = new Datatable()

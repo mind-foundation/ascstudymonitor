@@ -6,10 +6,9 @@ function filterPatternAny(labels) {
   return '(' + labels.join('|') + ')'
 }
 
-
 window.App = {
   filters: {},
-  
+
   toggleFilter(column, label) {
     label = label.toString()
 
@@ -38,7 +37,10 @@ window.App = {
 
   transformData(data) {
     // add author labels
-    data = data.map(d => ({...d, authorLabels: d.authors.map(a => (`${a.first_name} ${a.last_name}`))}))
+    data = data.map(d => ({
+      ...d,
+      authorLabels: d.authors.map(a => `${a.first_name} ${a.last_name}`),
+    }))
     return data
   },
 
@@ -60,7 +62,7 @@ window.App = {
         msSinceLastAccess = (+new Date() - lastDate) / 1000
         if (msSinceLastAccess <= ONE_HOUR) {
           data = JSON.parse(cachedData)
-          
+
           // for faster development
           // data.length = 100
           // data = data.filter(d => d.file_attached)
@@ -95,8 +97,7 @@ window.App = {
       App.Datatable.init(data)
 
       const getDistinct = key =>
-        Array.from(new Set(data.flatMap(d => d[key])))
-          .filter(Boolean)
+        Array.from(new Set(data.flatMap(d => d[key]))).filter(Boolean)
 
       App.Menu = {
         open: [],
