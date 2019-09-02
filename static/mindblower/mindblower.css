@@ -25,6 +25,8 @@
   -ms-transform: translateZ(0);
   -o-transform: translateZ(0);
   transform: translateZ(0);
+
+  will-change: transform;
 }
 
 .mindblower__circle {
@@ -48,6 +50,7 @@
   justify-content: center;
   align-items: center;
   animation: grow 60s infinite;
+  will-change: transform;
 }
 
 @-webkit-keyframes spiral {

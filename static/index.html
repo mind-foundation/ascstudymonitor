@@ -46,10 +46,7 @@
       name="og:image"
       content="https://mind-foundation.org/wp-content/uploads/2018/03/MIND-logo-freigestellt-456x156-px-PLUS-H%C3%B6henabstand.png"
     />
-    <meta
-      name="og:url"
-      content="https://mind-foundation.org/project/asc_studymonitor/"
-    />
+    <meta name="og:url" content="http://asc-studymonitor.mind-foundation.org" />
     <meta name="og:site_name" content="ASC Study Monitor" />
     <meta name="og:locale" content="en_US" />
     <meta name="og:type" content="website" />
@@ -155,23 +152,24 @@
         </ul>
 
         <h3 onClick="App.Datatable.open('{{ id }}')">{{ title }}
-
-          <div class="entry__downloads-item big">
-            <div class="entry__downloads-icon entry__downloads-icon__blue">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14.847" height="16.271" viewBox="0 0 14.847 16.271">
-                <defs>
-                    <style>.asc_download_ico{fill:none;stroke:#fff}</style>
-                </defs>
-                <g transform="translate(-1375.217 -461.318)">
-                    <path class="asc_download_ico" d="M1391.141,3120.591h-4.424v12.621h13.847v-12.621h-4.786" transform="translate(-11 -2656.124)" />
-                    <g transform="translate(1379.459 461.318)">
-                        <path class="asc_download_ico" d="M1391.605,3117.109l3.082,3.012,3.082-3.012" transform="translate(-1391.605 -3107.066)" />
-                        <path class="asc_download_ico" d="M1396.051,3105.522v13.247" transform="translate(-1392.973 -3105.522)" />
-                    </g>
-                </g>
-              </svg>
+          {{#if file_attached}}
+            <div class="entry__downloads-item big">
+              <div class="entry__downloads-icon entry__downloads-icon__blue">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14.847" height="16.271" viewBox="0 0 14.847 16.271">
+                  <defs>
+                      <style>.asc_download_ico{fill:none;stroke:#fff}</style>
+                  </defs>
+                  <g transform="translate(-1375.217 -461.318)">
+                      <path class="asc_download_ico" d="M1391.141,3120.591h-4.424v12.621h13.847v-12.621h-4.786" transform="translate(-11 -2656.124)" />
+                      <g transform="translate(1379.459 461.318)">
+                          <path class="asc_download_ico" d="M1391.605,3117.109l3.082,3.012,3.082-3.012" transform="translate(-1391.605 -3107.066)" />
+                          <path class="asc_download_ico" d="M1396.051,3105.522v13.247" transform="translate(-1392.973 -3105.522)" />
+                      </g>
+                  </g>
+                </svg>
+              </div>
             </div>
-          </div>
+          {{/if}}
         </h3>
 
         <ul class="entry__authors">
@@ -398,7 +396,7 @@
             </p>
             <p class="lead">
               <a
-                href="https://mind-foundation.org/project/asc_studymonitor/"
+                href="https://mind-foundation.org/project/asc_studymonitor?utm_source=asc-studymonitor&utm_medium=info-popup&utm_campaign=asc-studymonitor-pre-conference"
                 target="_blank"
               >
                 Go to the MIND website
