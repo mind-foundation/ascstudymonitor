@@ -47,12 +47,15 @@ window.App = {
   async fetch() {
     const MIND_ASC_STORAGE_KEY_CACHE = 'mind-asc-cache'
     const MIND_ASC_STORAGE_KEY_LAST = 'mind-asc-last'
+    const MIND_ASC_STORAGE_KEY_VERSION = 'mind-asc-version'
+    const CURRENT_VERSION = 1
 
     let lastCacheEntryDate = localStorage.getItem(MIND_ASC_STORAGE_KEY_LAST)
+    const cacheVersion = localStorage.getItem(MIND_ASC_STORAGE_KEY_VERSION)
     let data = null
     const useCache = true // change me
 
-    if (useCache && lastCacheEntryDate) {
+    if (useCache && lastCacheEntryDate && cacheVersion == CURRENT_VERSION) {
       let cachedData = localStorage.getItem(MIND_ASC_STORAGE_KEY_CACHE)
 
       let msSinceLastAccess = -1
@@ -81,6 +84,7 @@ window.App = {
       data = App.transformData(data)
       localStorage.setItem(MIND_ASC_STORAGE_KEY_CACHE, JSON.stringify(data))
       localStorage.setItem(MIND_ASC_STORAGE_KEY_LAST, new Date().toISOString())
+      localStorage.setItem(MIND_ASC_STORAGE_KEY_VERSION, CURRENT_VERSION)
     }
 
     return data
