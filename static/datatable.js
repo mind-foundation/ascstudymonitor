@@ -73,10 +73,6 @@ class Datatable {
     this.dataTable.draw()
   }
 
-  static renderAuthorForSearch(author) {
-    return `${author.first_name} ${author.last_name}`
-  }
-
   init() {
     const $table = $('.data-table')
 
@@ -104,7 +100,7 @@ class Datatable {
         { name: 'year', data: 'year', defaultContent: '', visible: false },
         { name: 'disciplines', data: 'disciplines', render: disciplines => disciplines.join(" "), defaultContent: '', visible: false},
         { name: 'source', data: 'source', defaultContent: '', visible: false},
-        { name: 'authors', data: 'authors', defaultContent: '', render: authors => authors.map(Datatable.renderAuthorForSearch).join(" "), visible: false},
+        { name: 'authors', data: 'authorLabels', defaultContent: '', render: authors => authors.join(" "), visible: false},
       ],
       pageLength: 20,
       dom: 't p i',
@@ -143,7 +139,6 @@ class Datatable {
 
         if ($chevron.hasClass('toggles_datatable')) {
           const id = $chevron.attr('data-id')
-          console.log($chevron)
           App.Datatable.toggle(id)
         }
       }

@@ -36,6 +36,12 @@ window.App = {
     App.Datatable.draw()
   },
 
+  transformData(data) {
+    // add author labels
+    data = data.map(d => ({...d, authorLabels: d.authors.map(a => (`${a.first_name} ${a.last_name}`))}))
+    return data
+  },
+
   async fetch() {
     const MIND_ASC_STORAGE_KEY_CACHE = 'mind-asc-cache'
     const MIND_ASC_STORAGE_KEY_LAST = 'mind-asc-last'
@@ -70,6 +76,7 @@ window.App = {
 
     if (!data) {
       data = await $.getJSON('/documents.json')
+      data = App.transformData(data)
       localStorage.setItem(MIND_ASC_STORAGE_KEY_CACHE, JSON.stringify(data))
       localStorage.setItem(MIND_ASC_STORAGE_KEY_LAST, new Date().toISOString())
     }
@@ -84,20 +91,18 @@ window.App = {
 
     App.data = data
 
-    //window.Menu.bootstrap(data)
     setTimeout(() => {
       App.Datatable.init(data)
 
       const getDistinct = key =>
         Array.from(new Set(data.flatMap(d => d[key])))
           .filter(Boolean)
-          .sort()
 
       App.Menu = {
         open: [],
       }
 
-      App.distinct = ['disciplines', 'source', 'authors', 'year'].reduce(
+      App.distinct = ['disciplines', 'source', 'authorLabels', 'year'].reduce(
         (bag, key) => ({
           ...bag,
           [key]: getDistinct(key),
@@ -109,7 +114,6 @@ window.App = {
       $(document).foundation()
       window.__Mindblower__.stop()
     })
-    // const hasData = await this.data
   },
 }
 

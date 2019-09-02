@@ -8,44 +8,36 @@ function initMenu() {
       filters: App.filters,
       items: {
         disciplines: {
-          expanded: false,
           title: 'Disciplines',
           total: App.distinct.disciplines.length,
           data: App.distinct.disciplines.map(discipline => ({
-            active: false,
             label: discipline,
             count: App.data.filter(
               d => d.disciplines && d.disciplines.includes(discipline)
             ).length,
-          })),
+          })).sort((a, b) => (b.count - a.count)),
         },
         source: {
-          expanded: false,
           title: 'Journals',
           total: App.distinct.source.length,
           data: App.distinct.source.map(source => ({
-            active: false,
             label: source,
             count: App.data.filter(d => d.source === source).length,
-          })),
+          })).sort((a, b) => (b.count - a.count)),
         },
         authors: {
-          expanded: false,
           title: 'Authors',
-          total: App.distinct.authors.length,
-          data: App.distinct.authors.map(author => ({
-            active: false,
+          total: App.distinct.authorLabels.length,
+          data: App.distinct.authorLabels.map(author => ({
             label: author,
-            count: App.data.filter(d => d.authors && d.authors.includes(author))
+            count: App.data.filter(d => d.authorLabels && d.authorLabels.includes(author))
               .length,
-          })),
+          })).sort((a, b) => (b.count - a.count)),
         },
         year: {
-          expanded: false,
           title: 'Years',
           total: App.distinct.year.length,
-          data: App.distinct.year.map(year => ({
-            active: false,
+          data: App.distinct.year.sort((a, b) => (b - a)).map(year => ({
             label: year.toString(),
             count: App.data.filter(d => d.year === year).length,
           })),
@@ -55,14 +47,12 @@ function initMenu() {
     },
     methods: {
       handleMenuCategoryToggle(event) {
-        console.log('menu category toggle')
         const $target = $(event.target)
 
         const $li = $target.closest('li')
         const key = $li.data('key')
         toggle(App.Menu.open, key)
         const $ul = $li.find('ul')
-        console.log('query', $ul)
         $ul.stop().slideToggle(300)
       },
       filterItemClick() {
@@ -71,11 +61,6 @@ function initMenu() {
         const key = $target.closest('li[data-key]').data('key')
         const value = $target.closest('li[data-value]').data('value')
         App.toggleFilter(key, value)
-      },
-      formatLabel(label) {
-        return typeof label !== 'object'
-          ? label
-          : `${label.first_name} ${label.last_name}`
       },
     },
   })

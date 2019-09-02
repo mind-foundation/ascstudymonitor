@@ -360,14 +360,14 @@
             <li
               class="filterItem"
               v-for="d in item.data"
-              v-bind:data-value="formatLabel(d.label)"
+              v-bind:data-value="d.label"
               v-on:click="filterItemClick($event)"
               v-bind:class="{
-                'activeInFilter': filters[key] && filters[key].includes(formatLabel(d.label)),  
+                'activeInFilter': filters[key] && filters[key].includes(d.label),  
               }"
               aria-level="2"
             >
-              <a href="#">{{ formatLabel(d.label) }} ({{ d.count }})</a>
+              <a href="#">{{ d.label }} ({{ d.count }})</a>
             </li>
           </ul>
         </li>
