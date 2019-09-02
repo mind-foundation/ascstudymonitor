@@ -41,6 +41,7 @@ body {
   align-items: stretch;
   color: #fff;
 }
+
 #menu-content {
   padding: 10px 10px 0 10px;
   overflow: scroll;
@@ -80,9 +81,20 @@ body {
 #menu-info {
   padding: 10px;
   cursor: pointer;
+  opacity: 0.9;
 }
+
+#menu-info:focus {
+  outline: none;
+}
+
+#menu-info:hover {
+  opacity: 1.0;
+}
+
 #menu-info a {
   color: #fff;
+  font-size: 11pt;
 }
 
 #menu-about {
@@ -639,7 +651,6 @@ thead {
   text-align: left;
   padding: 30px 45px;
   position: relative;
-  left: 12vw;
   outline: none;
 }
 .reveal h3 {
