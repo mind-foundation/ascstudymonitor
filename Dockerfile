@@ -9,4 +9,4 @@ RUN poetry install
 
 ADD . /app
 
-CMD ["poetry", "run", "gunicorn", "-w", "4", "--bind", "0.0.0.0:8000", "ascmonitor.app:app"]
+CMD ["poetry", "run", "gunicorn", "-w", "4", "--bind", "0.0.0.0:8000", "--timeout", "120", "ascmonitor.app:app"]
