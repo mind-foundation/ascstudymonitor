@@ -93,6 +93,10 @@ window.App = {
   async onDOMReady() {
     window.__Mindblower__.start()
 
+    Sentry.init({
+      dsn: 'https://a35eb03c2845422ca06eae7625922e9a@sentry.io/1553227',
+    })
+
     const data = await App.fetch()
 
     App.data = data
