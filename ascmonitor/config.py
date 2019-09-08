@@ -36,4 +36,4 @@ else:
     redis_config = {"host": "localhost", "port": 6379, "db": 0}
 
 # document cache expiry time in seconds
-cache_expires = 300
+cache_expires = 3600

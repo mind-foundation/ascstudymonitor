@@ -21,6 +21,9 @@ services:
     ports:
       - 80:80
 
+  cache_warmer:
+    build: cache-warmer/
+
 secrets:
   mendeley-secret:
     file: mendeley-secret.json
