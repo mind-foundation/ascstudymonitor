@@ -35,5 +35,19 @@ if in_docker():
 else:
     redis_config = {"host": "localhost", "port": 6379, "db": 0}
 
+# fields to send on the documents endpoint
+required_fields = {
+    "abstract",
+    "authors",
+    "created",
+    "disciplines",
+    "file_attached",
+    "id",
+    "source",
+    "title",
+    "websites",
+    "year",
+}
+
 # document cache expiry time in seconds
 cache_expires = 3600

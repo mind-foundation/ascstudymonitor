@@ -6,6 +6,8 @@ from typing import NamedTuple
 import requests
 from mendeley import Mendeley
 
+from ascmonitor.config import required_fields
+
 
 class MendeleyAuthInfo(NamedTuple):
     """ Authentication infos for Mendeley """
@@ -93,6 +95,15 @@ class Mendeleur:
             document.json["file_attached"] = bool(list(document.files.iter()))
         return document
 
+    def filter_required_fields(self, document):
+        """ Remove fields that are not required """
+        document.json = {
+            field: value
+            for field, value in document.json.items()
+            if field in required_fields
+        }
+        return document
+
     def transform_documents(self, documents):
         """ Generator that transforms mendeley documents """
         for document in documents:
@@ -100,4 +111,5 @@ class Mendeleur:
             document = self.ensure_authors(document)
             document = self.ensure_year(document)
             document = self.fix_file_attached(document)
+            document = self.filter_required_fields(document)
             yield document.json

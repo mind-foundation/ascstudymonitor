@@ -73,6 +73,9 @@ class Datatable {
 
   init() {
     const $table = $('.data-table')
+    const entryTemplate = Handlebars.compile(
+      document.getElementById('template-entry').innerHTML
+    )
 
     const dataTable = $table.DataTable({
       data: App.data,
@@ -88,10 +91,7 @@ class Datatable {
         },
         {
           data: 'content',
-          render: (item, type, row) =>
-            Handlebars.compile(
-              document.getElementById('template-entry').innerHTML
-            )(row),
+          render: (item, type, row) => entryTemplate(row),
         },
 
         // columns to filter by
