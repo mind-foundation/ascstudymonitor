@@ -36,12 +36,14 @@ def update():
     return Response("success", mimetype="text/plain")
 
 
-@app.route("/static/<path:path>")
-def send_js(path):
-    return send_from_directory("static", "path")
+if app.env != "production":
 
+    @app.route("/static/<path:path>")
+    def send_js(path):
+        """ Send static js in development """
+        return send_from_directory("static", "path")
 
-@app.route("/")
-def browser():
-    """ Show the table as HTML """
-    return app.send_static_file("index.html")
+    @app.route("/")
+    def browser():
+        """ Show the table as HTML """
+        return app.send_static_file("index.html")
