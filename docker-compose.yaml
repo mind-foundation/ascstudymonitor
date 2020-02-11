@@ -13,12 +13,30 @@ services:
   redis:
     image: redis:alpine
 
-  nginx:
-    image: nginx:latest
+  letsencrypt:
+    image: linuxserver/letsencrypt
+    container_name: letsencrypt
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+      - URL=mind-foundation.org
+      - SUBDOMAINS=asc-studymonitor
+      - VALIDATION=http
+      # - DNSPLUGIN=cloudflare #optional
+      # - DUCKDNSTOKEN=<token> #optional
+      - EMAIL=felix.peppert@mind-foundation.org
+      # - DHLEVEL=2048 #optional
+      - ONLY_SUBDOMAINS=true
+      # - EXTRA_DOMAINS=<extradomains> #optional
+      # - STAGING=false #optional
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./letsencrypt:/config
       - ./static:/static
     ports:
+      - 443:443
       - 80:80
 
   cache_warmer:

@@ -1,0 +1,45 @@
+upstream app {
+	server app:8000;
+}
+
+# redirect all traffic to https
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	server_name _;
+	return 301 https://$host$request_uri;
+}
+
+# main server block
+server {
+	listen 443 ssl http2 default_server;
+	listen [::]:443 ssl http2 default_server;
+
+	server_name asc-studymonitor.mind-foundation.org localhost;
+
+	keepalive_timeout 5;
+
+	root /static;
+
+	# all ssl related config moved to ssl.conf
+	include /config/nginx/ssl.conf;
+
+	# enable for ldap auth
+	#include /config/nginx/ldap.conf;
+
+	client_max_body_size 4G;
+
+	location / {
+		try_files $uri $uri/ @proxy_to_app;
+	}
+
+	location @proxy_to_app {
+	    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	    proxy_set_header X-Forwarded-Proto $scheme;
+	    proxy_set_header Host $http_host;
+	    # we don't want nginx trying to do something clever with
+	    # redirects, we set the Host: header above already.
+	    proxy_redirect off;
+	    proxy_pass http://app;
+	}
+}

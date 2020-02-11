@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+  app:
+    image: mindfoundation/asc-studymonitor
+    build: .
+    expose:
+      - 8000
+    secrets:
+      - mendeley-secret
+    stop_signal: SIGINT
+    restart: always
+
+  redis:
+    image: redis:alpine
+
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx-dev.conf:/etc/nginx/nginx.conf
+      
+    ports:
+      - 80:80
+
+  cache_warmer:
+    build: cache-warmer/
+
+secrets:
+  mendeley-secret:
+    file: mendeley-secret.json
