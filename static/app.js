@@ -6,8 +6,26 @@ function filterPatternAny(labels) {
   return '(' + labels.join('|') + ')'
 }
 
+function getDistinct(data, key) {
+  // get distinct values for key from data
+  return Array.from(new Set(data.flatMap(d => d[key]))).filter(Boolean)
+}
+
 window.App = {
   filters: {},
+  Menu: { open: [] },
+  data: null,
+  distinct: null,
+
+  initDistinct() {
+    App.distinct = ['disciplines', 'source', 'authorLabels', 'year'].reduce(
+      (bag, key) => ({
+        ...bag,
+        [key]: getDistinct(App.data, key),
+      }),
+      {}
+    )
+  },
 
   toggleFilter(column, label) {
     label = label.toString()
@@ -35,61 +53,6 @@ window.App = {
     App.Datatable.draw()
   },
 
-  transformData(data) {
-    // add author labels
-    data = data.map(d => ({
-      ...d,
-      authorLabels: d.authors.map(a => `${a.first_name} ${a.last_name}`),
-    }))
-    return data
-  },
-
-  async fetch() {
-    const MIND_ASC_STORAGE_KEY_CACHE = 'mind-asc-cache'
-    const MIND_ASC_STORAGE_KEY_LAST = 'mind-asc-last'
-    const MIND_ASC_STORAGE_KEY_VERSION = 'mind-asc-version'
-    const CURRENT_VERSION = 1
-
-    let lastCacheEntryDate = localStorage.getItem(MIND_ASC_STORAGE_KEY_LAST)
-    const cacheVersion = localStorage.getItem(MIND_ASC_STORAGE_KEY_VERSION)
-    let data = null
-    const useCache = true // change me
-
-    if (useCache && lastCacheEntryDate && cacheVersion == CURRENT_VERSION) {
-      let cachedData = localStorage.getItem(MIND_ASC_STORAGE_KEY_CACHE)
-
-      let msSinceLastAccess = -1
-      const ONE_HOUR = 3600e3
-      if (typeof cachedData === 'string') {
-        let lastDate = new Date(lastCacheEntryDate)
-        msSinceLastAccess = (+new Date() - lastDate) / 1000
-        if (msSinceLastAccess <= ONE_HOUR) {
-          data = JSON.parse(cachedData)
-
-          // for faster development
-          // data.length = 100
-          // data = data.filter(d => d.file_attached)
-
-          console.info(
-            '[Cache] Hit: Loading %s entries from %ss ago',
-            data.length,
-            Math.round(msSinceLastAccess / 1000)
-          )
-        }
-      }
-    }
-
-    if (!data) {
-      data = await $.getJSON('/documents.json')
-      data = App.transformData(data)
-      localStorage.setItem(MIND_ASC_STORAGE_KEY_CACHE, JSON.stringify(data))
-      localStorage.setItem(MIND_ASC_STORAGE_KEY_LAST, new Date().toISOString())
-      localStorage.setItem(MIND_ASC_STORAGE_KEY_VERSION, CURRENT_VERSION)
-    }
-
-    return data
-  },
-
   async onDOMReady() {
     window.__Mindblower__.start()
 
@@ -97,28 +60,11 @@ window.App = {
       dsn: 'https://a35eb03c2845422ca06eae7625922e9a@sentry.io/1553227',
     })
 
-    const data = await App.fetch()
-
-    App.data = data
-
-    setTimeout(() => {
+    const documents = new Documents()
+    documents.get().then(data => {
+      App.data = data
       App.Datatable.init(data)
-
-      const getDistinct = key =>
-        Array.from(new Set(data.flatMap(d => d[key]))).filter(Boolean)
-
-      App.Menu = {
-        open: [],
-      }
-
-      App.distinct = ['disciplines', 'source', 'authorLabels', 'year'].reduce(
-        (bag, key) => ({
-          ...bag,
-          [key]: getDistinct(key),
-        }),
-        {}
-      )
-
+      App.initDistinct(data)
       initMenu()
       $(document).foundation()
       window.__Mindblower__.stop()
