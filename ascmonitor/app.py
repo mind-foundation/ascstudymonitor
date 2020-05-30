@@ -13,9 +13,7 @@ CORS(app)
 
 authinfo = MendeleyAuthInfo(**mendeley_authinfo)
 redis = Redis(**redis_config)
-document_store = DocumentStore(
-    authinfo=authinfo, group_id=mendeley_group_id, redis=redis
-)
+document_store = DocumentStore(authinfo=authinfo, group_id=mendeley_group_id, redis=redis)
 
 
 @app.route("/documents.json")
@@ -36,6 +34,31 @@ def update():
     """ Update bibliography """
     document_store.update()
     return Response("success", mimetype="text/plain")
+
+
+@app.route("/queue")
+def queue():
+    """ Show current post queue """
+    ...
+
+
+@app.route("/post")
+def post():
+    """
+    Send out posts about new papers.
+    Accepts channels as request parameter.
+    Must be secure endpoint.
+    """
+    ...
+
+
+@app.route("/pub/<doc_id>")
+def publication(doc_id):
+    """
+    Provides static link to document.
+    Includes meta tags.
+    """
+    ...
 
 
 if app.env != "production":
