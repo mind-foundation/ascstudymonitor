@@ -1,0 +1,132 @@
+<template>
+  <div id="mindblower">
+    <div id="mindblower__effect-container"></div>
+    <div class="mindblower__label" aria-busy="true" role="alert"></div>
+  </div>
+</template>
+
+<script lang="ts">
+export default {
+  name: 'mindblower',
+}
+</script>
+
+<style scoped lang="less">
+#mindblower {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#mindblower__effect-container {
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-animation: spiral 60s infinite;
+  animation: spiral 60s infinite;
+
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+
+  will-change: transform;
+}
+
+.mindblower__circle {
+  border-radius: 50%/50%;
+  border: 1px solid #ccc;
+  position: absolute;
+}
+
+.mindblower__label {
+  font-style: italic;
+  color: #fff;
+  backdrop-filter: blur(2px);
+  width: 50px;
+  height: 50px;
+  border-radius: 40px;
+  font-size: 1.15em;
+  background: #34557f;
+  line-height: 0.8em;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: grow 60s infinite;
+  will-change: transform;
+}
+
+@-webkit-keyframes spiral {
+  0% {
+    opacity: 0;
+    -webkit-transform: rotateZ(0deg);
+  }
+  2% {
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: rotateZ(360deg);
+  }
+}
+@keyframes spiral {
+  0% {
+    opacity: 0;
+    transform: rotateZ(0deg);
+  }
+  2% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+@keyframes rotating {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes grow {
+  0% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+  2% {
+    opacity: 1;
+  }
+  50% {
+    transform: scale(6);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@-webkit-keyframes grow {
+  0% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+  2% {
+    opacity: 1;
+  }
+  50% {
+    transform: scale(3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+</style>
