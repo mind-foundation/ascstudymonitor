@@ -7,9 +7,9 @@ from ascmonitor.mendeleur import Mendeleur
 class DocumentStore:
     """ Access to documents """
 
-    def __init__(self, authinfo, redis, group_id):
+    def __init__(self, authinfo, mongo, group_id):
         self._mendeley = Mendeleur(authinfo, group_id)
-        self._cache = DocumentCache(redis, self._mendeley.all_documents, cache_expires)
+        self._cache = DocumentCache(mongo, self._mendeley.all_documents, cache_expires)
 
     @property
     def documents(self):

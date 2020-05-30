@@ -3,8 +3,9 @@
 import re
 from typing import NamedTuple
 
-import requests
 from mendeley import Mendeley
+import requests
+from slugify import slugify
 
 from ascmonitor.config import required_fields
 
@@ -60,6 +61,11 @@ class Mendeleur:
             raise ValueError("Document has no file attached")
         return first_file.download_url
 
+    def slugify(self, document):
+        """ Put slug in document """
+        document.json["slug"] = slugify(document.json["title"], max_length=100)
+        return document
+
     def extract_disciplines(self, document):
         """ Extract disciplines from document tags """
         disciplines = []
@@ -109,5 +115,6 @@ class Mendeleur:
             document = self.ensure_authors(document)
             document = self.ensure_year(document)
             document = self.fix_file_attached(document)
+            document = self.slugify(document)
             document = self.filter_required_fields(document)
             yield document.json

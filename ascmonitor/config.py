@@ -31,9 +31,16 @@ mendeley_authinfo = {
 mendeley_group_id = "d9389c6c-8ab5-3b8b-86ed-33db09ca0198"
 
 if in_docker():
-    redis_config = {"host": "redis", "port": 6379, "db": 0}
+    mongo_config = {
+        "host": "redis",
+        "port": 27017,
+    }
 else:
-    redis_config = {"host": "localhost", "port": 6379, "db": 0}
+    mongo_config = {
+        "host": "localhost",
+        "port": 27017,
+    }
+mongo_db = "asc"
 
 # fields to send on the documents endpoint
 required_fields = {
@@ -47,6 +54,7 @@ required_fields = {
     "title",
     "websites",
     "year",
+    "slug",
 }
 
 # document cache expiry time in seconds
