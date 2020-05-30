@@ -1,4 +1,8 @@
 {
-    "python.pythonPath": ".venv/bin/python3",
-    "python.formatting.provider": "black"
+  "python.pythonPath": ".venv/bin/python3",
+  "python.formatting.provider": "black",
+  "eslint.validate": ["vue", "html", "javascript"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }
