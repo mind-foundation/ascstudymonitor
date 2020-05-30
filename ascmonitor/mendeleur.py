@@ -98,9 +98,7 @@ class Mendeleur:
     def filter_required_fields(self, document):
         """ Remove fields that are not required """
         document.json = {
-            field: value
-            for field, value in document.json.items()
-            if field in required_fields
+            field: value for field, value in document.json.items() if field in required_fields
         }
         return document
 
