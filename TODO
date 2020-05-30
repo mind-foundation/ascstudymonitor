@@ -7,3 +7,30 @@ Twitter Bot
  - /update endpoint
  - CRON job calling update every 5 minutes
  - on update: tweet new papers
+
+
+
+# Deliverables
+
+Chemistry bug
+
+Loading performance?
+ - When looking at specific link, get article by id and load others async
+ - Prerender?
+
+
+Which URL to link? ASCSM backend renders link w/ meta
+
+# Stretch goals
+
+Menu? Toggle sort alphanumeric vs counts
+VUE refactor (remove jQuery? Datatables)
+
+
+Radu
+Bild mit link
+
+
+
+Felix
+Twitter access tokens conjuren
