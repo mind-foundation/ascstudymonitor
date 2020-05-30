@@ -10,3 +10,5 @@ requirements.txt
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 .DS_Store
+*.sublime-project
+*.sublime-workspace
