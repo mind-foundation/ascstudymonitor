@@ -1,14 +1,10 @@
 <template>
   <div id="app">
     <navigation />
-    <router-view />
-    <main>
-      <table class="data-table display" style="width: 100%">
-        <caption style="display: none">
-          Publications
-        </caption>
-        <thead></thead>
-      </table>
+
+    <main id="main">
+      <query-bar />
+      <router-view />
     </main>
     <!-- <mindblower /> -->
     <!-- <div id="nav">
@@ -20,10 +16,12 @@
 
 <script>
 import Navigation from './components/Navigation'
+import QueryBar from './components/QueryBar'
 // import Mindblower from './components/Mindblower'
 export default {
   components: {
     Navigation,
+    QueryBar,
     // Mindblower,
   },
   created() {
@@ -75,6 +73,9 @@ ul {
   margin-bottom: 0px;
   margin-left: 0px;
   padding: 0;
+}
+#main {
+  margin-left: 240px;
 }
 
 #app {

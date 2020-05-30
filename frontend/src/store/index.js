@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     loaded: false,
-    publications: {},
+    publications: [],
   },
   mutations: {
     MUTATE_PUBLICATIONS: (state, publications) => {
