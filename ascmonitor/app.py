@@ -1,10 +1,10 @@
 """ Flask Web app """
 
-from redis import Redis
+from pymongo import MongoClient
 from flask import Flask, Response, jsonify, redirect, send_from_directory
 from flask_cors import CORS
 
-from ascmonitor.config import mendeley_authinfo, mendeley_group_id, redis_config
+from ascmonitor.config import mendeley_authinfo, mendeley_group_id, mongo_config, mongo_db
 from ascmonitor.document_store import DocumentStore
 from ascmonitor.mendeleur import MendeleyAuthInfo
 
@@ -12,8 +12,8 @@ app = Flask(__name__, static_folder="../static")
 CORS(app)
 
 authinfo = MendeleyAuthInfo(**mendeley_authinfo)
-redis = Redis(**redis_config)
-document_store = DocumentStore(authinfo=authinfo, group_id=mendeley_group_id, redis=redis)
+mongo = MongoClient(**mongo_config)[mongo_db]
+document_store = DocumentStore(authinfo=authinfo, group_id=mendeley_group_id, mongo=mongo)
 
 
 @app.route("/documents.json")
@@ -52,8 +52,8 @@ def post():
     ...
 
 
-@app.route("/pub/<doc_id>")
-def publication(doc_id):
+@app.route("/publication/<doc_slug>")
+def publication(doc_slug):
     """
     Provides static link to document.
     Includes meta tags.
