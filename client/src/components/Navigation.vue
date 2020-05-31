@@ -134,8 +134,8 @@ export default {
 
 <template>
   <nav id="menu" role="navigation">
-    <span v-if="!loaded">Loading</span>
-    <ul style="max-width: 250px" id="menu-content" v-if="loaded">
+    <span v-if="!loaded">Loading..</span>
+    <ul style="max-width: 250px" id="menu-content" v-else>
       <li class="menu__filter_header">
         <icon-filters />
         <span>Filter</span>

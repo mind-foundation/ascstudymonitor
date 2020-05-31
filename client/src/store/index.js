@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import localforage from 'localforage'
 import Fuse from 'fuse.js'
+import { transformPublication } from './helpers'
 
 const vuexLocal = new VuexPersistence({
   storage: localforage,
@@ -43,11 +44,12 @@ export default new Vuex.Store({
     pageSize: 20,
   },
   mutations: {
-    MUTATE_PUBLICATIONS: (state, publications) => {
-      publications = publications.map(pub => ({
-        ...pub,
-        authorNames: pub.authors.map(a => `${a.first_name} ${a.last_name}`),
-      }))
+    HYDRATE_SINGLE_PUBLICATION: (state, publication) => {
+      const transformed = transformPublication(publication)
+      Vue.set(state, 'publications', [transformed])
+    },
+    HYDRATE_ALL_PUBLICATIONS: (state, publications) => {
+      publications = publications.map(transformPublication)
       Vue.set(state, 'publications', publications)
       Vue.set(state, 'loaded', true)
 
@@ -63,14 +65,14 @@ export default new Vuex.Store({
     loadPublications: context => {
       fetch('http://localhost:5000/documents.json')
         .then(res => res.json())
-        .then(data => context.commit('MUTATE_PUBLICATIONS', data))
+        .then(data => context.commit('HYDRATE_ALL_PUBLICATIONS', data))
     },
-    localLocalPublication: () => {
+    localLocalPublication: context => {
       const initialPublicationStringified = window.initialPublication
       if (initialPublicationStringified) {
         try {
           const document = JSON.parse(initialPublicationStringified)
-          context.commit('MUTATE_PUBLICATIONS', [document])
+          context.commit('HYDRATE_SINGLE_PUBLICATION', document)
         } catch (e) {
           console.error('Error parsing initial publication')
           console.error(e)
