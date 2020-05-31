@@ -2,12 +2,12 @@
   <div id="app">
     <navigation />
 
-    <main id="main" v-if="loaded">
+    <main id="main" v-if="enoughDataToContinue">
       <query-bar />
       <router-view />
     </main>
     <transition name="fade">
-      <mindblower v-if="!loaded" />
+      <mindblower v-if="!enoughDataToContinue" />
     </transition>
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
@@ -32,9 +32,8 @@ export default {
     this.$store.dispatch('loadPublications')
   },
   computed: {
-    loaded() {
-      console.log('loaded', this.$store.state.loaded)
-      return this.$store.state.loaded
+    enoughDataToContinue() {
+      return this.$store.state.publications.length
     },
   },
 }
