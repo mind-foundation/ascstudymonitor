@@ -31,7 +31,7 @@ from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import MendeleyAuthInfo
 from ascmonitor.poster import Poster
 
-static_folder = "../client/dist"
+static_folder = "../client/dist/"
 template_folder = static_folder
 app = Flask(__name__, static_folder=static_folder, template_folder=template_folder)
 CORS(app)
@@ -147,7 +147,7 @@ def index():
 
 if development:
 
-    @app.route("/js/<path:path>")
+    @app.route("/<path:path>")
     def send_asset(path):
         """ Send static js in development """
-        return send_from_directory(static_folder, "path")
+        return send_from_directory(static_folder, path)
