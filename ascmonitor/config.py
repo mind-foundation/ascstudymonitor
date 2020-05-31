@@ -59,3 +59,6 @@ required_fields = {
 
 # document cache expiry time in seconds
 cache_expires = 3600
+
+# makes some things faster
+development = os.environ.get("FLASK_ENV", "") == "development"

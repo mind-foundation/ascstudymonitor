@@ -1,0 +1,90 @@
+import pytest
+from dateutil.parser import parse as parse_datetime
+from mongomock import MongoClient
+
+from ascmonitor.document_cache import DocumentCache, Changes
+
+
+def assert_doc_id_equal(a, b):
+    assert a["id"] == b["id"]
+
+
+def assert_changes_equal(changes, created=None, updated=None, removed=None):
+    """ Compare changes by few fields only """
+    sort_key = lambda d: d["id"]
+    for change, expected in zip(
+        (changes.created, changes.updated, changes.removed), (created, updated, removed)
+    ):
+        if expected is None:
+            assert change == []
+        else:
+            for a, b in zip(sorted(change, key=sort_key), sorted(expected, key=sort_key)):
+                assert_doc_id_equal(a, b)
+
+
+@pytest.fixture
+def documents():
+    return [
+        {
+            "title": "MDMA-assisted PTSD Therapy",
+            "authors": [{"first_name": "Rick", "last_name": "Doblin"}],
+            "year": 2020,
+            "source": "ASC Journal",
+            "websites": ["https://example.com"],
+            "id": "1",
+            "created": parse_datetime("2020-01-01T12:00:00.000"),
+            "file_attached": False,
+            "abstract": "First abstract",
+            "disciplines": ["Pharmacology"],
+            "slug": "doblin",
+        },
+        {
+            "title": "Free Energy Principle",
+            "authors": [{"first_name": "Karl", "last_name": "Friston"}],
+            "year": 2020,
+            "source": "ASC Journal",
+            "websites": ["https://example.com"],
+            "id": "2",
+            "created": parse_datetime("2020-01-02T12:00:00.000"),
+            "file_attached": True,
+            "abstract": "Second abstract",
+            "disciplines": ["Pharmacology"],
+            "slug": "friston",
+        },
+    ]
+
+
+@pytest.fixture
+def mongo():
+    return MongoClient()["asc-test"]
+
+
+@pytest.fixture
+def document_cache(mongo, documents):
+    source_fn = lambda: documents
+    return DocumentCache(mongo=mongo, source_fn=source_fn, expires=10)
+
+
+def test_put(document_cache, documents):
+    changes = document_cache.put(documents)
+    assert_changes_equal(changes, created=documents)
+
+
+def test_put__ignore_old(document_cache, documents):
+    _ = document_cache.put(documents)
+    changes = document_cache.put(documents)
+    assert_changes_equal(changes)
+
+
+def test_put__update(document_cache, documents):
+    _ = document_cache.put(documents)
+    updated = [{**documents[0], "title": "New title"}, documents[1]]
+    changes = document_cache.put(updated)
+    assert_changes_equal(changes, updated=[updated[0]])
+    assert changes.updated[0]["title"] == updated[0]["title"]
+
+
+def test_put__delete(document_cache, documents):
+    _ = document_cache.put(documents)
+    changes = document_cache.put([documents[0]])
+    assert_changes_equal(changes, removed=[documents[1]])

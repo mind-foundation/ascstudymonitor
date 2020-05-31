@@ -1,7 +1,7 @@
 /* Cache the database so that the visitor will never forget us */
 
-const USE_CACHE = true // for development
-const FAST_DEV = false // reduce data for fast development
+const USE_CACHE = false // for development
+const FAST_DEV = true // reduce data for fast development
 
 const MIND_ASC_STORAGE_KEY_CACHE = 'mind-asc-cache'
 const MIND_ASC_STORAGE_KEY_LAST = 'mind-asc-last'
@@ -12,9 +12,9 @@ const CACHE_EXPIRY_MS = 3600e3 // one hour
 class Documents {
 	transformData(data) {
 		// add author labels
-		data = data.map(d => ({
+		data = data.map((d) => ({
 			...d,
-			authorLabels: d.authors.map(a => `${a.first_name} ${a.last_name}`),
+			authorLabels: d.authors.map((a) => `${a.first_name} ${a.last_name}`),
 		}))
 		return data
 	}
@@ -95,7 +95,7 @@ class Documents {
 		if (FAST_DEV) {
 			// for faster development
 			data.length = 100
-			data = data.filter(d => d.file_attached)
+			data = data.filter((d) => d.file_attached)
 		}
 		return data
 	}
