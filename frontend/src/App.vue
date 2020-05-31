@@ -18,6 +18,7 @@
 import Navigation from './components/Navigation'
 import QueryBar from './components/QueryBar'
 // import Mindblower from './components/Mindblower'
+
 export default {
   components: {
     Navigation,
@@ -46,6 +47,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  font-family: 'Open Sans', sans-serif !important;
   font-size: 12px;
 }
 blockquote,
@@ -76,14 +78,7 @@ ul {
 }
 #main {
   margin-left: 240px;
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  margin-top: 70px;
 }
 
 #nav {
