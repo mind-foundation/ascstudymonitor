@@ -103,6 +103,9 @@ p {
   text-rendering: optimizeLegibility;
 }
 
+ul {
+  list-style-type: none;
+}
 #main {
   margin-left: 240px;
   margin-top: 70px;

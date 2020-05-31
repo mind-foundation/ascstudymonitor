@@ -37,4 +37,17 @@ export default {
   stroke: #333;
   stroke-width: 1px;
 }
+
+.entry__authors svg {
+  height: 18px;
+  position: relative;
+  bottom: -4px;
+  left: 4px;
+}
+
+.entry__authors svg .a3 {
+  fill: none;
+  stroke: #333;
+  stroke-width: 1px;
+}
 </style>

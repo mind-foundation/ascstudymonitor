@@ -1,12 +1,11 @@
 <template>
-  <div>
-    <h2>List</h2>
-
+  <div id="list">
     <ul>
       <li v-for="publication in this.publications" :key="publication.id">
-        <router-link :to="{ path: '/publication/' + publication.id }">{{
+        <publication :publicationId="publication.id" />
+        <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
           publication.title
-        }}</router-link>
+        }}</router-link> -->
       </li>
     </ul>
 
@@ -28,13 +27,14 @@
 <script>
 import Vue from 'vue'
 import Paginate from 'vuejs-paginate'
+import Publication from './Publication'
 Vue.component('paginate', Paginate)
 
 export default {
   name: 'List',
 
   components: {
-    // HelloWorld,
+    Publication,
   },
   methods: {
     clickCallback(page) {
@@ -55,3 +55,9 @@ export default {
   },
 }
 </script>
+
+<style scoped lang="less">
+#list {
+  margin-top: 70px;
+}
+</style>

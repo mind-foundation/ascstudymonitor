@@ -88,13 +88,9 @@ export default new Vuex.Store({
 
       let hasFused = false
       if (search) {
-        index
-        console.log('looking for ' + search + ' in ', basePublications.length)
         const fuse = new Fuse(basePublications, fuseOptions, index)
 
-        console.log(fuse)
         basePublications = fuse.search(search)
-        console.log('fuse results', basePublications)
         hasFused = true
       }
 

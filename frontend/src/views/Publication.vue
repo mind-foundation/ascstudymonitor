@@ -1,118 +1,170 @@
 <template>
   <div class="entry">
     <span v-if="!publication">Loading..</span>
-    <div v-if="publication">
-      <ul class="entry__disciplines">
-        <icon-science />
-        <li v-for="d in publication.disciplines" v-bind:key="d">
-          <a @click="query('disciplines', e)">{{ d }}</a>
-        </li>
-      </ul>
+    <div class="row" v-if="publication" @click="toggleExpand">
+      <div class="chevron-wrapper">
+        <icon-publication-chevron :expanded="expanded" />
+      </div>
 
-      <router-link :to="{ path: '/publication/' + publication.id }">
-        <h3>
-          {{ publication.title }}
+      <div class="content">
+        <ul class="entry__disciplines">
+          <icon-science />
+          <li v-for="d in publication.disciplines" v-bind:key="d">
+            <a @click="query('disciplines', e)">{{ d }}</a>
+          </li>
+        </ul>
+
+        <router-link :to="{ path: '/publication/' + publication.id }">
+          <h3>
+            {{ publication.title }}
+
+            <icon-download v-if="publication.file_attached" />
+          </h3>
+        </router-link>
+
+        <ul class="entry__authors">
+          <icon-author />
+          <div class="entry_authors_holder">
+            <li
+              v-for="authorName in publication.authorNames"
+              v-bind:key="authorName"
+            >
+              <a @click="query('authors', authorName)">{{ authorName }}</a>
+            </li>
+          </div>
+        </ul>
+        <slide-up-down :active="expanded" :duration="200">
+          <div class="entry__abstract">
+            <div class="entry__abstract_inner">
+              <icon-abstract />
+              <div class="entry__abstract_text" v-if="publication.abstract">
+                {{ publication.abstract }}
+              </div>
+              <div class="entry__abstract_text" v-else>
+                Abstract missing.
+              </div>
+            </div>
+          </div>
+        </slide-up-down>
+
+        <div class="entry__year_source">
+          <a
+            class="entry__year_source__year"
+            @click="query('year', publixation.year)"
+            >{{ publication.year }}</a
+          >
+          <a @click="query('source', publication.source)">{{
+            publication.source
+          }}</a>
+        </div>
+
+        <div class="entry__downloads" style="display: none">
+          <div
+            class="entry__downloads-item"
+            v-for="website in publication.websites"
+            v-bind:key="website"
+          >
+            <icon-link />
+            <a target="_blank" rel="noopener noreferrer" :href="website"
+              >Visit publisher website</a
+            >
+          </div>
 
           <icon-download v-if="publication.file_attached" />
-        </h3>
-      </router-link>
 
-      <ul class="entry__authors">
-        <icon-author />
-        <div class="entry_authors_holder">
-          <li
-            v-for="authorName in publication.authorNames"
-            v-bind:key="authorName"
-          >
-            <a @click="query('authors', authorName)">{{ authorName }}</a>
-          </li>
-        </div>
-      </ul>
-      <div class="entry__abstract">
-        <div class="entry__abstract_inner">
-          <icon-abstract />
-          <div class="entry__abstract_text" v-if="publication.abstract">
-            {{ publication.abstract }}
-          </div>
-          <div class="entry__abstract_text" v-else>
-            Abstract missing.
-          </div>
-        </div>
-      </div>
-
-      <div class="entry__year_source">
-        <a
-          class="entry__year_source__year"
-          @click="query('year', publixation.year)"
-          >{{ publication.year }}</a
-        >
-        <a @click="query('source', publication.source)">{{
-          publication.source
-        }}</a>
-      </div>
-
-      <div class="entry__downloads" style="display: none">
-        <div
-          class="entry__downloads-item"
-          v-for="website in publication.websites"
-          v-bind:key="website"
-        >
-          <icon-link />
-          <a target="_blank" rel="noopener noreferrer" :href="website"
-            >Visit publisher website</a
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            :href="'/download/' + publication.id"
+            >Download full text</a
           >
         </div>
-
-        <icon-download v-if="publication.file_attached" />
-
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          :href="'/download/' + publication.id"
-          >Download full text</a
-        >
+        <router-link :to="{ path: '/' }">Back to all</router-link>
       </div>
-      <router-link :to="{ path: '/' }">Back to all</router-link>
     </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import SlideUpDown from 'vue-slide-up-down'
 import IconDownload from '@/components/IconDownload.vue'
 import IconAuthor from '@/components/IconAuthor.vue'
 import IconLink from '@/components/IconLink.vue'
 import IconAbstract from '@/components/IconAbstract.vue'
 import IconScience from '@/components/IconScience.vue'
+import IconPublicationChevron from '@/components/IconPublicationChevron.vue'
 
 export default {
   name: 'Publication',
   components: {
-    // HelloWorld,
     IconDownload,
     IconLink,
     IconAuthor,
     IconAbstract,
     IconScience,
+    IconPublicationChevron,
+    SlideUpDown,
   },
-  props: ['publicationId'],
+  data: () => ({
+    expanded: false,
+  }),
+  props: ['slug', 'publicationId'],
   computed: {
-    publication() {
-      console.log('A')
-      const p = this.$store.state.publications.find(
-        p => p.id === this.publicationId,
+    isDetailView() {
+      return (
+        this.publication &&
+        this.$store.state.route.params?.slug === this.publication.slug
       )
-      console.log('rendering ,publication is ', p)
-      return p
     },
+    publication() {
+      if (this.publicationId)
+        return this.$store.state.publications.find(
+          p => p._id === this.publicationId,
+        )
+      else return this.$store.state.publications.find(p => p.slug === this.slug)
+    },
+  },
+  methods: {
+    toggleExpand() {
+      if (this.isDetailView) return false
+      this.expanded = !this.expanded
+    },
+  },
+  created() {
+    if (this.isDetailView) {
+      this.expanded = true
+    }
   },
 }
 </script>
 
-<style>
+<style scoped lang="less">
+.row {
+  display: flex;
+}
+
+.chevron-wrapper {
+  min-width: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .entry {
   margin: 0;
   padding: 12px 24px 12px 0;
+  widht: 100%;
+
+  h3 {
+    margin-top: 0;
+    font-size: 1.8em;
+    color: #333;
+    font-weight: 700;
+    letter-spacing: 0.015em;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
 }
 
 .entry__chevron-wrapper svg {
@@ -154,24 +206,6 @@ export default {
   color: #607a9b;
 }
 
-.entry__disciplines .entry__icon {
-  width: 32px;
-  min-width: 32px;
-}
-
-.entry__disciplines svg {
-  height: 20px;
-  position: relative;
-  bottom: -5px;
-  left: 0.05em;
-}
-
-.entry__disciplines svg .a4 {
-  fill: none;
-  stroke: #34557f;
-  stroke-width: 1px;
-}
-
 .entry__authors {
   list-style: none;
   padding-bottom: 10px;
@@ -204,7 +238,6 @@ export default {
 }
 
 .entry__abstract {
-  display: none;
   color: #333;
   line-height: 1.5;
   margin-bottom: 12px;
@@ -297,5 +330,9 @@ export default {
   position: relative;
   right: -0.01em;
   top: -0.02em;
+}
+
+.content {
+  padding: 8px 24px 12px 0px;
 }
 </style>
