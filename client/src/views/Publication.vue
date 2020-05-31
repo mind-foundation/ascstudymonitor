@@ -123,7 +123,7 @@ export default {
     publication() {
       if (this.publicationId)
         return this.$store.state.publications.find(
-          p => p._id === this.publicationId,
+          p => p.id === this.publicationId,
         )
       else return this.$store.state.publications.find(p => p.slug === this.slug)
     },
