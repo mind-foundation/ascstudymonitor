@@ -4,8 +4,11 @@ and posted publications.
 """
 
 from typing import List
+from logging import getLogger
 import pymongo
 from ascmonitor.events import BaseEvent, EventKind, event_from_dict
+
+logger = getLogger(__name__)
 
 
 class EventStore:
@@ -20,6 +23,7 @@ class EventStore:
 
     def put(self, event):
         """ Put an event in the event store """
+        logger.debug("Put event: %s", event.as_dict())
         self._collection.insert(event.as_dict())
 
     def put_many(self, events: List[BaseEvent]):

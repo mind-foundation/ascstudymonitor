@@ -28,6 +28,10 @@ class DocumentStore:
         changes = self._cache.update()
         self._emit_events(changes)
 
+    def get_by_id(self, id_: str) -> Optional[DocumentType]:
+        """ Return document by slug or None if not found """
+        return self._cache.get_by_id(id_)
+
     def get_by_slug(self, slug: str) -> Optional[DocumentType]:
         """ Return document by slug or None if not found """
         return self._cache.get_by_slug(slug)

@@ -11,6 +11,7 @@ from flask import (
     render_template,
     send_from_directory,
 )
+from flask import json
 from flask_cors import CORS
 
 from ascmonitor.config import (
@@ -38,13 +39,19 @@ event_store = EventStore(mongo)
 document_store = DocumentStore(
     authinfo=authinfo, group_id=mendeley_group_id, mongo=mongo, event_store=event_store
 )
-poster = Poster(event_store=event_store, auths=channel_auths)
+poster = Poster(event_store=event_store, document_store=document_store, auths=channel_auths)
 
 
 @app.route("/documents.json")
 def documents():
     """ Return documents as JSON """
     return jsonify(document_store.documents)
+
+
+@app.route("/documents/<id_>")
+def document(id_):
+    """ Return single document as json """
+    return jsonify(document_store.get_by_id(id_))
 
 
 @app.route("/download/<doc_id>")
@@ -96,7 +103,9 @@ def publication(slug):
     document = document_store.get_by_slug(slug)
     if document is None:
         abort(404)
-    return render_template("index.html", static=False, document=document)
+    return render_template(
+        "index.html", static=False, document=document, initial_publication=json.dumps(document)
+    )
 
 
 @app.route("/")

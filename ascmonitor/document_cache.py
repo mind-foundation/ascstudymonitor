@@ -64,7 +64,11 @@ class DocumentCache:
 
     def get_by_slug(self, slug: str) -> Optional[DocumentType]:
         """ Return document by slug or None if not found """
-        return self._collection.findOne({"slug": slug})
+        return self._collection.find_one({"slug": slug})
+
+    def get_by_id(self, id_: str) -> Optional[DocumentType]:
+        """ Return document by id_ or None if not found """
+        return self._collection.find_one({"_id": id_})
 
     def update(self) -> Changes:
         """ Force update """
