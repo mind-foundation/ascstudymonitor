@@ -25,14 +25,14 @@ class TwitterChannel(Channel):
     space_for_hashtags = 100
 
     templates = [
-        "{title} {first_name} {last_name} et․al․",
-        "{title} {initial_name}. {last_name} et․al․",
-        "{title} {last_name} et․al․",
-        "{title_short} {initial_name} {last_name} et․al․",
+        "{title}\n{first_name} {last_name} et․al․",
+        "{title}\n{initial_name}. {last_name} et․al․",
+        "{title}\n{last_name} et․al․",
+        "{title_short}\n{initial_name} {last_name} et․al․",
         "{title}",
         "{title_short}",
     ]
-    static_hashtags = ["science"]
+    static_hashtags = ["PsychedelicResearch", "Psychedelic", "Science", "AcademicTwitter"]
 
     def __init__(self, api_key, api_secret, access_token, access_secret):
         """ Connect to twitter """
@@ -45,8 +45,11 @@ class TwitterChannel(Channel):
 
     def update_short_url_length(self):
         """ Update the twitter shortened link length """
-        config = self.twitter.configuration()
-        self._short_url_length_https = config["short_url_length_https"]
+        try:
+            config = self.twitter.configuration()
+            self._short_url_length_https = config["short_url_length_https"]
+        except tweepy.error.RateLimitError:
+            self._short_url_length_https = 23
         self._short_url_length_https_expiry = datetime.now() + timedelta(days=1)
 
     @property
@@ -94,8 +97,6 @@ class TwitterChannel(Channel):
         templates = [*self.templates]
 
         title = document["title"]
-        if title[-1] not in string.punctuation:
-            title += ","
         title_short = " ".join(title[:100].split(" ")[:-1]) + "…"
 
         # extract author and remove invalid templates
@@ -118,18 +119,23 @@ class TwitterChannel(Channel):
                 allow_retry=False,
             )
 
+        status += "\n{url}\n\n"
+
         hashtags = (
             self.static_hashtags + document.get("disciplines", []) + document.get("keywords", [])
         )
         for hashkw in hashtags:
-            hashkw = hashkw.title()
+            if " " in hashkw:
+                hashkw = hashkw.title()
             hashkw = re.sub(r"\W", "", hashkw)
             hashtag = f" #{hashkw}"
-            if len(status) + len(hashtag) > self.character_limit - self.short_url_length_https - 1:
+
+            # win 5 and loose x chars by replacing {url}
+            if len(status) + len(hashtag) > self.character_limit + 5 - self.short_url_length_https:
                 break
             status += hashtag
 
-        status += " " + self.get_url(document)
+        status = status.format(url=self.get_url(document))
 
         logger.debug("Prepared post %s, length %d", status, len(status))
         return PreparedPost(document=document, channel=self, payload=status)
