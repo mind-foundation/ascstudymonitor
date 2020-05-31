@@ -14,13 +14,15 @@
           </li>
         </ul>
 
-        <router-link :to="{ path: '/publication/' + publication.id }">
-          <h3>
-            {{ publication.title }}
+        <h3>
+          {{ publication.title }}
 
-            <icon-download v-if="publication.file_attached" />
-          </h3>
-        </router-link>
+          <icon-download
+            @click="download(publication)"
+            v-if="publication.file_attached"
+            big="true"
+          />
+        </h3>
 
         <ul class="entry__authors">
           <icon-author />
@@ -58,7 +60,7 @@
           }}</a>
         </div>
 
-        <div class="entry__downloads" style="display: none">
+        <div v-if="expanded">
           <div
             class="entry__downloads-item"
             v-for="website in publication.websites"
@@ -66,20 +68,21 @@
           >
             <icon-link />
             <a target="_blank" rel="noopener noreferrer" :href="website"
-              >Visit publisher website</a
-            >
+              >Visit publisher website
+            </a>
           </div>
 
-          <icon-download v-if="publication.file_attached" />
-
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            :href="'/download/' + publication.id"
-            >Download full text</a
-          >
+          <div class="entry__downloads-item" v-if="publication.file_attached">
+            <icon-download big="false" />
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              :href="'/' + publication.id + '/download/'"
+              >Download full text</a
+            >
+          </div>
         </div>
-        <router-link :to="{ path: '/' }">Back to all</router-link>
+        <!-- <router-link :to="{ path: '/' }">Back to all</router-link> -->
       </div>
     </div>
   </div>
@@ -88,12 +91,12 @@
 <script>
 // @ is an alias to /src
 import SlideUpDown from 'vue-slide-up-down'
-import IconDownload from '@/components/IconDownload.vue'
-import IconAuthor from '@/components/IconAuthor.vue'
-import IconLink from '@/components/IconLink.vue'
-import IconAbstract from '@/components/IconAbstract.vue'
-import IconScience from '@/components/IconScience.vue'
-import IconPublicationChevron from '@/components/IconPublicationChevron.vue'
+import IconDownload from '@/components/Icons/IconDownload.vue'
+import IconAuthor from '@/components/Icons/IconAuthor.vue'
+import IconLink from '@/components/Icons/IconLink.vue'
+import IconAbstract from '@/components/Icons/IconAbstract.vue'
+import IconScience from '@/components/Icons/IconScience.vue'
+import IconPublicationChevron from '@/components/Icons/IconPublicationChevron.vue'
 
 export default {
   name: 'Publication',
@@ -145,10 +148,10 @@ export default {
 }
 
 .chevron-wrapper {
-  min-width: 130px;
+  min-width: 110px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  padding-top: 50px;
 }
 
 .entry {
@@ -281,6 +284,14 @@ export default {
   min-width: 30px;
 }*/
 
+.entry__downloads-item {
+  margin-right: 24px;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: stretch;
+}
+
 .entry__downloads-item a {
   color: #000;
   font-weight: 600;
@@ -294,42 +305,6 @@ export default {
 .entry__downloads-item a:hover {
   text-decoration: none;
   color: #607a9b;
-}
-
-.entry__downloads-icon {
-  height: 24px;
-  width: 24px;
-  border-radius: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 10px;
-}
-
-.entry__downloads-icon__blue {
-  background-color: rgb(27, 157, 164);
-}
-
-.entry__downloads-icon svg {
-  height: 14px;
-  position: relative;
-  right: -0.03em;
-  top: -0.02em;
-}
-
-.entry__downloads-item.big {
-  display: inline-block;
-  height: 24px;
-  width: 24px;
-  border-radius: 24px;
-  /*margin-right: 10px;*/
-}
-
-.entry__downloads-item.big svg {
-  height: 14px;
-  position: relative;
-  right: -0.01em;
-  top: -0.02em;
 }
 
 .content {

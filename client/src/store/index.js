@@ -32,16 +32,13 @@ const fuseOptions = {
   ],
 }
 
-let index = Fuse.createIndex(
-  fuseOptions.keys.map(({ name }) => name),
-  [],
-)
+let index = null
 
 export default new Vuex.Store({
   state: {
     loaded: false,
     publications: [],
-    pageSize: 20,
+    pageSize: 4,
   },
   mutations: {
     HYDRATE_SINGLE_PUBLICATION: (state, publication) => {
@@ -65,7 +62,12 @@ export default new Vuex.Store({
     loadPublications: context => {
       fetch('http://localhost:5000/documents.json')
         .then(res => res.json())
-        .then(data => context.commit('HYDRATE_ALL_PUBLICATIONS', data))
+        .then(data =>
+          context.commit(
+            'HYDRATE_ALL_PUBLICATIONS',
+            data.filter(d => d.file_attached),
+          ),
+        )
     },
     localLocalPublication: context => {
       const initialPublicationStringified = window.initialPublication
@@ -84,7 +86,7 @@ export default new Vuex.Store({
   getters: {
     getPublications: state => state.publications,
     queryPublications: function(state, getters, rootState) {
-      const { page = 1, search } = rootState.route.query
+      const { search } = rootState.route.query
       let basePublications = state.publications
 
       let hasFused = false
@@ -95,9 +97,8 @@ export default new Vuex.Store({
         hasFused = true
       }
 
-      const pageIndex = page - 1
       // console.log(pageIndex, pageIndex + state.pageSize)
-      basePublications = basePublications.slice(pageIndex, pageIndex + 20)
+
       if (hasFused) {
         basePublications = basePublications.map(result => result.item)
       }
