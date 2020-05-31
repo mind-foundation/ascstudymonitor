@@ -61,7 +61,7 @@ class TwitterChannel(Channel):
     @staticmethod
     def get_url(document):
         """ Build tweet url for document """
-        return url_for("publish", slug=document["slug"])
+        return url_for("publication", slug=document["slug"])
 
     def format(self, document: DocumentType) -> PreparedPost:
         """ Format a document to return a post """
@@ -72,7 +72,7 @@ class TwitterChannel(Channel):
 
         # extract author and remove invalid templates
         author = self.extract_author(document)
-        missing = {k for k, v in author if not v}
+        missing = {k for k, v in author.items() if not v}
         templates = [t for t in templates if not any(k in t for k in missing)]
 
         # find a headline
@@ -115,5 +115,5 @@ class TwitterChannel(Channel):
             )
 
         except TweepError as error:
-            msg = " - ".join(error.args) + " - " + error.response.text
+            msg = f"{error.reason}"
             raise PostSendException(msg, allow_retry=False)

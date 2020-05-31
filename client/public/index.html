@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 
+    {% if static %} {% include 'static_meta.html' %} {% else %} {% include
+    'dynamic_meta.html' %} {% endif %}
+
     <link
       rel="icon"
       href="https://i2.wp.com/mind-foundation.org/wp-content/uploads/2017/05/Favicon.png?fit=61%2C58&#038;ssl=1"
