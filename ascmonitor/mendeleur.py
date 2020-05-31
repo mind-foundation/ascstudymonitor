@@ -1,13 +1,15 @@
 """ Access the Mendeley Database """
 
+from itertools import islice
 import re
 from typing import NamedTuple
 
+from dateutil.parser import parse as parse_datetime
 from mendeley import Mendeley
 import requests
 from slugify import slugify
 
-from ascmonitor.config import required_fields
+from ascmonitor.config import required_fields, development
 
 
 class MendeleyAuthInfo(NamedTuple):
@@ -49,7 +51,10 @@ class Mendeleur:
         Fetch the current library from mendeley.
         :returns: List of dicts with document bibliography
         """
-        library = self.group.documents.iter(sort="created", order="desc", view="all")
+        library = self.group.documents.iter(page_size=500, sort="created", order="desc", view="all")
+        if development:
+            library = islice(library, 0, 500)
+
         return list(self.transform_documents(doc for doc in library))
 
     def get_download_url(self, document_id):
@@ -63,7 +68,8 @@ class Mendeleur:
 
     def slugify(self, document):
         """ Put slug in document """
-        document.json["slug"] = slugify(document.json["title"], max_length=100)
+        first_id, *_ = document.json["id"].split("-")
+        document.json["slug"] = first_id + "-" + slugify(document.json["title"], max_length=100)
         return document
 
     def extract_disciplines(self, document):
@@ -95,6 +101,13 @@ class Mendeleur:
             document.json["year"] = None
         return document
 
+    def cast_created(self, document):
+        """ Cast created to datetime """
+        created = document.json["created"].replace("Z", "")
+        document.json["created"] = parse_datetime(created)
+
+        return document
+
     def fix_file_attached(self, document):
         """ Test file_attached attribute """
         if document.file_attached:
@@ -116,5 +129,6 @@ class Mendeleur:
             document = self.ensure_year(document)
             document = self.fix_file_attached(document)
             document = self.slugify(document)
+            document = self.cast_created(document)
             document = self.filter_required_fields(document)
             yield document.json

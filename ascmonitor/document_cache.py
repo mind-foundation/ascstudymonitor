@@ -1,7 +1,26 @@
 """
 Stores the document library in a database
 """
+from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta
+from typing import Callable, Tuple
+
+from pymongo.database import Database
+
+from ascmonitor import DocumentsType
+
+# TODO: if it becomes are problem, make sure slugs never change
+
+
+@dataclass
+class Changes:
+    created: DocumentsType = field(default_factory=list)
+    updated: DocumentsType = field(default_factory=list)
+    removed: DocumentsType = field(default_factory=list)
+
+    def items(self):
+        """ Similar to dict.items """
+        return asdict(self).items()
 
 
 class DocumentCache:
@@ -10,7 +29,7 @@ class DocumentCache:
     collection_name = "documents"
     meta_collection_name = "documents_meta"
 
-    def __init__(self, mongo, source_fn, expires):
+    def __init__(self, mongo: Database, source_fn: Callable[[], DocumentsType], expires: int):
         """
         :param mongo: mongo db instance
         :param source_fn: function that is called on cache miss
@@ -22,8 +41,8 @@ class DocumentCache:
         self._source_fn = source_fn
         self._expires = expires
 
-        # reset cache
-        self.expire()
+        # init cache
+        self._collection.create_index("slug")
 
     @property
     def expired(self):
@@ -34,39 +53,71 @@ class DocumentCache:
             return True
         return meta_doc["expiry"] > now
 
-    def get(self):
-        """ Get the documents """
+    def get(self) -> Tuple[DocumentsType, Changes]:
+        """ Get the documents and list of changes """
         if not self.expired:
             documents = self._get_from_cache()
+            changes = Changes()
         else:
-            documents = self._get_from_source()
-        return documents
+            documents, changes = self._get_from_source()
+        return documents, changes
 
-    def expire(self):
-        """ Clear cache """
-        self._meta.drop()
-        self._collection.drop()
-        self._collection.create_index("slug")
+    def update(self) -> Changes:
+        """ Force update """
+        _, changes = self._get_from_source()
+        return changes
 
-    def _get_from_cache(self):
+    def _get_from_cache(self) -> DocumentsType:
         """ Return from cache or None """
         data = list(self._collection.find())
         return data
 
     @staticmethod
-    def _set_id_field(documents, field):
+    def _set_id_field(documents: DocumentsType, field_: str):
         """ Set custom id from field as mongo id """
-        return [{"_id": d[field], **d} for d in documents]
+        return [{"_id": d[field_], **d} for d in documents]
 
-    def _get_from_source(self):
+    @staticmethod
+    def diff(old: DocumentsType, new: DocumentsType) -> Changes:
+        """ Returns list of changes """
+        old_docs = {d["id"]: d for d in old}
+        new_docs = {d["id"]: d for d in new}
+
+        old_ids = set(old_docs.keys())
+        new_ids = set(new_docs.keys())
+        created = [new_docs[id_] for id_ in new_ids - old_ids]
+        removed = [old_docs[id_] for id_ in old_ids - new_ids]
+
+        updated = []
+        for id_ in old_ids & new_ids:
+            if old_docs[id_] != new_docs[id_]:
+                updated.append(new_docs[id_])
+
+        return Changes(created=created, removed=removed, updated=updated)
+
+    def _get_from_source(self) -> Tuple[DocumentsType, Changes]:
         """ Return from source and put in cache """
         documents = self._source_fn()
-        documents = self._set_id_field(documents, "id")
-        self.put(documents)
-        return documents
+        changes = self.put(documents)
+        return documents, changes
 
-    def put(self, documents):
-        """ Update documents in collection and set expiration """
-        self.expire()
+    def put(self, documents: DocumentsType) -> Changes:
+        """
+        Update documents in collection and set expiration.
+        :returns: Differences between old and new documents
+        """
+        # make sure documents have correct id
+        documents = self._set_id_field(documents, "id")
+
+        # get old documents to build diff
+        old = self._get_from_cache()
+
+        # replace documents
+        self._collection.delete_many({})
         self._collection.insert_many(documents)
-        self._meta.insert({"expiry": datetime.now() + timedelta(seconds=self._expires)})
+        self._meta.insert_one({"expiry": datetime.now() + timedelta(seconds=self._expires)})
+
+        # build and return diff
+        new = self._get_from_cache()
+        changes = self.diff(old, new)
+        return changes

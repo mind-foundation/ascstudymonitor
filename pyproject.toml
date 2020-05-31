@@ -15,11 +15,16 @@ pymongo = "^3.10.1"
 tweepy = "^3.8.0"
 mendeley = {git = "https://github.com/membranepotential/mendeley-python-sdk.git"}
 python-slugify = "^4.0.0"
+attrs = "^19.3.0"
+python-dateutil = "^2.8.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.0"
 pylint = "^2.5.2"
 mypy = "^0.770"
+ipython = "^7.15.0"
+ipdb = "^0.13.2"
+mongomock = "^3.19.0"
 
 [build-system]
 requires = ["poetry>=0.12"]

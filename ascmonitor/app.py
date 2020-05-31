@@ -6,14 +6,20 @@ from flask_cors import CORS
 
 from ascmonitor.config import mendeley_authinfo, mendeley_group_id, mongo_config, mongo_db
 from ascmonitor.document_store import DocumentStore
+from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import MendeleyAuthInfo
+from ascmonitor.post_queue import PostQueue
 
 app = Flask(__name__, static_folder="../static")
 CORS(app)
 
 authinfo = MendeleyAuthInfo(**mendeley_authinfo)
 mongo = MongoClient(**mongo_config)[mongo_db]
-document_store = DocumentStore(authinfo=authinfo, group_id=mendeley_group_id, mongo=mongo)
+event_store = EventStore(mongo)
+document_store = DocumentStore(
+    authinfo=authinfo, group_id=mendeley_group_id, mongo=mongo, event_store=event_store
+)
+post_queue = PostQueue(event_store=event_store)
 
 
 @app.route("/documents.json")
@@ -39,7 +45,12 @@ def update():
 @app.route("/queue")
 def queue():
     """ Show current post queue """
-    ...
+    n_visible = 20
+    docs = list(post_queue)
+    visible, hidden = docs[:n_visible], docs[n_visible:]
+    entries = "\n".join(d["title"] for d in visible)
+    rest = f"\n ... and {len(hidden)} more ..."
+    return Response(entries + rest, mimetype="text/plain")
 
 
 @app.route("/post")
