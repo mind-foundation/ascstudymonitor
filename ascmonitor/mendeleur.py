@@ -70,7 +70,7 @@ class Mendeleur:
         """ Put slug in document """
         first_id, *_ = document.json["id"].split("-")
         document.json["slug"] = (
-            first_id + "-" + slugify(document.json["title"], max_length=60, word_boundary=True)
+            slugify(document.json["title"], max_length=60, word_boundary=True) + "-" + first_id
         )
         return document
 

@@ -4,32 +4,21 @@ TODO
  - show 1. figure
 
 Twitter Bot
- - /update endpoint
  - CRON job calling update every 5 minutes
- - on update: tweet new papers
 
-
+sitemap & robot.txt
 
 # Deliverables
 
-Chemistry bug
-
-Loading performance?
- - When looking at specific link, get article by id and load others async
- - Prerender?
-
-
-Which URL to link? ASCSM backend renders link w/ meta
 
 # Stretch goals
 
 Menu? Toggle sort alphanumeric vs counts
-VUE refactor (remove jQuery? Datatables)
-
+Mobile friendly
 
 Radu
 Bild mit link
-
+Render Paper title on cover image
 
 
 Felix
@@ -37,4 +26,5 @@ Twitter access tokens conjuren
 
 # TEST
 
-test paper download. publication/id route is double booked?
+test paper download.
+Write tests

@@ -1,5 +1,7 @@
 """ Flask Web app """
 
+from itertools import takewhile
+
 from pymongo import MongoClient
 from flask import (
     Flask,
@@ -10,6 +12,7 @@ from flask import (
     redirect,
     render_template,
     send_from_directory,
+    url_for,
 )
 from flask import json
 from flask_cors import CORS
@@ -28,10 +31,16 @@ from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import MendeleyAuthInfo
 from ascmonitor.poster import Poster
 
-static_folder = "../client/public" if development else "../client/dist"
+static_folder = "../client/dist"
 template_folder = static_folder
 app = Flask(__name__, static_folder=static_folder, template_folder=template_folder)
 CORS(app)
+
+if development:
+    app.logger.info("Environment: development")
+else:
+    app.logger.info("Environment: production")
+
 
 authinfo = MendeleyAuthInfo(**mendeley_authinfo)
 mongo = MongoClient(**mongo_config)[mongo_db]
@@ -49,15 +58,15 @@ def documents():
 
 
 @app.route("/documents/<id_>")
-def document(id_):
+def document_by_id(id_):
     """ Return single document as json """
     return jsonify(document_store.get_by_id(id_))
 
 
-@app.route("/download/<doc_id>")
-def download(doc_id):
+@app.route("/documents/<id_>/download")
+def download(id_):
     """ Download a attached PDF document """
-    download_url = document_store.get_download_url(doc_id)
+    download_url = document_store.get_download_url(id_)
     return redirect(download_url, code=301)
 
 
@@ -94,7 +103,7 @@ def post(channel):
     return jsonify(response)
 
 
-@app.route("/publication/<slug>")
+@app.route("/<slug>")
 def publication(slug):
     """
     Provides static link to document.
@@ -103,8 +112,30 @@ def publication(slug):
     document = document_store.get_by_slug(slug)
     if document is None:
         abort(404)
+
+    # shorten abstract
+    abstract = document["abstract"]
+    if len(abstract) > 240:
+        paragraphs = abstract.split("\n")
+        abstract = ""
+        for par in paragraphs:
+            abstract += "\n" + par
+            if len(abstract) > 240:
+                break
+
+    # build url
+    if development:
+        url = "https://asc-studymonitor.mind-foundation.org" + url_for("publication", slug=slug)
+    else:
+        url = url_for("publication", slug=slug)
+
     return render_template(
-        "index.html", static=False, document=document, initial_publication=json.dumps(document)
+        "index.html",
+        static=False,
+        abstract=abstract,
+        title=document["title"],
+        url=url_for("publication", slug=slug),
+        initial_publication=json.dumps(document),
     )
 
 
@@ -114,7 +145,9 @@ def index():
     return render_template("index.html", static=True)
 
 
-@app.route("/static/<path:path>")
-def send_asset(path):
-    """ Send static js in development """
-    return send_from_directory(static_folder, "path")
+if development:
+
+    @app.route("/js/<path:path>")
+    def send_asset(path):
+        """ Send static js in development """
+        return send_from_directory(static_folder, "path")
