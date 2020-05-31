@@ -21,14 +21,15 @@
     <!-- prettier-ignore -->
     <% if (process.env.NODE_ENV === 'production') { %>
     <!-- prettier-ignore -->
-    {% if static %}
+    {% if abstract is defined and title is defined and url is defined %}
     <!-- prettier-ignore -->
-    {% include 'static_meta.html' %}
+    {% include 'dynamic_meta.html' %}
     <!-- prettier-ignore -->
     {% else %}
     <!-- prettier-ignore -->
-    {% include 'dynamic_meta.html' %} {% endif %}
-
+    {% include 'static_meta.html' %}
+    <!-- prettier-ignore -->
+    {% endif %}
     <!-- prettier-ignore -->
     <% } %>
 
@@ -69,7 +70,7 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
     <script>
-      window.initialPublication = '{{ initial_publication }}'
+      window.initialPublication = '{{ initial_publication | safe }}'
       window.VERSION = '<%= process.env.VERSION  %>'
       window.COMMIT_HASH = '<%= process.env.COMMIT_HASH %>'
     </script>
