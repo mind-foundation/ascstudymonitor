@@ -37,18 +37,18 @@ class Poster:
         )
         self.event_store.put(event)
 
-    def post(self, channels):
+    def post(self, channel_name):
         """
         Post the next document in queue
-        :param channels: List of channel names to post to
+        :param channel: Name of channel to post to
         """
         document = self.queue.pop()
-        for channel_name in channels:
-            channel = self.channels[channel_name]
-            self.emit_start(document, channel_name)
-            try:
-                post = channel.format(document)
-                post = channel.send(post)
-                self.emit_success(document, post, channel_name)
-            except PostSendException as error:
-                self.emit_fail(document, error, channel_name)
+        channel = self.channels[channel_name]
+
+        self.emit_start(document, channel_name)
+        try:
+            post = channel.format(document)
+            post = channel.send(post)
+            self.emit_success(document, post, channel_name)
+        except PostSendException as error:
+            self.emit_fail(document, error, channel_name)

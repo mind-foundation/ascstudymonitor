@@ -1,7 +1,17 @@
 """ Flask Web app """
 
 from pymongo import MongoClient
-from flask import Flask, Response, jsonify, redirect, send_from_directory
+from flask import (
+    Flask,
+    Response,
+    abort,
+    request,
+    jsonify,
+    redirect,
+    render_template,
+    send_from_directory,
+)
+from flask_cors import CORS
 
 from ascmonitor.config import (
     mendeley_authinfo,
@@ -9,13 +19,15 @@ from ascmonitor.config import (
     mongo_config,
     mongo_db,
     channel_auths,
+    post_secret_token,
 )
 from ascmonitor.document_store import DocumentStore
 from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import MendeleyAuthInfo
 from ascmonitor.poster import Poster
 
-app = Flask(__name__, static_folder="../static")
+app = Flask(__name__, static_folder="../static", template_folder="../templates")
+CORS(app)
 
 authinfo = MendeleyAuthInfo(**mendeley_authinfo)
 mongo = MongoClient(**mongo_config)[mongo_db]
@@ -57,13 +69,18 @@ def queue():
     return Response(entries + rest, mimetype="text/plain")
 
 
-@app.route("/post")
-def post():
+@app.route("/post/<channel>")
+def post(channel):
     """
     Send out posts about new papers.
-    Accepts channels as request parameter.
     Must be secure endpoint.
     """
+    if post_secret_token:
+        token = request.args.get("token")
+        if token != post_secret_token:
+            abort(404)
+
+    poster.post(channel)
 
 
 @app.route("/publication/<doc_slug>")
@@ -72,6 +89,10 @@ def publication(doc_slug):
     Provides static link to document.
     Includes meta tags.
     """
+    document = document_store.get_by_slug(doc_slug)
+    if document is None:
+        abort(404)
+    return render_template("stub.html", document=document)
 
 
 if app.env != "production":
