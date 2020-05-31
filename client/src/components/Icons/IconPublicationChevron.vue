@@ -26,8 +26,11 @@ export default {
 </template>
 
 <style lang="less" scoped>
-.chevron.expanded {
-  transform: rotate(-90deg);
+.chevron {
+  transition: transform 0.2s ease-in;
+  &.expanded {
+    transform: rotate(-90deg);
+  }
 }
 
 .a {

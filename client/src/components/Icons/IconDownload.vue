@@ -1,10 +1,11 @@
 <script>
 export default {
   name: 'icon-download',
+  props: ['big'],
 }
 </script>
 <template>
-  <div class="entry__downloads-item" big>
+  <div :class="{ 'entry__downloads-item': true, big }">
     <div class="entry__downloads-icon entry__downloads-icon__blue">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -37,12 +38,14 @@ export default {
 </template>
 
 <style lang="less" scoped>
-.entry__downloads-item {
-  margin-right: 24px;
-  display: inline-flex;
-  flex-direction: row;
+.entry__downloads-icon {
+  height: 24px;
+  width: 24px;
+  border-radius: 24px;
+  display: flex;
   align-items: center;
-  justify-content: stretch;
+  justify-content: center;
+  margin-right: 4px;
 }
 
 .entry__downloads-item .entry__icon {
@@ -53,6 +56,32 @@ export default {
 
 .entry__downloads-item .entry__icon svg {
   height: 20px;
+}
+
+.entry__downloads-icon__blue {
+  background-color: rgb(27, 157, 164);
+}
+
+.entry__downloads-icon svg {
+  height: 14px;
+  position: relative;
+  right: -0.03em;
+  top: -0.02em;
+}
+
+.entry__downloads-item.big {
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+  border-radius: 24px;
+  margin-right: 10px;
+}
+
+.entry__downloads-item.big svg {
+  height: 14px;
+  position: relative;
+  right: -0.01em;
+  top: -0.02em;
 }
 
 .asc_download_ico {

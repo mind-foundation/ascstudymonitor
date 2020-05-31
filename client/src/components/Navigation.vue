@@ -1,7 +1,7 @@
 <script>
 import SlideUpDown from 'vue-slide-up-down'
-import IconFilters from './IconFilters'
-import IconChevron from './IconChevron'
+import IconFilters from './Icons/IconFilters'
+import IconChevron from './Icons/IconChevron'
 import MenuBottom from './MenuBottom'
 
 function getDistinct(data, key) {
