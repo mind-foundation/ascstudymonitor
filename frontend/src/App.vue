@@ -2,11 +2,13 @@
   <div id="app">
     <navigation />
 
-    <main id="main">
+    <main id="main" v-if="loaded">
       <query-bar />
       <router-view />
     </main>
-    <!-- <mindblower /> -->
+    <transition name="fade">
+      <mindblower v-if="!loaded" />
+    </transition>
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
@@ -17,16 +19,22 @@
 <script>
 import Navigation from './components/Navigation'
 import QueryBar from './components/QueryBar'
-// import Mindblower from './components/Mindblower'
+import Mindblower from './components/Mindblower'
 
 export default {
   components: {
     Navigation,
     QueryBar,
-    // Mindblower,
+    Mindblower,
   },
   created() {
     this.$store.dispatch('loadPublications')
+  },
+  computed: {
+    loaded() {
+      console.log('loaded', this.$store.state.loaded)
+      return this.$store.state.loaded
+    },
   },
 }
 </script>
@@ -92,5 +100,13 @@ ul {
       color: #42b983;
     }
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

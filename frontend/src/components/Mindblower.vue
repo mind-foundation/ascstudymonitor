@@ -1,6 +1,6 @@
 <template>
-  <div id="mindblower">
-    <div id="mindblower__effect-container"></div>
+  <div id="mindblower" ref="mindblower">
+    <div id="mindblower__effect-container" v-html="mindBlowerHTML" />
     <div class="mindblower__label" aria-busy="true" role="alert"></div>
   </div>
 </template>
@@ -8,10 +8,41 @@
 <script lang="ts">
 export default {
   name: 'mindblower',
+  data: () => ({
+    mindBlowerHTML: '',
+  }),
+  mounted() {
+    this.mindBlowerHTML = (function() {
+      let circles = ''
+      const total = 80 // number of overlapping circles
+      const size = 1200 // diameter of circles (px)
+
+      const top = index =>
+        -(size / 2) + (size / 2) * Math.cos((2 * Math.PI * (index - 1)) / total)
+
+      const left = index =>
+        -(size / 2) + (size / 2) * Math.sin((2 * Math.PI * (index - 1)) / total)
+
+      for (
+        let i = 1, end = total, asc = 1 <= end;
+        asc ? i <= end : i >= end;
+        asc ? i++ : i--
+      ) {
+        circles += `<div class="mindblower__circle index-${i}" style=" \
+      width:${size}px; 
+      height:${size}px; 
+      top:${top(i)}px; 
+      left:${left(i)}px; 
+    "></div>`
+      }
+
+      return circles
+    })()
+  },
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 #mindblower {
   position: fixed;
   top: 0;
@@ -44,7 +75,10 @@ export default {
 }
 
 .mindblower__circle {
-  border-radius: 50%/50%;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 50%;
   border: 1px solid #ccc;
   position: absolute;
 }
