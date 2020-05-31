@@ -1,12 +1,46 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VuexPersistence from 'vuex-persist'
+import localforage from 'localforage'
+import Fuse from 'fuse.js'
+
+const vuexLocal = new VuexPersistence({
+  storage: localforage,
+})
 
 Vue.use(Vuex)
+
+const fuseOptions = {
+  // isCaseSensitive: false,
+  // includeScore: false,
+  // shouldSort: true,
+  // includeMatches: false,
+  // findAllMatches: false,
+  // minMatchCharLength: 1,
+  // location: 0,
+  // threshold: 0.6,
+  // distance: 100,
+  // useExtendedSearch: false,
+  keys: [
+    { name: 'abstract', weight: 0.5 },
+    { name: 'authors', weight: 1.2 },
+    { name: 'disciplines', weight: 1.8 },
+    { name: 'source', weight: 1.5 },
+    { name: 'title', weight: 2.0 },
+    { name: 'year', weight: 1.0 },
+  ],
+}
+
+let index = Fuse.createIndex(
+  fuseOptions.keys.map(({ name }) => name),
+  [],
+)
 
 export default new Vuex.Store({
   state: {
     loaded: false,
     publications: [],
+    pageSize: 20,
   },
   mutations: {
     MUTATE_PUBLICATIONS: (state, publications) => {
@@ -16,14 +50,18 @@ export default new Vuex.Store({
       }))
       Vue.set(state, 'publications', publications)
       Vue.set(state, 'loaded', true)
+
+      console.log('setting index', publications.length)
+      setTimeout(() => {
+        index = Fuse.createIndex(
+          fuseOptions.keys.map(({ name }) => name),
+          publications,
+        )
+      })
     },
   },
   actions: {
     loadPublications: context => {
-      setTimeout(() => {
-        console.log('!timer')
-        context.commit('MUTATE_PUBLICATIONS', getSample())
-      }, 30000)
       fetch('http://localhost:5000/documents.json')
         .then(res => res.json())
         .then(function(data) {
@@ -41,62 +79,34 @@ export default new Vuex.Store({
   modules: {},
   getters: {
     getPublications: state => state.publications,
-  },
-})
+    queryPublications: function(state, getters, rootState) {
+      // if (!rootState.router) {
+      //   return []
+      // }
+      const { page = 1, search } = rootState.route.query
+      let basePublications = state.publications
 
-function getSample() {
-  return [
-    {
-      abstract:
-        'Ibogaine is an alkaloid purported to be an effective drug dependence treatment. However, its efficacy has been hard to evaluate, partly because it is illegal in some countries. In such places, treatments are conducted in underground settings where fatalities have occurred. In Brazil ibogaine is unregulated and a combined approach of psychotherapy and ibogaine is being practiced to treat addiction. To evaluate the safety and efficacy of ibogaine, we conducted a retrospective analysis of data from 75 previous alcohol, cannabis, cocaine and crack users (72% poly-drug users). We observed no serious adverse reactions or fatalities, and found 61% of participants abstinent. Participants treated with ibogaine only once reported abstinence for a median of 5.5 months and those treated multiple times for a median of 8.4 months. This increase was statistically significant (p < 0.001), and both single or multiple treatments led to longer abstinence periods than before the first ibogaine session (p < 0.001). These results suggest that the use of ibogaine supervised by a physician and accompanied by psychotherapy can facilitate prolonged periods of abstinence, without the occurrence of fatalities or complications. These results suggest that ibogaine can be a safe and effective treatment for dependence on stimulant and other non-opiate drugs.',
-      authors: [
-        {
-          first_name: 'Eduardo Ekman',
-          last_name: 'Schenberg',
-        },
-        {
-          first_name: 'Maria Angélica',
-          last_name: 'De Castro Comis',
-        },
-        {
-          first_name: 'Bruno Rasmussen',
-          last_name: 'Chaves',
-        },
-        {
-          first_name: 'Dartiu Xavier',
-          last_name: 'Da Silveira',
-        },
-      ],
-      created: '2017-11-10T18:19:02.497Z',
-      disciplines: ['testdiscipline A'],
-      file_attached: false,
-      id: '205ebd9f-678c-32fd-af41-170736ec2111',
-      source: 'Journal of Psychopharmacology',
-      title:
-        'Treating drug dependence with the aid of ibogaine: A retrospective study',
-      websites: ['http://www.akademiai.com/doi/abs/10.1556/2054.01.2016.002'],
-      year: 2014,
+      let hasFused = false
+      if (search) {
+        index
+        console.log('looking for ' + search + ' in ', basePublications.length)
+        const fuse = new Fuse(basePublications, fuseOptions, index)
+
+        console.log(fuse)
+        basePublications = fuse.search(search)
+        console.log('fuse results', basePublications)
+        hasFused = true
+      }
+
+      const pageIndex = page - 1
+      console.log(pageIndex, pageIndex + state.pageSize)
+      basePublications = basePublications.slice(pageIndex, pageIndex + 20)
+      if (hasFused) {
+        basePublications = basePublications.map(result => result.item)
+      }
+      return basePublications
     },
-    {
-      abstract:
-        'Cluster headache is a highly disabling primary headache disorder, characterized by unilateral headache attacks occurring in association with cranial autonomic symptoms. Serotonergic agents, such as the ergot alkaloids, have traditionally been used for the acute and preventive treatment of cluster headache and other primary headaches. Although it initially was thought that their efficacy was due solely to the vasoconstriction of extracranial cerebral vessels, new mechanisms of action of these drugs have been ascertained as a consequence of advances in elucidation of the pathogenesis of primary headaches and the development of triptans. This article reviews the current knowledge about serotonergic agonists and antagonists used in the management of cluster headache, focusing on their mechanisms of action and on the possible role of serotonin system dysfunction in this complex disorder.',
-      authors: [
-        {
-          first_name: 'Giorgio',
-          last_name: 'Lambru',
-        },
-        {
-          first_name: 'Manjit',
-          last_name: 'Matharu',
-        },
-      ],
-      created: '2017-11-10T18:19:02.496Z',
-      disciplines: ['testdiscipline A', 'testdiscipline B'],
-      file_attached: false,
-      id: 'b4771194-12d5-3059-8953-2dde0516eb4a',
-      source: 'Current Pain and Headache Reports',
-      title: 'Serotonergic agents in the management of cluster headache',
-      year: 2011,
-    },
-  ]
-}
+  },
+
+  plugins: [vuexLocal.plugin],
+})

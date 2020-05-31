@@ -9,23 +9,48 @@
         }}</router-link>
       </li>
     </ul>
+
+    <paginate
+      :force-page="page"
+      :page-count="pageCount"
+      :page-range="3"
+      :margin-pages="2"
+      :click-handler="clickCallback"
+      :prev-text="'Prev'"
+      :next-text="'Next'"
+      :container-class="'pagination'"
+      :page-class="'page-item'"
+    >
+    </paginate>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
+import Vue from 'vue'
+import Paginate from 'vuejs-paginate'
+Vue.component('paginate', Paginate)
 
 export default {
   name: 'List',
+
   components: {
     // HelloWorld,
   },
+  methods: {
+    clickCallback(page) {
+      this.$router.replace({ query: { page } })
+    },
+  },
   computed: {
+    page() {
+      const queryPage = this.$store.state.route.query.page
+      return typeof queryPage === 'number' ? parseInt(queryPage) : 1
+    },
+    pageCount() {
+      return Math.ceil(this.publications.length / this.$store.state.pageSize)
+    },
     publications() {
-      const publications = this.$store.state.publications || []
-
-      return publications.slice(0, 5)
+      return this.$store.getters.queryPublications
     },
   },
 }

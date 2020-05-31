@@ -4,16 +4,15 @@ import IconFilters from './IconFilters'
 import IconChevron from './IconChevron'
 
 function getDistinct(data, key) {
-  console.log(data, key)
   // get distinct values for key from data
   return Array.from(new Set(data.flatMap(d => d[key]))).filter(Boolean)
 }
 
 const accessors = Object.freeze({
   disciplines: 'disciplines',
-  source: 'sources',
+  sources: 'source',
+  authors: 'authors',
   years: 'year',
-  sources: 'sources',
 })
 
 export default {
@@ -28,8 +27,6 @@ export default {
   }),
   methods: {
     handleMenuCategoryToggle(key) {
-      console.log('open', arguments)
-
       // this.state = Array.from(new Set(...this.open, key))
       this.open = this.open.includes(key)
         ? this.open.filter(el => el !== key)
@@ -57,29 +54,24 @@ export default {
 
     distinct() {
       const { publications } = this.$store.state
-      console.log(this.$store)
-      if (!this.loaded) {
-        return {}
-      }
-      console.log('computing distinxt. accessors', publications)
-      const distinct = Object.entries(accessors).reduce(
+
+      console.log(...Object.entries(accessors))
+      return [
+        ...Object.entries(accessors),
+        ['authorNames', 'authorNames'],
+      ].reduce(
         (bag, [key, accessor]) => ({
           ...bag,
           [key]: getDistinct(publications, accessor),
         }),
         {},
       )
-
-      console.log('distinct', distinct)
-
-      return distinct
     },
 
     summaries() {
       const { publications } = this.$store.state
-      if (!this.loaded) {
-        return {}
-      }
+
+      console.log(this.distinct)
       return {
         disciplines: [...this.distinct.disciplines]
           .map(discipline => ({
@@ -95,10 +87,10 @@ export default {
             count: publications.filter(d => d.source === source).length,
           }))
           .sort((a, b) => b.count - a.count),
-        authors: [...this.distinct.sources]
-          .map(source => ({
-            label: source,
-            count: publications.filter(d => d.source === source).length,
+        authors: [...this.distinct.authorNames]
+          .map(authorName => ({
+            label: authorName,
+            count: publications.filter(d => d.authorName === authorName).length,
           }))
           .sort((a, b) => b.count - a.count),
         years: [...this.distinct.years]
@@ -112,15 +104,18 @@ export default {
     categories() {
       const { publications } = this.$store.state
 
-      if (!this.loaded) {
-        return {}
+      const labels = {
+        sources: 'Journals',
+        authors: 'Authors',
+        disciplines: 'Disciplines',
+        years: 'Years',
       }
 
       return Object.keys(accessors).reduce(
         (bag, key) => ({
           ...bag,
           [key]: {
-            title: key[0].toUpperCase() + key.slice(1),
+            title: labels[key],
             total: this.distinct[key].length,
             data: publications,
           },
@@ -371,6 +366,9 @@ export default {
   padding-top: 10px !important;
   opacity: 0.9;
   width: 100%;
+
+  line-height: inherit;
+  text-decoration: none;
 }
 
 .menu__category-link:hover {
