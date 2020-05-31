@@ -2,6 +2,7 @@
 import SlideUpDown from 'vue-slide-up-down'
 import IconFilters from './IconFilters'
 import IconChevron from './IconChevron'
+import MenuBottom from './MenuBottom'
 
 function getDistinct(data, key) {
   // get distinct values for key from data
@@ -21,9 +22,11 @@ export default {
     SlideUpDown,
     IconFilters,
     IconChevron,
+    MenuBottom,
   },
   data: () => ({
     open: [],
+    showModal: false,
   }),
   methods: {
     handleMenuCategoryToggle(key) {
@@ -146,8 +149,7 @@ export default {
           class="menu__category-link"
           @click="handleMenuCategoryToggle(key)"
         >
-          <span class="menu__category-link-label">{{ category.title }}</span
-          >&nbsp;
+          <span class="menu__category-link-label">{{ category.title }}</span>
           <span class="menu__category-link-count">{{ category.total }}</span>
           <icon-chevron :expanded="open.includes(key)" />
         </a>
@@ -172,55 +174,7 @@ export default {
       </li>
     </ul>
 
-    <!-- <div id="menu-bottom">
-      <div aria-haspopup="true" id="menu-info" data-open="modal-about">
-        <a>Info</a>
-        <div class="reveal" id="modal-about" data-reveal aria-modal="true">
-          <h3>Thank you for being here</h3>
-          <p>
-            The ASC Study Monitor is a curated, freely accessible, and regularly
-            updated database of scholarly publications concerning altered states
-            of consciousness (ASCs). The publications included in the ASC Study
-            Monitor mainly cover the field of the “mind & brain sciences”
-            including philosophy, psychology, psychiatry, neuroscience, and
-            medicine as well as natural sciences. Moreover, the monitor covers
-            relevant publications from cultural studies and the social sciences
-            that discuss altered states of consciousness. With the ASC Study
-            Monitor, MIND provides a multidisciplinary reference base to
-            researchers, practitioners, students, and the interested public.
-            This aims to enable high-quality, evidence-based public discussions
-            of consciousness, its alterations, capabilities, and pathologies.
-          </p>
-          <p>
-            Visit the MIND website for more information and ways to support this
-            project.
-          </p>
-          <p class="lead">
-            <a
-              href="https://mind-foundation.org/project/asc-study-monitor?utm_source=asc-studymonitor&utm_medium=info-popup&utm_campaign=asc-studymonitor-pre-conference"
-              target="_blank"
-            >
-              Go to the MIND website
-            </a>
-          </p>
-          <button
-            class="close-button"
-            data-close
-            aria-label="Close reveal"
-            type="button"
-          ></button>
-        </div>
-      </div>
-      <div id="menu-about">
-        <p>
-          <span class="menu-bottom__asc">ASC</span>
-          <span class="menu-bottom__study-monitor">Study Monitor</span>
-        </p>
-        <span class="menu-bottom__love">
-          Made with &hearts; in Berlin
-        </span>
-      </div>
-    </div> -->
+    <menu-bottom />
   </nav>
 </template>
 
@@ -277,68 +231,6 @@ export default {
   opacity: 1;
 }
 
-#menu-bottom {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: stretch;
-  text-align: center;
-}
-
-#menu-info {
-  padding: 10px;
-  cursor: pointer;
-  opacity: 0.9;
-}
-
-#menu-info:focus {
-  outline: none;
-}
-
-#menu-info:hover {
-  opacity: 1;
-}
-
-#menu-info a {
-  color: #fff;
-  font-size: 11pt;
-}
-
-#menu-about {
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  height: 70px;
-}
-
-#menu-bottom p {
-  display: inline;
-  margin: 0 0 2px 0;
-  font-size: 1.2em;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.menu-bottom__asc {
-  font-weight: 700;
-  letter-spacing: 0.15em;
-}
-
-.menu-bottom__study-monitor {
-  letter-spacing: 0.04em;
-  font-weight: 300;
-}
-.menu-bottom__love {
-  display: block;
-  font-size: 0.8em;
-  font-weight: 700;
-}
-
 .menu__filter_header {
   font-weight: 700;
   text-transform: uppercase;
@@ -378,7 +270,8 @@ export default {
 
 .menu__category-link-label {
   font-weight: 700;
-  display: inline;
+  display: inline-block;
+  margin-right: 8px;
 }
 
 .menu__category-link-count {
