@@ -114,14 +114,21 @@ def publication(slug):
         abort(404)
 
     # shorten abstract
-    abstract = document["abstract"]
-    if len(abstract) > 240:
-        paragraphs = abstract.split("\n")
-        abstract = ""
-        for par in paragraphs:
-            abstract += "\n" + par
-            if len(abstract) > 240:
-                break
+    try:
+        abstract = document["abstract"]
+        if len(abstract) > 240:
+            paragraphs = abstract.split("\n")
+            abstract = ""
+            for par in paragraphs:
+                abstract += "\n" + par
+                if len(abstract) > 240:
+                    break
+    except KeyError:
+        abstract = (
+            "The ASC Study Monitor is a curated, freely accessible, "
+            + "and regularly updated database of scholarly publications concerning "
+            + "altered states of consciousness."
+        )
 
     # build url
     if development:
@@ -129,20 +136,22 @@ def publication(slug):
     else:
         url = url_for("publication", slug=slug)
 
+    # jsonify doc and escape quotes
+    json_doc = json.dumps(document).replace("'", r"\'").replace('"', r"\"")
+
     return render_template(
         "index.html",
-        static=False,
         abstract=abstract,
         title=document["title"],
-        url=url_for("publication", slug=slug),
-        initial_publication=json.dumps(document),
+        url=url,
+        initial_publication=json_doc,
     )
 
 
 @app.route("/")
 def index():
     """ Show the table as HTML """
-    return render_template("index.html", static=True)
+    return render_template("index.html")
 
 
 if development:
