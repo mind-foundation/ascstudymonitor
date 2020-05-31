@@ -51,7 +51,6 @@ export default new Vuex.Store({
       Vue.set(state, 'publications', publications)
       Vue.set(state, 'loaded', true)
 
-      console.log('setting index', publications.length)
       setTimeout(() => {
         index = Fuse.createIndex(
           fuseOptions.keys.map(({ name }) => name),
@@ -64,25 +63,25 @@ export default new Vuex.Store({
     loadPublications: context => {
       fetch('http://localhost:5000/documents.json')
         .then(res => res.json())
-        .then(function(data) {
-          context.commit('MUTATE_PUBLICATIONS', data)
-        })
+        .then(data => context.commit('MUTATE_PUBLICATIONS', data))
     },
-    loadPublication: () => {
-      // fetch('http://localhost:5000/documents.json')
-      //   .then(res => res.json())
-      //   .then(function(data) {
-      //     context.commit('MUTATE_PUBLICATIONS', data)
-      //   })
+    localLocalPublication: () => {
+      const initialPublicationStringified = window.initialPublication
+      if (initialPublicationStringified) {
+        try {
+          const document = JSON.parse(initialPublicationStringified)
+          context.commit('MUTATE_PUBLICATIONS', [document])
+        } catch (e) {
+          console.error('Error parsing initial publication')
+          console.error(e)
+        }
+      }
     },
   },
   modules: {},
   getters: {
     getPublications: state => state.publications,
     queryPublications: function(state, getters, rootState) {
-      // if (!rootState.router) {
-      //   return []
-      // }
       const { page = 1, search } = rootState.route.query
       let basePublications = state.publications
 
@@ -95,7 +94,7 @@ export default new Vuex.Store({
       }
 
       const pageIndex = page - 1
-      console.log(pageIndex, pageIndex + state.pageSize)
+      // console.log(pageIndex, pageIndex + state.pageSize)
       basePublications = basePublications.slice(pageIndex, pageIndex + 20)
       if (hasFused) {
         basePublications = basePublications.map(result => result.item)

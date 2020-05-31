@@ -28,6 +28,7 @@ export default {
     Mindblower,
   },
   created() {
+    this.$store.dispatch('localLocalPublication')
     this.$store.dispatch('loadPublications')
   },
   computed: {
