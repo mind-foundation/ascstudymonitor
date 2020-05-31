@@ -11,8 +11,9 @@ from ascmonitor.channels.twitter import TwitterChannel
 class Poster:
     """ Posts documents to channels """
 
-    def __init__(self, event_store, auths):
+    def __init__(self, event_store, document_store, auths):
         self.event_store = event_store
+        self.document_store = document_store
         self.auths = auths
         self.queue = PostQueue(event_store)
 
@@ -43,7 +44,8 @@ class Poster:
         Post the next document in queue
         :param channel: Name of channel to post to
         """
-        document = self.queue.pop()
+        document_short = self.queue.pop()
+        document = self.document_store.get_by_id(document_short["id"])
         channel = self.channels[channel_name]
 
         self.emit_start(document, channel_name)

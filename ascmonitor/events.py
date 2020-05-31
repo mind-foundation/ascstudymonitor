@@ -71,7 +71,7 @@ class UpdatedDocEvent(BaseEvent):
 class DeletedDocEvent(BaseEvent):
     """ Event """
 
-    kind: EventKind = EventKind.new_document
+    kind: EventKind = EventKind.deleted_document
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -100,5 +100,5 @@ class PostFailureEvent(BaseEvent):
     channel: str
     error: str
     allow_retry: bool
-    kind: EventKind = EventKind.new_document
+    kind: EventKind = EventKind.post_failure
     timestamp: datetime = attr.Factory(datetime.now)

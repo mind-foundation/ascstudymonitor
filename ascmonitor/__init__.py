@@ -2,6 +2,7 @@
 __version__ = "2.0.0"
 
 from logging.config import dictConfig
+from ascmonitor.config import development
 
 dictConfig(
     {
@@ -16,13 +17,14 @@ dictConfig(
                 "formatter": "default",
             }
         },
-        "root": {"level": "INFO", "handlers": ["wsgi"]},
+        "root": {"level": "DEBUG" if development else "INFO", "handlers": ["wsgi"]},
     }
 )
 
-import sentry_sdk
+if not development:
+    import sentry_sdk
 
-sentry_sdk.init("https://91d6a27d4de14deba93bac991e05185f@sentry.io/1661534")
+    sentry_sdk.init("https://91d6a27d4de14deba93bac991e05185f@sentry.io/1661534")
 
 # some global types
 from typing import Any, List, Dict
