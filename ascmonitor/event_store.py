@@ -20,8 +20,7 @@ class EventStore:
 
     def put(self, event):
         """ Put an event in the event store """
-        # probably not needed
-        raise NotImplementedError()
+        self._collection.insert(event.as_dict())
 
     def put_many(self, events: List[BaseEvent]):
         """ Put many events in the event store """

@@ -78,14 +78,17 @@ class DeletedDocEvent(BaseEvent):
 class PostStartEvent(BaseEvent):
     """ Event """
 
+    channel: str
     kind: EventKind = EventKind.post_start
+    timestamp: datetime = attr.Factory(datetime.now)
 
 
 @attr.s(frozen=True, auto_attribs=True)
 class PostSuccessEvent(BaseEvent):
     """ Event """
 
-    post_id: str
+    channel: str
+    post: Dict[str, Any]
     kind: EventKind = EventKind.post_success
     timestamp: datetime = attr.Factory(datetime.now)
 
@@ -94,7 +97,7 @@ class PostSuccessEvent(BaseEvent):
 class PostFailureEvent(BaseEvent):
     """ Event """
 
-    post_id: str
+    channel: str
     error: str
     allow_retry: bool
     kind: EventKind = EventKind.new_document
