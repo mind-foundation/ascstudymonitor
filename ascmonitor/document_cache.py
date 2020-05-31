@@ -3,11 +3,11 @@ Stores the document library in a database
 """
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta
-from typing import Callable, Tuple
+from typing import Callable, Optional, Tuple
 
 from pymongo.database import Database
 
-from ascmonitor import DocumentsType
+from ascmonitor import DocumentType, DocumentsType
 
 # TODO: if it becomes are problem, make sure slugs never change
 
@@ -61,6 +61,10 @@ class DocumentCache:
         else:
             documents, changes = self._get_from_source()
         return documents, changes
+
+    def get_by_slug(self, slug: str) -> Optional[DocumentType]:
+        """ Return document by slug or None if not found """
+        return self._collection.findOne({"slug": slug})
 
     def update(self) -> Changes:
         """ Force update """

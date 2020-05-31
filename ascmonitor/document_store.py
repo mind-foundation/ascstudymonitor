@@ -1,4 +1,7 @@
 """ Store documents in Mendeley """
+from typing import Optional
+
+from ascmonitor import DocumentType
 from ascmonitor.config import cache_expires
 from ascmonitor.document_cache import DocumentCache
 from ascmonitor.events import NewDocEvent, UpdatedDocEvent, DeletedDocEvent
@@ -24,6 +27,10 @@ class DocumentStore:
         """ Force update """
         changes = self._cache.update()
         self._emit_events(changes)
+
+    def get_by_slug(self, slug: str) -> Optional[DocumentType]:
+        """ Return document by slug or None if not found """
+        return self._cache.get_by_slug(slug)
 
     def get_download_url(self, document_id):
         """ Get download link for specified document """

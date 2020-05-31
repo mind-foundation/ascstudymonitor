@@ -3,6 +3,9 @@
 import json
 import os
 
+# makes some things faster
+development = os.environ.get("FLASK_ENV", "") == "development"
+
 
 def in_docker():
     """ Returns: True if running in a Docker container, else False """
@@ -37,11 +40,16 @@ channel_auths = {
     }
 }
 
+post_secret_token = env.get("POST_SECRET_TOKEN", None)
+if not development and not post_secret_token:
+    raise RuntimeError("post secret token missing")
+
+
 mendeley_group_id = "d9389c6c-8ab5-3b8b-86ed-33db09ca0198"
 
 if in_docker():
     mongo_config = {
-        "host": "redis",
+        "host": "mongo",
         "port": 27017,
     }
 else:
@@ -69,6 +77,3 @@ required_fields = {
 
 # document cache expiry time in seconds
 cache_expires = 3600
-
-# makes some things faster
-development = os.environ.get("FLASK_ENV", "") == "development"
