@@ -12,3 +12,4 @@ requirements.txt
 .DS_Store
 *.sublime-project
 *.sublime-workspace
+data

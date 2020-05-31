@@ -39,6 +39,12 @@ export default {
 }
 </script>
 <style lang="less">
+*,
+::after,
+::before {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
 body {
   margin: 0;
   padding: 0;
@@ -84,6 +90,19 @@ ul {
   margin-left: 0px;
   padding: 0;
 }
+
+a {
+  line-height: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+p {
+  margin-bottom: 1rem;
+  font-size: inherit;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
 #main {
   margin-left: 240px;
   margin-top: 70px;
