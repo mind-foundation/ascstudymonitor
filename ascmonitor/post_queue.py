@@ -17,10 +17,11 @@ class PostQueue:
         events = self.event_store.query()
 
         excluded = set()
+        yielded = set()
         for event in events:
             document = event.document
             if event.kind == EventKind.new_document:
-                if document["id"] not in excluded:
+                if document["id"] not in excluded | yielded:
                     yield document
             elif event.kind == EventKind.deleted_document:
                 excluded.add(document["id"])
@@ -29,8 +30,9 @@ class PostQueue:
             elif event.kind == EventKind.post_success:
                 excluded.add(document["id"])
             elif event.kind == EventKind.post_failure:
-                if event.allow_retry and event.document["id"] not in excluded:
+                if event.allow_retry and event.document["id"] not in excluded | yielded:
                     yield document
+                    yielded.add(document)
 
     def pop(self):
         """ Return the next document in the queue """

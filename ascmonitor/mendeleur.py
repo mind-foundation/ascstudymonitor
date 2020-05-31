@@ -69,7 +69,9 @@ class Mendeleur:
     def slugify(self, document):
         """ Put slug in document """
         first_id, *_ = document.json["id"].split("-")
-        document.json["slug"] = first_id + "-" + slugify(document.json["title"], max_length=100)
+        document.json["slug"] = (
+            first_id + "-" + slugify(document.json["title"], max_length=60, word_boundary=True)
+        )
         return document
 
     def extract_disciplines(self, document):

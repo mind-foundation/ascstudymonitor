@@ -28,6 +28,15 @@ mendeley_authinfo = {
     "password": env["MENDELEY_PASSWORD"],
 }
 
+channel_auths = {
+    "twitter": {
+        "api_key": env["TWITTER_API_KEY"],
+        "api_secret": env["TWITTER_API_SECRET"],
+        "access_token": env["TWITTER_ACCESS_TOKEN"],
+        "access_secret": env["TWITTER_ACCESS_SECRET"],
+    }
+}
+
 mendeley_group_id = "d9389c6c-8ab5-3b8b-86ed-33db09ca0198"
 
 if in_docker():
@@ -55,6 +64,7 @@ required_fields = {
     "websites",
     "year",
     "slug",
+    "keywords",
 }
 
 # document cache expiry time in seconds
