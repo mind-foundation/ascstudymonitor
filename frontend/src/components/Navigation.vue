@@ -43,11 +43,13 @@ export default {
       // const $ul = $li.find('ul')
       // $ul.stop().slideToggle(300)
     },
-    filterItemClick() {
+    navigate(key) {
+      console.log(key)
       // const $target = $(event.target)
       // const key = $target.closest('li[data-key]').data('key')
       // const value = $target.closest('li[data-value]').data('value')
       // App.toggleFilter(key, value)
+      this.$router.push({ path: '/', query: { search: key } })
     },
   },
   computed: {
@@ -161,13 +163,13 @@ export default {
               v-for="s in summaries[key]"
               :key="s.label"
               :data-value="s.label"
-              v-on:click="filterItemClick(s)"
+              @click="navigate(s.label)"
               :class="{
                 activeInFilter: false, //filters[key] && filters[key].includes(d.label),
               }"
               aria-level="2"
             >
-              <a href="#">{{ s.label }} ({{ s.count }})</a>
+              {{ s.label }} ({{ s.count }})
             </li>
           </ul>
         </slide-up-down>
@@ -220,6 +222,7 @@ export default {
 
 #menu-content ul {
   margin-top: 1em;
+  margin-left: 1em;
 }
 
 #menu-content a {
@@ -284,9 +287,10 @@ export default {
   display: none;
 }
 
-.filterItem a {
+.filterItem {
   line-height: 1.8;
   padding: 0 !important;
+  cursor: pointer;
 }
 
 .filterItem.activeInFilter {

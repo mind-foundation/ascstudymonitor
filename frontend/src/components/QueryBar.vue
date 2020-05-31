@@ -49,6 +49,8 @@ export default {
   position: fixed;
   left: 240px;
   width: calc(100vw - 240px);
+  background: #fff;
+  z-index: 1;
 }
 
 .title-bar {
