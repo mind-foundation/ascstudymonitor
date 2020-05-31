@@ -62,12 +62,7 @@ export default new Vuex.Store({
     loadPublications: context => {
       fetch('http://localhost:5000/documents.json')
         .then(res => res.json())
-        .then(data =>
-          context.commit(
-            'HYDRATE_ALL_PUBLICATIONS',
-            data.filter(d => d.file_attached),
-          ),
-        )
+        .then(data => context.commit('HYDRATE_ALL_PUBLICATIONS', data))
     },
     localLocalPublication: context => {
       const initialPublicationStringified = window.initialPublication

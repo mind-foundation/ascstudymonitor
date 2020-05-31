@@ -18,8 +18,19 @@
     <meta name="msapplication-tooltip" content="Click to browse publications" />
     <meta name="msapplication-starturl" content="/" />
 
-    {% if static %} {% include 'static_meta.html' %} {% else %} {% include
-    'dynamic_meta.html' %} {% endif %}
+    <!-- prettier-ignore -->
+    <% if (process.env.NODE_ENV === 'production') { %>
+    <!-- prettier-ignore -->
+    {% if static %}
+    <!-- prettier-ignore -->
+    {% include 'static_meta.html' %}
+    <!-- prettier-ignore -->
+    {% else %}
+    <!-- prettier-ignore -->
+    {% include 'dynamic_meta.html' %} {% endif %}
+
+    <!-- prettier-ignore -->
+    <% } %>
 
     <link
       rel="icon"
@@ -58,7 +69,8 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
     <script>
-      window.initialPublication = '{{ initial_publication }}'
+      window.VERSION = '<%= process.env.VERSION  %>'
+      window.COMMIT_HASH = '<%= process.env.COMMIT_HASH %>'
     </script>
   </body>
 </html>
