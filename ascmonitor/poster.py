@@ -1,4 +1,5 @@
 """ Common interface for posting from a queue """
+from typing import Any, Dict
 
 from ascmonitor import DocumentType
 from ascmonitor.events import PostStartEvent, PostSuccessEvent, PostFailureEvent
@@ -37,7 +38,7 @@ class Poster:
         )
         self.event_store.put(event)
 
-    def post(self, channel_name):
+    def post(self, channel_name) -> Dict[str, Any]:
         """
         Post the next document in queue
         :param channel: Name of channel to post to
@@ -50,5 +51,7 @@ class Poster:
             post = channel.format(document)
             post = channel.send(post)
             self.emit_success(document, post, channel_name)
+            return post.as_dict()
         except PostSendException as error:
             self.emit_fail(document, error, channel_name)
+            return {"document": document, "channel": channel_name, "error": error.as_dict()}

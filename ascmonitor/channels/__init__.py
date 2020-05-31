@@ -3,9 +3,12 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, asdict
 from datetime import datetime
+from logging import getLogger
 from typing import Any, Optional
 
 from ascmonitor import DocumentType
+
+logger = getLogger(__name__)
 
 
 class PostSendException(Exception):
@@ -19,6 +22,11 @@ class PostSendException(Exception):
         super().__init__(message)
         self.message = message
         self.allow_retry = allow_retry
+        logger.error(f"PostSendException: {message}, allow_retry={allow_retry}")
+
+    def as_dict(self):
+        """ Convert to dict """
+        return {"error": self.message, "allow_retry": self.allow_retry}
 
 
 @dataclass(frozen=True)

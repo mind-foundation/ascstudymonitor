@@ -20,13 +20,16 @@ from ascmonitor.config import (
     mongo_db,
     channel_auths,
     post_secret_token,
+    development,
 )
 from ascmonitor.document_store import DocumentStore
 from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import MendeleyAuthInfo
 from ascmonitor.poster import Poster
 
-app = Flask(__name__, static_folder="../static", template_folder="../templates")
+static_folder = "../client/public" if development else "../client/dist"
+template_folder = static_folder
+app = Flask(__name__, static_folder=static_folder, template_folder=template_folder)
 CORS(app)
 
 authinfo = MendeleyAuthInfo(**mendeley_authinfo)
@@ -80,29 +83,29 @@ def post(channel):
         if token != post_secret_token:
             abort(404)
 
-    poster.post(channel)
+    response = poster.post(channel)
+    return jsonify(response)
 
 
-@app.route("/publication/<doc_slug>")
-def publication(doc_slug):
+@app.route("/publication/<slug>")
+def publication(slug):
     """
     Provides static link to document.
     Includes meta tags.
     """
-    document = document_store.get_by_slug(doc_slug)
+    document = document_store.get_by_slug(slug)
     if document is None:
         abort(404)
-    return render_template("stub.html", document=document)
+    return render_template("index.html", static=False, document=document)
 
 
-if app.env != "production":
+@app.route("/")
+def index():
+    """ Show the table as HTML """
+    return render_template("index.html", static=True)
 
-    @app.route("/static/<path:path>")
-    def send_js(path):
-        """ Send static js in development """
-        return send_from_directory("static", "path")
 
-    @app.route("/")
-    def browser():
-        """ Show the table as HTML """
-        return app.send_static_file("index.html")
+@app.route("/static/<path:path>")
+def send_asset(path):
+    """ Send static js in development """
+    return send_from_directory(static_folder, "path")
