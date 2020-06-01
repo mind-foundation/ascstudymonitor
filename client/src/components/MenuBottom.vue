@@ -35,25 +35,25 @@ export default {
   justify-content: center;
   align-items: stretch;
   text-align: center;
-}
 
-#menu-info {
-  padding: 10px;
-  cursor: pointer;
-  opacity: 0.9;
-}
+  a {
+    color: #fff;
+    font-size: 11pt;
+    display: inline-block;
 
-#menu-info:focus {
-  outline: none;
-}
+    margin: 0 auto;
+    padding: 10px;
+    cursor: pointer;
+    opacity: 0.9;
 
-#menu-info:hover {
-  opacity: 1;
-}
+    &:focus {
+      outline: none;
+    }
 
-#menu-info a {
-  color: #fff;
-  font-size: 11pt;
+    &:hover {
+      opacity: 1;
+    }
+  }
 }
 
 #menu-about {

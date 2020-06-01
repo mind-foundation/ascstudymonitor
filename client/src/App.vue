@@ -107,13 +107,10 @@ ul {
   list-style-type: none;
 }
 
-#app {
-  width: 100%;
-}
-
 #main {
   margin-left: 240px;
   margin-top: 70px;
+  width: calc(100vw - 260px);
 }
 
 #nav {

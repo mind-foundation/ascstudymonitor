@@ -5,13 +5,14 @@
  - Configure nginx to gzip everything
 
 ## Frontend
- - On click on filter: highlight in menu
- - On click on info button: fix modal
- - Implement screen for no results on search
- - Title of website, missing assets?
- - Cursor icons
- - On click on author: search author
+ - Go through previous HTML check for missing assets
+ - Click behavior on publication
+  - On click on discipline: search discipline
+  - On click on author: search author
+  - On click on publication: search publication
  - Thorough testing and fixing small things
+   - Small horizontal scroll bars on list content  
+   - On click on info button: leaky z-index (text overlaying modal, query bar color)
 
 ## UX design
  - Logo for Tweet picture for meta tags
@@ -20,7 +21,7 @@
  - How to go from single pub view to main site
 
 ## Tests
- - test paper download
+ - Test paper download
  - Browser support and consistent UI
  - Unit tests ;-)
 

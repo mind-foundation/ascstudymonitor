@@ -38,6 +38,9 @@ export default {
     navigate(key) {
       this.$router.push({ path: '/', query: { search: key } })
     },
+    isActive(category) {
+      return this.$store.state.route.query?.search === category.label
+    },
   },
   computed: {
     loaded() {
@@ -80,7 +83,8 @@ export default {
         authors: [...this.distinct.authorNames]
           .map(authorName => ({
             label: authorName,
-            count: publications.filter(d => d.authorName === authorName).length,
+            count: publications.filter(d => d.authorNames.includes(authorName))
+              .length,
           }))
           .sort((a, b) => b.count - a.count),
         years: [...this.distinct.years]
@@ -150,7 +154,7 @@ export default {
               :data-value="s.label"
               @click="navigate(s.label)"
               :class="{
-                activeInFilter: false, //filters[key] && filters[key].includes(d.label),
+                activeInFilter: isActive(s),
               }"
               aria-level="2"
             >
