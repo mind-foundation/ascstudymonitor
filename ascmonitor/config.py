@@ -55,6 +55,8 @@ if in_docker():
     mongo_config = {
         "host": "mongo",
         "port": 27017,
+        "username": "root",
+        "password": "integration",
     }
 else:
     mongo_config = {

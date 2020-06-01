@@ -1,7 +1,11 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "ascstudymonitor",
+  "version": "2.0.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/membranepotential/ascstudymonitor.git"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "NODE_ENV=production vue-cli-service build",
@@ -68,5 +72,12 @@
   ],
   "jest": {
     "preset": "@vue/cli-plugin-unit-jest"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "arrowParens": "avoid"
   }
 }

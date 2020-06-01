@@ -1,10 +1,12 @@
 .venv
+.pytest_cache
 *.egg-info
 __pycache__
 *env.sh*
-mendeley-secret.json
+asc-secret.json
 asc.db
 requirements.txt
+Makefile
 
 # Elastic Beanstalk Files
 .ebextensions
@@ -15,3 +17,6 @@ requirements.txt
 .DS_Store
 .vscode
 .git
+
+client/dist
+client/node_modules
