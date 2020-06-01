@@ -59,9 +59,6 @@ export default {
       })
     },
   },
-  created() {
-    console.log('list created')
-  },
   computed: {
     page() {
       const queryPage = this.$store.state.route.query.page
@@ -69,7 +66,6 @@ export default {
     },
     pageCount() {
       const c = Math.ceil(this.publications.length / this.$store.state.pageSize)
-      console.log(this.publications.length, this.$store.state.pageSize)
       return c
     },
     publications() {
