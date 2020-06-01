@@ -1,9 +1,7 @@
 # TODO
 
 ## Backend
- - Separate collection for slugs
  - CRON job calling post every day
- - sitemap (dynamically) & robot.txt (in client/pub)
 
 ## Frontend
  - On click on filter: highlight in menu

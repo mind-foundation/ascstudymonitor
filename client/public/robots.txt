@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://asc-studymonitor.mind-foundation.org/sitemap.xml
