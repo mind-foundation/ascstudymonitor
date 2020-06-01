@@ -106,6 +106,11 @@ p {
 ul {
   list-style-type: none;
 }
+
+#app {
+  width: 100%;
+}
+
 #main {
   margin-left: 240px;
   margin-top: 70px;

@@ -12,8 +12,6 @@ export default {
 
 <template>
   <div id="menu-bottom">
-    <!-- use the modal component, pass in the prop -->
-
     <a @click="showModal = true">Info</a>
     <div v-if="showModal">
       <modal @close="showModal = false" />

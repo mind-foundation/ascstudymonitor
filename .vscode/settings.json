@@ -6,6 +6,8 @@
     "source.fixAll.eslint": true
   },
   "cSpell.words": [
+    "ascstudymonitor",
+    "conda",
     "localforage",
     "vuex"
   ]

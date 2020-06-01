@@ -1,6 +1,13 @@
 <template>
   <div id="list">
-    <span v-if="pagination.items.length === 0">Loading</span>
+    <div v-if="pagination.items.length == 0" class="message">
+      <p v-if="!loaded">
+        Loading..
+      </p>
+      <p v-else>
+        No articles found matching your query. Try a different search instead.
+      </p>
+    </div>
     <ul>
       <li v-for="publication in this.pagination.items" :key="publication.id">
         <publication :publicationId="publication.id" />
@@ -60,6 +67,9 @@ export default {
     },
   },
   computed: {
+    loaded() {
+      return this.$store.state.loaded
+    },
     page() {
       const queryPage = this.$store.state.route.query.page
       return typeof queryPage === 'number' ? parseInt(queryPage) : 1
@@ -96,6 +106,12 @@ export default {
       scroll-behavior: auto;
     }
   }
+}
+
+.message {
+  padding: 30px;
+  color: #111;
+  font-size: 1.1em;
 }
 
 .pagination--wrapper {
