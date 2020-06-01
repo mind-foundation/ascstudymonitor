@@ -34,21 +34,8 @@ export default {
       this.open = this.open.includes(key)
         ? this.open.filter(el => el !== key)
         : [...this.open, key]
-
-      // this.open =
-      // const $target = $(event.target)
-      // const $li = $target.closest('li')
-      // const key = $li.data('key')
-      // toggle(App.Menu.open, key)
-      // const $ul = $li.find('ul')
-      // $ul.stop().slideToggle(300)
     },
     navigate(key) {
-      console.log(key)
-      // const $target = $(event.target)
-      // const key = $target.closest('li[data-key]').data('key')
-      // const value = $target.closest('li[data-value]').data('value')
-      // App.toggleFilter(key, value)
       this.$router.push({ path: '/', query: { search: key } })
     },
   },
@@ -60,7 +47,6 @@ export default {
     distinct() {
       const { publications } = this.$store.state
 
-      console.log(...Object.entries(accessors))
       return [
         ...Object.entries(accessors),
         ['authorNames', 'authorNames'],
@@ -76,7 +62,6 @@ export default {
     summaries() {
       const { publications } = this.$store.state
 
-      console.log(this.distinct)
       return {
         disciplines: [...this.distinct.disciplines]
           .map(discipline => ({

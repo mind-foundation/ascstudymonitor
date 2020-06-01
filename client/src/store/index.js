@@ -92,8 +92,6 @@ export default new Vuex.Store({
         hasFused = true
       }
 
-      // console.log(pageIndex, pageIndex + state.pageSize)
-
       if (hasFused) {
         basePublications = basePublications.map(result => result.item)
       }
