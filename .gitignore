@@ -13,3 +13,4 @@ requirements.txt
 *.sublime-project
 *.sublime-workspace
 data
+.pytest_cache

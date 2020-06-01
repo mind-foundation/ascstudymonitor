@@ -6,14 +6,15 @@ from datetime import datetime, timedelta
 from typing import Callable, Optional, Tuple
 
 from pymongo.database import Database
+from pymongo.errors import BulkWriteError
 
 from ascmonitor import DocumentType, DocumentsType
-
-# TODO: if it becomes are problem, make sure slugs never change
 
 
 @dataclass
 class Changes:
+    """ Describes changes to the document collection """
+
     created: DocumentsType = field(default_factory=list)
     updated: DocumentsType = field(default_factory=list)
     removed: DocumentsType = field(default_factory=list)
@@ -26,8 +27,9 @@ class Changes:
 class DocumentCache:
     """ Provides access to stored document data. """
 
-    collection_name = "documents"
-    meta_collection_name = "documents_meta"
+    collection_name = "documents"  # for documents
+    meta_collection_name = "documents_meta"  # for expiration datetime
+    slug_collection_name = "slugs"  # one-to-many slug -> document id mapping
 
     def __init__(self, mongo: Database, source_fn: Callable[[], DocumentsType], expires: int):
         """
@@ -38,11 +40,11 @@ class DocumentCache:
         self._mongo = mongo
         self._collection = mongo[self.collection_name]
         self._meta = mongo[self.meta_collection_name]
+        self._slugs = mongo[self.slug_collection_name]
         self._source_fn = source_fn
         self._expires = expires
 
-        # init cache
-        self._collection.create_index("slug")
+        self._slugs.create_index("slug", unique=True)
 
     @property
     def expired(self):
@@ -64,11 +66,14 @@ class DocumentCache:
 
     def get_by_slug(self, slug: str) -> Optional[DocumentType]:
         """ Return document by slug or None if not found """
-        return self._collection.find_one({"slug": slug})
+        id_ = self._slugs.find_one({"slug": slug})["document"]
+        if id_ is None:
+            return None
+        return self.get_by_id(id_)
 
     def get_by_id(self, id_: str) -> Optional[DocumentType]:
         """ Return document by id_ or None if not found """
-        return self._collection.find_one({"_id": id_})
+        return self._collection.find_one({"_id": id_}, {"_id": False})
 
     def update(self) -> Changes:
         """ Force update """
@@ -76,8 +81,8 @@ class DocumentCache:
         return changes
 
     def _get_from_cache(self) -> DocumentsType:
-        """ Return from cache or None """
-        data = list(self._collection.find())
+        """ Return all documents from cache """
+        data = list(self._collection.find({}, {"_id": False}))
         return data
 
     @staticmethod
@@ -109,6 +114,15 @@ class DocumentCache:
         changes = self.put(documents)
         return documents, changes
 
+    def _put_slugs(self, documents: DocumentsType):
+        """ Update the slug collection """
+        slugs = [{"slug": d["slug"], "document": d["_id"]} for d in documents]
+        try:
+            self._slugs.insert_many(slugs, ordered=False)
+        except BulkWriteError:
+            # ignore duplicated slugs
+            pass
+
     def put(self, documents: DocumentsType) -> Changes:
         """
         Update documents in collection and set expiration.
@@ -123,7 +137,12 @@ class DocumentCache:
         # replace documents
         self._collection.delete_many({})
         self._collection.insert_many(documents)
+
+        # update cche expiry
         self._meta.insert_one({"expiry": datetime.now() + timedelta(seconds=self._expires)})
+
+        # update slugs
+        self._put_slugs(documents)
 
         # build and return diff
         new = self._get_from_cache()

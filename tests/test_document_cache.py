@@ -88,3 +88,19 @@ def test_put__delete(document_cache, documents):
     _ = document_cache.put(documents)
     changes = document_cache.put([documents[0]])
     assert_changes_equal(changes, removed=[documents[1]])
+
+
+def test_slugs(document_cache, documents):
+    document_cache.put(documents)
+    first_slug = documents[0]["slug"]
+    doc = document_cache.get_by_slug(first_slug)
+    assert doc == documents[0]
+
+    # change slug of one document
+    new_slug = "new-slug"
+    updated = [{**documents[0], "slug": new_slug}, documents[1]]
+    document_cache.put(updated)
+
+    # document should be reachable by both slugs now
+    assert document_cache.get_by_slug(first_slug) == updated[0]
+    assert document_cache.get_by_slug(new_slug) == updated[0]
