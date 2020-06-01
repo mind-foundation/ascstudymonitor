@@ -2,6 +2,7 @@
 
 ## Backend
  - CRON job calling post every day
+ - Configure nginx to gzip everything
 
 ## Frontend
  - On click on filter: highlight in menu
@@ -27,6 +28,7 @@
  - Twitter access tokens conjuren
  - Too many requests on update (maybe in fix file attached?), use cached data instead
  - Sentry Vue
+ - move sitemap.xml out of client
 
 # IDEAS
  - Citation generator
