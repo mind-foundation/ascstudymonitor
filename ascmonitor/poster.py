@@ -15,10 +15,14 @@ class Poster:
         self.event_store = event_store
         self.document_store = document_store
         self.auths = auths
-        self.queue = PostQueue(event_store)
 
-        # init channels
-        self.channels = {"twitter": TwitterChannel(**auths["twitter"])}
+        # init channels and queues
+        self.channels = {
+            "twitter": {
+                "channel": TwitterChannel(**auths["twitter"]),
+                "queue": PostQueue(event_store, "twitter"),
+            }
+        }
 
     def emit_start(self, document: DocumentType, channel: str):
         """ Notify event store about starting to post """
@@ -44,9 +48,9 @@ class Poster:
         Post the next document in queue
         :param channel: Name of channel to post to
         """
-        document_short = self.queue.pop()
+        document_short = self.channels["channel_name"]["queue"].pop()
         document = self.document_store.get_by_id(document_short["id"])
-        channel = self.channels[channel_name]
+        channel = self.channels[channel_name]["channel"]
 
         self.emit_start(document, channel_name)
         try:
