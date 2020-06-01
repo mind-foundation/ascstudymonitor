@@ -1,30 +1,36 @@
-TODO
+# TODO
 
- - citation generator
- - show 1. figure
+## Backend
+ - Separate collection for slugs
+ - CRON job calling post every day
+ - sitemap (dynamically) & robot.txt (in client/pub)
 
-Twitter Bot
- - CRON job calling update every 5 minutes
+## Frontend
+ - On click on filter: highlight in menu
+ - On click on info button: fix modal
+ - Implement screen for no results on search
+ - Title of website, missing assets?
+ - Cursor icons
+ - On click on author: search author
+ - Thorough testing and fixing small things
 
-sitemap & robot.txt
+## UX design
+ - Logo for Tweet picture for meta tags
+ - Toggle sort for filter menu (alphanumeric vs counts)
+ - Mobile friendly
+ - How to go from single pub view to main site
 
-# Deliverables
+## Tests
+ - test paper download
+ - Browser support and consistent UI
+ - Unit tests ;-)
 
+## Misc
+ - Twitter access tokens conjuren
+ - Too many requests on update (maybe in fix file attached?), use cached data instead
+ - Sentry Vue
 
-# Stretch goals
-
-Menu? Toggle sort alphanumeric vs counts
-Mobile friendly
-
-Radu
-Bild mit link
-Render Paper title on cover image
-
-Felix
-Twitter access tokens conjuren
-Too many requests on update (maybe in fix file attached?), use cached data instead
-
-# TEST
-
-test paper download.
-Write tests
+# IDEAS
+ - Citation generator
+ - Dynamic procedural tweet picture generator 
+ - Render paper infos in tweet picture
