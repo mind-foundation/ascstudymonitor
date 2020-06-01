@@ -157,7 +157,7 @@ export default {
 .entry {
   margin: 0;
   padding: 12px 24px 12px 0;
-  widht: 100%;
+  width: 100%;
 
   h3 {
     margin-top: 0;
@@ -168,45 +168,47 @@ export default {
     margin-bottom: 10px;
     cursor: pointer;
   }
+
+  ul {
+    margin: 0;
+  }
+
+  li {
+    display: inline-block;
+    font-weight: 700;
+  }
 }
 
 .entry__chevron-wrapper svg {
   transition: transform 0.2s ease-in;
 }
 
-.entry ul {
-  margin: 0;
-}
-.entry li {
-  display: inline-block;
-  font-weight: 700;
-}
-
 .entry__icon {
   width: 35px;
   min-width: 35px;
   display: inline-block;
-}
 
-.entry__icon .l {
-  fill: none;
-  stroke: #333;
-  stroke-width: 1px;
+  .l {
+    fill: none;
+    stroke: #333;
+    stroke-width: 1px;
+  }
 }
 
 .entry__disciplines {
   list-style: none;
   padding-bottom: 10px;
-}
-.entry__disciplines a {
-  color: #34557f;
-  font-size: 1.2em;
-  font-weight: 700;
-  margin-right: 8px;
-}
 
-.entry__disciplines a:hover {
-  color: #607a9b;
+  a {
+    color: #34557f;
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-right: 8px;
+
+    &:hover {
+      color: #607a9b;
+    }
+  }
 }
 
 .entry__authors {
@@ -214,30 +216,30 @@ export default {
   padding-bottom: 10px;
   line-height: 2;
   display: inline-flex;
-}
 
-.entry__authors svg {
-  height: 18px;
-  position: relative;
-  bottom: -4px;
-  left: 4px;
-}
+  a {
+    color: #333;
+    font-weight: 700;
+    font-size: 1em;
+    margin-right: 8px;
 
-.entry__authors svg .a3 {
-  fill: none;
-  stroke: #333;
-  stroke-width: 1px;
-}
+    &:hover {
+      color: #607a9b;
+    }
+  }
 
-.entry__authors a {
-  color: #333;
-  font-weight: 700;
-  font-size: 1em;
-  margin-right: 8px;
-}
+  svg {
+    height: 18px;
+    position: relative;
+    bottom: -4px;
+    left: 4px;
 
-.entry__authors a:hover {
-  color: #607a9b;
+    .a3 {
+      fill: none;
+      stroke: #333;
+      stroke-width: 1px;
+    }
+  }
 }
 
 .entry__abstract {

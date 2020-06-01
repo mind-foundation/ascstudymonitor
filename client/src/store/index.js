@@ -60,7 +60,9 @@ export default new Vuex.Store({
   },
   actions: {
     loadPublications: context => {
-      fetch('http://localhost:5000/documents.json')
+      const prefix =
+        process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000/'
+      fetch(prefix + '/documents.json')
         .then(res => res.json())
         .then(data => context.commit('HYDRATE_ALL_PUBLICATIONS', data))
     },
