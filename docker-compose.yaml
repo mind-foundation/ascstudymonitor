@@ -6,12 +6,20 @@ services:
     expose:
       - 8000
     secrets:
-      - mendeley-secret
+      - asc-secret
     stop_signal: SIGINT
     restart: always
 
-  redis:
-    image: redis:alpine
+  mongo:
+    image: mongo:4.2-bionic
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: integration
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb-data:/data/db
 
   letsencrypt:
     image: linuxserver/letsencrypt
@@ -34,7 +42,7 @@ services:
       # - STAGING=false #optional
     volumes:
       - ./letsencrypt:/config
-      - ./static:/static
+      - ./client/dist:/static
     ports:
       - 443:443
       - 80:80
@@ -42,6 +50,9 @@ services:
   cache_warmer:
     build: cache-warmer/
 
+volumes:
+  mongodb-data:
+
 secrets:
-  mendeley-secret:
-    file: mendeley-secret.json
+  asc-secret:
+    file: asc-secret.json

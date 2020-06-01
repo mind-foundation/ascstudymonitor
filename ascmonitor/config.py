@@ -8,7 +8,7 @@ development = os.environ.get("FLASK_ENV", "") == "development"
 
 
 def in_docker():
-    """ Returns: True if running in a Docker container, else False """
+    """ Returns: True if running in a Docker container """
     if not os.path.exists("/proc/1/cgroup"):
         # not on linux
         return False
@@ -17,30 +17,34 @@ def in_docker():
         return "docker" in ifh.read()
 
 
+env = os.environ
+secrets = {}
+
 if in_docker():
-    with open("/run/secrets/mendeley-secret") as f:
-        env = json.load(f)
+    with open("/run/secrets/asc-secret") as f:
+        secret = json.load(f)
+        secrets.update(secret)
 else:
-    env = os.environ
+    secrets.update(env)
 
 mendeley_authinfo = {
-    "client_id": env["MENDELEY_CLIENT_ID"],
-    "client_secret": env["MENDELEY_CLIENT_SECRET"],
-    "redirect_uri": env["MENDELEY_REDIRECT_URI"],
-    "user": env["MENDELEY_USER"],
-    "password": env["MENDELEY_PASSWORD"],
+    "client_id": secrets["MENDELEY_CLIENT_ID"],
+    "client_secret": secrets["MENDELEY_CLIENT_SECRET"],
+    "redirect_uri": secrets["MENDELEY_REDIRECT_URI"],
+    "user": secrets["MENDELEY_USER"],
+    "password": secrets["MENDELEY_PASSWORD"],
 }
 
 channel_auths = {
     "twitter": {
-        "api_key": env["TWITTER_API_KEY"],
-        "api_secret": env["TWITTER_API_SECRET"],
-        "access_token": env["TWITTER_ACCESS_TOKEN"],
-        "access_secret": env["TWITTER_ACCESS_SECRET"],
+        "api_key": secrets["TWITTER_API_KEY"],
+        "api_secret": secrets["TWITTER_API_SECRET"],
+        "access_token": secrets["TWITTER_ACCESS_TOKEN"],
+        "access_secret": secrets["TWITTER_ACCESS_SECRET"],
     }
 }
 
-post_secret_token = env.get("POST_SECRET_TOKEN", None)
+post_secret_token = secrets.get("POST_SECRET_TOKEN", None)
 if not development and not post_secret_token:
     raise RuntimeError("post secret token missing")
 
