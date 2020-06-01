@@ -154,6 +154,16 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/sitemap.xml")
+def sitemap():
+    """ Build sitemap """
+    urlset = [
+        {"loc": f"https://asc-studymonitor.mind-foundation.org/{d['slug']}"}
+        for d in document_store.documents
+    ]
+    return render_template("sitemap.xml", urlset=urlset)
+
+
 if development:
 
     @app.route("/<path:path>")
