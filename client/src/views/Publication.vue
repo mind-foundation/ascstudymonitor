@@ -151,7 +151,7 @@ export default {
   min-width: 110px;
   display: flex;
   justify-content: center;
-  padding-top: 50px;
+  padding-top: 40px;
 }
 
 .entry {

@@ -38,7 +38,7 @@ export default new Vuex.Store({
   state: {
     loaded: false,
     publications: [],
-    pageSize: 4,
+    pageSize: 20,
   },
   mutations: {
     HYDRATE_SINGLE_PUBLICATION: (state, publication) => {

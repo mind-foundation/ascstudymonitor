@@ -5,10 +5,6 @@ export default {
 </script>
 
 <template>
-  <!-- <div aria-modal="true">
-        
-       
-      </div> -->
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper" @click="$emit('close')">
@@ -35,14 +31,14 @@ export default {
               Visit the MIND website for more information and ways to support
               this project.
             </p>
-            <p class="lead">
+            <div>
               <a
-                href="https://mind-foundation.org/project/asc-study-monitor?utm_source=asc-studymonitor&utm_medium=info-popup&utm_campaign=asc-studymonitor-pre-conference"
+                href="https://mind-foundation.org/project/asc-study-monitor?utm_source=asc-studymonitor&utm_medium=info-popup"
                 target="_blank"
               >
                 Go to the MIND website
               </a>
-            </p>
+            </div>
           </div>
         </div>
       </div>
@@ -71,21 +67,21 @@ export default {
 .modal-container {
   width: 600px;
   margin: 0px auto;
-  background-color: #fff;
+  background-color: #fefefe;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
-}
 
-.modal-container h3 {
-  margin-top: 0;
-  color: #42b983;
-  font-size: 1.9375rem;
+  h3 {
+    margin-top: 0;
+    color: #42b983;
+    font-size: 1.9375rem;
+  }
 }
 
 .modal-body {
-  margin: 20px 0;
+  margin: 10px 0;
 }
 
 .modal-default-button {
@@ -97,25 +93,30 @@ export default {
   padding: 30px 45px;
   position: relative;
   outline: none;
-}
-.reveal h3 {
-  text-align: left;
-  color: #333;
-  font-weight: 300;
-}
-.reveal p {
-  margin: 0;
-  text-align: left;
-  color: #333;
-  line-height: 1.8;
-  padding-bottom: 20px;
-}
-.reveal a {
-  font-weight: 600;
-  color: #fff;
-  background: linear-gradient(to right, #1a9da4, #34557f);
-  padding: 10px 20px;
-  line-height: 3em;
+
+  h3 {
+    text-align: left;
+    color: #333;
+    font-weight: 300;
+  }
+
+  p {
+    margin: 0;
+    text-align: left;
+    color: #333;
+    line-height: 1.8;
+    padding-bottom: 20px;
+  }
+
+  a {
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(to right, #1a9da4, #34557f);
+    padding: 3px 20px;
+    font-size: 15px;
+    line-height: 3em;
+    display: inline-block;
+  }
 }
 
 /*

@@ -28,6 +28,9 @@ export default {
 <style lang="less" scoped>
 .chevron {
   transition: transform 0.2s ease-in;
+  cursor: pointer;
+  padding: 10px; // increase hit box
+
   &.expanded {
     transform: rotate(-90deg);
   }
