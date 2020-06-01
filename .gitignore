@@ -2,7 +2,7 @@
 *.egg-info
 __pycache__
 *env.sh*
-mendeley-secret.json
+*secret.json
 asc.db
 requirements.txt
 # Elastic Beanstalk Files
