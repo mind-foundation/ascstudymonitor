@@ -27,8 +27,7 @@
 ## Misc
  - Twitter access tokens conjuren
  - Too many requests on update (maybe in fix file attached?), use cached data instead
- - Sentry Vue
- - move sitemap.xml out of client
+- move sitemap.xml out of client
 
 # IDEAS
  - Citation generator
