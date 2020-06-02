@@ -13,12 +13,15 @@
  - Thorough testing and fixing small things
    - Small horizontal scroll bars on list content  
    - On click on info button: leaky z-index (text overlaying modal, query bar color)
+   - Issues with some names and search, e.g. `/?search=Robin%20Lester%20Carhart-Harris`
+   - Move `queryPublications` out of getters to activate caching
 
 ## UX design
  - Logo for Tweet picture for meta tags
  - Toggle sort for filter menu (alphanumeric vs counts)
  - Mobile friendly
  - How to go from single pub view to main site
+ - It’s confusing to click at "Item (2)" and see more than 2 results 
 
 ## Tests
  - Test paper download
