@@ -86,10 +86,11 @@ export default {
       const { page = 1 } = route.query
       const pageIndex = page - 1
 
+      const items = this.publications.slice(pageIndex, pageIndex + pageSize)
       return {
-        items: this.publications.slice(pageIndex, pageIndex + pageSize),
+        items,
         start: pageIndex + 1,
-        end: pageIndex + 1 + pageSize,
+        end: pageIndex + items.length,
         total: publications.length,
       }
     },
