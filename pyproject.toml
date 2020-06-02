@@ -10,7 +10,7 @@ requests = "^2.5"
 flask = "^1.1"
 flask-cors = "^3.0"
 gunicorn = "^20"
-sentry-sdk = "^0.14"
+sentry-sdk = {extras = ["flask"], version = "^0.14.4"}
 pymongo = "^3.10.1"
 tweepy = "^3.8.0"
 mendeley = {git = "https://github.com/membranepotential/mendeley-python-sdk.git"}
