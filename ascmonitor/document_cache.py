@@ -3,12 +3,15 @@ Stores the document library in a database
 """
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta
+from logging import getLogger
 from typing import Callable, Optional, Tuple
 
 from pymongo.database import Database
 from pymongo.errors import BulkWriteError
 
 from ascmonitor import DocumentType, DocumentsType
+
+logger = getLogger(__name__)
 
 
 @dataclass
@@ -49,27 +52,33 @@ class DocumentCache:
     @property
     def expired(self):
         """ Returns True if cache has expired """
-        now = datetime.now()
+        now = datetime.utcnow()
         meta_doc = self._meta.find_one()
         if meta_doc is None:
+            logger.info("No cache metadata found, assuming expired")
             return True
-        return meta_doc["expiry"] > now
+
+        logger.debug("expiry: %s, now: %s", meta_doc["expiry"].isoformat(), now.isoformat())
+        expired = now > meta_doc["expiry"]
+        return expired
 
     def get(self) -> Tuple[DocumentsType, Changes]:
         """ Get the documents and list of changes """
         if not self.expired:
+            logger.debug("Get from cache")
             documents = self._get_from_cache()
             changes = Changes()
         else:
+            logger.debug("Get from source")
             documents, changes = self._get_from_source()
         return documents, changes
 
     def get_by_slug(self, slug: str) -> Optional[DocumentType]:
         """ Return document by slug or None if not found """
-        id_ = self._slugs.find_one({"slug": slug})["document"]
-        if id_ is None:
+        slug_doc = self._slugs.find_one({"slug": slug})
+        if slug_doc is None:
             return None
-        return self.get_by_id(id_)
+        return self.get_by_id(slug_doc["document"])
 
     def get_by_id(self, id_: str) -> Optional[DocumentType]:
         """ Return document by id_ or None if not found """
@@ -138,8 +147,9 @@ class DocumentCache:
         self._collection.delete_many({})
         self._collection.insert_many(documents)
 
-        # update cche expiry
-        self._meta.insert_one({"expiry": datetime.now() + timedelta(seconds=self._expires)})
+        # update cache expiry
+        self._meta.delete_many({})
+        self._meta.insert_one({"expiry": datetime.utcnow() + timedelta(seconds=self._expires)})
 
         # update slugs
         self._put_slugs(documents)

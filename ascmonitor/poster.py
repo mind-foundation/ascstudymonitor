@@ -43,6 +43,10 @@ class Poster:
         )
         self.event_store.put(event)
 
+    def get_queue(self, channel_name) -> PostQueue:
+        """ Get queue for a channel """
+        return self.channels[channel_name]["queue"]
+
     def post(self, channel_name) -> Dict[str, Any]:
         """
         Post the next document in queue

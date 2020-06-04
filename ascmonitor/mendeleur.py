@@ -1,6 +1,7 @@
 """ Access the Mendeley Database """
 
 from itertools import islice
+import logging
 import re
 from typing import NamedTuple
 
@@ -10,6 +11,8 @@ import requests
 from slugify import slugify
 
 from ascmonitor.config import required_fields, development
+
+logger = logging.getLogger(__name__)
 
 
 class MendeleyAuthInfo(NamedTuple):
@@ -32,6 +35,7 @@ class Mendeleur:
             client_secret=authinfo.client_secret,
             redirect_uri=authinfo.redirect_uri,
         )
+
         auth = mendeley.start_authorization_code_flow()
         login_url = auth.get_login_url()
 
@@ -51,6 +55,8 @@ class Mendeleur:
         Fetch the current library from mendeley.
         :returns: List of dicts with document bibliography
         """
+        logger.info("Fetching fresh documents from mendeley")
+
         library = self.group.documents.iter(page_size=500, sort="created", order="desc", view="all")
         if development:
             library = islice(library, 0, 500)
