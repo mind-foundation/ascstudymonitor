@@ -18,19 +18,23 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: integration
     ports:
       - 127.0.0.1:27017:27017
-    # volumes:
-    #   - mongodb-data:/data/db
+    volumes:
+      - mongodb-data:/data/db
 
   nginx:
     image: nginx:latest
     volumes:
       - ./nginx-dev.conf:/etc/nginx/nginx.conf
-      
+      - ./static:/static
     ports:
       - 80:80
 
-  cache_warmer:
-    build: cache-warmer/
+  # cache_warmer:
+  #   build: cache-warmer/
+
+volumes:
+  mongodb-data:
+    name: asc-mongodb-dev
 
 secrets:
   asc-secret:
