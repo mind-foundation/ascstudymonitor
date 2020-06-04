@@ -77,11 +77,11 @@ def update():
     return Response("success", mimetype="text/plain")
 
 
-@app.route("/queue")
-def queue():
-    """ Show current post queue """
+@app.route("/queue/<channel>")
+def queue(channel):
+    """ Show current post queue for given channel """
     n_visible = 20
-    docs = list(poster.queue)
+    docs = list(poster.get_queue(channel))
     visible, hidden = docs[:n_visible], docs[n_visible:]
     entries = "\n".join(d["title"] for d in visible)
     rest = f"\n ... and {len(hidden)} more ..."
@@ -101,6 +101,12 @@ def post(channel):
 
     response = poster.post(channel)
     return jsonify(response)
+
+
+@app.route("/<path:path>")
+def send_asset(path):
+    """ Send static js in development """
+    return send_from_directory(static_folder, path)
 
 
 @app.route("/<slug>")
@@ -162,11 +168,3 @@ def sitemap():
         for d in document_store.documents
     ]
     return render_template("sitemap.xml", urlset=urlset)
-
-
-if development:
-
-    @app.route("/<path:path>")
-    def send_asset(path):
-        """ Send static js in development """
-        return send_from_directory(static_folder, path)

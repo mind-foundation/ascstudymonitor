@@ -1,19 +1,18 @@
 """ A channel to twitter """
 
 from datetime import datetime, timedelta
-from logging import getLogger
+import logging
 import re
-import string
 
 import tweepy
 from tweepy import TweepError
-from flask import url_for
+from flask import request, url_for
 
 from ascmonitor import DocumentType
 from ascmonitor.channels import Channel, PreparedPost, SentPost, PostSendException
 from ascmonitor.config import development
 
-logger = getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class TwitterChannel(Channel):
@@ -88,7 +87,7 @@ class TwitterChannel(Channel):
     def get_url(document):
         """ Build tweet url for document """
         if development:
-            host = "https://asc-studymonitor.mind-foundation.org"
+            host = request.host_url
             return host + url_for("publication", slug=document["slug"])
         return url_for("publication", slug=document["slug"], _external=True)
 
