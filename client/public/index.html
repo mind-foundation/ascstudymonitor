@@ -69,8 +69,10 @@
     <!-- built files will be auto injected -->
     <script>
       <% if( process.env.NODE_ENV === 'production' ) {  %>
-        window.initialPublication = '{{ initial_publication | safe }}'
+        window.initialPublication = {% if initial_publication is defined %} '{{ initial_publication | tojson }}' {% else %} '' {% endif %}
         window.urlForPublication = '{{ url_for("publication", slug=":slug") }}'
+      <% } else { %>
+       window.urlForPublication = '/p/:slug'
       <% }  %>
       window.VERSION = '<%= process.env.VERSION  %>'
       window.COMMIT_HASH = '<%= process.env.COMMIT_HASH %>'
