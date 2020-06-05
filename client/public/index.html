@@ -70,6 +70,7 @@
     <script>
       <% if( process.env.NODE_ENV === 'production' ) {  %>
         window.initialPublication = '{{ initial_publication | safe }}'
+        window.urlForPublication = '{{ url_for("publication", slug=":slug") }}'
       <% }  %>
       window.VERSION = '<%= process.env.VERSION  %>'
       window.COMMIT_HASH = '<%= process.env.COMMIT_HASH %>'
