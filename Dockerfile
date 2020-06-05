@@ -10,7 +10,7 @@ COPY client/yarn.lock ./
 RUN yarn install
 
 ADD ./client /client
-ENV SOURCE_COMMIT $SOURCE_COMMIT
+ARG SOURCE_COMMIT
 RUN yarn build
 
 # Backend Target
@@ -27,4 +27,4 @@ RUN poetry install
 ADD . /app
 COPY --from=builder /client/dist /app/client/dist
 
-CMD ["poetry", "run", "gunicorn", "-w", "4", "--bind", "0.0.0.0:8000", "--timeout", "120", "--log-level", "info", "ascmonitor.app:app"]
+CMD ["poetry", "run", "gunicorn", "-c", "etc/gunicorn.py", "ascmonitor.app:app"]

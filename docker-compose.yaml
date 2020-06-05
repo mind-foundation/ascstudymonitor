@@ -2,7 +2,10 @@ version: "3.7"
 services:
   app:
     image: mindfoundation/asc-studymonitor
-    build: .
+    build:
+      context: .
+      args:
+        - SOURCE_COMMIT=${SOURCE_COMMIT}
     expose:
       - 8000
     secrets:
@@ -41,7 +44,7 @@ services:
       # - EXTRA_DOMAINS=<extradomains> #optional
       # - STAGING=false #optional
     volumes:
-      - ./letsencrypt:/config
+      - ./etc/letsencrypt:/config
       - ./static:/static
     ports:
       - 443:443

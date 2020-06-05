@@ -19,6 +19,10 @@ server {
 
 	keepalive_timeout 5;
 
+	gzip on;
+	gzip_types text/html application/json;
+	gzip_proxied no-cache no-store private expired auth;
+
 	root /static;
 
 	# all ssl related config moved to ssl.conf
@@ -30,7 +34,7 @@ server {
 	client_max_body_size 4G;
 
 	location / {
-		try_files $uri $uri/ @proxy_to_app;
+		try_files $uri @proxy_to_app;
 	}
 
 	location @proxy_to_app {

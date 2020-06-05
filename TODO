@@ -2,10 +2,10 @@
 
 ## Backend
  - CRON job calling post every day
- - Configure nginx to gzip everything
 
 ## Frontend
  - Go through previous HTML check for missing assets
+ - Publication opening arrow has wrong orientation, should be right > on closed and down v on opened 
  - Click behavior on publication
   - On click on discipline: search discipline
   - On click on author: search author
@@ -31,7 +31,6 @@
 ## Misc
  - Twitter access tokens conjuren
  - Too many requests on update (maybe in fix file attached?), use cached data instead
-- move sitemap.xml out of client
 
 # IDEAS
  - Citation generator

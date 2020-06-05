@@ -6,14 +6,17 @@ docker-dev-build:
 docker-dev-up: docker-dev-build
 	docker-compose -f docker-compose-dev.yaml up
 
-docker-build:
-	docker build -t ascstudymonitor .
+docker-prod-build:
+	docker-compose -f docker-compose.yaml build	
 
-docker-bash: docker-build
-	docker run -it -v $$PWD/asc-secret.json:/run/secrets/asc-secret --add-host mongo:127.0.0.1 --network=host ascstudymonitor bash
+docker-prod-up: docker-prod-build
+	docker-compose -f docker-compose.yaml up
 
-docker-dev-run: docker-build
-	docker run -it -v $$PWD/asc-secret.json:/run/secrets/asc-secret --add-host mongo:127.0.0.1 --network=host ascstudymonitor
+bash-backend:
+	docker exec -it $$(docker ps -f name=ascstudymonitor_app -q) bash
+
+mongo:
+	docker exec -it $$(docker ps -f name=ascstudymonitor_mongo -q) mongo -u root -p integration
 
 deploy:
 	eval $(docker-machine env asc-studymonitor)
