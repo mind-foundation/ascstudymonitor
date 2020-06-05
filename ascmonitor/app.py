@@ -1,7 +1,5 @@
 """ Flask Web app """
 
-from itertools import takewhile
-
 from pymongo import MongoClient
 from flask import (
     Flask,
@@ -11,6 +9,7 @@ from flask import (
     jsonify,
     redirect,
     render_template,
+    render_template_string,
     send_from_directory,
     url_for,
 )
@@ -30,6 +29,7 @@ from ascmonitor.document_store import DocumentStore
 from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import MendeleyAuthInfo
 from ascmonitor.poster import Poster
+from ascmonitor.sitemap import sitemap_template
 
 static_folder = "../client/dist/"
 template_folder = static_folder
@@ -37,9 +37,9 @@ app = Flask(__name__, static_folder=static_folder, template_folder=template_fold
 CORS(app)
 
 if development:
-    app.logger.info("Environment: development")
+    app.logger.info("Environment: development")  # pylint: disable=no-member
 else:
-    app.logger.info("Environment: production")
+    app.logger.info("Environment: production")  # pylint: disable=no-member
 
 
 authinfo = MendeleyAuthInfo(**mendeley_authinfo)
@@ -103,13 +103,7 @@ def post(channel):
     return jsonify(response)
 
 
-@app.route("/<path:path>")
-def send_asset(path):
-    """ Send static js in development """
-    return send_from_directory(static_folder, path)
-
-
-@app.route("/<slug>")
+@app.route("/p/<slug>")
 def publication(slug):
     """
     Provides static link to document.
@@ -142,19 +136,17 @@ def publication(slug):
     else:
         url = url_for("publication", slug=slug)
 
-    # jsonify doc and escape quotes
-    json_doc = json.dumps(document).replace("'", r"\'").replace('"', r"\"")
-
     return render_template(
         "index.html",
         abstract=abstract,
         title=document["title"],
         url=url,
-        initial_publication=json_doc,
+        initial_publication=document,
     )
 
 
 @app.route("/")
+@app.route("/index.html")
 def index():
     """ Show the table as HTML """
     return render_template("index.html")
@@ -167,4 +159,10 @@ def sitemap():
         {"loc": f"https://asc-studymonitor.mind-foundation.org/{d['slug']}"}
         for d in document_store.documents
     ]
-    return render_template("sitemap.xml", urlset=urlset)
+    return render_template_string(sitemap_template, urlset=urlset)
+
+
+@app.route("/<path:path>")
+def send_asset(path):
+    """ Send static js in development """
+    return send_from_directory(static_folder, path)
