@@ -12,7 +12,7 @@ const routes = [
     component: List,
   },
   {
-    path: '/:slug',
+    path: window.urlForPublication,
     name: 'Publication',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route

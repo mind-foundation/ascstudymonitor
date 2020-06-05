@@ -3,12 +3,19 @@ const webpack = require('webpack')
 var git = require('git-rev-sync')
 
 const getGitHash = () => {
+  let hash = ''
   try {
-    return git.short()
+    hash = git.short()
   } catch {
     // As a fallback for docker builds, try env var
-    return process.env.SOURCE_COMMIT.slice(0, 7)
+    hash = process.env['SOURCE_COMMIT'].slice(0, 7)
   }
+
+  if (!hash) {
+    throw Error('No commit hash found')
+  }
+
+  return hash
 }
 
 module.exports = {
