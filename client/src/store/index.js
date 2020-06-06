@@ -4,6 +4,7 @@ import VuexPersistence from 'vuex-persist'
 import localforage from 'localforage'
 import Fuse from 'fuse.js'
 import { transformPublication } from './helpers'
+import { uniq, sortBy } from 'lodash'
 
 const vuexLocal = new VuexPersistence({
   storage: localforage,
@@ -34,13 +35,18 @@ const fuseOptions = {
 
 let index = null
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     loaded: false,
     publications: [],
     pageSize: 20,
+    sortKey: 'count',
   },
   mutations: {
+    MUTATE_SORT_KEY: (state, newSortKey) => {
+      console.log('set sort key', newSortKey)
+      Vue.set(state, 'sortKey', newSortKey)
+    },
     HYDRATE_SINGLE_PUBLICATION: (state, publication) => {
       const transformed = transformPublication(publication)
       Vue.set(state, 'publications', [transformed])
@@ -82,6 +88,86 @@ export default new Vuex.Store({
   modules: {},
   getters: {
     getPublications: state => state.publications,
+    distinctPublicationsKeys: function({ publications }) {},
+    publicationsByKey: function({ publications }) {
+      const years = {}
+      const disciplines = {}
+      const authorNames = {}
+      const sources = {}
+
+      for (const p of publications) {
+        for (const a of p.authorNames) {
+          authorNames[a] = authorNames[a] || []
+          authorNames[a].push(p)
+        }
+        for (const d of p.disciplines) {
+          disciplines[d] = disciplines[d] || []
+          disciplines[d].push(p)
+        }
+        years[p.year] = years[p.year] || []
+        years[p.year].push(p)
+
+        sources[p.source] = sources[p.source] || []
+        sources[p.source].push(p)
+      }
+
+      return {
+        years: Object.values(years),
+        disciplines: Object.values(disciplines),
+        authorNames: Object.values(authorNames),
+        sources: Object.values(sources),
+      }
+    },
+    distinct({ publications }) {
+      return {
+        years: uniq(publications.map(p => p.year || 'None')),
+        disciplines: uniq(publications.map(p => p.disciplines).flat()),
+        authorNames: uniq(publications.map(p => p.authorNames).flat()),
+        sources: uniq(publications.map(p => p.source)),
+      }
+    },
+    summary(state, getters) {
+      const { publications, sortKey } = state
+      const { distinct } = getters
+
+      const sort = array => {
+        let sorted = sortBy(array, sortKey)
+        if (sortKey === 'count') {
+          sorted.reverse()
+        }
+        return sorted
+      }
+
+      return {
+        disciplines: sort(
+          distinct.disciplines.map(discipline => ({
+            label: discipline,
+            count: publications.filter(
+              d => d.disciplines && d.disciplines.includes(discipline),
+            ).length,
+          })),
+        ),
+        sources: sort(
+          distinct.sources.map(source => ({
+            label: source,
+            count: publications.filter(d => d.source === source).length,
+          })),
+        ),
+        authors: sort(
+          distinct.authorNames.map(authorName => ({
+            label: authorName,
+            count: publications.filter(d => d.authorNames.includes(authorName))
+              .length,
+          })),
+        ),
+        years: sort(
+          distinct.years.map(year => ({
+            label: year.toString(),
+            count: publications.filter(d => d.year === year).length,
+          })),
+        ),
+      }
+    },
     queryPublications: function(state, getters, rootState) {
       const { search } = rootState.route.query
       let basePublications = state.publications
@@ -103,3 +189,5 @@ export default new Vuex.Store({
 
   plugins: [vuexLocal.plugin],
 })
+
+export default store

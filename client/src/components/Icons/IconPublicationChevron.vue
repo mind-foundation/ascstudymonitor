@@ -1,7 +1,7 @@
 <script>
 export default {
   name: 'icon-publication-chevron',
-  props: ['expanded'],
+  props: ['expanded', 'selectable'],
 }
 </script>
 <template>
@@ -14,6 +14,7 @@ export default {
     viewBox="0 0 35.912 20.077"
     v-bind:class="{
       expanded: expanded,
+      selectable: selectable,
     }"
   >
     <defs></defs>
@@ -28,11 +29,17 @@ export default {
 <style lang="less" scoped>
 .chevron {
   transition: transform 0.2s ease-in;
-  cursor: pointer;
   padding: 10px; // increase hit box
+  transform: rotate(-90deg);
 
   &.expanded {
-    transform: rotate(-90deg);
+    transform: rotate(0);
+  }
+  &.selectable {
+    cursor: pointer;
+  }
+  &:not(.selectable) {
+    opacity: 0.5;
   }
 }
 

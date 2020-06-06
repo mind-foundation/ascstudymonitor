@@ -3,14 +3,17 @@
     <span v-if="!publication">Loading..</span>
     <div class="row" v-if="publication" @click="toggleExpand">
       <div class="chevron-wrapper">
-        <icon-publication-chevron :expanded="expanded" />
+        <icon-publication-chevron
+          :expanded="expanded"
+          :selectable="!isDetailView"
+        />
       </div>
 
-      <div class="content">
+      <div class="content" @click.stop>
         <ul class="entry__disciplines">
           <icon-science />
           <li v-for="d in publication.disciplines" v-bind:key="d">
-            <a @click="query('disciplines', e)">{{ d }}</a>
+            <a @click="navigate(d)">{{ d }}</a>
           </li>
         </ul>
 
@@ -26,12 +29,12 @@
 
         <ul class="entry__authors">
           <icon-author />
-          <div class="entry_authors_holder">
+          <div class="entry_authors_holder" @click.stop>
             <li
               v-for="authorName in publication.authorNames"
               v-bind:key="authorName"
             >
-              <a @click="query('authors', authorName)">{{ authorName }}</a>
+              <a @click="navigate(authorName)">{{ authorName }}</a>
             </li>
           </div>
         </ul>
@@ -49,15 +52,13 @@
           </div>
         </slide-up-down>
 
-        <div class="entry__year_source">
+        <div class="entry__year_source" @click.stop>
           <a
             class="entry__year_source__year"
-            @click="query('year', publixation.year)"
+            @click="navigate(publication.year)"
             >{{ publication.year }}</a
           >
-          <a @click="query('source', publication.source)">{{
-            publication.source
-          }}</a>
+          <a @click="navigate(publication.source)">{{ publication.source }}</a>
         </div>
 
         <div v-if="expanded">
@@ -110,7 +111,7 @@ export default {
     SlideUpDown,
   },
   data: () => ({
-    expanded: false,
+    expanded: null,
   }),
   props: ['slug', 'publicationId'],
   computed: {
@@ -133,11 +134,12 @@ export default {
       if (this.isDetailView) return false
       this.expanded = !this.expanded
     },
+    navigate(key) {
+      this.$router.push({ path: '/', query: { search: key } })
+    },
   },
   created() {
-    if (this.isDetailView) {
-      this.expanded = true
-    }
+    this.expanded = this.isDetailView
   },
 }
 </script>

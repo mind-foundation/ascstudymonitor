@@ -5,20 +5,13 @@
 
 ## Frontend
  - Go through previous HTML check for missing assets
- - Publication opening arrow has wrong orientation, should be right > on closed and down v on opened 
- - Click behavior on publication
-  - On click on discipline: search discipline
-  - On click on author: search author
-  - On click on publication: search publication
  - Thorough testing and fixing small things
-   - Small horizontal scroll bars on list content  
-   - On click on info button: leaky z-index (text overlaying modal, query bar color)
+   - Small horizontal scroll bars on list content  (@felix - still an issue?)
+   - On click on info button: modal and content have leaky z-index (text overlaying modal, query bar color)
    - Issues with some names and search, e.g. `/?search=Robin%20Lester%20Carhart-Harris`
-   - Move `queryPublications` out of getters to activate caching
 
 ## UX design
  - Logo for Tweet picture for meta tags
- - Toggle sort for filter menu (alphanumeric vs counts)
  - Mobile friendly
  - How to go from single pub view to main site
  - It’s confusing to click at "Item (2)" and see more than 2 results 
