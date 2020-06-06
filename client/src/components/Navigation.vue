@@ -4,17 +4,12 @@ import IconFilters from './Icons/IconFilters'
 import IconChevron from './Icons/IconChevron'
 import MenuBottom from './MenuBottom'
 
-function getDistinct(data, key) {
-  // get distinct values for key from data
-  return Array.from(new Set(data.flatMap(d => d[key]))).filter(Boolean)
-}
-
-const accessors = Object.freeze({
+const accessors = {
   disciplines: 'disciplines',
-  sources: 'source',
-  authors: 'authors',
-  years: 'year',
-})
+  sources: 'sources',
+  authors: 'authorNames',
+  years: 'years',
+}
 
 export default {
   name: 'navigation',
@@ -41,62 +36,23 @@ export default {
     isActive(category) {
       return this.$store.state.route.query?.search === category.label
     },
+    toggleSortKey() {
+      const newSortKey =
+        this.$store.state.sortKey === 'count' ? 'label' : 'count'
+      this.$store.commit('MUTATE_SORT_KEY', newSortKey)
+    },
   },
   computed: {
     loaded() {
       return this.$store.state.loaded
     },
-
-    distinct() {
-      const { publications } = this.$store.state
-
-      return [
-        ...Object.entries(accessors),
-        ['authorNames', 'authorNames'],
-      ].reduce(
-        (bag, [key, accessor]) => ({
-          ...bag,
-          [key]: getDistinct(publications, accessor),
-        }),
-        {},
-      )
-    },
-
     summaries() {
-      const { publications } = this.$store.state
-
-      return {
-        disciplines: [...this.distinct.disciplines]
-          .map(discipline => ({
-            label: discipline,
-            count: publications.filter(
-              d => d.disciplines && d.disciplines.includes(discipline),
-            ).length,
-          }))
-          .sort((a, b) => b.count - a.count),
-        sources: [...this.distinct.sources]
-          .map(source => ({
-            label: source,
-            count: publications.filter(d => d.source === source).length,
-          }))
-          .sort((a, b) => b.count - a.count),
-        authors: [...this.distinct.authorNames]
-          .map(authorName => ({
-            label: authorName,
-            count: publications.filter(d => d.authorNames.includes(authorName))
-              .length,
-          }))
-          .sort((a, b) => b.count - a.count),
-        years: [...this.distinct.years]
-          .sort((a, b) => b - a)
-          .map(year => ({
-            label: year.toString(),
-            count: publications.filter(d => d.year === year).length,
-          })),
-      }
+      return this.$store.getters.summary
     },
+
     categories() {
       const { publications } = this.$store.state
+      const { publicationsByKey } = this.$store.getters
 
       const labels = {
         sources: 'Journals',
@@ -105,12 +61,12 @@ export default {
         years: 'Years',
       }
 
-      return Object.keys(accessors).reduce(
-        (bag, key) => ({
+      return Object.entries(accessors).reduce(
+        (bag, [key, accessor]) => ({
           ...bag,
           [key]: {
             title: labels[key],
-            total: this.distinct[key].length,
+            total: publicationsByKey[accessor].length,
             data: publications,
           },
         }),
@@ -125,7 +81,7 @@ export default {
   <nav id="menu" role="navigation">
     <span v-if="!loaded">Loading..</span>
     <ul style="max-width: 250px" id="menu-content" v-else>
-      <li class="menu__filter_header">
+      <li class="menu__filter_header" @click="toggleSortKey()">
         <icon-filters />
         <span>Filter</span>
       </li>
@@ -171,7 +127,7 @@ export default {
 
 <style lang="less" scoped>
 #nav {
-  padding: 30px;
+  padding: 20px;
 
   a {
     font-weight: bold;
@@ -200,7 +156,7 @@ export default {
   overflow: scroll;
   padding-bottom: 20px;
   list-style: none;
-  margin-left: 1.25rem;
+  margin-left: 0.5rem;
   margin-bottom: 1rem;
   line-height: 1.6;
 }
@@ -232,6 +188,7 @@ export default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  user-select: none;
 }
 
 .menu__filter_header span {

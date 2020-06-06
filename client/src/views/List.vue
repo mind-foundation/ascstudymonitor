@@ -75,8 +75,7 @@ export default {
       return typeof queryPage === 'number' ? parseInt(queryPage) : 1
     },
     pageCount() {
-      const c = Math.ceil(this.publications.length / this.$store.state.pageSize)
-      return c
+      return Math.ceil(this.publications.length / this.$store.state.pageSize)
     },
     publications() {
       return this.$store.getters.queryPublications
