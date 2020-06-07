@@ -31,6 +31,7 @@ export default {
   transition: transform 0.2s ease-in;
   padding: 10px; // increase hit box
   transform: rotate(-90deg);
+  user-select: none;
 
   &.expanded {
     transform: rotate(0);

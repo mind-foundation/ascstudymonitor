@@ -2,6 +2,19 @@
 
 ## Backend
  - CRON job calling post every day
+ - Publications returned with duplicate discipline
+  ```
+    "disciplines": [
+        "Psychopharmacology",
+        "Psychopharmacology"
+    ],
+    "id": "52590145-2b2b-30ea-b818-de9ddb49e4a5",
+  ```
+  - Publications returned without year
+   ```
+     "id": "a848cdba-dd3e-3db2-ac1d-85d06b166a18",
+     "year": null
+   ```
 
 ## Frontend
  - Thorough testing and fixing small things

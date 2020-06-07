@@ -1,8 +1,8 @@
 <template>
   <div class="entry">
     <span v-if="!publication">Loading..</span>
-    <div class="row" v-if="publication" @click="toggleExpand">
-      <div class="chevron-wrapper">
+    <div class="row" v-if="publication">
+      <div class="chevron-wrapper" @click="toggleExpand">
         <icon-publication-chevron
           :expanded="expanded"
           :selectable="!isDetailView"
@@ -168,7 +168,6 @@ export default {
     font-weight: 700;
     letter-spacing: 0.015em;
     margin-bottom: 10px;
-    cursor: pointer;
   }
 
   ul {
@@ -200,6 +199,7 @@ export default {
 .entry__disciplines {
   list-style: none;
   padding-bottom: 10px;
+  user-select: none;
 
   a {
     color: #34557f;
