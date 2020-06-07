@@ -30,11 +30,37 @@ export default {
         ? this.open.filter(el => el !== key)
         : [...this.open, key]
     },
-    navigate(key) {
-      this.$router.push({ path: '/', query: { search: key } })
+    addFilter(key, item) {
+      const filter = this.$store.state.route.query?.filter
+      if (!filter) {
+        return { [key]: [item] }
+      } else {
+        const prev = filter[key] || []
+        const next = { [key]: [...new Set([...prev, item])] }
+        return { ...filter, ...next }
+      }
     },
-    isActive(category) {
-      return this.$store.state.route.query?.search === category.label
+    removeFilter(key, item) {
+      const filter = this.$store.state.route.query?.filter
+      const nextSelected = filter[key].filter(i => i !== item)
+      if (nextSelected) {
+        return { ...filter, [key]: nextSelected }
+      } else {
+        return {}
+      }
+    },
+    toggleFilter(key, item) {
+      const nextFilter = this.isActive(key, item)
+        ? this.removeFilter(key, item)
+        : this.addFilter(key, item)
+      this.$router.push({
+        path: '/',
+        query: { ...this.$store.state.route.query, filter: nextFilter },
+      })
+    },
+    isActive(key, item) {
+      const filter = this.$store.state.route.query?.filter
+      return filter?.[key] && filter[key].includes(item)
     },
     toggleSortKey() {
       const newSortKey =
@@ -108,9 +134,9 @@ export default {
               v-for="s in summaries[key]"
               :key="s.label"
               :data-value="s.label"
-              @click="navigate(s.label)"
+              @click="toggleFilter(key, s.label)"
               :class="{
-                activeInFilter: isActive(s),
+                activeInFilter: isActive(key, s.label),
               }"
               aria-level="2"
             >
