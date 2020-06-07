@@ -79,5 +79,19 @@
       window.COMMIT_HASH = '<%= process.env.COMMIT_HASH %>'
       window.ENV = '<%= process.env.NODE_ENV %>'
     </script>
+
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-90650695-2"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+
+      gtag('config', 'UA-90650695-2')
+    </script>
   </body>
 </html>
