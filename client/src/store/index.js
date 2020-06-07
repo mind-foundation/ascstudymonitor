@@ -35,6 +35,12 @@ const fuseOptions = {
 
 let index = null
 
+const publicationFilterFn = {
+  allApply: (pub, filter) => filter.every(v => v in pub.disciplines),
+}
+
+function publicationIsVisible(publication, filters) {}
+
 const store = new Vuex.Store({
   state: {
     loaded: false,
@@ -169,18 +175,21 @@ const store = new Vuex.Store({
       }
     },
     queryPublications: function(state, getters, rootState) {
-      const { search } = rootState.route.query
+      const { search, filter } = rootState.route.query
       let basePublications = state.publications
 
-      let hasFused = false
+      if (filter) {
+        basePublications = basePublications.filter(pub =>
+          Object.entries(filter).every(([key, included]) =>
+            included.every(v => pub[key].includes(v)),
+          ),
+        )
+      }
+
       if (search) {
         const fuse = new Fuse(basePublications, fuseOptions, index)
 
         basePublications = fuse.search(search)
-        hasFused = true
-      }
-
-      if (hasFused) {
         basePublications = basePublications.map(result => result.item)
       }
       return basePublications
