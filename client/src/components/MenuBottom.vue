@@ -1,21 +1,21 @@
 <script>
-import Modal from './Modal'
-
 export default {
   name: 'icon-author',
-  components: { Modal },
   data: () => ({
     showModal: false,
   }),
+  methods: {
+    show() {
+      this.$modal.show('info-modal')
+    },
+  },
 }
 </script>
 
 <template>
   <div id="menu-bottom">
-    <a @click="showModal = true">Info</a>
-    <div v-if="showModal">
-      <modal @close="showModal = false" />
-    </div>
+    <a @click="show()">Info</a>
+
     <div id="menu-about">
       <p>
         <span class="menu-bottom__asc">ASC</span>

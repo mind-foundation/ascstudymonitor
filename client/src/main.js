@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import { sync } from 'vuex-router-sync'
+import VModal from 'vue-js-modal'
 
 if (process.env.NODE_ENV === 'production') {
   Sentry.init({
@@ -19,7 +20,9 @@ Vue.config.productionTip = false
 
 sync(store, router)
 
-new Vue({
+Vue.use(VModal)
+
+const app = new Vue({
   router,
   store,
   render: h => h(App),

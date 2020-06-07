@@ -7,7 +7,6 @@
  - Go through previous HTML check for missing assets
  - Thorough testing and fixing small things
    - Small horizontal scroll bars on list content  (@felix - still an issue?)
-   - On click on info button: modal and content have leaky z-index (text overlaying modal, query bar color)
    - Issues with some names and search, e.g. `/?search=Robin%20Lester%20Carhart-Harris`
 
 ## UX design

@@ -261,8 +261,7 @@ export default {
 
 .entry__year_source {
   font-size: 0.9em;
-  color: #333;
-  opacity: 0.75;
+  color: #212121bf;
   margin-bottom: 12px;
 }
 

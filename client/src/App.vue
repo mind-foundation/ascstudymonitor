@@ -13,6 +13,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div> -->
+    <info-modal />
   </div>
 </template>
 
@@ -20,12 +21,14 @@
 import Navigation from './components/Navigation'
 import QueryBar from './components/QueryBar'
 import Mindblower from './components/Mindblower'
+import InfoModal from './components/InfoModal'
 
 export default {
   components: {
     Navigation,
     QueryBar,
     Mindblower,
+    InfoModal,
   },
   created() {
     this.$store.dispatch('localLocalPublication')
