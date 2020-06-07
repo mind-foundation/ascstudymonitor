@@ -153,7 +153,7 @@ export default {
 
 #menu-content {
   padding: 10px 10px 0 10px;
-  overflow: scroll;
+  overflow: auto;
   padding-bottom: 20px;
   list-style: none;
   margin-left: 0.5rem;

@@ -18,14 +18,19 @@
 
 ## Frontend
  - Thorough testing and fixing small things
-   - Small horizontal scroll bars on list content  (@felix - still an issue?)
+   - On click on info button: modal and content have leaky z-index (text overlaying modal, query bar color)
    - Issues with some names and search, e.g. `/?search=Robin%20Lester%20Carhart-Harris`
+   - Search by author doesnt work at all
+   - Make filter searches specific (when filtering by author, only search on author field)
+   - Year filter deselection doesnt work
+   - Info modal majorly messed up
 
 ## UX design
  - Logo for Tweet picture for meta tags
  - Mobile friendly
  - How to go from single pub view to main site
  - It’s confusing to click at "Item (2)" and see more than 2 results 
+ - Call to action: Make search function more clear
 
 ## Tests
  - Test paper download
