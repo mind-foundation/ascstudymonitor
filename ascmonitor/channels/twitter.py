@@ -120,9 +120,8 @@ class TwitterChannel(Channel):
 
         status += "\n{url}\n\n"
 
-        hashtags = (
-            self.static_hashtags + document.get("disciplines", []) + document.get("keywords", [])
-        )
+        keywords = [kw for kw in document.get("keywords", []) if kw not in self.static_hashtags]
+        hashtags = self.static_hashtags + document.get("disciplines", []) + keywords
         for hashkw in hashtags:
             if " " in hashkw:
                 hashkw = hashkw.title()
