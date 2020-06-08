@@ -1,12 +1,9 @@
 # ASC Study Monitor
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
-
-![GitHub issues](https://img.shields.io/github/issues/membranepotential/ascstudymonitor)
-
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/membranepotential/ascstudymonitor)
-
 ![Version](https://img.shields.io/badge/Version-2.0-orange)
+![GitHub issues](https://img.shields.io/github/issues/membranepotential/ascstudymonitor)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/membranepotential/ascstudymonitor)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
 ## Introduction
 
