@@ -91,6 +91,9 @@ class Mendeleur:
             # strip bad characters
             disciplines = [re.sub(r"[^\w\s]", "", disc).strip() for disc in disciplines]
 
+            # make sure disciplines are unique
+            disciplines = list(set(disciplines))
+
             document.json["disciplines"] = disciplines
         else:
             document.json["disciplines"] = []
