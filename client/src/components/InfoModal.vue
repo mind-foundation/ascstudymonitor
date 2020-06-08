@@ -14,7 +14,7 @@ export default {
           The ASC Study Monitor is a curated, freely accessible, and regularly
           updated database of scholarly publications concerning altered states
           of consciousness (ASCs). The publications included in the ASC Study
-          Monitor mainly cover the field of the “mind & brain sciences”
+          Monitor mainly cover the field of the “mind &amp; brain sciences”
           including philosophy, psychology, psychiatry, neuroscience, and
           medicine as well as natural sciences. Moreover, the monitor covers
           relevant publications from cultural studies and the social sciences
