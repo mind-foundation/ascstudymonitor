@@ -24,7 +24,6 @@ The ASC Study Monitor is a curated, freely accessible, and regularly updated dat
 
 - Start mongoDB
   - osx: `sudo mongod --dbpath=./data`
-- `source ./env.sh`
 - `export FLASK_APP='ascmonitor.app:app'`
 - `export FLASK_ENV=development`
 - `poetry run flask run`
