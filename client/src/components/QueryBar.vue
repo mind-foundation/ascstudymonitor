@@ -4,6 +4,7 @@
     :class="{
       focussed: isFocussed,
     }"
+    @click="activate"
   >
     <div
       class="title-bar"
@@ -15,21 +16,23 @@
         v-if="activated"
         @input="debounceSearch($event)"
         @focus="isFocussed = true"
-        @blur="isFocussed = false"
+        @blur="onBlur($event)"
         type="text"
         class="title-bar__input"
-        placeholder="Search.."
+        placeholder="Search..."
         role="search"
         ref="input"
       />
 
-      <p class="typer" v-else @click="activate">
+      <p class="typer" v-else>
         Search For
         <vue-typer
           :text="texts"
-          pre-type-delay="100"
-          type-delay="120"
-          pre-erase-delay="1500"
+          erase-style="clear"
+          caret-animation="blink"
+          :pre-type-delay="200"
+          :type-delay="140"
+          :pre-erase-delay="1500"
         ></vue-typer>
       </p>
     </div>
@@ -49,7 +52,7 @@ export default {
     activated: false,
     isFocussed: false,
     debounce: null,
-    texts: ['Articles', 'Publications', 'Disciplines'],
+    texts: ['Titles', 'Authors', 'Journals', 'Keywords', 'Disciplines'],
   }),
 
   methods: {
@@ -58,6 +61,12 @@ export default {
       setTimeout(() => {
         this.$refs.input.focus()
       })
+    },
+    onBlur(e) {
+      this.isFocussed = false
+      if (!e.target.value) {
+        this.activated = false
+      }
     },
     debounceSearch(e) {
       clearTimeout(this.debounce)
@@ -85,6 +94,7 @@ export default {
   background: #fff;
   z-index: 1;
   border-bottom: solid 1px #e0e0e0;
+  cursor: text;
 
   -webkit-transition: border-color 0.25s ease-in-out, -webkit-box-shadow 0.5s;
   transition: border-color 0.25s ease-in-out, -webkit-box-shadow 0.5s;
@@ -104,6 +114,7 @@ export default {
   background-color: #fff;
   display: flex;
   justify-content: center;
+  font-weight: 300;
   align-items: stretch;
   margin: 0 !important;
   padding: 0 !important;
@@ -111,10 +122,10 @@ export default {
 
 .typer {
   position: absolute;
-  left: 33px;
-  top: 16px;
+  left: 32px;
+  bottom: -0.5px;
   font-size: 2em;
-  cursor: pointer;
+  cursor: text;
 }
 
 .title-bar__input {
@@ -152,24 +163,11 @@ export default {
 .title-bar__input::placeholder {
   color: #333;
   opacity: 0.75;
-  font-weight: 300 !important;
   letter-spacing: 0;
 }
 
-.title-bar__input .data-table {
-  font-size: 12px;
-}
-
-#ascSearch {
-  padding: 0px 5px;
-  margin: 0;
-  height: 30px;
-  width: 100%;
-  font-size: 17px;
-}
-
 .vue-typer {
-  cursor: pointer !important;
+  cursor: text !important;
 
   .char {
     color: #333333 !important;
