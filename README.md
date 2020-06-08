@@ -1,16 +1,24 @@
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-
 # ASC Study Monitor
+
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
+
+![GitHub issues](https://img.shields.io/github/issues/membranepotential/ascstudymonitor)
+
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/membranepotential/ascstudymonitor)
+
+![Version](https://img.shields.io/badge/Version-2.0-orange)
+
+## Introduction
 
 The ASC Study Monitor is a curated, freely accessible, and regularly updated database of scholarly publications concerning altered states of consciousness (ASCs).
 
-### Requirements
+## Todos
 
-- env.sh file with environment variables (ask team members)
-- [conda](https://docs.conda.io/en/latest/)
+[Live at Github](https://github.com/membranepotential/ascstudymonitor/issues)
 
 ### Installation
 
+- Install [conda](https://docs.conda.io/en/latest/)
 - `conda install poetry`
 - `poetry config settings.virtualenvs.in-project true`
 - `poetry install`
@@ -24,13 +32,6 @@ The ASC Study Monitor is a curated, freely accessible, and regularly updated dat
 - `export FLASK_ENV=development`
 - `poetry run flask run`
 
-##### Expose in network
+#### Expose in network
 
 - `poetry run flask run --host=0.0.0.0`
-
-### FAQ
-
-- _Q:_ `env.sh:2: command not found`
-- _A:_ `cat env.sh | sed -e "s/^M//" > .env.sh && rm env.sh && mv .env.sh env.sh`
-- _Q:_ Can the above be more concise?
-- _A:_ Yes
