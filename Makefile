@@ -34,7 +34,7 @@ install-client:
 build-client: install-client
 	cd client && yarn build
 
-flask-run:
+flask-run: build-client
 	${SECRET_ENV} FLASK_ENV="development" poetry run flask run
 
 yarn-serve: install-client
