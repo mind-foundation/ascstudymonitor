@@ -1,4 +1,5 @@
 """ Flask Web app """
+from urllib.parse import urljoin
 
 from pymongo import MongoClient
 from flask import (
@@ -13,7 +14,6 @@ from flask import (
     send_from_directory,
     url_for,
 )
-from flask import json
 from flask_cors import CORS
 
 from ascmonitor.config import (
@@ -131,10 +131,7 @@ def publication(slug):
         )
 
     # build url
-    if development:
-        url = "https://asc-studymonitor.mind-foundation.org" + url_for("publication", slug=slug)
-    else:
-        url = url_for("publication", slug=slug)
+    url = urljoin(request.host_url, url_for("publication", slug=slug))
 
     return render_template(
         "index.html",
