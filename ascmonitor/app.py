@@ -1,6 +1,4 @@
 """ Flask Web app """
-from urllib.parse import urljoin
-
 from pymongo import MongoClient
 from flask import (
     Flask,
@@ -131,7 +129,7 @@ def publication(slug):
         )
 
     # build url
-    url = urljoin(request.host_url, url_for("publication", slug=slug))
+    url = url_for("publication", slug=slug, _external=True)
 
     return render_template(
         "index.html",
