@@ -7,7 +7,7 @@
 
 ## Introduction
 
-The ASC Study Monitor is a curated, freely accessible, and regularly updated database of scholarly publications concerning altered states of consciousness (ASCs).
+The ASC Study Monitor is a curated, freely accessible, and regularly updated database of scholarly publications concerning altered states of consciousness (ASCs). https://asc-studymonitor.mind-foundation.org/
 
 ## Todos
 
