@@ -22,7 +22,7 @@ class PostSendException(Exception):
         super().__init__(message)
         self.message = message
         self.allow_retry = allow_retry
-        logger.error(f"PostSendException: {message}, allow_retry={allow_retry}")
+        logger.error("PostSendException: %s, allow_retry=%s", message, allow_retry)
 
     def as_dict(self):
         """ Convert to dict """
@@ -41,6 +41,7 @@ class PreparedPost:
     payload: Any
 
     def as_dict(self):
+        """ Convert to dict """
         dct = asdict(self)
         dct["channel"] = self.channel.name
         return dct
