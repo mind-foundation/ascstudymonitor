@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Navigation.vue matches snapshot 1`] = `
+<nav
+  id="menu"
+  role="navigation"
+>
+  <span>
+    Loading..
+  </span>
+   
+  <menu-bottom-stub />
+</nav>
+`;
