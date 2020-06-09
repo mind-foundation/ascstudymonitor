@@ -25,7 +25,7 @@ sync(store, router)
 
 Vue.use(VModal)
 
-const app = new Vue({
+new Vue({
   router,
   store,
   render: h => h(App),

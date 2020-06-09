@@ -38,12 +38,6 @@ const fuseOptions = {
 
 let index = null
 
-const publicationFilterFn = {
-  allApply: (pub, filter) => filter.every(v => v in pub.disciplines),
-}
-
-function publicationIsVisible(publication, filters) {}
-
 const store = new Vuex.Store({
   state: {
     loaded: false,
@@ -99,7 +93,6 @@ const store = new Vuex.Store({
       return deserializeFilterConfiguration(state.route.path)
     },
     getPublications: state => state.publications,
-    distinctPublicationsKeys: function({ publications }) {},
     publicationsByKey: function({ publications }) {
       const years = {}
       const disciplines = {}

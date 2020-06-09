@@ -2,10 +2,6 @@
   "name": "ascstudymonitor-client",
   "version": "2.0.0",
   "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/membranepotential/ascstudymonitor.git"
-  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "NODE_ENV=production vue-cli-service build",
@@ -72,6 +68,13 @@
       }
     ]
   },
+  "prettier": {
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "arrowParens": "avoid"
+  },
   "browserslist": [
     "> 1%",
     "last 2 versions",
@@ -86,11 +89,8 @@
       "!**/dist/**"
     ]
   },
-  "prettier": {
-    "trailingComma": "all",
-    "tabWidth": 2,
-    "semi": false,
-    "singleQuote": true,
-    "arrowParens": "avoid"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/membranepotential/ascstudymonitor.git"
   }
 }
