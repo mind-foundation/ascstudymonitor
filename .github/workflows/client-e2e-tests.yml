@@ -1,0 +1,19 @@
+name: Client E2E Tests
+
+on: [push]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Cypress run
+        uses: cypress-io/github-action@v1
+        with:
+          start: npm run serve --prefix client
+          wait-on: http://localhost:8080/
+          config_file: cypress.json
+          spec: 'client/tests/e2e/**/*'
+        env:
+          CYPRESS_baseUrl: http://localhost:8080/
