@@ -1,6 +1,6 @@
 name: Client Unit Tests
 
-on: ['push', 'pull_request']
+on: ['push']
 
 env:
   COVERALLS_REPO_TOKEN: '${{ secrets.COVERALLS_REPO_TOKEN }}'
