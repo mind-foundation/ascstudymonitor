@@ -159,7 +159,7 @@ export default {
 .entry {
   margin: 0;
   padding: 12px 20px 12px 0;
-  width: 100%;
+  /* width: 100%; */
 
   h3 {
     margin-top: 0;
