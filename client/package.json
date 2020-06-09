@@ -8,6 +8,7 @@
     "test:unit": "vue-cli-service test:unit",
     "test:unit:watch": "vue-cli-service test:unit --watch",
     "test:e2e": "vue-cli-service test:e2e --url http://localhost:5000 --headless",
+    "coveralls": "coveralls < ./coverage/lcov.info",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -41,6 +42,7 @@
     "@vue/cli-service": "~4.4.0",
     "@vue/test-utils": "^1.0.3",
     "babel-eslint": "^10.1.0",
+    "coveralls": "^3.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "less": "^3.0.4",
