@@ -5,6 +5,11 @@ import localforage from 'localforage'
 import Fuse from 'fuse.js'
 import { transformPublication } from './helpers'
 import { uniq, sortBy } from 'lodash'
+import { deserializeFilterConfiguration, slugifyMemo } from '../mixins/Filters'
+import { FACETS } from '../constants'
+
+const log = require('debug')('store')
+log.enabled = process.env.NODE_ENV === 'development'
 
 const vuexLocal = new VuexPersistence({
   storage: localforage,
@@ -24,12 +29,10 @@ const fuseOptions = {
   // useExtendedSearch: false,
   threshold: 0.6,
   keys: [
-    { name: 'abstract', weight: 0.5 },
+    { name: 'abstract', weight: 0.6 },
     { name: 'authors', weight: 1.2 },
-    { name: 'disciplines', weight: 1.8 },
     { name: 'source', weight: 1.5 },
     { name: 'title', weight: 2.0 },
-    { name: 'year', weight: 1.0 },
   ],
 }
 
@@ -92,6 +95,9 @@ const store = new Vuex.Store({
   },
   modules: {},
   getters: {
+    filters(state) {
+      return deserializeFilterConfiguration(state.route.path)
+    },
     getPublications: state => state.publications,
     distinctPublicationsKeys: function({ publications }) {},
     publicationsByKey: function({ publications }) {
@@ -174,23 +180,55 @@ const store = new Vuex.Store({
       }
     },
     queryPublications: function(state, getters, rootState) {
-      const { search, filter } = rootState.route.query
+      const { search } = rootState.route.query
       let basePublications = state.publications
+      const filters = getters.filters
 
-      if (filter) {
-        basePublications = basePublications.filter(pub =>
-          Object.entries(filter).every(([key, included]) =>
-            included.every(v => pub[key].includes(v)),
-          ),
-        )
-      }
+      log('Got %o publications to chose from', basePublications.length)
+
+      Object.entries(filters).forEach(([facet, visible]) => {
+        const slugify = slugifyMemo.bind(null, facet)
+        switch (facet) {
+          case FACETS.YEAR:
+            basePublications = basePublications.filter(p =>
+              visible.includes(p.year),
+            )
+            break
+          case FACETS.JOURNAL:
+            basePublications = basePublications.filter(p =>
+              visible.includes(slugify(p.source)),
+            )
+            break
+          case FACETS.DISCIPLINE:
+            basePublications = basePublications.filter(p =>
+              p.disciplines.some(d => visible.includes(slugify(d))),
+            )
+            break
+          case FACETS.AUTHOR:
+            basePublications = basePublications.filter(p =>
+              p.authorNames.some(d => visible.includes(slugify(d))),
+            )
+            break
+          default:
+            throw new Error('Filtering by unknown facet: ' + facet)
+        }
+      })
+
+      log('Down to %o publications after filters', basePublications.length)
 
       if (search) {
         const fuse = new Fuse(basePublications, fuseOptions, index)
 
         basePublications = fuse.search(search)
-        basePublications = basePublications.map(result => result.item)
+        basePublications = basePublications
+          .map(result => result.item)
+          .filter(Boolean) // item can be null if it was filtered above ()
       }
+      log(
+        'Returning %o after searching for %o',
+        basePublications.length,
+        search,
+      )
       return basePublications
     },
   },
