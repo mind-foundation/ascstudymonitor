@@ -125,7 +125,6 @@ export default {
   left: 32px;
   bottom: -0.5px;
   font-size: 2em;
-  cursor: text;
 }
 
 .title-bar__input {
