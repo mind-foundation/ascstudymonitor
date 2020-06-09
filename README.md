@@ -3,6 +3,8 @@
 ![Version](https://img.shields.io/badge/Version-2.0-orange)
 ![GitHub issues](https://img.shields.io/github/issues/membranepotential/ascstudymonitor)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/membranepotential/ascstudymonitor)
+![Client Unit Tests](https://github.com/membranepotential/ascstudymonitor/workflows/Client%20Unit%20Tests/badge.svg)
+![Backend Unit Tests](https://github.com/membranepotential/ascstudymonitor/workflows/Backend%20Unit%20Tests/badge.svg)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
 ## Introduction
