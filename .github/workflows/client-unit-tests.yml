@@ -21,3 +21,8 @@ jobs:
         with:
           cmd: --cwd client test:unit # will run `yarn test` command
 
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./client/coverage/lcov.info

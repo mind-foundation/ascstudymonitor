@@ -78,7 +78,13 @@
     "not dead"
   ],
   "jest": {
-    "preset": "@vue/cli-plugin-unit-jest"
+    "preset": "@vue/cli-plugin-unit-jest",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/src/**/*.{js,vue}",
+      "!**/node_modules/**",
+      "!**/dist/**"
+    ]
   },
   "prettier": {
     "trailingComma": "all",
