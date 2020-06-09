@@ -74,6 +74,7 @@ export default {
         if (this.$store.state.route.query.search !== e.target.value) {
           this.$router.replace({
             query: {
+              ...this.$store.state.route.query,
               search: e.target.value,
             },
           })

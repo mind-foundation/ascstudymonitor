@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Mindblower.vue matches snapshot 1`] = `
+<div
+  id="mindblower"
+>
+  <div
+    id="mindblower__effect-container"
+  />
+   
+  <div
+    aria-busy="true"
+    class="mindblower__label"
+    role="alert"
+  />
+</div>
+`;

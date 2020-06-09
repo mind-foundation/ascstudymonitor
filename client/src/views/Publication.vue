@@ -135,7 +135,7 @@ export default {
       this.expanded = !this.expanded
     },
     navigate(key) {
-      this.$router.push({ path: '/', query: { search: key } })
+      this.$router.push({ query: { search: key } })
     },
   },
   created() {

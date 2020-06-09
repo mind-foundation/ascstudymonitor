@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import qs from 'qs'
+
 import List from '../views/List.vue'
 import Publication from '../views/Publication.vue'
 
@@ -27,6 +29,13 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+  parseQuery(query) {
+    return qs.parse(query)
+  },
+  stringifyQuery(query) {
+    const stringified = qs.stringify(query, { encode: false })
+    return stringified ? `?${stringified}` : ''
+  },
 })
 
 export default router
