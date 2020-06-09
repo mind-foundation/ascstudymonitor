@@ -27,7 +27,7 @@ jobs:
       - name: yarn test:unit
         uses: borales/actions-yarn@v2.0.0
         with:
-          cmd: --cwd client test:unit
+          cmd: --cwd client test:unit --ci
 
       - name: Send to Coveralls
         uses: coverallsapp/github-action@master
