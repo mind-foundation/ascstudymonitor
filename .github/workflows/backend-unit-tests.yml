@@ -25,4 +25,4 @@ jobs:
       - name: Typecheck with mypy
         run: poetry run mypy ascmonitor
       - name: Test with pytest
-        run: pytest
+        run: poetry run pytest

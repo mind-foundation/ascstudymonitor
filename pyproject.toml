@@ -22,8 +22,6 @@ python-dateutil = "^2.8.1"
 pytest = "^5.0"
 pylint = "^2.5.2"
 mypy = "^0.770"
-ipython = "^7.15.0"
-ipdb = "^0.13.2"
 mongomock = "^3.19.0"
 
 [build-system]
