@@ -44,7 +44,8 @@
     "eslint-plugin-vue": "^6.2.2",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "wallaby-vue-compiler": "^1.0.6"
   },
   "eslintConfig": {
     "root": true,
