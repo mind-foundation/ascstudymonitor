@@ -158,7 +158,7 @@ export default {
 
 .entry {
   margin: 0;
-  padding: 12px 24px 12px 0;
+  padding: 12px 20px 12px 0;
   width: 100%;
 
   h3 {
