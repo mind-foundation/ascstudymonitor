@@ -34,4 +34,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./client/coverage/lcov.info
-          base-path: client
+          base-path: ./client
