@@ -14,10 +14,10 @@ docker-prod-build:
 docker-prod-up: docker-prod-build
 	docker-compose -f docker-compose.yaml up
 
-bash-backend:
+docker-bash-backend:
 	docker exec -it $$(docker ps -f name=ascstudymonitor_app -q) bash
 
-mongo:
+docker-mongo:
 	docker exec -it $$(docker ps -f name=ascstudymonitor_mongo -q) mongo -u root -p integration
 
 deploy:
@@ -34,7 +34,11 @@ install-client:
 build-client: install-client
 	cd client && yarn build
 
-flask-run: build-client
+mongod:
+	mkdir -p ./data
+	mongod --dbpath=./data &
+
+flask-run: build-client mongod
 	${SECRET_ENV} FLASK_ENV="development" poetry run flask run
 
 yarn-serve: install-client
