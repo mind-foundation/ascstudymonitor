@@ -6,6 +6,7 @@ import router from './router'
 import store from './store'
 import { sync } from 'vuex-router-sync'
 import VModal from 'vue-js-modal'
+import constants from './constants'
 
 if (process.env.NODE_ENV === 'production') {
   Sentry.init({
@@ -17,6 +18,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 Vue.config.productionTip = false
+
+Vue.prototype.$constants = constants
 
 sync(store, router)
 

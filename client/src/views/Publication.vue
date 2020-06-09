@@ -31,8 +31,8 @@
           <icon-author />
           <div class="entry_authors_holder" @click.stop>
             <li
-              v-for="authorName in publication.authorNames"
-              v-bind:key="authorName"
+              v-for="(authorName, index) in publication.authorNames"
+              :key="index"
             >
               <a @click="navigate(authorName)">{{ authorName }}</a>
             </li>

@@ -8,11 +8,6 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'List',
-    component: List,
-  },
-  {
     path: window.urlForPublication,
     name: 'Publication',
     // route level code-splitting
@@ -21,6 +16,11 @@ const routes = [
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
     component: Publication,
     props: true,
+  },
+  {
+    path: '*',
+    name: 'List',
+    component: List,
   },
 ]
 

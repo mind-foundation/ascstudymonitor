@@ -1,5 +1,6 @@
 <script>
 import SlideUpDown from 'vue-slide-up-down'
+import Filters from '../mixins/Filters'
 import IconFilters from './Icons/IconFilters'
 import IconChevron from './Icons/IconChevron'
 import MenuBottom from './MenuBottom'
@@ -13,6 +14,7 @@ const accessors = {
 
 export default {
   name: 'navigation',
+  mixins: [Filters],
   components: {
     SlideUpDown,
     IconFilters,
@@ -24,44 +26,16 @@ export default {
     showModal: false,
   }),
   methods: {
+    keyToFacet(key) {
+      return this.$constants.LABELS[key].toLowerCase().slice(0, -1)
+    },
     handleMenuCategoryToggle(key) {
       // this.state = Array.from(new Set(...this.open, key))
       this.open = this.open.includes(key)
         ? this.open.filter(el => el !== key)
         : [...this.open, key]
     },
-    addFilter(key, item) {
-      const filter = this.$store.state.route.query?.filter
-      if (!filter) {
-        return { [key]: [item] }
-      } else {
-        const prev = filter[key] || []
-        const next = { [key]: [...new Set([...prev, item])] }
-        return { ...filter, ...next }
-      }
-    },
-    removeFilter(key, item) {
-      const filter = this.$store.state.route.query?.filter
-      const nextSelected = filter[key].filter(i => i !== item)
-      if (nextSelected) {
-        return { ...filter, [key]: nextSelected }
-      } else {
-        return {}
-      }
-    },
-    toggleFilter(key, item) {
-      const nextFilter = this.isActive(key, item)
-        ? this.removeFilter(key, item)
-        : this.addFilter(key, item)
-      this.$router.push({
-        path: '/',
-        query: { ...this.$store.state.route.query, filter: nextFilter },
-      })
-    },
-    isActive(key, item) {
-      const filter = this.$store.state.route.query?.filter
-      return filter?.[key] && filter[key].includes(item)
-    },
+
     toggleSortKey() {
       const newSortKey =
         this.$store.state.sortKey === 'count' ? 'label' : 'count'
@@ -69,29 +43,15 @@ export default {
     },
   },
   computed: {
-    loaded() {
-      return this.$store.state.loaded
-    },
-    summaries() {
-      return this.$store.getters.summary
-    },
-
     categories() {
       const { publications } = this.$store.state
       const { publicationsByKey } = this.$store.getters
-
-      const labels = {
-        sources: 'Journals',
-        authors: 'Authors',
-        disciplines: 'Disciplines',
-        years: 'Years',
-      }
 
       return Object.entries(accessors).reduce(
         (bag, [key, accessor]) => ({
           ...bag,
           [key]: {
-            title: labels[key],
+            title: this.$constants.LABELS[key],
             total: publicationsByKey[accessor].length,
             data: publications,
           },
@@ -105,7 +65,7 @@ export default {
 
 <template>
   <nav id="menu" role="navigation">
-    <span v-if="!loaded">Loading..</span>
+    <span v-if="!$store.state.loaded">Loading..</span>
     <ul style="max-width: 250px" id="menu-content" v-else>
       <li class="menu__filter_header" @click="toggleSortKey()">
         <icon-filters />
@@ -131,12 +91,12 @@ export default {
           <ul class="menu vertical">
             <li
               class="filterItem"
-              v-for="s in summaries[key]"
+              v-for="s in $store.getters.summary[key]"
               :key="s.label"
               :data-value="s.label"
-              @click="toggleFilter(key, s.label)"
+              @click="toggleFilter(keyToFacet(key), s.label)"
               :class="{
-                activeInFilter: isActive(key, s.label),
+                activeInFilter: isFilterActive(keyToFacet(key), s.label),
               }"
               aria-level="2"
             >
@@ -185,6 +145,7 @@ export default {
   margin-left: 0.5rem;
   margin-bottom: 1rem;
   line-height: 1.6;
+  user-select: none;
 }
 
 #menu-content > li {

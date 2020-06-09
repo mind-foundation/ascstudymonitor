@@ -1,11 +1,12 @@
 <template>
   <div id="list">
-    <div v-if="pagination.items.length == 0" class="message">
+    <div v-if="pagination.items.length === 0" class="message">
       <p v-if="!loaded">
         Loading..
       </p>
       <p v-else>
         No articles found matching your query. Try a different search instead.
+        <router-link to="/">Or reset search.</router-link>
       </p>
     </div>
     <ul>
@@ -17,7 +18,7 @@
       </li>
     </ul>
 
-    <div class="pagination--wrapper">
+    <div v-if="pagination.items.length !== 0" class="pagination--wrapper">
       <paginate
         :force-page="page"
         :page-count="pageCount"
@@ -112,6 +113,16 @@ export default {
   padding: 30px;
   color: #111;
   font-size: 1.1em;
+  font-weight: 700;
+
+  a {
+    color: #34557f;
+    margin-right: 8px;
+
+    &:hover {
+      color: #607a9b;
+    }
+  }
 }
 
 .pagination--wrapper {
