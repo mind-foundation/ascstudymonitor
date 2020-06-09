@@ -3,6 +3,8 @@ const log = require('debug')('filters')
 import { FACETS } from '../constants'
 log.enabled = process.env.NODE_ENV === 'development'
 
+export const MULTIPLE_VALUE_SEPARATOR = '/'
+
 export const slugifyMemo = memoize(slugify, (...args) => JSON.stringify(args))
 
 export default {
@@ -15,13 +17,18 @@ export default {
         facet,
         slugifiedValue,
       )
-      const newPath = serializeFilterConfiguration(targetFilterConfiguration)
+      const filterParams = filterConfigurationToParams(
+        targetFilterConfiguration,
+      )
       log('Set filters: %o', JSON.stringify(targetFilterConfiguration))
 
-      this.$router.push({
-        query: this.$store.state.route.query,
-        path: newPath,
-      })
+      const query = filterParams
+
+      if (this.$store.state.route.query?.search) {
+        query.search = this.$store.state.route.query.search
+      }
+
+      this.$router.push({ query })
     },
 
     isFilterActive(facet, value) {
@@ -40,21 +47,30 @@ export default {
   },
 }
 
-export function deserializeFilterConfiguration(pathname) {
-  const fragments = pathname.split('/').filter(Boolean)
+export function paramsToFilterConfiguration(params) {
+  const { search, ...allParamsButSearch } = params //eslint-disable-line
 
-  const FACET_VALUE_SEPARATOR = ':'
-  const MULTIPLE_VALUE_SEPARATOR = ','
+  return Object.entries(allParamsButSearch).reduce(
+    (bag, [facet, valueString]) => {
+      return {
+        ...bag,
+        [facet]: valueString
+          .split(MULTIPLE_VALUE_SEPARATOR)
+          .map(value => slugifyMemo(facet, value)),
+      }
+    },
+    {},
+  )
+}
 
-  return fragments.reduce((bag, current) => {
-    const [facet, valueString] = current.split(FACET_VALUE_SEPARATOR)
-    return {
+export function filterConfigurationToParams(configuration) {
+  return Object.entries(configuration).reduce(
+    (bag, [facet, values]) => ({
       ...bag,
-      [facet]: valueString
-        .split(MULTIPLE_VALUE_SEPARATOR)
-        .map(value => slugifyMemo(facet, value)),
-    }
-  }, {})
+      [facet]: values.join(MULTIPLE_VALUE_SEPARATOR),
+    }),
+    {},
+  )
 }
 
 export function toggleFacetInConfiguration(currentConfiguration, facet, value) {
@@ -74,15 +90,6 @@ export function toggleFacetInConfiguration(currentConfiguration, facet, value) {
     delete newConfiguration[facet]
   }
   return newConfiguration
-}
-
-export function serializeFilterConfiguration(configuration) {
-  return (
-    Object.entries(configuration).reduce(
-      (path, [facet, values]) => path + `/${facet}:${values.join(',')}`,
-      '',
-    ) || '/'
-  )
 }
 
 function slugify(facet, value) {

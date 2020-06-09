@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`QueryBar.vue matches snapshot 1`] = `
+<div
+  class="top-bar"
+>
+  <div
+    class="title-bar"
+    data-options="marginTop:0;"
+    data-sticky=""
+    style="width: 100%;"
+  >
+    <p
+      class="typer"
+    >
+      
+      Search For
+      
+      <vue-typer-stub
+        caretanimation="blink"
+        erasedelay="250"
+        erasestyle="clear"
+        initialaction="typing"
+        preerasedelay="1500"
+        pretypedelay="200"
+        repeat="Infinity"
+        text="Titles,Authors,Journals,Keywords,Disciplines"
+        typedelay="140"
+      />
+    </p>
+  </div>
+</div>
+`;

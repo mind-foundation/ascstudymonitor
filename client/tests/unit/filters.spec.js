@@ -1,7 +1,8 @@
 import {
-  deserializeFilterConfiguration,
-  serializeFilterConfiguration,
+  paramsToFilterConfiguration,
+  filterConfigurationToParams,
   toggleFacetInConfiguration,
+  MULTIPLE_VALUE_SEPARATOR,
 } from '@/mixins/Filters'
 
 describe('Filters.vue', () => {
@@ -49,41 +50,55 @@ describe('Filters.vue', () => {
       })
     })
   })
-  describe('deserializeFilterConfiguration', () => {
+  describe('paramsToFilterConfiguration', () => {
     it('deserializes root path', () => {
-      const pathname = '/'
-      const serialized = deserializeFilterConfiguration(pathname)
-      expect(serialized).toEqual({})
+      const params = {}
+      const configuration = paramsToFilterConfiguration(params)
+      expect(configuration).toEqual({})
     })
 
     it('deserializes all categories', () => {
-      const pathname =
-        '/year:2020/discipline:psychology/journal:scientific-reports'
-      const serialized = deserializeFilterConfiguration(pathname)
-      expect(serialized).toEqual({
+      const params = {
+        year: '2020',
+        discipline: 'psychology',
+        journal: 'scientific-reports',
+        author: 'david-nutt',
+      }
+
+      const configuration = paramsToFilterConfiguration(params)
+
+      expect(configuration).toEqual({
         year: [2020],
         discipline: ['psychology'],
         journal: ['scientific-reports'],
+        author: ['david-nutt'],
       })
     })
 
     it('deserializes with multiple entries', () => {
-      const pathname =
-        '/year:2019,2020,2021/discipline:psychology/journal:scientific-reports,european-neuropsychopharmacology'
-      const serialized = deserializeFilterConfiguration(pathname)
-      expect(serialized).toEqual({
-        year: [2019, 2020, 2021],
+      const params = {
+        year: '2019/2020',
+        discipline: 'psychology',
+        journal: 'scientific-reports',
+        author: 'david-nutt/felix-peppert',
+      }
+
+      const configuration = paramsToFilterConfiguration(params)
+
+      expect(configuration).toEqual({
+        year: [2019, 2020],
         discipline: ['psychology'],
-        journal: ['scientific-reports', 'european-neuropsychopharmacology'],
+        journal: ['scientific-reports'],
+        author: ['david-nutt', 'felix-peppert'],
       })
     })
   })
 
-  describe('serializeFilterConfiguration', () => {
+  describe('filterConfigurationToParams', () => {
     it('serializes root path', () => {
       const configuration = {}
-      const serialized = serializeFilterConfiguration(configuration)
-      expect(serialized).toEqual('/')
+      const serialized = filterConfigurationToParams(configuration)
+      expect(serialized).toEqual({})
     })
 
     it('serializes all categories', () => {
@@ -93,9 +108,11 @@ describe('Filters.vue', () => {
         journal: ['scientific-reports'],
       }
 
-      expect(serializeFilterConfiguration(configuration)).toEqual(
-        '/year:2020/discipline:psychology/journal:scientific-reports',
-      )
+      expect(filterConfigurationToParams(configuration)).toEqual({
+        year: '2020',
+        discipline: 'psychology',
+        journal: 'scientific-reports',
+      })
     })
 
     it('serializes with multiple entries', () => {
@@ -104,9 +121,11 @@ describe('Filters.vue', () => {
         discipline: ['psychology'],
         journal: ['scientific-reports', 'european-neuropsychopharmacology'],
       }
-      expect(serializeFilterConfiguration(configuration)).toEqual(
-        '/year:2019,2020,2021/discipline:psychology/journal:scientific-reports,european-neuropsychopharmacology',
-      )
+      expect(filterConfigurationToParams(configuration)).toEqual({
+        year: '2019/2020/2021',
+        discipline: 'psychology',
+        journal: 'scientific-reports/european-neuropsychopharmacology',
+      })
     })
   })
 })

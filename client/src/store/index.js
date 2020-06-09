@@ -5,7 +5,7 @@ import localforage from 'localforage'
 import Fuse from 'fuse.js'
 import { transformPublication } from './helpers'
 import { uniq, sortBy } from 'lodash'
-import { deserializeFilterConfiguration, slugifyMemo } from '../mixins/Filters'
+import { paramsToFilterConfiguration, slugifyMemo } from '../mixins/Filters'
 import { FACETS } from '../constants'
 
 const log = require('debug')('store')
@@ -91,7 +91,7 @@ const store = new Vuex.Store({
   modules: {},
   getters: {
     filters(state) {
-      return deserializeFilterConfiguration(state.route.path)
+      return paramsToFilterConfiguration(state.route.query || {})
     },
     getPublications: state => state.publications,
     publicationsByKey: function({ publications }) {
@@ -217,12 +217,12 @@ const store = new Vuex.Store({
         basePublications = basePublications
           .map(result => result.item)
           .filter(Boolean) // item can be null if it was filtered above ()
+        log(
+          'Returning %o after searching for %o',
+          basePublications.length,
+          search,
+        )
       }
-      log(
-        'Returning %o after searching for %o',
-        basePublications.length,
-        search,
-      )
       return basePublications
     },
   },
