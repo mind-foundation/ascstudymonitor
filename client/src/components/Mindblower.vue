@@ -1,6 +1,6 @@
 <template>
   <div id="mindblower" ref="mindblower">
-    <div id="mindblower__effect-container" v-html="mindBlowerHTML" />
+    <div id="mindblower__effect-container" v-html="mindblowerHTML" />
     <div class="mindblower__label" aria-busy="true" role="alert"></div>
   </div>
 </template>
@@ -9,10 +9,10 @@
 export default {
   name: 'mindblower',
   data: () => ({
-    mindBlowerHTML: '',
+    mindblowerHTML: '',
   }),
   mounted() {
-    this.mindBlowerHTML = (function() {
+    this.mindblowerHTML = (function() {
       let circles = ''
       const total = 80 // number of overlapping circles
       const size = 1200 // diameter of circles (px)
