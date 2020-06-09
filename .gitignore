@@ -14,5 +14,4 @@ requirements.txt
 *.sublime-workspace
 data
 .pytest_cache
-client/coverage
 .mypy_cache

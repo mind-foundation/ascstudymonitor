@@ -9,23 +9,27 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: borales/actions-yarn@v2.0.0
+      - name: yarn install
+        uses: borales/actions-yarn@v2.0.0
         with:
           cmd: --cwd client install
 
-      - uses: borales/actions-yarn@v2.0.0
+      - name: yarn build
+        uses: borales/actions-yarn@v2.0.0
         with:
           cmd: --cwd client build
 
-      - uses: borales/actions-yarn@v2.0.0
+      - name: yarn lint
+        uses: borales/actions-yarn@v2.0.0
         with:
           cmd: --cwd client lint
 
-      - uses: borales/actions-yarn@v2.0.0
+      - name: yarn test:unit
+        uses: borales/actions-yarn@v2.0.0
         with:
           cmd: --cwd client test:unit
 
-      - name: Coveralls
+      - name: Send to Coveralls
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

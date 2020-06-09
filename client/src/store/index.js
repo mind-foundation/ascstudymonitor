@@ -30,6 +30,7 @@ const fuseOptions = {
   threshold: 0.6,
   keys: [
     { name: 'abstract', weight: 0.6 },
+    { name: 'disciplines', weight: 1.8 },
     { name: 'authors', weight: 1.2 },
     { name: 'source', weight: 1.5 },
     { name: 'title', weight: 2.0 },
