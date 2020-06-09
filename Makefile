@@ -36,10 +36,13 @@ build-client: install-client
 
 mongod:
 	mkdir -p ./data
-	mongod --dbpath=./data &
+	mongod --dbpath=./data
 
-flask-run: build-client mongod
+flask-run: build-client
 	${SECRET_ENV} FLASK_ENV="development" poetry run flask run
 
 yarn-serve: install-client
 	cd client && yarn serve
+
+client-test-e2e: install-client
+	cd client && yarn test:e2e
