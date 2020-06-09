@@ -1,6 +1,4 @@
-const webpack = require('webpack')
-
-var git = require('git-rev-sync')
+const git = require('git-rev-sync')
 
 const getGitHash = () => {
   let hash = ''

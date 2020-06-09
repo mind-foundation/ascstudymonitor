@@ -8,15 +8,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - uses: borales/actions-yarn@v2.0.0
         with:
-          cmd: --cwd client install # will run `yarn install` command
+          cmd: --cwd client install
+
       - uses: borales/actions-yarn@v2.0.0
         with:
-          cmd: --cwd client build # will run `yarn build` command
+          cmd: --cwd client build
+
       - uses: borales/actions-yarn@v2.0.0
         with:
-          cmd: --cwd client test:unit # will run `yarn test` command
+          cmd: --cwd client lint
+
+      - uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: --cwd client test:unit
 
       - name: Coveralls
         uses: coverallsapp/github-action@master
