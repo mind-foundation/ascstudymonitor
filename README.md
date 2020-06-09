@@ -33,3 +33,9 @@ The ASC Study Monitor is a curated, freely accessible, and regularly updated dat
 #### Expose in network
 
 - `poetry run flask run --host=0.0.0.0`
+
+## E2E Tests
+
+- Start server so flask is serving at port 5000
+- `cd client`
+- `yarn test:e2e`

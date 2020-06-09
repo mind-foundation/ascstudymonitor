@@ -1,4 +1,3 @@
-import qs from 'qs'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import List from '../views/List.vue'
@@ -28,11 +27,6 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
-  parseQuery: qs.parse,
-  stringifyQuery: function(query) {
-    const result = qs.stringify(query)
-    return result ? '?' + result : ''
-  },
 })
 
 export default router

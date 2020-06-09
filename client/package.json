@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "NODE_ENV=production vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
+    "test:e2e": "vue-cli-service test:e2e --url http://localhost:5000 --headless",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -16,7 +17,6 @@
     "fuse.js": "^6.0.0",
     "git-rev-sync": "^2.0.0",
     "localforage": "^1.7.3",
-    "qs": "^6.9.4",
     "vue": "^2.6.11",
     "vue-js-modal": "^2.0.0-rc.3",
     "vue-router": "^3.2.0",
@@ -29,7 +29,9 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.1",
+    "@cypress/webpack-preprocessor": "^5.4.1",
     "@vue/cli-plugin-babel": "~4.4.0",
+    "@vue/cli-plugin-e2e-cypress": "~4.4.0",
     "@vue/cli-plugin-eslint": "~4.4.0",
     "@vue/cli-plugin-router": "~4.4.0",
     "@vue/cli-plugin-unit-jest": "~4.4.0",
