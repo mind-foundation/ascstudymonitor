@@ -50,7 +50,6 @@ const store = new Vuex.Store({
   },
   mutations: {
     MUTATE_SORT_KEY: (state, newSortKey) => {
-      console.log('set sort key', newSortKey)
       Vue.set(state, 'sortKey', newSortKey)
     },
     HYDRATE_SINGLE_PUBLICATION: (state, publication) => {
@@ -73,7 +72,7 @@ const store = new Vuex.Store({
   actions: {
     loadPublications: context => {
       const prefix =
-        process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000/'
+        process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000'
       fetch(prefix + '/documents.json')
         .then(res => res.json())
         .then(data => context.commit('HYDRATE_ALL_PUBLICATIONS', data))
