@@ -46,3 +46,9 @@ yarn-serve: install-client
 
 client-test-e2e: install-client
 	cd client && yarn test:e2e
+
+tmux-yarn-serve:
+	tmux \
+		new-session 'make mongod' \; \
+		split-window 'make flask-run' \; \
+		split-window 'make yarn-serve' \;
