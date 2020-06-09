@@ -2,7 +2,6 @@ import {
   paramsToFilterConfiguration,
   filterConfigurationToParams,
   toggleFacetInConfiguration,
-  MULTIPLE_VALUE_SEPARATOR,
 } from '@/mixins/Filters'
 
 describe('Filters.vue', () => {
