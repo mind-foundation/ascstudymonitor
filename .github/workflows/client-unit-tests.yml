@@ -36,4 +36,4 @@ jobs:
       - name: yarn coveralls
         uses: borales/actions-yarn@v2.0.0
         with:
-          cmd: --cwd client coveralls
+          cmd: --cwd client coveralls -- -v
