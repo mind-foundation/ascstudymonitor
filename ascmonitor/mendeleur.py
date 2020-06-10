@@ -1,6 +1,5 @@
 """ Access the Mendeley Database """
 
-from itertools import islice
 import logging
 import re
 from typing import NamedTuple
@@ -10,7 +9,7 @@ from mendeley import Mendeley
 import requests
 from slugify import slugify
 
-from ascmonitor.config import required_fields, development
+from ascmonitor.config import required_fields
 
 logger = logging.getLogger(__name__)
 
@@ -109,6 +108,18 @@ class Mendeleur:
             document.json["year"] = None
         return document
 
+    def ensure_source(self, document):
+        """ Ensure source is present or None """
+        if document.source is None:
+            document.json["source"] = None
+        return document
+
+    def ensure_keywords(self, document):
+        """ Ensure keywords are present or [] """
+        if document.keywords is None:
+            document.json["keywords"] = []
+        return document
+
     def cast_created(self, document):
         """ Cast created to datetime """
         created = document.json["created"].replace("Z", "")
@@ -134,7 +145,9 @@ class Mendeleur:
         for document in documents:
             document = self.extract_disciplines(document)
             document = self.ensure_authors(document)
+            document = self.ensure_source(document)
             document = self.ensure_year(document)
+            document = self.ensure_keywords(document)
             document = self.fix_file_attached(document)
             document = self.slugify(document)
             document = self.cast_created(document)
