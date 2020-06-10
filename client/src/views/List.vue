@@ -109,6 +109,10 @@ export default {
   }
 }
 
+#list :nth-child(even) .entry {
+  background-color: #f8f9fb;
+}
+
 .message {
   padding: 30px;
   color: #111;
