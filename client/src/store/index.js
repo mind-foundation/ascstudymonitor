@@ -22,14 +22,16 @@ const fuseOptions = {
   // includeScore: false,
   // shouldSort: true,
   // includeMatches: false,
-  // findAllMatches: false,
-  // minMatchCharLength: 1,
+  findAllMatches: true,
+  minMatchCharLength: 2,
   // location: 0,
-  // distance: 100,
+  distance: 10000 / 0.6, // longest abstract currently 7637, gets scaled by threshold
   // useExtendedSearch: false,
   threshold: 0.6,
   keys: [
-    { name: 'abstract', weight: 0.6 },
+    // scores get scaled by text length,
+    // so a high value makes sense for abstract
+    { name: 'abstract', weight: 2.5 },
     { name: 'disciplines', weight: 1.8 },
     { name: 'authorNames', weight: 1.2 },
     { name: 'source', weight: 1.5 },
