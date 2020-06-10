@@ -33,8 +33,17 @@ const router = new VueRouter({
     return qs.parse(query)
   },
   stringifyQuery(query) {
-    const stringified = qs.stringify(query, { encode: false })
-    return stringified ? `?${stringified}` : ''
+    // remove empty strings
+    for (const k in query) {
+      if (query[k] === '') {
+        delete query[k]
+      }
+    }
+
+    return qs.stringify(query, {
+      encode: false,
+      addQueryPrefix: true,
+    })
   },
 })
 

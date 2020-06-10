@@ -17,6 +17,7 @@
         @input="debounceSearch($event)"
         @focus="isFocussed = true"
         @blur="onBlur($event)"
+        :value="query"
         type="text"
         class="title-bar__input"
         placeholder="Search All Articles..."
@@ -48,12 +49,16 @@ export default {
     VueTyper,
   },
 
-  data: () => ({
-    activated: false,
-    isFocussed: false,
-    debounce: null,
-    texts: ['Titles', 'Authors', 'Journals', 'Keywords', 'Disciplines'],
-  }),
+  data() {
+    const query = this.$store.state.route.query?.search || ''
+    return {
+      query,
+      activated: Boolean(query),
+      isFocussed: false,
+      debounce: null,
+      texts: ['Titles', 'Authors', 'Journals', 'Keywords', 'Disciplines'],
+    }
+  },
 
   methods: {
     activate() {
@@ -69,6 +74,8 @@ export default {
       }
     },
     debounceSearch(e) {
+      this.query = e.target.value
+
       clearTimeout(this.debounce)
       this.debounce = setTimeout(() => {
         if (this.$store.state.route.query.search !== e.target.value) {
