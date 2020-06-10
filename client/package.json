@@ -20,6 +20,7 @@
     "localforage": "^1.7.3",
     "qs": "^6.9.4",
     "vue": "^2.6.11",
+    "vue-d3-network": "^0.1.28",
     "vue-js-modal": "^2.0.0-rc.3",
     "vue-router": "^3.2.0",
     "vue-slide-up-down": "^2.0.1",

@@ -4,10 +4,16 @@ import qs from 'qs'
 
 import List from '../views/List.vue'
 import Publication from '../views/Publication.vue'
+import KnowledgeGraph from '../views/KnowledgeGraph.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/graph',
+    name: 'KnowledgeGraph',
+    component: KnowledgeGraph,
+  },
   {
     path: window.urlForPublication,
     name: 'Publication',
