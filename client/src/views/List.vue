@@ -20,11 +20,11 @@
 
     <div v-if="pagination.items.length !== 0" class="pagination--wrapper">
       <paginate
+        v-model="page"
         :force-page="page"
         :page-count="pageCount"
         :page-range="3"
         :margin-pages="2"
-        :click-handler="clickCallback"
         :prev-text="'&lt;'"
         :next-text="'&gt;'"
         :break-view-text="'…'"
@@ -37,7 +37,7 @@
       >
       </paginate>
       <p>
-        Showing {{ pagination.start }} to {{ pagination.end }} of
+        Showing {{ pagination.start + 1 }} to {{ pagination.end }} of
         {{ publications.length }} entries
       </p>
     </div>
@@ -56,24 +56,37 @@ export default {
   components: {
     Publication,
   },
-  methods: {
-    clickCallback(page) {
-      this.$router.replace({ query: { page } })
-      setTimeout(() => {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth',
-        })
-      })
-    },
-  },
   computed: {
     loaded() {
       return this.$store.state.loaded
     },
-    page() {
-      const queryPage = this.$store.state.route.query.page
-      return typeof queryPage === 'number' ? parseInt(queryPage) : 1
+    page: {
+      get() {
+        const queryPage = this.$store.state.route.query?.page
+        const page = parseInt(queryPage)
+        if (page > 0 && page <= this.pageCount) {
+          return page
+        } else if (page > this.pageCount) {
+          return this.pageCount
+        } else {
+          // catches page = NaN
+          return 1
+        }
+      },
+      set(page) {
+        this.$router.push({
+          query: {
+            ...this.$store.state.route.query,
+            page,
+          },
+        })
+        setTimeout(() => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          })
+        })
+      },
     },
     pageCount() {
       return Math.ceil(this.publications.length / this.$store.state.pageSize)
@@ -81,17 +94,22 @@ export default {
     publications() {
       return this.$store.getters.queryPublications
     },
+    pageSize() {
+      return this.$store.state.pageSize
+    },
     pagination() {
-      const { route, pageSize, publications } = this.$store.state
+      const { route, publications } = this.$store.state
       const { page = 1 } = route.query
-      const pageIndex = page - 1
-
-      const items = this.publications.slice(pageIndex, pageIndex + pageSize)
+      const pageIndex = Math.min(page, this.pageCount) - 1
+      const total = this.publications.length
+      const start = pageIndex * this.pageSize
+      const end = Math.min((pageIndex + 1) * this.pageSize, total)
+      const items = this.publications.slice(start, end)
       return {
         items,
-        start: pageIndex + 1,
-        end: pageIndex + items.length,
-        total: publications.length,
+        start,
+        end,
+        total,
       }
     },
   },
@@ -146,6 +164,7 @@ export default {
 }
 
 .pagination--container {
+  margin-top: 8px;
   display: flex;
   justify-content: flex-end;
 }

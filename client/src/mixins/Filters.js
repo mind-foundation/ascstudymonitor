@@ -27,6 +27,9 @@ export default {
       if (this.$store.state.route.query?.search) {
         query.search = this.$store.state.route.query.search
       }
+      if (this.$store.state.route.query?.page) {
+        query.page = this.$store.state.route.query.page
+      }
 
       this.$router.push({ query })
     },
@@ -48,19 +51,18 @@ export default {
 }
 
 export function paramsToFilterConfiguration(params) {
-  const { search, ...allParamsButSearch } = params //eslint-disable-line
-
-  return Object.entries(allParamsButSearch).reduce(
-    (bag, [facet, valueString]) => {
+  return Object.entries(params).reduce((bag, [facet, valueString]) => {
+    if (Object.values(FACETS).includes(facet)) {
       return {
         ...bag,
         [facet]: valueString
           .split(MULTIPLE_VALUE_SEPARATOR)
           .map(value => slugifyMemo(facet, value)),
       }
-    },
-    {},
-  )
+    } else {
+      return bag
+    }
+  }, {})
 }
 
 export function filterConfigurationToParams(configuration) {
