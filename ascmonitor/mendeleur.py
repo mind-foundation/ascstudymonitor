@@ -58,9 +58,6 @@ class Mendeleur:
         logger.info("Fetching fresh documents from mendeley")
 
         library = self.group.documents.iter(page_size=500, sort="created", order="desc", view="all")
-        if development:
-            library = islice(library, 0, 500)
-
         return list(self.transform_documents(doc for doc in library))
 
     def get_download_url(self, document_id):

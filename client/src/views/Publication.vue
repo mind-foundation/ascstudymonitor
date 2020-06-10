@@ -13,7 +13,7 @@
         <ul class="entry__disciplines">
           <icon-science />
           <li v-for="d in publication.disciplines" v-bind:key="d">
-            <a @click="navigate(d)">{{ d }}</a>
+            <a @click="toggleFilter('discipline', d)">{{ d }}</a>
           </li>
         </ul>
 
@@ -34,7 +34,9 @@
               v-for="(authorName, index) in publication.authorNames"
               :key="index"
             >
-              <a @click="navigate(authorName)">{{ authorName }}</a>
+              <a @click="toggleFilter('author', authorName)">{{
+                authorName
+              }}</a>
             </li>
           </div>
         </ul>
@@ -55,10 +57,12 @@
         <div class="entry__year_source" @click.stop>
           <a
             class="entry__year_source__year"
-            @click="navigate(publication.year)"
+            @click="toggleFilter('year', publication.year)"
             >{{ publication.year }}</a
           >
-          <a @click="navigate(publication.source)">{{ publication.source }}</a>
+          <a @click="toggleFilter('journal', publication.source)">{{
+            publication.source
+          }}</a>
         </div>
 
         <div v-if="expanded">
@@ -91,6 +95,7 @@
 
 <script>
 // @ is an alias to /src
+import Filters from '../mixins/Filters'
 import SlideUpDown from 'vue-slide-up-down'
 import IconDownload from '@/components/Icons/IconDownload.vue'
 import IconAuthor from '@/components/Icons/IconAuthor.vue'
@@ -110,6 +115,7 @@ export default {
     IconPublicationChevron,
     SlideUpDown,
   },
+  mixins: [Filters],
   data: () => ({
     expanded: null,
   }),
@@ -133,9 +139,6 @@ export default {
     toggleExpand() {
       if (this.isDetailView) return false
       this.expanded = !this.expanded
-    },
-    navigate(key) {
-      this.$router.push({ query: { search: key } })
     },
   },
   created() {
