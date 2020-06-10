@@ -19,7 +19,7 @@
         @blur="onBlur($event)"
         type="text"
         class="title-bar__input"
-        placeholder="Search..."
+        placeholder="Search All Articles..."
         role="search"
         ref="input"
       />
