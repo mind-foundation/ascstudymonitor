@@ -4,8 +4,10 @@ on: ['push']
 
 env:
   COVERALLS_REPO_TOKEN: '${{ secrets.COVERALLS_REPO_TOKEN }}'
+  COVERALLS_SERVICE_NAME: 'github'
   COVERALLS_GIT_BRANCH: '${{ github.ref }}'
   COVERALLS_GIT_COMMIT: '${{ github.sha }}'
+  COVERALLS_DEBUG: true
 
 jobs:
   build:
