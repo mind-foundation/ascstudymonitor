@@ -50,7 +50,10 @@ export default {
   },
 
   data() {
-    const query = this.$store.state.route.query?.search || ''
+    const query = (this.$store.state.route.query?.search || '').replace(
+      /\+/g,
+      ' ',
+    )
     return {
       query,
       activated: Boolean(query),
@@ -82,11 +85,11 @@ export default {
           this.$router.replace({
             query: {
               ...this.$store.state.route.query,
-              search: e.target.value,
+              search: e.target.value.replace(/ /g, '+'),
             },
           })
         }
-      }, 100)
+      }, 300)
     },
   },
 }

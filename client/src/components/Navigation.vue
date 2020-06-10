@@ -59,6 +59,9 @@ export default {
         {},
       )
     },
+    filterItems() {
+      return this.$store.getters.summary
+    },
   },
 }
 </script>
@@ -91,7 +94,7 @@ export default {
           <ul class="menu vertical">
             <li
               class="filterItem"
-              v-for="s in $store.getters.summary[key]"
+              v-for="s in filterItems[key]"
               :key="s.label"
               :data-value="s.label"
               @click="toggleFilter(keyToFacet(key), s.label)"

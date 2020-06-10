@@ -14,6 +14,10 @@ log.enabled = process.env.NODE_ENV === 'development'
 const vuexLocal = new VuexPersistence({
   storage: localforage,
   asyncStorage: true,
+  reducer: state => ({
+    sortKey: state.sortKey,
+    publications: state.publications,
+  }),
 })
 
 Vue.use(Vuex)
