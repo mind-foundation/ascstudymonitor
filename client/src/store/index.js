@@ -13,6 +13,7 @@ log.enabled = process.env.NODE_ENV === 'development'
 
 const vuexLocal = new VuexPersistence({
   storage: localforage,
+  asyncStorage: true,
 })
 
 Vue.use(Vuex)
