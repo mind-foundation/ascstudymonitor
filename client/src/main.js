@@ -20,6 +20,8 @@ if (process.env.NODE_ENV === 'production') {
 Vue.config.productionTip = false
 
 Vue.prototype.$constants = constants
+Vue.prototype.$api =
+  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000'
 
 sync(store, router)
 
