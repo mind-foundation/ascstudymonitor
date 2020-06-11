@@ -82,7 +82,7 @@
             <a
               target="_blank"
               rel="noopener noreferrer"
-              :href="$api + '/documents/' + publication.id + '/download/'"
+              :href="$api + '/documents/' + publication.id + '/download'"
               >Download full text</a
             >
           </div>
