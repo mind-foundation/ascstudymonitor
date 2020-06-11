@@ -84,8 +84,8 @@ class Mendeleur:
                 if tag.lower().startswith("disc:"):
                     disciplines.extend(tag[5:].split(":"))
 
-            # strip bad characters
-            disciplines = [re.sub(r"[^\w\s]", "", disc).strip() for disc in disciplines]
+            # strip bad characters and titelize
+            disciplines = [re.sub(r"[^\w\s]", "", disc).strip().title() for disc in disciplines]
 
             # make sure disciplines are unique
             disciplines = list(set(disciplines))
