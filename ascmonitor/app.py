@@ -79,7 +79,12 @@ def update():
 def queue(channel):
     """ Show current post queue for given channel """
     n_visible = 20
-    docs = list(poster.get_queue(channel))
+
+    try:
+        docs = list(poster.get_queue(channel))
+    except KeyError:
+        abort(404)
+
     visible, hidden = docs[:n_visible], docs[n_visible:]
     entries = "\n".join(d["title"] for d in visible)
     rest = f"\n ... and {len(hidden)} more ..."
@@ -97,7 +102,11 @@ def post(channel):
         if token != post_secret_token:
             abort(404)
 
-    response = poster.post(channel)
+    try:
+        response = poster.post(channel)
+    except KeyError:
+        abort(404)
+
     return jsonify(response)
 
 

@@ -44,15 +44,19 @@ class Poster:
         self.event_store.put(event)
 
     def get_queue(self, channel_name) -> PostQueue:
-        """ Get queue for a channel """
+        """
+        Get queue for a channel.
+        :raises: KeyError if channel unknown
+        """
         return self.channels[channel_name]["queue"]
 
     def post(self, channel_name) -> Dict[str, Any]:
         """
         Post the next document in queue
         :param channel: Name of channel to post to
+        :raises: KeyError if channel unknown
         """
-        document_short = self.channels["channel_name"]["queue"].pop()
+        document_short = self.channels[channel_name]["queue"].pop()
         document = self.document_store.get_by_id(document_short["id"])
         channel = self.channels[channel_name]["channel"]
 
