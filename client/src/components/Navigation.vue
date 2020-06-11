@@ -52,7 +52,7 @@ export default {
           ...bag,
           [key]: {
             title: this.$constants.LABELS[key],
-            total: publicationsByKey[accessor].length,
+            total: Object.keys(publicationsByKey[accessor]).length,
             data: publications,
           },
         }),

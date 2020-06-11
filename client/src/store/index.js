@@ -66,7 +66,14 @@ const store = new Vuex.Store({
     },
     HYDRATE_ALL_PUBLICATIONS: (state, publications) => {
       publications = publications.map(transformPublication)
-      Vue.set(state, 'publications', publications)
+
+      const needToUpdate =
+        state.publications.length < 2 ||
+        JSON.stringify(state.publications) !== JSON.stringify(publications)
+
+      if (needToUpdate) {
+        Vue.set(state, 'publications', publications)
+      }
       Vue.set(state, 'loaded', true)
 
       setTimeout(() => {
@@ -102,7 +109,6 @@ const store = new Vuex.Store({
     filters(state) {
       return paramsToFilterConfiguration(state.route.query || {})
     },
-    getPublications: state => state.publications,
     publicationsByKey: function({ publications }) {
       const years = {}
       const disciplines = {}
@@ -126,41 +132,29 @@ const store = new Vuex.Store({
       }
 
       return {
-        years: Object.values(years),
-        disciplines: Object.values(disciplines),
-        authorNames: Object.values(authorNames),
-        sources: Object.values(sources),
+        years,
+        disciplines,
+        authorNames,
+        sources,
       }
     },
-    distinct({ publications }) {
-      const distinct = {
-        years: {},
-        disciplines: {},
-        authorNames: {},
-        sources: {},
-      }
-
-      for (const p of publications) {
-        distinct.years[p.year] = 1
-        distinct.sources[p.source] = 1
-        for (const a of p.authorNames) {
-          distinct.authorNames[a] = 1
-        }
-        for (const a of p.disciplines) {
-          distinct.disciplines[a] = 1
-        }
-      }
-
+    distinct(state, getters) {
+      const {
+        years,
+        disciplines,
+        authorNames,
+        sources,
+      } = getters.publicationsByKey
       return {
-        years: Object.keys(distinct.years).map(Number),
-        disciplines: Object.keys(distinct.disciplines),
-        authorNames: Object.keys(distinct.authorNames),
-        sources: Object.keys(distinct.sources),
+        years: Object.keys(years).map(Number),
+        disciplines: Object.keys(disciplines),
+        authorNames: Object.keys(authorNames),
+        sources: Object.keys(sources),
       }
     },
     summary(state, getters) {
-      const { publications, sortKey } = state
-      const { distinct } = getters
+      const { sortKey } = state
+      const { distinct, publicationsByKey } = getters
 
       const sort = array => {
         let sorted = sortBy(array, sortKey)
@@ -174,28 +168,25 @@ const store = new Vuex.Store({
         disciplines: sort(
           distinct.disciplines.map(discipline => ({
             label: discipline,
-            count: publications.filter(
-              d => d.disciplines && d.disciplines.includes(discipline),
-            ).length,
+            count: publicationsByKey.disciplines[discipline].length,
           })),
         ),
         sources: sort(
           distinct.sources.map(source => ({
             label: source,
-            count: publications.filter(d => d.source === source).length,
+            count: publicationsByKey.sources[source].length,
           })),
         ),
         authors: sort(
           distinct.authorNames.map(authorName => ({
             label: authorName,
-            count: publications.filter(d => d.authorNames.includes(authorName))
-              .length,
+            count: publicationsByKey.authorNames[authorName].length,
           })),
         ),
         years: sort(
           distinct.years.map(year => ({
-            label: year.toString(),
-            count: publications.filter(d => d.year === year).length,
+            label: year,
+            count: publicationsByKey.years[year].length,
           })),
         ),
       }
