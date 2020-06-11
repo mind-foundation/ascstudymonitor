@@ -6,7 +6,9 @@ const getGitHash = () => {
     hash = git.short()
   } catch {
     // As a fallback for docker builds, try env var
-    hash = process.env['SOURCE_COMMIT'].slice(0, 7)
+    if (process.env['SOURCE_COMMIT']) {
+      hash = process.env['SOURCE_COMMIT'].slice(0, 7)
+    }
   }
 
   if (!hash) {
