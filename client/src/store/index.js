@@ -4,7 +4,7 @@ import VuexPersistence from 'vuex-persist'
 import localforage from 'localforage'
 import Fuse from 'fuse.js'
 import { transformPublication } from './helpers'
-import { uniq, sortBy } from 'lodash'
+import { uniq, sortBy, isEmpty } from 'lodash'
 import { paramsToFilterConfiguration, slugifyMemo } from '../mixins/Filters'
 import { FACETS } from '../constants'
 
@@ -218,16 +218,18 @@ const store = new Vuex.Store({
       log('Down to %o publications after filters', basePublications.length)
 
       if (search) {
-        const fuse = new Fuse(basePublications, fuseOptions, index)
+        const useIndex = isEmpty(filters) ? index : null
+        const fuse = new Fuse(basePublications, fuseOptions, useIndex)
 
         basePublications = fuse.search(search)
         basePublications = basePublications
           .map(result => result.item)
           .filter(Boolean) // item can be null if it was filtered above ()
         log(
-          'Returning %o after searching for %o',
+          'Returning %o after searching for %o, used index: %s',
           basePublications.length,
           search,
+          Boolean(useIndex),
         )
       }
       return basePublications
