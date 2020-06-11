@@ -152,7 +152,7 @@ const store = new Vuex.Store({
       }
 
       return {
-        years: Object.keys(distinct.years),
+        years: Object.keys(distinct.years).map(Number),
         disciplines: Object.keys(distinct.disciplines),
         authorNames: Object.keys(distinct.authorNames),
         sources: Object.keys(distinct.sources),
