@@ -40,9 +40,5 @@ BACKUP_ARCHIVE="asc-studymonitor-${timestamp}.tar.xz"
 tar --force-local -cJf "$BACKUP_ARCHIVE" "$BACKUP_DIR"
 
 # upload to aws
-VAULT_NAME="asc-studymonitor-backup"
-aws glacier upload-archive \
-    --account-id - \
-    --vault-name "$VAULT_NAME" \
-    --archive-description "$timestamp" \
-    --body "$BACKUP_ARCHIVE"
+S3_URI="s3://asc-studymonitor-backup"
+aws s3 cp "$BACKUP_ARCHIVE" "$S3_URI"
