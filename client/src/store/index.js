@@ -76,8 +76,7 @@ const store = new Vuex.Store({
   },
   actions: {
     loadPublications: context => {
-      const prefix =
-        process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000'
+      const prefix = Vue.prototype.$api
       fetch(prefix + '/documents.json')
         .then(res => res.json())
         .then(data => context.commit('HYDRATE_ALL_PUBLICATIONS', data))
