@@ -131,6 +131,9 @@ def publication(slug):
     # build url
     url = url_for("publication", slug=slug, _external=True)
 
+    # escape newlines in abstract
+    document["abstract"] = document["abstract"].replace("\n", "\\n").replace("\r", "\\r")
+
     return render_template(
         "index.html",
         abstract=abstract,
