@@ -5,8 +5,8 @@ import re
 from typing import NamedTuple
 
 from dateutil.parser import parse as parse_datetime
-from mendeley import Mendeley
 import requests
+from mendeley import Mendeley
 from slugify import slugify
 
 from ascmonitor.config import required_fields
