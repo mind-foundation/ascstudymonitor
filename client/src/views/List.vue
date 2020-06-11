@@ -98,7 +98,7 @@ export default {
       return this.$store.state.pageSize
     },
     pagination() {
-      const { route, publications } = this.$store.state
+      const { route } = this.$store.state
       const { page = 1 } = route.query
       const pageIndex = Math.min(page, this.pageCount) - 1
       const total = this.publications.length

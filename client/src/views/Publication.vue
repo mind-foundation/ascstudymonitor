@@ -253,6 +253,10 @@ export default {
   margin-bottom: 12px;
 }
 
+.entry__abstract_text {
+  white-space: pre-line;
+}
+
 .entry__abstract_inner {
   display: inline-flex;
 }
