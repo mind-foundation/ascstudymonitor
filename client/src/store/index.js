@@ -15,8 +15,11 @@ const vuexLocal = new VuexPersistence({
   storage: localforage,
   asyncStorage: true,
   reducer: state => ({
-    sortKey: state.sortKey,
-    publications: state.publications,
+    ...state,
+    // Don’t persist route in between sessions to avoid
+    // filter configuration conflicts between a manually
+    // changed URL and the previous URL
+    route: {},
   }),
 })
 
