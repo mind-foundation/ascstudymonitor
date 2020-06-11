@@ -124,11 +124,16 @@ const store = new Vuex.Store({
           disciplines[d] = disciplines[d] || []
           disciplines[d].push(p)
         }
-        years[p.year] = years[p.year] || []
-        years[p.year].push(p)
 
-        sources[p.source] = sources[p.source] || []
-        sources[p.source].push(p)
+        if (p.year) {
+          years[p.year] = years[p.year] || []
+          years[p.year].push(p)
+        }
+
+        if (p.source) {
+          sources[p.source] = sources[p.source] || []
+          sources[p.source].push(p)
+        }
       }
 
       return {
