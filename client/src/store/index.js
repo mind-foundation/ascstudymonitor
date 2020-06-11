@@ -4,7 +4,7 @@ import VuexPersistence from 'vuex-persist'
 import localforage from 'localforage'
 import Fuse from 'fuse.js'
 import { transformPublication } from './helpers'
-import { uniq, sortBy, isEmpty } from 'lodash'
+import { sortBy, isEmpty } from 'lodash'
 import { paramsToFilterConfiguration, slugifyMemo } from '../mixins/Filters'
 import { FACETS } from '../constants'
 
@@ -133,11 +133,29 @@ const store = new Vuex.Store({
       }
     },
     distinct({ publications }) {
+      const distinct = {
+        years: {},
+        disciplines: {},
+        authorNames: {},
+        sources: {},
+      }
+
+      for (const p of publications) {
+        distinct.years[p.year] = 1
+        distinct.sources[p.source] = 1
+        for (const a of p.authorNames) {
+          distinct.authorNames[a] = 1
+        }
+        for (const a of p.disciplines) {
+          distinct.disciplines[a] = 1
+        }
+      }
+
       return {
-        years: uniq(publications.map(p => p.year || 'None')),
-        disciplines: uniq(publications.map(p => p.disciplines).flat()),
-        authorNames: uniq(publications.map(p => p.authorNames).flat()),
-        sources: uniq(publications.map(p => p.source)),
+        years: Object.keys(distinct.years),
+        disciplines: Object.keys(distinct.disciplines),
+        authorNames: Object.keys(distinct.authorNames),
+        sources: Object.keys(distinct.sources),
       }
     },
     summary(state, getters) {
