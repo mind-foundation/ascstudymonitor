@@ -50,10 +50,8 @@ export default {
   },
 
   data() {
-    const query = (this.$store.state.route.query?.search || '').replace(
-      /\+/g,
-      ' ',
-    )
+    const paramQuery = this.$store.state.route.query?.search
+    const query = paramQuery ? paramQuery.replace(/\+/g, ' ') : ''
     return {
       query,
       activated: Boolean(query),
