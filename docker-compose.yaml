@@ -53,6 +53,13 @@ services:
   cache_warmer:
     build: cache-warmer/
 
+  backer-upper:
+    build: backer-upper/
+    volumes:
+      - ./etc/letsencrypt:/letsencrypt
+    secrets:
+      - asc-secret
+
 volumes:
   mongodb-data:
     name: asc-mongodb-prod
