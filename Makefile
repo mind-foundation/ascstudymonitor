@@ -52,3 +52,13 @@ tmux-yarn-serve:
 		new-session 'make mongod' \; \
 		split-window 'make flask-run' \; \
 		split-window 'make yarn-serve' \;
+
+docker-backer-upper:
+	docker build -t backer-upper ./backer-upper
+	docker run -it \
+		--network host --add-host mongo:127.0.0.1 \
+		--volume ${PWD}/asc-secret.json:/run/secrets/asc-secret \
+		--volume ${PWD}/etc/letsencrypt:/letsencrypt \
+		--env BACKER_UPPER_DEV=1 \
+		--entrypoint /bin/bash \
+		backer-upper
