@@ -22,7 +22,7 @@ export default {
         <span class="menu-bottom__study-monitor">Study Monitor</span>
       </p>
       <span class="menu-bottom__love">
-        Made with &hearts; in Berlin
+        Made with ♥️ in Berlin
       </span>
     </div>
   </div>
