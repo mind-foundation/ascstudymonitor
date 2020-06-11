@@ -86,7 +86,7 @@ def queue(channel):
     return Response(entries + rest, mimetype="text/plain")
 
 
-@app.route("/post/<channel>")
+@app.route("/post/<channel>", methods=["POST"])
 def post(channel):
     """
     Send out posts about new papers.
