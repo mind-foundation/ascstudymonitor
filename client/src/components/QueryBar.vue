@@ -83,7 +83,7 @@ export default {
           this.$router.replace({
             query: {
               ...this.$store.state.route.query,
-              search: e.target.value.replace(/ /g, '+'),
+              search: e.target.value.replace(/\s/g, '+'),
             },
           })
         }

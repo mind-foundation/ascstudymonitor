@@ -30,7 +30,13 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
   parseQuery(query) {
-    return qs.parse(query)
+    const parsed = qs.parse(query)
+
+    // put the + back in search
+    if (parsed.search) {
+      parsed.search = parsed.search.replace(/\s/g, '+')
+    }
+    return parsed
   },
   stringifyQuery(query) {
     // remove empty strings
