@@ -6,6 +6,7 @@ env:
   COVERALLS_REPO_TOKEN: '${{ secrets.COVERALLS_REPO_TOKEN }}'
   COVERALLS_GIT_BRANCH: '${{ github.ref }}'
   COVERALLS_GIT_COMMIT: '${{ github.sha }}'
+  CYPRESS_INSTALL_BINARY: 0 # can cause problems on ci. skip until we need e2e on ci
 
 jobs:
   build:
