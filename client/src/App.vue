@@ -14,6 +14,7 @@
       <router-link to="/about">About</router-link>
     </div> -->
     <info-modal />
+    <filter-modal />
   </div>
 </template>
 
@@ -22,6 +23,7 @@ import Navigation from './components/Navigation'
 import QueryBar from './components/QueryBar'
 import Mindblower from './components/Mindblower'
 import InfoModal from './components/InfoModal'
+import FilterModal from './components/FilterModal'
 
 export default {
   components: {
@@ -29,6 +31,7 @@ export default {
     QueryBar,
     Mindblower,
     InfoModal,
+    FilterModal,
   },
   created() {
     this.$store.dispatch('localLocalPublication')

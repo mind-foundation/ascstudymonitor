@@ -4,6 +4,7 @@ export default {
     authors: 'Authors',
     disciplines: 'Disciplines',
     years: 'Years',
+    keywords: 'Keywords',
   },
 }
 
@@ -12,4 +13,5 @@ export const FACETS = {
   JOURNAL: 'journal',
   AUTHOR: 'author',
   DISCIPLINE: 'discipline',
+  KEYWORD: 'keyword',
 }

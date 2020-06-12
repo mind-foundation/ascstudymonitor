@@ -114,6 +114,7 @@ const store = new Vuex.Store({
       const disciplines = {}
       const authorNames = {}
       const sources = {}
+      const keywords = {}
 
       for (const p of publications) {
         for (const a of p.authorNames) {
@@ -123,6 +124,10 @@ const store = new Vuex.Store({
         for (const d of p.disciplines) {
           disciplines[d] = disciplines[d] || []
           disciplines[d].push(p)
+        }
+        for (const d of p.keywords) {
+          keywords[d] = keywords[d] || []
+          keywords[d].push(p)
         }
 
         if (p.year) {
@@ -141,6 +146,7 @@ const store = new Vuex.Store({
         disciplines,
         authorNames,
         sources,
+        keywords,
       }
     },
     distinct(state, getters) {
@@ -149,12 +155,14 @@ const store = new Vuex.Store({
         disciplines,
         authorNames,
         sources,
+        keywords,
       } = getters.publicationsByKey
       return {
         years: Object.keys(years).map(Number),
         disciplines: Object.keys(disciplines),
         authorNames: Object.keys(authorNames),
         sources: Object.keys(sources),
+        keywords: Object.keys(keywords),
       }
     },
     summary(state, getters) {
@@ -194,6 +202,12 @@ const store = new Vuex.Store({
             count: publicationsByKey.years[year].length,
           })),
         ),
+        keywords: sort(
+          distinct.keywords.map(year => ({
+            label: year,
+            count: publicationsByKey.keywords[year].length,
+          })),
+        ),
       }
     },
     queryPublications: function(state, getters, rootState) {
@@ -223,7 +237,12 @@ const store = new Vuex.Store({
             break
           case FACETS.AUTHOR:
             basePublications = basePublications.filter(p =>
-              p.authorNames.some(d => visible.includes(slugify(d))),
+              p.authorNames.some(a => visible.includes(slugify(a))),
+            )
+            break
+          case FACETS.KEYWORD:
+            basePublications = basePublications.filter(p =>
+              p.keywords.some(k => visible.includes(slugify(k))),
             )
             break
           default:

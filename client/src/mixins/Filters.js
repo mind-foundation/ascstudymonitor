@@ -104,6 +104,7 @@ function slugify(facet, value) {
     case FACETS.JOURNAL:
     case FACETS.DISCIPLINE:
     case FACETS.AUTHOR:
+    case FACETS.KEYWORD:
       return value.toLowerCase().replace(/ /g, '-')
     default:
       return value

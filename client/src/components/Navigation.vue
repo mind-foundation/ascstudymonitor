@@ -10,6 +10,7 @@ const accessors = {
   sources: 'sources',
   authors: 'authorNames',
   years: 'years',
+  keywords: 'keywords',
 }
 
 export default {
@@ -23,7 +24,6 @@ export default {
   },
   data: () => ({
     open: [],
-    showModal: false,
   }),
   methods: {
     keyToFacet(key) {
@@ -94,7 +94,7 @@ export default {
           <ul class="menu vertical">
             <li
               class="filterItem"
-              v-for="s in filterItems[key]"
+              v-for="s in filterItems[key].slice(0, 10)"
               :key="s.label"
               :data-value="s.label"
               @click="toggleFilter(keyToFacet(key), s.label)"
@@ -106,6 +106,13 @@ export default {
               {{ s.label }} ({{ s.count }})
             </li>
           </ul>
+          <div
+            v-if="filterItems[key].length > 10"
+            class="show-more"
+            @click="$modal.show('filter-modal')"
+          >
+            Show more
+          </div>
         </slide-up-down>
       </li>
     </ul>
@@ -243,5 +250,13 @@ export default {
   border-radius: 50%;
   left: -1.1em;
   top: 0.5em;
+}
+
+.show-more {
+  background-color: white;
+  color: #34557f;
+  text-align: center;
+  font-weight: bold;
+  margin: 5px 0;
 }
 </style>
