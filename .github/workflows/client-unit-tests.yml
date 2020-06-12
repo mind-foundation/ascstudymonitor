@@ -33,7 +33,7 @@ jobs:
       - name: yarn test:unit
         uses: borales/actions-yarn@v2.0.0
         with:
-          cmd: --cwd client test:unit --ci
+          cmd: --cwd client test:unit --ci --collect-coverage
 
       - name: yarn coveralls
         uses: borales/actions-yarn@v2.0.0
