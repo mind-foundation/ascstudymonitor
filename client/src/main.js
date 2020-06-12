@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueSocialSharing from 'vue-social-sharing'
 import { sync } from 'vuex-router-sync'
 import VModal from 'vue-js-modal'
+import VueClipboard from 'vue-clipboard2'
+import Toasted from 'vue-toasted'
 import * as Sentry from '@sentry/browser'
 import { Vue as VueIntegration } from '@sentry/integrations'
 import App from './App.vue'
@@ -27,7 +29,9 @@ Vue.prototype.$api =
 sync(store, router)
 
 Vue.use(VueSocialSharing)
+Vue.use(VueClipboard)
 Vue.use(VModal)
+Vue.use(Toasted)
 
 new Vue({
   router,
