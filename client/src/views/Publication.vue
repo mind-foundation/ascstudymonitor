@@ -86,6 +86,8 @@
               >Download full text</a
             >
           </div>
+
+          <social-bar :publication="publication" />
         </div>
         <!-- <router-link :to="{ path: '/' }">Back to all</router-link> -->
       </div>
@@ -97,6 +99,7 @@
 // @ is an alias to /src
 import Filters from '../mixins/Filters'
 import SlideUpDown from 'vue-slide-up-down'
+import SocialBar from '@/components/SocialBar.vue'
 import IconDownload from '@/components/Icons/IconDownload.vue'
 import IconAuthor from '@/components/Icons/IconAuthor.vue'
 import IconLink from '@/components/Icons/IconLink.vue'
@@ -114,6 +117,7 @@ export default {
     IconScience,
     IconPublicationChevron,
     SlideUpDown,
+    SocialBar,
   },
   mixins: [Filters],
   data: () => ({

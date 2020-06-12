@@ -1,11 +1,12 @@
 import Vue from 'vue'
+import VueSocialSharing from 'vue-social-sharing'
+import { sync } from 'vuex-router-sync'
+import VModal from 'vue-js-modal'
 import * as Sentry from '@sentry/browser'
 import { Vue as VueIntegration } from '@sentry/integrations'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import { sync } from 'vuex-router-sync'
-import VModal from 'vue-js-modal'
 import constants from './constants'
 
 if (process.env.NODE_ENV === 'production') {
@@ -25,6 +26,7 @@ Vue.prototype.$api =
 
 sync(store, router)
 
+Vue.use(VueSocialSharing)
 Vue.use(VModal)
 
 new Vue({

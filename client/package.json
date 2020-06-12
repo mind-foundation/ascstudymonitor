@@ -24,6 +24,7 @@
     "vue-js-modal": "^2.0.0-rc.3",
     "vue-router": "^3.2.0",
     "vue-slide-up-down": "^2.0.1",
+    "vue-social-sharing": "^3.0.0-beta.11",
     "vue-typer": "^1.2.0",
     "vuejs-paginate": "^2.1.0",
     "vuex": "^3.4.0",
@@ -88,7 +89,7 @@
   ],
   "jest": {
     "preset": "@vue/cli-plugin-unit-jest",
-    "collectCoverage": true,
+    "collectCoverage": false,
     "collectCoverageFrom": [
       "**/src/**/*.{js,vue}",
       "!**/node_modules/**",
