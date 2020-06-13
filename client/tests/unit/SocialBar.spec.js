@@ -17,7 +17,6 @@ describe('SocialBar.vue', () => {
       localVue,
       propsData: { publication },
     })
-    console.log(wrapper.html())
     expect(wrapper).toMatchSnapshot()
   })
 

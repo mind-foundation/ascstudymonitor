@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "NODE_ENV=production vue-cli-service build",
+    "build:dev": "NODE_ENV=development vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:unit:watch": "vue-cli-service test:unit --watch",
     "test:e2e": "vue-cli-service test:e2e --url http://localhost:5000 --headless",
@@ -56,7 +57,8 @@
   "eslintConfig": {
     "root": true,
     "env": {
-      "node": true
+      "node": true,
+      "jest": true
     },
     "extends": [
       "plugin:vue/essential",
@@ -91,6 +93,9 @@
   ],
   "jest": {
     "preset": "@vue/cli-plugin-unit-jest",
+    "setupFiles": [
+      "<rootDir>/jest.init.js"
+    ],
     "collectCoverage": false,
     "collectCoverageFrom": [
       "**/src/**/*.{js,vue}",

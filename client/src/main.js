@@ -10,6 +10,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import constants from './constants'
+import { paramsToFilterConfiguration } from '@/mixins/Filters'
 
 if (process.env.NODE_ENV === 'production') {
   Sentry.init({
@@ -38,3 +39,13 @@ new Vue({
   store,
   render: h => h(App),
 }).$mount('#app')
+
+router.afterEach(to => {
+  const config = paramsToFilterConfiguration(to.query)
+  const keywords = Object.values(config)
+    .flat()
+    .filter(Boolean)
+    .map(String)
+
+  window.analytics.page('Filter', { keywords, searchterm: to.query.search })
+})

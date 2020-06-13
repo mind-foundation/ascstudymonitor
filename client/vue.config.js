@@ -18,6 +18,8 @@ const getGitHash = () => {
   return hash
 }
 
+const analyzeBundle = false
+
 module.exports = {
   lintOnSave: process.env.NODE_ENV !== 'production',
   configureWebpack: {
@@ -28,7 +30,23 @@ module.exports = {
       },
     },
   },
+  ...(analyzeBundle && {
+    pluginOptions: {
+      webpackBundleAnalyzer: {
+        openAnalyzer: false,
+      },
+    },
+  }),
   chainWebpack: config => {
+    if (analyzeBundle) {
+      // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+      //   .BundleAnalyzerPlugin
+      // config
+      //   .plugin('webpack-bundle-analyzer')
+      //   .use(BundleAnalyzerPlugin)
+      //   .init(Plugin => new Plugin({}))
+    }
+
     config.plugin('define').tap(definitions => {
       const pkgVersion = JSON.stringify(require('./package.json').version)
       const hash = getGitHash()

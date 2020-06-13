@@ -1,11 +1,16 @@
 <script>
 export default {
   name: 'info-modal',
+  methods: {
+    beforeOpen() {
+      window.analytics.page('InfoModal')
+    },
+  },
 }
 </script>
 
 <template>
-  <modal name="info-modal" :width="600" :height="430">
+  <modal name="info-modal" :width="600" :height="430" @before-open="beforeOpen">
     <div class="modal-container reveal">
       <h3>Thank you for being here</h3>
 

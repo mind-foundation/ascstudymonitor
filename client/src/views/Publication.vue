@@ -143,6 +143,9 @@ export default {
     toggleExpand() {
       if (this.isDetailView) return false
       this.expanded = !this.expanded
+      if (this.expanded) {
+        window.analytics.page('Publication')
+      }
     },
   },
   created() {

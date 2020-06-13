@@ -31,14 +31,14 @@ deploy:
 install-client:
 	cd client && yarn install
 
-build-client: install-client
-	cd client && yarn build
+build-client-dev: install-client
+	cd client && yarn build:dev
 
 mongod:
 	mkdir -p ./data
 	mongod --dbpath=./data
 
-flask-run: build-client
+flask-run: build-client-dev
 	${SECRET_ENV} FLASK_ENV="development" poetry run flask run
 
 yarn-serve: install-client

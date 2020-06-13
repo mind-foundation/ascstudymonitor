@@ -8,6 +8,7 @@
         :description="params.description"
         :quote="params.quote"
         :hashtags="params.hashtags"
+        @click="trackShare('email')"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -30,6 +31,7 @@
         :description="params.description"
         :quote="params.quote"
         :hashtags="params.hashtags"
+        @click="trackShare('twitter')"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -52,6 +54,7 @@
         :description="params.description"
         :quote="params.quote"
         :hashtags="params.hashtags"
+        @click="trackShare('telegram')"
       >
         <svg
           width="24px"
@@ -103,7 +106,13 @@ export default {
         window.COMMIT_HASH
       )
     },
+    trackShare(channel) {
+      window.analytics.track('Publication shared', {
+        channel,
+      })
+    },
     doCopy() {
+      this.trackShare('copy')
       this.$copyText(this.linkFor('copy')).then(
         () => {
           this.$toasted.success('Link copied to clipboard', {

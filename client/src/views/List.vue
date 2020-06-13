@@ -52,7 +52,9 @@ Vue.component('paginate', Paginate)
 
 export default {
   name: 'List',
-
+  mounted() {
+    window.analytics.page('List')
+  },
   components: {
     Publication,
   },
