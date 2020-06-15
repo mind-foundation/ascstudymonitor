@@ -93,7 +93,7 @@ export default {
 }
 </script>
 <style lang="less">
-@import "~@/styles/variables";
+@import '~@/styles/variables';
 
 .top-bar {
   padding: 0 !important;
@@ -156,12 +156,11 @@ export default {
   left: 32px;
   bottom: -0.5px;
   font-size: 2em;
-  margin-bottom: 0px;
 
   @media @for-phone {
     font-size: 1em;
+    margin-bottom: 0px;
   }
-
 }
 
 .title-bar__input {

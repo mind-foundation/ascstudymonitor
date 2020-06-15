@@ -1,4 +1,5 @@
 <script>
+import { mapGetters, mapState } from 'vuex'
 import SlideUpDown from 'vue-slide-up-down'
 import Filters from '../mixins/Filters'
 import IconFilters from './Icons/IconFilters'
@@ -39,28 +40,30 @@ export default {
     toggleSortKey() {
       const newSortKey =
         this.$store.state.sortKey === 'count' ? 'label' : 'count'
-      this.$store.commit('MUTATE_SORT_KEY', newSortKey)
+      this.$store.commit('publications/setSortKey', newSortKey)
     },
   },
   computed: {
-    categories() {
-      const { publications } = this.$store.state
-      const { publicationsByKey } = this.$store.getters
-
+    ...mapState('publications', {
+      publications: state => state.items,
+      loaded: state => state.loaded,
+    }),
+    ...mapGetters('publications', {
+      filterItems: 'summary',
+      publicationsByKey: 'publicationsByKey',
+    }),
+    categories: function() {
       return Object.entries(accessors).reduce(
         (bag, [key, accessor]) => ({
           ...bag,
           [key]: {
             title: this.$constants.LABELS[key],
-            total: Object.keys(publicationsByKey[accessor]).length,
-            data: publications,
+            total: Object.keys(this.publicationsByKey[accessor]).length,
+            data: this.publications,
           },
         }),
         {},
       )
-    },
-    filterItems() {
-      return this.$store.getters.summary
     },
   },
 }
@@ -68,18 +71,21 @@ export default {
 
 <template>
   <nav id="menu" role="navigation">
-    <div> 
+    <div>
       <div id="menu-header" @click="toggleSortKey()">
-        <div id="mobile-only-search-icon" @click='$store.commit("TOGGLE_MOBILE_SEARCH")'>
+        <div
+          id="mobile-only-search-icon"
+          @click="$store.commit('toggleMobileSearch')"
+        >
           Search
         </div>
         <icon-filters />
         <span>Filter</span>
       </div>
     </div>
-    <span v-if="!$store.state.loaded">Loading..</span>
-    <div id="menu-tablet" v-else> 
-      <ul style="max-width: 250px" id="menu-content" >
+    <span v-if="!loaded">Loading..</span>
+    <div id="menu-tablet" v-else>
+      <ul style="max-width: 250px" id="menu-content">
         <li
           v-for="(category, key) in this.categories"
           :key="key"
@@ -124,12 +130,12 @@ export default {
       </ul>
 
       <menu-bottom />
-      </div>
+    </div>
   </nav>
 </template>
 
 <style lang="less" scoped>
-@import "~@/styles/variables";
+@import '~@/styles/variables';
 
 #menu {
   background-color: #34557f;
@@ -150,19 +156,19 @@ export default {
     top: 0;
     left: 0;
     right: 0;
-    
-    overflow:hidden;
-    -webkit-overflow-scrolling:touch;
+
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
 #menu-tablet {
- flex-grow: 1;
- display: flex;
- flex-direction: column;
- justify-content: space-between;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
- @media @for-phone {
+  @media @for-phone {
     display: none;
   }
 }
@@ -209,7 +215,6 @@ export default {
   padding-left: 1rem;
   box-sizing: border-box;
 
-  
   @media @for-tablet-portrait-up {
     margin-top: 2em;
     align-items: center;
@@ -233,7 +238,7 @@ export default {
 
 #mobile-only-search-icon {
   cursor: pointer;
-  content: "Search";
+  content: 'Search';
 
   @media @for-tablet-portrait-up {
     display: none;

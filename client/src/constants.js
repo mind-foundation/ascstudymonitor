@@ -6,6 +6,7 @@ export default {
     years: 'Years',
     keywords: 'Keywords',
   },
+  PAGE_SIZE: 25
 }
 
 export const FACETS = {

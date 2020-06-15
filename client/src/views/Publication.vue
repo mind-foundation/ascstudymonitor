@@ -88,6 +88,15 @@
           </div>
 
           <social-bar :publication="publication" />
+
+          <div
+            v-if="recommendations && recommendations.length"
+            class="card-container"
+          >
+            <div v-for="r in recommendations" v-bind:key="r.id">
+              <router-link :to="getLinkTo(r)">{{ r.title }}</router-link>
+            </div>
+          </div>
         </div>
         <!-- <router-link :to="{ path: '/' }">Back to all</router-link> -->
       </div>
@@ -97,8 +106,8 @@
 
 <script>
 // @ is an alias to /src
-import Filters from '../mixins/Filters'
 import SlideUpDown from 'vue-slide-up-down'
+import { mapState } from 'vuex'
 import SocialBar from '@/components/SocialBar.vue'
 import IconDownload from '@/components/Icons/IconDownload.vue'
 import IconAuthor from '@/components/Icons/IconAuthor.vue'
@@ -106,6 +115,7 @@ import IconLink from '@/components/Icons/IconLink.vue'
 import IconAbstract from '@/components/Icons/IconAbstract.vue'
 import IconScience from '@/components/Icons/IconScience.vue'
 import IconPublicationChevron from '@/components/Icons/IconPublicationChevron.vue'
+import Filters from '../mixins/Filters'
 
 export default {
   name: 'Publication',
@@ -131,13 +141,22 @@ export default {
         this.$store.state.route.params?.slug === this.publication.slug
       )
     },
-    publication() {
-      if (this.publicationId)
-        return this.$store.state.publications.find(
-          p => p.id === this.publicationId,
+    ...mapState('publications', {
+      publications: state => state.items,
+      publication: function(state) {
+        if (this.publicationId)
+          return state.items.find(p => p.id === this.publicationId)
+        else return state.items.find(p => p.slug === this.slug)
+      },
+    }),
+    ...mapState('recommendations', {
+      recommendations: function(state) {
+        const recommendationIds = state.items[this.publication.id]
+        return recommendationIds?.map(id =>
+          this.publications.find(p => p.id === id),
         )
-      else return this.$store.state.publications.find(p => p.slug === this.slug)
-    },
+      },
+    }),
   },
   methods: {
     toggleExpand() {
@@ -145,18 +164,32 @@ export default {
       this.expanded = !this.expanded
       if (this.expanded) {
         window.analytics.page('Publication')
+        this.$store.dispatch('recommendations/get', this.publication.id)
       }
+    },
+    getLinkTo(r) {
+      return {
+        path: window.urlForPublication.replace(':slug', r.slug),
+      }
+    },
+  },
+  watch: {
+    publication: function(publication) {
+      console.log('publication changed', publication.title)
+      this.$store.dispatch('recommendations/get', publication.id)
     },
   },
   created() {
     this.expanded = this.isDetailView
+    if (this.expanded) {
+      this.$store.dispatch('recommendations/get', this.publication.id)
+    }
   },
 }
 </script>
 
 <style scoped lang="less">
-@import "~@/styles/variables";
-
+@import '~@/styles/variables';
 
 .row {
   display: flex;
@@ -168,7 +201,7 @@ export default {
   justify-content: center;
   padding-top: 40px;
 
-   @media @for-phone {
+  @media @for-phone {
     min-width: 60px;
     align-items: start;
     padding-top: 64px;
@@ -335,5 +368,11 @@ export default {
 
 .content {
   padding: 8px 24px 12px 0px;
+}
+
+.card-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-evenly;
 }
 </style>

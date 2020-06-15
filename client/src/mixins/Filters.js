@@ -11,7 +11,9 @@ export default {
   methods: {
     toggleFilter: function(facet, value) {
       const slugifiedValue = slugifyMemo(facet, value)
-      const currentFilterConfiguration = this.$store.getters.filters
+      const currentFilterConfiguration = this.$store.getters[
+        'publications/filters'
+      ]
       const targetFilterConfiguration = toggleFacetInConfiguration(
         currentFilterConfiguration,
         facet,
@@ -40,7 +42,10 @@ export default {
       }
 
       const slugifiedValue = slugifyMemo(facet, value)
-      const currentFilterConfiguration = this.$store.getters.filters
+
+      const currentFilterConfiguration = this.$store.getters[
+        'publications/filters'
+      ]
       const isActive = currentFilterConfiguration[facet]?.includes(
         slugifiedValue,
       )

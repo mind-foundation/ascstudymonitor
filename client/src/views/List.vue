@@ -51,11 +51,12 @@
 <script>
 import Vue from 'vue'
 import Paginate from 'vuejs-paginate'
+import { mapGetters, mapState } from 'vuex'
 import Publication from './Publication'
 Vue.component('paginate', Paginate)
 
 export default {
-  name: 'List',
+  name: 'list',
   mounted() {
     window.analytics.page('List')
   },
@@ -63,9 +64,6 @@ export default {
     Publication,
   },
   computed: {
-    loaded() {
-      return this.$store.state.loaded
-    },
     page: {
       get() {
         const queryPage = this.$store.state.route.query?.page
@@ -95,21 +93,15 @@ export default {
       },
     },
     pageCount() {
-      return Math.ceil(this.publications.length / this.$store.state.pageSize)
+      return Math.ceil(this.publications.length / this.$constants.PAGE_SIZE)
     },
-    publications() {
-      return this.$store.getters.queryPublications
-    },
-    pageSize() {
-      return this.$store.state.pageSize
-    },
-    pagination() {
+      pagination() {
       const { route } = this.$store.state
       const { page = 1 } = route.query
       const pageIndex = Math.min(page, this.pageCount) - 1
       const total = this.publications.length
-      const start = pageIndex * this.pageSize
-      const end = Math.min((pageIndex + 1) * this.pageSize, total)
+      const start = pageIndex * this.$constants.PAGE_SIZE
+      const end = Math.min((pageIndex + 1) * this.$constants.PAGE_SIZE, total)
       const items = this.publications.slice(start, end)
       return {
         items,
@@ -118,7 +110,13 @@ export default {
         total,
       }
     },
-  },
+    ...mapState({
+      loaded: state => state.loaded,
+    }),
+    ...mapGetters('publications', {
+      publications: 'queryPublications'
+    })
+  }
 }
 </script>
 
