@@ -17,13 +17,12 @@ const mutations = {
 const actions = {
   get: (context, id) => {
     const recommendations = conjureRecommendations(id)
-    console.log(recommendations)
     setTimeout(() => {
       context.commit('setRecommendation', {
         id,
         recommendations,
       })
-    }, (500 + 1000) & Math.random())
+    }, 500 + 1000 * Math.random())
   },
 }
 

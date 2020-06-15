@@ -175,7 +175,6 @@ export default {
   },
   watch: {
     publication: function(publication) {
-      console.log('publication changed', publication.title)
       this.$store.dispatch('recommendations/get', publication.id)
     },
   },

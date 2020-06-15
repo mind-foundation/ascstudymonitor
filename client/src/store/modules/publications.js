@@ -67,7 +67,6 @@ const mutations = {
 
 const actions = {
   load: context => {
-    console.log('load!')
     const prefix = Vue.prototype.$api
     fetch(prefix + '/documents.json')
       .then(res => res.json())
