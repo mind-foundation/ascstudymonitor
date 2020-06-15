@@ -2,6 +2,7 @@
 
 exports[`List.vue matches snapshot 1`] = `
 <div
+  class=""
   id="list"
 >
   <div

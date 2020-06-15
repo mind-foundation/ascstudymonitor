@@ -155,6 +155,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+@import "~@/styles/variables";
+
+
 .row {
   display: flex;
 }
@@ -164,6 +167,12 @@ export default {
   display: flex;
   justify-content: center;
   padding-top: 40px;
+
+   @media @for-phone {
+    min-width: 60px;
+    align-items: start;
+    padding-top: 64px;
+  }
 }
 
 .entry {

@@ -9,8 +9,6 @@ export default {
     xmlns="http://www.w3.org/2000/svg"
     class="chevron"
     data-id="${id}"
-    width="35.912"
-    height="20.077"
     viewBox="0 0 35.912 20.077"
     v-bind:class="{
       expanded: expanded,
@@ -27,11 +25,18 @@ export default {
 </template>
 
 <style lang="less" scoped>
+@import "~@/styles/variables";
+
 .chevron {
   transition: transform 0.2s ease-in;
   padding: 10px; // increase hit box
   transform: rotate(-90deg);
   user-select: none;
+  width: 36px;
+
+  @media @for-phone {
+    width: 30px;
+  }
 
   &.expanded {
     transform: rotate(0);

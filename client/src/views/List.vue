@@ -1,5 +1,9 @@
 <template>
-  <div id="list">
+  <div id="list"
+   :class="{
+      mobileBarActivated: $store.state.mobileBarActivated,
+    }"
+    >
     <div v-if="pagination.items.length === 0" class="message">
       <p v-if="!loaded">
         Loading..
@@ -119,6 +123,8 @@ export default {
 </script>
 
 <style lang="less">
+@import "~@/styles/variables";
+
 #list {
   margin-top: 70px;
   scroll-behavior: smooth;
@@ -127,10 +133,20 @@ export default {
       scroll-behavior: auto;
     }
   }
+
+  transition: transform 0.1s ease-in-out;
+
+  @media @for-phone {
+    margin-top: @mobile-header-height;
+
+    &.mobileBarActivated {
+      transform: translateY( 34px );
+    }
+  }
 }
 
 #list :nth-child(even) .entry {
-  background-color: #f8f9fb;
+  background-color: #F6F6F6;
 }
 
 .message {

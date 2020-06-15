@@ -4,7 +4,7 @@ import VuexPersistence from 'vuex-persist'
 import localforage from 'localforage'
 import Fuse from 'fuse.js'
 import { transformPublication } from './helpers'
-import { sortBy, isEmpty } from 'lodash'
+import { debounce, isEmpty, sortBy } from 'lodash'
 import { paramsToFilterConfiguration, slugifyMemo } from '../mixins/Filters'
 import { FACETS } from '../constants'
 
@@ -21,6 +21,13 @@ const vuexLocal = new VuexPersistence({
     // changed URL and the previous URL
     route: {},
   }),
+  saveState: debounce(
+    (key, state, storage) => {
+      requestAnimationFrame(() => {
+        storage.setItem(key, state)
+      })
+    }
+  )
 })
 
 Vue.use(Vuex)
@@ -55,8 +62,12 @@ const store = new Vuex.Store({
     publications: [],
     pageSize: 20,
     sortKey: 'count',
+    mobileBarActivated: false,
   },
   mutations: {
+    TOGGLE_MOBILE_SEARCH: (state) => {
+      Vue.set(state, 'mobileBarActivated', !state.mobileBarActivated)
+    },
     MUTATE_SORT_KEY: (state, newSortKey) => {
       Vue.set(state, 'sortKey', newSortKey)
     },

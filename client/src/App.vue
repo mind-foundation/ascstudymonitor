@@ -45,12 +45,20 @@ export default {
 }
 </script>
 <style lang="less">
+@import "~@/styles/variables";
+
 *,
 ::after,
 ::before {
   -webkit-box-sizing: inherit;
   box-sizing: inherit;
 }
+
+// Disables double tap to zoom
+* {
+    touch-action: manipulation;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -114,23 +122,14 @@ ul {
 }
 
 #main {
-  margin-left: 240px;
-  margin-top: 70px;
-  width: calc(100vw - 260px);
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+  position: relative;
+  @media @for-tablet-portrait-up {
+    margin-left: @tablet-navigation-width;
+    margin-top: 70px;
+    width: calc(100vw - @tablet-navigation-width);
   }
 }
+
 
 .fade-enter-active,
 .fade-leave-active {

@@ -21,6 +21,7 @@
     "git-rev-sync": "^2.0.0",
     "localforage": "^1.7.3",
     "qs": "^6.9.4",
+    "raf": "^3.4.1",
     "vue": "^2.6.11",
     "vue-clipboard2": "^0.3.1",
     "vue-js-modal": "^2.0.0-rc.3",

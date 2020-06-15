@@ -3,6 +3,7 @@
     class="top-bar"
     :class="{
       focussed: isFocussed,
+      mobileBarActivated: $store.state.mobileBarActivated,
     }"
     @click="activate"
   >
@@ -48,7 +49,6 @@ export default {
   components: {
     VueTyper,
   },
-
   data() {
     const paramQuery = this.$store.state.route.query?.search
     const query = paramQuery ? paramQuery.replace(/\+/g, ' ') : ''
@@ -93,6 +93,8 @@ export default {
 }
 </script>
 <style lang="less">
+@import "~@/styles/variables";
+
 .top-bar {
   padding: 0 !important;
   height: 70px;
@@ -111,11 +113,31 @@ export default {
   transition: box-shadow 0.5s, border-color 0.25s ease-in-out,
     -webkit-box-shadow 0.5s;
 
+  @media @for-phone {
+    top: @mobile-header-height;
+    left: 0;
+    height: 30px;
+    width: 100%;
+    border-bottom: solid 3px @primary;
+    transform: translateY(-30px);
+    transition: all 0.1s ease-in-out;
+    opacity: 0;
+  }
+
+  &.mobileBarActivated {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+
   &.focussed {
     outline: none;
     border: none;
     box-shadow: none;
     border-bottom: solid 1px #34557f;
+
+    @media @for-phone {
+      border-bottom: solid 3px @primary;
+    }
   }
 }
 
@@ -134,6 +156,12 @@ export default {
   left: 32px;
   bottom: -0.5px;
   font-size: 2em;
+  margin-bottom: 0px;
+
+  @media @for-phone {
+    font-size: 1em;
+  }
+
 }
 
 .title-bar__input {
@@ -147,7 +175,6 @@ export default {
   font-weight: 300;
   letter-spacing: 0;
   display: block;
-  padding: 10px 0 9px 32px;
   font-size: 2em;
   font-weight: 300 !important;
   margin: 0;
@@ -160,6 +187,13 @@ export default {
   margin: 0 !important;
   width: 100%;
   font-family: 'Open Sans', sans-serif !important;
+  padding: 10px 0 9px 32px;
+
+  @media @for-phone {
+    padding: 2px 20px;
+    height: 20px;
+    font-size: 1em;
+  }
 }
 
 .title-bar__input:focus {

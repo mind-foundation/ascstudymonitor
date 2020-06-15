@@ -68,72 +68,68 @@ export default {
 
 <template>
   <nav id="menu" role="navigation">
-    <span v-if="!$store.state.loaded">Loading..</span>
-    <ul style="max-width: 250px" id="menu-content" v-else>
-      <li class="menu__filter_header" @click="toggleSortKey()">
+    <div> 
+      <div id="menu-header" @click="toggleSortKey()">
+        <div id="mobile-only-search-icon" @click='$store.commit("TOGGLE_MOBILE_SEARCH")'>
+          Search
+        </div>
         <icon-filters />
         <span>Filter</span>
-      </li>
-      <li
-        v-for="(category, key) in this.categories"
-        :key="key"
-        :data-key="key"
-        aria-level="1"
-      >
-        <a
-          href="#"
-          class="menu__category-link"
-          @click="handleMenuCategoryToggle(key)"
+      </div>
+    </div>
+    <span v-if="!$store.state.loaded">Loading..</span>
+    <div id="menu-tablet" v-else> 
+      <ul style="max-width: 250px" id="menu-content" >
+        <li
+          v-for="(category, key) in this.categories"
+          :key="key"
+          :data-key="key"
+          aria-level="1"
         >
-          <span class="menu__category-link-label">{{ category.title }}</span>
-          <span class="menu__category-link-count">{{ category.total }}</span>
-          <icon-chevron :expanded="open.includes(key)" />
-        </a>
-
-        <slide-up-down :active="open.includes(key)" :duration="200">
-          <ul class="menu vertical">
-            <li
-              class="filterItem"
-              v-for="s in filterItems[key].slice(0, 10)"
-              :key="s.label"
-              :data-value="s.label"
-              @click="toggleFilter(keyToFacet(key), s.label)"
-              :class="{
-                activeInFilter: isFilterActive(keyToFacet(key), s.label),
-              }"
-              aria-level="2"
-            >
-              {{ s.label }} ({{ s.count }})
-            </li>
-          </ul>
-          <div
-            v-if="filterItems[key].length > 10"
-            class="show-more"
-            @click="$modal.show('filter-modal')"
+          <a
+            href="#"
+            class="menu__category-link"
+            @click="handleMenuCategoryToggle(key)"
           >
-            Show more
-          </div>
-        </slide-up-down>
-      </li>
-    </ul>
+            <span class="menu__category-link-label">{{ category.title }}</span>
+            <span class="menu__category-link-count">{{ category.total }}</span>
+            <icon-chevron :expanded="open.includes(key)" />
+          </a>
 
-    <menu-bottom />
+          <slide-up-down :active="open.includes(key)" :duration="200">
+            <ul class="menu vertical">
+              <li
+                class="filterItem"
+                v-for="s in filterItems[key].slice(0, 10)"
+                :key="s.label"
+                :data-value="s.label"
+                @click="toggleFilter(keyToFacet(key), s.label)"
+                :class="{
+                  activeInFilter: isFilterActive(keyToFacet(key), s.label),
+                }"
+                aria-level="2"
+              >
+                {{ s.label }} ({{ s.count }})
+              </li>
+            </ul>
+            <div
+              v-if="filterItems[key].length > 10"
+              class="show-more"
+              @click="$modal.show('filter-modal')"
+            >
+              Show more
+            </div>
+          </slide-up-down>
+        </li>
+      </ul>
+
+      <menu-bottom />
+      </div>
   </nav>
 </template>
 
 <style lang="less" scoped>
-#nav {
-  padding: 20px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
+@import "~@/styles/variables";
 
 #menu {
   background-color: #34557f;
@@ -145,8 +141,31 @@ export default {
   justify-content: space-between;
   align-items: stretch;
   color: #fff;
+
+  @media @for-phone {
+    width: 100%;
+    height: 54px;
+    // ios sticky fix
+    z-index: 2;
+    top: 0;
+    left: 0;
+    right: 0;
+    
+    overflow:hidden;
+    -webkit-overflow-scrolling:touch;
+  }
 }
 
+#menu-tablet {
+ flex-grow: 1;
+ display: flex;
+ flex-direction: column;
+ justify-content: space-between;
+
+ @media @for-phone {
+    display: none;
+  }
+}
 #menu-content {
   padding: 10px 10px 0 10px;
   overflow: auto;
@@ -156,6 +175,7 @@ export default {
   margin-bottom: 1rem;
   line-height: 1.6;
   user-select: none;
+  flex-grow: 1;
 }
 
 #menu-content > li {
@@ -176,26 +196,48 @@ export default {
   opacity: 1;
 }
 
-.menu__filter_header {
+#menu-header {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-size: 1.2em;
   opacity: 0.5;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   user-select: none;
+  width: 100%;
+  text-align: left;
+  padding-left: 1rem;
+  box-sizing: border-box;
+
+  
+  @media @for-tablet-portrait-up {
+    margin-top: 2em;
+    align-items: center;
+  }
+
+  @media @for-phone {
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  span {
+    font-size: 1em;
+    margin-left: 0.5em;
+  }
+
+  svg {
+    height: 14px;
+    margin-left: -1px;
+  }
 }
 
-.menu__filter_header span {
-  font-size: 1em;
-  margin-left: 0.5em;
-}
+#mobile-only-search-icon {
+  cursor: pointer;
+  content: "Search";
 
-.menu__filter_header svg {
-  height: 14px;
-  margin-left: -1px;
+  @media @for-tablet-portrait-up {
+    display: none;
+  }
 }
 
 .menu__category-link {

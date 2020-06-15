@@ -5,10 +5,28 @@ exports[`Navigation.vue matches snapshot 1`] = `
   id="menu"
   role="navigation"
 >
+  <div>
+    <div
+      id="menu-header"
+    >
+      <div
+        id="mobile-only-search-icon"
+      >
+        
+        Search
+      
+      </div>
+       
+      <icon-filters-stub />
+       
+      <span>
+        Filter
+      </span>
+    </div>
+  </div>
+   
   <span>
     Loading..
   </span>
-   
-  <menu-bottom-stub />
 </nav>
 `;

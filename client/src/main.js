@@ -11,6 +11,9 @@ import router from './router'
 import store from './store'
 import constants from './constants'
 import { paramsToFilterConfiguration } from '@/mixins/Filters'
+import raf from "raf"
+
+raf.polyfill()
 
 if (process.env.NODE_ENV === 'production') {
   Sentry.init({
