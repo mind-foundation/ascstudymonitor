@@ -14,6 +14,7 @@ source <(jq -r 'to_entries[] | "export \(.key)=\"\(.value)\""' "$SECRETS_JSON")
 MONGO_HOST="mongo"
 MONGO_PORT="27017"
 MONGO_DATABASE="asc"
+MONGO_AUTH_DB="admin"
 MONGO_OUTDIR="${BACKUP_DIR}/mongodb"
 if [ -z "$BACKER_UPPER_DEV" ]; then
     MONGO_USERNAME="root"
@@ -23,6 +24,7 @@ if [ -z "$BACKER_UPPER_DEV" ]; then
               --username=$MONGO_USERNAME \
               --password=$MONGO_PASSWORD \
               --db=$MONGO_DATABASE \
+              --authenticationDatabase=$MONGO_AUTH_DB \
               --out="$MONGO_OUTDIR"
 else
     mongodump --host=$MONGO_HOST \
