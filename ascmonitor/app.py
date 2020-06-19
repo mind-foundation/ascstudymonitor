@@ -163,7 +163,7 @@ def index():
 def sitemap():
     """ Build sitemap """
     urlset = [
-        {"loc": f"https://asc-studymonitor.mind-foundation.org/{d['slug']}"}
+        {"loc": url_for("publication", slug=d["slug"], _external=True)}
         for d in document_store.documents
     ]
     return render_template_string(sitemap_template, urlset=urlset)
