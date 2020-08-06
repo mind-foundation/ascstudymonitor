@@ -38,7 +38,7 @@ export default {
     this.$store.dispatch('publications/load')
   },
   computed: mapState('publications', {
-    enoughDataToContinue: state => state.items.length > 0,
+    enoughDataToContinue: state => state.items?.length > 0,
   }),
 }
 </script>

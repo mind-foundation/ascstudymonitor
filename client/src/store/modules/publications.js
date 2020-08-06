@@ -90,14 +90,14 @@ const getters = {
   filters(state, _, rootState) {
     return paramsToFilterConfiguration(rootState.route.query || {})
   },
-  publicationsByKey: function({ publications }) {
+  publicationsByKey: function({ items }) {
     const years = {}
     const disciplines = {}
     const authorNames = {}
     const sources = {}
     const keywords = {}
 
-    for (const p of publications) {
+    for (const p of items) {
       for (const a of p.authorNames) {
         authorNames[a] = authorNames[a] || []
         authorNames[a].push(p)
