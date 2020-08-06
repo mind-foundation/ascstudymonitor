@@ -22,7 +22,7 @@ WORKDIR /app
 
 RUN pip install poetry
 COPY ./pyproject.toml ./poetry.lock /app/
-RUN poetry install
+RUN poetry install --no-dev
 
 ADD . /app
 COPY --from=builder /client/dist /app/client/dist
