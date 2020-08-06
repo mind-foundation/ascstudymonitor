@@ -46,7 +46,9 @@ event_store = EventStore(mongo)
 document_store = DocumentStore(
     authinfo=authinfo, group_id=mendeley_group_id, mongo=mongo, event_store=event_store
 )
-poster = Poster(event_store=event_store, document_store=document_store, auths=channel_auths)
+poster = Poster(
+    event_store=event_store, document_store=document_store, auths=channel_auths
+)
 
 
 @app.route("/documents.json")
@@ -141,7 +143,7 @@ def publication(slug):
     url = url_for("publication", slug=slug, _external=True)
 
     # escape newlines in abstract
-    document["abstract"] = document["abstract"].replace("\n", "\\n").replace("\r", "\\r")
+    abstract = abstract.replace("\n", "\\n").replace("\r", "\\r")
 
     return render_template(
         "index.html",
