@@ -1,4 +1,5 @@
 .venv
+*.swp
 *.egg-info
 __pycache__
 *env.sh*
