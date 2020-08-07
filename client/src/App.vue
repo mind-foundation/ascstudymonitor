@@ -9,6 +9,8 @@
 
     <router-view name="main" />
 
+    <keymap />
+
     <!-- <main id="main" v-if="enoughDataToContinue">
       <query-bar />
       <router-view />
@@ -33,6 +35,7 @@ import FilterModal from '@/components/FilterModal'
 import SearchModal from '@/components/SearchModal'
 import Logo from '@/components/Logo'
 import HeroWrap from '@/components/HeroWrap'
+import Keymap from '@/components/Keymap'
 
 export default {
   components: {
@@ -44,6 +47,7 @@ export default {
     SearchModal,
     Logo,
     HeroWrap,
+    Keymap,
   },
   created() {
     this.$store.dispatch('publications/init')
@@ -58,6 +62,12 @@ export default {
 <style lang="less">
 // @import '~@/styles/variables';
 // @import '~@/styles/core';
+
+html {
+  // font-smooth: auto;
+  -webkit-font-smoothing: antialised;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 body {
   background-color: #eef2f5;

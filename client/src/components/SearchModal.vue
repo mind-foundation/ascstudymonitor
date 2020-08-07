@@ -8,10 +8,6 @@ export default {
   methods: {
     beforeOpen() {
       window.analytics.page('SearchModal')
-      console.log('opening search modal')
-    },
-    created() {
-      console.log('created')
     },
   },
 }
@@ -24,6 +20,7 @@ export default {
     :adaptive="true"
     width="100%"
     height="100%"
+    @before-open="beforeOpen"
   >
     <div
       class="modal-container reveal bg-blue flex flex-col justify-center items-center"
@@ -39,15 +36,19 @@ export default {
         </ul>
       </div>
       <div
-        class="flex flex-grow flex-col justify-center items-center w-100 h-40 "
+        class="flex flex-grow flex-col justify-center items-center w-full h-40 "
       >
-        Search and Filter
         <search-widget />
       </div>
-      <div class="flex justify-center w-100 sm:mb-10">
-        <button class="bac">
+      <div class="flex justify-center w-full sm:mb-10">
+        <t-button
+          classes="bg-blue pt-1 pb-1 pl-20 pr-20 text-white color-red"
+          :variant="{
+            error: true,
+          }"
+        >
           Show 8 results
-        </button>
+        </t-button>
       </div>
     </div>
   </modal>
@@ -68,7 +69,6 @@ export default {
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
-  font-family: Helvetica, Arial, sans-serif;
 
   h3 {
     margin-top: 0;

@@ -1,131 +1,49 @@
 <template>
-  <div>
-    <div>
-      <t-input />
+  <div class="max-w-3xl w-full">
+    <div class="t-4 border-2 border-white w-full">
+      <input
+        ref="input"
+        class="primary-search bg-transparent color-white w-full p-4 font-light text-4xl"
+        placeholder="Search for.."
+        :value="query"
+      />
     </div>
-    <div class="bg-white">Results</div>
+    <!-- <div class="bg-white">Results</div> -->
   </div>
 </template>
 
 <script>
 export default {
   name: 'search-widget',
-  // props: ['publication'],
-  // methods: {
-  //   linkFor(network) {
-  //     return (
-  //       'https://asc-studymonitor.mind-foundation.org/p/' +
-  //       this.publication.slug +
-  //       '?utm_source=' +
-  //       network +
-  //       '&utm_medium=share_publication&utm_campaign=' +
-  //       window.COMMIT_HASH
-  //     )
-  //   },
-  //   trackShare(channel) {
-  //     window.analytics.track('Publication shared', {
-  //       channel,
-  //     })
-  //   },
-  //   doCopy() {
-  //     this.trackShare('copy')
-  //     this.$copyText(this.linkFor('copy')).then(
-  //       () => {
-  //         this.$toasted.success('Link copied to clipboard', {
-  //           className: 'radu-make-me-pretty-please',
-  //           theme: 'toasted-primary',
-  //           position: 'top-right',
-  //           duration: 3000,
-  //         })
-  //       },
-  //       () => {
-  //         this.$toasted.show('hello billo XX')
-  //       },
-  //     )
-  //   },
-  // },
-  // computed: {
-  //   params() {
-  //     return {
-  //       title: this.publication.title,
-  //       description: this.publication.abstract,
-  //       quote: 'I’m a quote',
-  //       hashtags: 'hashy,hash,hash2020,hash4you',
-  //     }
-  //   },
-  // },
+  data: () => ({
+    query: '',
+  }),
+
+  mounted() {
+    console.log('created')
+    // setTimeout(() => {
+    // console.log("timer fired")
+    this.$refs.input.focus()
+    // })
+  },
 }
 </script>
 
 <style lang="less">
-#search-widget {
-  display: inline-flex;
+.primary-search {
+  background-color: transparent;
+  outline-style: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
 
-  svg {
-    vertical-align: bottom;
-    transform: translateY(2px);
-    zoom: 0.9;
-
-    path {
-      height: 20px;
-      fill: #34557f;
-    }
+  &::placeholder {
+    color: #fff;
+    opacity: 0.3;
+    // color: red;
   }
 
-  a {
-    color: #34557f;
-    font-weight: bold;
+  // ::placeholder {
 
-    &:hover {
-      color: #607a9b;
-
-      svg {
-        transform: translateY(2px);
-
-        path {
-          fill: #607a9b;
-        }
-      }
-    }
-  }
-
-  .copy-wrap {
-    color: #34557f;
-    font-weight: bold;
-    cursor: pointer;
-
-    svg {
-      height: 24px;
-      width: 24px;
-    }
-
-    &:hover {
-      color: #607a9b;
-
-      svg {
-        transform: translateY(2px);
-
-        path {
-          fill: #607a9b;
-        }
-      }
-    }
-  }
-}
-
-.segment {
-  margin: 0 10px;
-
-  a,
-  div > {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-}
-
-.radu-make-me-pretty-please {
-  background-color: #c31d1d !important;
+  // }
 }
 </style>

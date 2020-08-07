@@ -3178,7 +3178,7 @@ core-js-compat@^3.6.2, core-js-compat@^3.6.5:
     browserslist "^4.8.5"
     semver "7.0.0"
 
-core-js@^2.4.0:
+core-js@^2.4.0, core-js@^2.6.5:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.11.tgz#38831469f9922bded8ee21c9dc46985e0399308c"
   integrity sha512-5wjnpaT/3dV+XB4borEsnAYQchn00XSgTAWKDkEqv+K8KevjbzmofK6hfJ9TZIlpj2N0xQpazy7PiRQiWHqzWg==
@@ -9954,6 +9954,13 @@ uuid@^3.3.2, uuid@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+v-hotkey@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/v-hotkey/-/v-hotkey-0.8.0.tgz#134d64b30a3eeeb53bcb00eba81fdf74e21a032a"
+  integrity sha512-TWxiUbd5DPF/ClnGsa0VHw1jXX6xA8G8jNy/qFeULVz28cq8ZFz+SGNcniXj7WHazoqRUSzL20y/VDiZ+yzprw==
+  dependencies:
+    core-js "^2.6.5"
 
 v8-compile-cache@^2.0.3:
   version "2.1.1"

@@ -1,9 +1,13 @@
 module.exports = {
   theme: {
     extend: {},
+    fontFamily: {
+      sans: ['"Open Sans"', 'sans-serif'],
+    },
     colors: {
       blue: '#6B97B2',
-      white: '#FFF',
+      white: '#EEF2F5',
+      red: 'red',
     },
   },
   variants: {},

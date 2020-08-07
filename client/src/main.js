@@ -5,6 +5,7 @@ import VModal from 'vue-js-modal'
 import VueClipboard from 'vue-clipboard2'
 import Toasted from 'vue-toasted'
 import VueTailwind from 'vue-tailwind'
+import VueHotkey from 'v-hotkey'
 import * as Sentry from '@sentry/browser'
 import { Vue as VueIntegration } from '@sentry/integrations'
 import App from './App.vue'
@@ -40,6 +41,7 @@ Vue.use(VueClipboard)
 Vue.use(Toasted)
 Vue.use(VueTailwind, theme)
 Vue.use(VModal)
+Vue.use(VueHotkey)
 
 new Vue({
   router,
