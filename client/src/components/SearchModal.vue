@@ -46,6 +46,7 @@ export default {
           :variant="{
             error: true,
           }"
+          tabindex="-1"
         >
           Show 8 results
         </t-button>
@@ -62,6 +63,7 @@ export default {
   bottom: 0;
   right: 0;
 }
+
 .modal-container {
   height: 100%;
   width: 100%;

@@ -38,14 +38,12 @@ export default {
 
   h3 {
     text-align: left;
-    color: #333;
     font-weight: 300;
   }
 
   p {
     margin: 0;
     text-align: left;
-    color: #333;
     line-height: 1.8;
     padding-bottom: 20px;
   }

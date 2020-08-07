@@ -6,8 +6,13 @@ module.exports = {
     },
     colors: {
       blue: '#6B97B2',
-      white: '#EEF2F5',
-      red: 'red',
+      superwhite: '#FFFFFF',
+      white: '#EEF2F5', // contrast color
+      black: '#00212b', // main font color
+      red: '#AB0400', // danger color
+      navy: '#0B2D3D', // secondary font color
+      lightblue: '#6B97B2',
+      gray: '#C4D5E0',
     },
   },
   variants: {},

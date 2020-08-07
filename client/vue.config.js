@@ -30,6 +30,10 @@ module.exports = {
       },
     },
   },
+  devServer: {
+    // enables debugging on remote iPad :)
+    disableHostCheck: true,
+  },
   ...(analyzeBundle && {
     pluginOptions: {
       webpackBundleAnalyzer: {
