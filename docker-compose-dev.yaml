@@ -32,9 +32,6 @@ services:
     ports:
       - 80:80
 
-  # cache_warmer:
-  #   build: cache-warmer/
-
 volumes:
   mongodb-data:
     name: asc-mongodb-dev

@@ -50,13 +50,22 @@ services:
       - 443:443
       - 80:80
 
-  cache_warmer:
-    build: cache-warmer/
-
-  backer-upper:
-    build: backer-upper/
+  cronicle:
+    # scheduler for periodic tasks
+    # configurable via web interface
+    # username: admin, password: admin
+    # use ssh tunnel to configure
+    build:
+      context: ./cronicle
+    hostname: localhost
     volumes:
+      - ./cronicle/data:/opt/cronicle/data
+      - ./cronicle/logs:/opt/cronicle/logs
+      - ./cronicle/scripts:/opt/cronicle/app
       - ./etc/letsencrypt:/letsencrypt
+    ports:
+      - 127.0.0.1:3012:3012
+    restart: always
     secrets:
       - asc-secret
 
