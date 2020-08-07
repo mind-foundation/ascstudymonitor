@@ -19,3 +19,6 @@ data
 
 ./cronicle/data/*
 cronicle/logs/
+
+node_modules/.yarn-integrity
+yarn.lock
