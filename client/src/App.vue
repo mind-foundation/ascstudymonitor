@@ -1,19 +1,25 @@
 <template>
-  <div id="app">
-    <navigation />
+  <div id="app" class="lg:container lg:mx-aut4">
+    <logo />
+    <hero-wrap>
+      <router-view name="hero" />
+    </hero-wrap>
+    <!-- <router-view name="main" /> -->
+    <!-- <navigation />  -->
 
-    <main id="main" v-if="enoughDataToContinue">
+    <router-view name="main" />
+
+    <!-- <main id="main" v-if="enoughDataToContinue">
       <query-bar />
       <router-view />
     </main>
 
     <transition name="fade">
       <mindblower v-if="!enoughDataToContinue" />
-    </transition>
-
-    <info-modal />
+    </transition>-->
 
     <filter-modal />
+    <search-modal />
   </div>
 </template>
 
@@ -24,6 +30,9 @@ import QueryBar from '@/components/QueryBar'
 import Mindblower from '@/components/Mindblower'
 import InfoModal from '@/components/InfoModal'
 import FilterModal from '@/components/FilterModal'
+import SearchModal from '@/components/SearchModal'
+import Logo from '@/components/Logo'
+import HeroWrap from '@/components/HeroWrap'
 
 export default {
   components: {
@@ -32,6 +41,9 @@ export default {
     Mindblower,
     InfoModal,
     FilterModal,
+    SearchModal,
+    Logo,
+    HeroWrap,
   },
   created() {
     this.$store.dispatch('publications/init')
@@ -44,23 +56,22 @@ export default {
 </script>
 
 <style lang="less">
-@import '~@/styles/variables';
-@import '~@/styles/core';
+// @import '~@/styles/variables';
+// @import '~@/styles/core';
 
-#main {
-  position: relative;
-  @media @for-tablet-portrait-up {
-    margin-left: @tablet-navigation-width;
-    margin-top: 70px;
-    width: calc(100vw - @tablet-navigation-width);
-  }
+body {
+  background-color: #eef2f5;
+  color: #0b2d3d;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
+// .fade-enter-active,
+// .fade-leave-active {
+//   transition: opacity 0.5s;
+// }
+// .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+//   opacity: 0;
+// }
 </style>

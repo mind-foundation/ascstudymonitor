@@ -25,14 +25,14 @@ export default {
 </template>
 
 <style lang="less" scoped>
-@import "~@/styles/variables";
+@import '~@/styles/variables';
 
 .chevron {
   transition: transform 0.2s ease-in;
   padding: 10px; // increase hit box
   transform: rotate(-90deg);
   user-select: none;
-  width: 36px;
+  width: 40px;
 
   @media @for-phone {
     width: 30px;

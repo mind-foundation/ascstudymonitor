@@ -41,6 +41,7 @@ const mutations = {
   },
   init: (state, publication) => {
     const transformed = transformPublication(publication)
+    transformed.length = 3
     Vue.set(state, 'items', [transformed])
   },
   load: (state, publications) => {

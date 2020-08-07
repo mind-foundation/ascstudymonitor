@@ -28,6 +28,7 @@
     "vue-router": "^3.2.0",
     "vue-slide-up-down": "^2.0.1",
     "vue-social-sharing": "^3.0.0-beta.11",
+    "vue-tailwind": "^1.0.2",
     "vue-toasted": "^1.1.28",
     "vue-typer": "^1.2.0",
     "vuejs-paginate": "^2.1.0",
@@ -51,6 +52,9 @@
     "eslint-plugin-vue": "^6.2.2",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
+    "postcss-assets": "^5.0.0",
+    "postcss-nested": "^4.2.3",
+    "tailwindcss": "^1.6.2",
     "vue-template-compiler": "^2.6.11",
     "wallaby-vue-compiler": "^1.0.6"
   },
@@ -78,13 +82,6 @@
         }
       }
     ]
-  },
-  "prettier": {
-    "trailingComma": "all",
-    "tabWidth": 2,
-    "semi": false,
-    "singleQuote": true,
-    "arrowParens": "avoid"
   },
   "browserslist": [
     "> 1%",

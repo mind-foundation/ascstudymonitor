@@ -10,14 +10,7 @@
       </div>
 
       <div class="content" @click.stop>
-        <ul class="entry__disciplines">
-          <icon-science />
-          <li v-for="d in publication.disciplines" v-bind:key="d">
-            <a @click="toggleFilter('discipline', d)">{{ d }}</a>
-          </li>
-        </ul>
-
-        <h3>
+        <h3 class="text-3xl">
           {{ publication.title }}
 
           <icon-download
@@ -40,6 +33,26 @@
             </li>
           </div>
         </ul>
+
+        <div class="flex flex-row">
+          <div class="entry__year_source" @click.stop>
+            <a
+              class="entry__year_source__year"
+              @click="toggleFilter('year', publication.year)"
+              >{{ publication.year }}</a
+            >
+            <a @click="toggleFilter('journal', publication.source)">{{
+              publication.source
+            }}</a>
+          </div>
+          <ul class="entry__disciplines">
+            <icon-science />
+            <li v-for="d in publication.disciplines" v-bind:key="d">
+              <a @click="toggleFilter('discipline', d)">{{ d }}</a>
+            </li>
+          </ul>
+        </div>
+
         <slide-up-down :active="expanded" :duration="200">
           <div class="entry__abstract">
             <div class="entry__abstract_inner">
@@ -53,17 +66,6 @@
             </div>
           </div>
         </slide-up-down>
-
-        <div class="entry__year_source" @click.stop>
-          <a
-            class="entry__year_source__year"
-            @click="toggleFilter('year', publication.year)"
-            >{{ publication.year }}</a
-          >
-          <a @click="toggleFilter('journal', publication.source)">{{
-            publication.source
-          }}</a>
-        </div>
 
         <div v-if="expanded">
           <div
@@ -192,19 +194,15 @@ export default {
 
 .row {
   display: flex;
+  background-color: #fff;
 }
 
 .chevron-wrapper {
   min-width: 110px;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   padding-top: 40px;
-
-  @media @for-phone {
-    min-width: 60px;
-    align-items: start;
-    padding-top: 64px;
-  }
 }
 
 .entry {
@@ -214,7 +212,6 @@ export default {
 
   h3 {
     margin-top: 0;
-    font-size: 1.8em;
     color: #333;
     font-weight: 700;
     letter-spacing: 0.015em;

@@ -4,6 +4,7 @@ import { sync } from 'vuex-router-sync'
 import VModal from 'vue-js-modal'
 import VueClipboard from 'vue-clipboard2'
 import Toasted from 'vue-toasted'
+import VueTailwind from 'vue-tailwind'
 import * as Sentry from '@sentry/browser'
 import { Vue as VueIntegration } from '@sentry/integrations'
 import App from './App.vue'
@@ -11,7 +12,9 @@ import router from './router'
 import store from './store'
 import constants from './constants'
 import { paramsToFilterConfiguration } from '@/mixins/Filters'
-import raf from "raf"
+import raf from 'raf'
+import '../assets/tailwind.css'
+import theme from '@/styles/tailwind.theme.js'
 
 raf.polyfill()
 
@@ -34,8 +37,9 @@ sync(store, router)
 
 Vue.use(VueSocialSharing)
 Vue.use(VueClipboard)
-Vue.use(VModal)
 Vue.use(Toasted)
+Vue.use(VueTailwind, theme)
+Vue.use(VModal)
 
 new Vue({
   router,

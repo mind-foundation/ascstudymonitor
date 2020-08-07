@@ -3,25 +3,30 @@ import VueRouter from 'vue-router'
 import qs from 'qs'
 
 import List from '../views/List.vue'
-import Publication from '../views/Publication.vue'
-
+import ListHero from '../components/ListHero.vue'
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: window.urlForPublication,
-    name: 'Publication',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Publication,
-    props: true,
-  },
+  // {
+  //   path: window.urlForPublication,
+  //   name: 'Publication',
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+  //   components: {
+  //     hero: PublicationHero,
+  //     // main:Publication
+  //   },
+  //   props: true,
+  // },
   {
     path: '*',
     name: 'List',
-    component: List,
+    components: {
+      hero: ListHero,
+      main: List,
+    },
   },
 ]
 

@@ -1,9 +1,13 @@
 <template>
-  <div id="list"
-   :class="{
+  <div
+    id="list"
+    :class="{
       mobileBarActivated: $store.state.mobileBarActivated,
     }"
-    >
+  >
+    <div class="mb-12 mt-2 flex items-center justify-center">
+      <t-button @click="$modal.show('search-modal')">Test</t-button>
+    </div>
     <div v-if="pagination.items.length === 0" class="message">
       <p v-if="!loaded">
         Loading..
@@ -95,7 +99,7 @@ export default {
     pageCount() {
       return Math.ceil(this.publications.length / this.$constants.PAGE_SIZE)
     },
-      pagination() {
+    pagination() {
       const { route } = this.$store.state
       const { page = 1 } = route.query
       const pageIndex = Math.min(page, this.pageCount) - 1
@@ -114,14 +118,14 @@ export default {
       loaded: state => state.loaded,
     }),
     ...mapGetters('publications', {
-      publications: 'queryPublications'
-    })
-  }
+      publications: 'queryPublications',
+    }),
+  },
 }
 </script>
 
 <style lang="less">
-@import "~@/styles/variables";
+@import '~@/styles/variables';
 
 #list {
   margin-top: 70px;
@@ -138,13 +142,13 @@ export default {
     margin-top: @mobile-header-height;
 
     &.mobileBarActivated {
-      transform: translateY( 34px );
+      transform: translateY(34px);
     }
   }
 }
 
 #list :nth-child(even) .entry {
-  background-color: #F6F6F6;
+  background-color: #f6f6f6;
 }
 
 .message {
