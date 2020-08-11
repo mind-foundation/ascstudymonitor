@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # prepare backup directory
 timestamp=$(date -u +'%Y-%m-%dT%H:%M:%S%Z')
 BACKUP_DIR="/backups/asc-studymonitor-$timestamp"
@@ -37,7 +39,7 @@ fi
 rsync -av /letsencrypt "$BACKUP_DIR"
 
 # cronicle
-rsync -av /cronicle/data "§BACKUP_DIR"/cronicle_data
+rsync -av /opt/cronicle/data "§BACKUP_DIR"/cronicle_data
 
 # prepare backup archive for upload
 cd ..
