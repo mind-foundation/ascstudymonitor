@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        padding: 0;
+        background-color: green;
+        width: 1200px;
+        height: 628px;
+        font-family: 'Open Sans';
+      }
+      #wrapper {
+        background-image: url('/background.png');
+        background-size: cover;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 3px solid red;
+        border-right: 3px solid red;
+        box-sizing: content-box;
+      }
+
+      h1 {
+        margin: 0;
+        width: 60%;
+        font-size: 80px;
+        text-align: center;
+      }
+    </style>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="wrapper">
+      <h1><%= publication.title %></h1>
+    </div>
+  </body>
+</html>
