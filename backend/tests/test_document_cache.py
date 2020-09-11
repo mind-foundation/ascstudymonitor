@@ -1,6 +1,4 @@
 import pytest
-from dateutil.parser import parse as parse_datetime
-from mongomock import MongoClient
 
 from ascmonitor.document_cache import DocumentCache, Changes
 
@@ -18,45 +16,10 @@ def assert_changes_equal(changes, created=None, updated=None, removed=None):
         if expected is None:
             assert change == []
         else:
-            for a, b in zip(sorted(change, key=sort_key), sorted(expected, key=sort_key)):
+            for a, b in zip(
+                sorted(change, key=sort_key), sorted(expected, key=sort_key)
+            ):
                 assert_doc_id_equal(a, b)
-
-
-@pytest.fixture
-def documents():
-    return [
-        {
-            "title": "MDMA-assisted PTSD Therapy",
-            "authors": [{"first_name": "Rick", "last_name": "Doblin"}],
-            "year": 2020,
-            "source": "ASC Journal",
-            "websites": ["https://example.com"],
-            "id": "1",
-            "created": parse_datetime("2020-01-01T12:00:00.000"),
-            "file_attached": False,
-            "abstract": "First abstract",
-            "disciplines": ["Pharmacology"],
-            "slug": "doblin",
-        },
-        {
-            "title": "Free Energy Principle",
-            "authors": [{"first_name": "Karl", "last_name": "Friston"}],
-            "year": 2020,
-            "source": "ASC Journal",
-            "websites": ["https://example.com"],
-            "id": "2",
-            "created": parse_datetime("2020-01-02T12:00:00.000"),
-            "file_attached": True,
-            "abstract": "Second abstract",
-            "disciplines": ["Pharmacology"],
-            "slug": "friston",
-        },
-    ]
-
-
-@pytest.fixture
-def mongo():
-    return MongoClient()["asc-test"]
 
 
 @pytest.fixture

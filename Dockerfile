@@ -21,10 +21,10 @@ EXPOSE 8000
 WORKDIR /app
 
 RUN pip install poetry
-COPY ./pyproject.toml ./poetry.lock /app/
+COPY ./backend/pyproject.toml ./backend/poetry.lock /app/
 RUN poetry install --no-dev
 
-ADD . /app
+ADD ./backend /app
 COPY --from=builder /client/dist /app/client/dist
 
 CMD ["poetry", "run", "gunicorn", "-c", "etc/gunicorn.py", "ascmonitor.app:app"]

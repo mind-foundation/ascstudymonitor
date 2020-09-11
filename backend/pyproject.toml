@@ -19,10 +19,11 @@ attrs = "^19.3.0"
 python-dateutil = "^2.8.1"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.0"
+pytest = "^6.0"
 pylint = "^2.5.2"
 mypy = "^0.770"
 mongomock = "^3.19.0"
+ipdb = "^0.13.3"
 
 [build-system]
 requires = ["poetry>=0.12"]
