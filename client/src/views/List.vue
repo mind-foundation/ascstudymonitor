@@ -1,68 +1,9 @@
-<template>
-  <div
-    id="list"
-    :class="{
-      mobileBarActivated: $store.state.mobileBarActivated,
-    }"
-  >
-    <div class="mb-12 mt-2 flex items-center justify-center">
-      <t-button
-        @click="$modal.show('search-modal')"
-        classes="bg-blue pt-3 pb-3 pl-20 pr-20 text-white color-red font-bold"
-        >Search and Filter all Publications</t-button
-      >
-    </div>
-    <div v-if="pagination.items.length === 0" class="message">
-      <p v-if="!loaded">
-        Loading..
-      </p>
-      <p v-else>
-        No articles found matching your query. Try a different search instead.
-        <router-link to="/">Or reset search.</router-link>
-      </p>
-    </div>
-    <ul>
-      <publication-list-item
-        :publicationId="publication.id"
-        v-for="publication in this.pagination.items"
-        :key="publication.id"
-      />
-      <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
-          publication.title
-        }}</router-link> -->
-    </ul>
-
-    <div v-if="pagination.items.length !== 0" class="pagination--wrapper">
-      <paginate
-        v-model="page"
-        :force-page="page"
-        :page-count="pageCount"
-        :page-range="3"
-        :margin-pages="2"
-        :prev-text="'&lt;'"
-        :next-text="'&gt;'"
-        :break-view-text="'…'"
-        :container-class="'pagination--container'"
-        :active-class="'pagination--active'"
-        :page-class="'pagination--page-item'"
-        :page-link-class="'pagination--page-link'"
-        :prev-class="'pagination--page-item'"
-        :next-class="'pagination--page-item'"
-      >
-      </paginate>
-      <p>
-        Showing {{ pagination.start + 1 }} to {{ pagination.end }} of
-        {{ publications.length }} entries
-      </p>
-    </div>
-  </div>
-</template>
-
 <script>
 import Vue from 'vue'
 import Paginate from 'vuejs-paginate'
 import { mapGetters, mapState } from 'vuex'
-import PublicationListItem from '@/components/PublicationListItem'
+import PublicationListItem from '@/components/PublicationListItem/PublicationListItem'
+import SearchButton from '@/components/SearchButton'
 Vue.component('paginate', Paginate)
 
 export default {
@@ -72,6 +13,7 @@ export default {
   },
   components: {
     PublicationListItem,
+    SearchButton,
   },
   computed: {
     page: {
@@ -129,6 +71,62 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div
+    id="list"
+    :class="{
+      mobileBarActivated: $store.state.mobileBarActivated,
+    }"
+  >
+    <div class="mb-12 mt-2 flex items-center justify-center">
+      <search-button />
+    </div>
+    <div v-if="pagination.items.length === 0" class="message">
+      <p v-if="!loaded">
+        Loading..
+      </p>
+      <p v-else>
+        No articles found matching your query. Try a different search instead.
+        <router-link to="/">Or reset search.</router-link>
+      </p>
+    </div>
+    <ul>
+      <publication-list-item
+        :publicationId="publication.id"
+        v-for="publication in this.pagination.items"
+        :key="publication.id"
+      />
+      <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
+          publication.title
+        }}</router-link> -->
+    </ul>
+
+    <div v-if="pagination.items.length !== 0" class="pagination--wrapper">
+      <paginate
+        v-model="page"
+        :force-page="page"
+        :page-count="pageCount"
+        :page-range="3"
+        :margin-pages="2"
+        :prev-text="'&lt;'"
+        :next-text="'&gt;'"
+        :break-view-text="'…'"
+        :container-class="'pagination--container'"
+        :active-class="'pagination--active'"
+        :page-class="'pagination--page-item'"
+        :page-link-class="'pagination--page-link'"
+        :prev-class="'pagination--page-item'"
+        :next-class="'pagination--page-item'"
+      >
+      </paginate>
+      <p>
+        Showing {{ pagination.start + 1 }} to {{ pagination.end }} of
+        {{ publications.length }} entries
+      </p>
+    </div>
+  </div>
+</template>
 
 <style lang="less">
 @import '~@/styles/variables';

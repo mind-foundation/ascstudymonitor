@@ -12,8 +12,4 @@ export default {
   </div>
 </template>
 
-<style>
-/* #container {
-  margin: 20;
-} */
-</style>
+<style></style>

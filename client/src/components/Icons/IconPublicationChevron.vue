@@ -33,6 +33,7 @@ export default {
   transform: rotate(-90deg);
   user-select: none;
   width: 54px;
+  margin-top: 3px;
 
   @media @for-phone {
     width: 30px;

@@ -4,7 +4,7 @@ export default {
 }
 </script>
 <template>
-  <div class="entry__icon">
+  <div class="container inline-block">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="16.586"
@@ -26,26 +26,25 @@ export default {
 </template>
 
 <style lang="less" scoped>
-.entry__icon {
+.container {
   width: 35px;
   min-width: 35px;
-  display: inline-block;
 }
 
-.entry__icon .l {
+.container .l {
   fill: none;
   stroke: #333;
   stroke-width: 1px;
 }
 
-.entry__authors svg {
+.container svg {
   height: 18px;
   position: relative;
   bottom: -4px;
   left: 4px;
 }
 
-.entry__authors svg .a3 {
+.container svg .a3 {
   fill: none;
   stroke: #333;
   stroke-width: 1px;
