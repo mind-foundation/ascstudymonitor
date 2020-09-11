@@ -6,7 +6,11 @@
     }"
   >
     <div class="mb-12 mt-2 flex items-center justify-center">
-      <t-button @click="$modal.show('search-modal')">Test</t-button>
+      <t-button
+        @click="$modal.show('search-modal')"
+        classes="bg-blue pt-3 pb-3 pl-20 pr-20 text-white color-red font-bold"
+        >Search and Filter all Publications</t-button
+      >
     </div>
     <div v-if="pagination.items.length === 0" class="message">
       <p v-if="!loaded">
@@ -18,12 +22,14 @@
       </p>
     </div>
     <ul>
-      <li v-for="publication in this.pagination.items" :key="publication.id">
-        <publication :publicationId="publication.id" />
-        <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
+      <publication-list-item
+        :publicationId="publication.id"
+        v-for="publication in this.pagination.items"
+        :key="publication.id"
+      />
+      <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
           publication.title
         }}</router-link> -->
-      </li>
     </ul>
 
     <div v-if="pagination.items.length !== 0" class="pagination--wrapper">
@@ -56,7 +62,7 @@
 import Vue from 'vue'
 import Paginate from 'vuejs-paginate'
 import { mapGetters, mapState } from 'vuex'
-import Publication from './Publication'
+import PublicationListItem from '@/components/PublicationListItem'
 Vue.component('paginate', Paginate)
 
 export default {
@@ -65,7 +71,7 @@ export default {
     window.analytics.page('List')
   },
   components: {
-    Publication,
+    PublicationListItem,
   },
   computed: {
     page: {
@@ -128,7 +134,7 @@ export default {
 @import '~@/styles/variables';
 
 #list {
-  margin-top: 70px;
+  margin-top: 30px;
   scroll-behavior: smooth;
   @media screen and (prefers-reduced-motion: reduce) {
     html {
@@ -145,10 +151,6 @@ export default {
       transform: translateY(34px);
     }
   }
-}
-
-#list :nth-child(even) .entry {
-  background-color: #f6f6f6;
 }
 
 .message {

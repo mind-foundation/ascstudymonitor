@@ -5,7 +5,7 @@ export default {
 </script>
 
 <template>
-  <span v-hotkey="keymap" v-show="show">
+  <span v-hotkey="keymap">
     Press `enter` to toggle search! Hold `enter` to hide me!
   </span>
 </template>

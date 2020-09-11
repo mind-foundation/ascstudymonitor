@@ -1,4 +1,5 @@
 const git = require('git-rev-sync')
+const path = require('path')
 
 const getGitHash = () => {
   let hash = ''
@@ -50,6 +51,8 @@ module.exports = {
       //   .use(BundleAnalyzerPlugin)
       //   .init(Plugin => new Plugin({}))
     }
+
+    config.resolve.alias.set('assets', path.resolve(__dirname, 'assets'))
 
     config.plugin('define').tap(definitions => {
       const pkgVersion = JSON.stringify(require('./package.json').version)

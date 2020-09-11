@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="lg:container lg:mx-aut4">
     <logo />
+    <bubbles />
     <hero-wrap>
       <router-view name="hero" />
     </hero-wrap>
@@ -27,22 +28,24 @@
 
 <script>
 import { mapState } from 'vuex'
-import Navigation from '@/components/Navigation'
-import QueryBar from '@/components/QueryBar'
-import Mindblower from '@/components/Mindblower'
-import InfoModal from '@/components/InfoModal'
+// import Navigation from '@/components/Navigation'
+// import QueryBar from '@/components/QueryBar'
+// import Mindblower from '@/components/Mindblower'
+// // import InfoModal from '@/components/InfoModal'
 import FilterModal from '@/components/FilterModal'
 import SearchModal from '@/components/SearchModal'
 import Logo from '@/components/Logo'
+import Bubbles from '@/components/Bubbles'
 import HeroWrap from '@/components/HeroWrap'
 import Keymap from '@/components/Keymap'
 
 export default {
   components: {
-    Navigation,
-    QueryBar,
-    Mindblower,
-    InfoModal,
+    // Navigation,
+    // QueryBar,
+    Bubbles,
+    // Mindblower,
+    // InfoModal,
     FilterModal,
     SearchModal,
     Logo,

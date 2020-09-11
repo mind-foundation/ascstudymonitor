@@ -11,6 +11,7 @@ module.exports = {
       black: '#00212b', // main font color
       red: '#AB0400', // danger color
       navy: '#0B2D3D', // secondary font color
+      aqua: '#34557F', // link color disciplines
       lightblue: '#6B97B2',
       gray: '#C4D5E0',
     },

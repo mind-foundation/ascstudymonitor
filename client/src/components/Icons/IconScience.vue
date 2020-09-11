@@ -4,7 +4,7 @@ export default {
 }
 </script>
 <template>
-  <div class="entry__icon">
+  <div class="wrapper inline-block">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="25"
@@ -39,51 +39,34 @@ export default {
 </template>
 
 <style lang="less" scoped>
-.filter_header__svg_a,
-.filter_header__svg_d {
-  fill: #fff;
-}
-.filter_header__svg_a,
-.filter_header__svg_b {
-  stroke: #fff;
-}
-.filter_header__svg_b {
-  fill: #fff;
-}
-.filter_header__svg_c {
-  stroke: none;
-}
-
-.entry__icon .l {
+.wrapper .l {
   fill: none;
   stroke: #333;
   stroke-width: 1px;
 }
 
-.entry__disciplines {
+.wrapper {
   list-style: none;
-  padding-bottom: 10px;
 }
-.entry__disciplines a {
+.wrapper a {
   color: #34557f;
   font-size: 1.2em;
   font-weight: 700;
   margin-right: 8px;
 }
 
-.entry__icon {
+.wrapper {
   width: 32px;
   min-width: 32px;
 }
 
-.entry__disciplines svg {
+.wrapper svg {
   height: 20px;
   position: relative;
-  bottom: -5px;
-  left: 0.05em;
+  bottom: -3px;
 }
 
-.entry__disciplines svg .a4 {
+.wrapper svg .a4 {
   fill: none;
   stroke: #34557f;
   stroke-width: 1px;

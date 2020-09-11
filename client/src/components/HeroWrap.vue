@@ -5,7 +5,9 @@ export default {
 </script>
 
 <template>
-  <div class="w-full h-30 text-4xl mt-20 mb-20 text-center font-light">
+  <div
+    class="w-full md:w-9/12 h-30 text-4xl m-auto mt-24 text-center font-light"
+  >
     <slot />
   </div>
 </template>

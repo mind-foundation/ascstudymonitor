@@ -9,7 +9,7 @@ export default {
     xmlns="http://www.w3.org/2000/svg"
     class="chevron"
     data-id="${id}"
-    viewBox="0 0 35.912 20.077"
+    viewBox="0 0 36 21"
     v-bind:class="{
       expanded: expanded,
       selectable: selectable,
@@ -32,7 +32,7 @@ export default {
   padding: 10px; // increase hit box
   transform: rotate(-90deg);
   user-select: none;
-  width: 40px;
+  width: 54px;
 
   @media @for-phone {
     width: 30px;

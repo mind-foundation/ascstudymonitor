@@ -1,109 +1,100 @@
 <template>
-  <div class="entry">
-    <span v-if="!publication">Loading..</span>
-    <div class="row" v-if="publication">
-      <div class="chevron-wrapper" @click="toggleExpand">
-        <icon-publication-chevron
-          :expanded="expanded"
-          :selectable="!isDetailView"
-        />
-      </div>
-
-      <div class="content" @click.stop>
-        <h3 class="text-3xl">
-          {{ publication.title }}
-
-          <icon-download
-            @click="download(publication)"
-            v-if="publication.file_attached"
-            big="true"
-          />
-        </h3>
-
-        <ul class="entry__authors">
-          <icon-author />
-          <div class="entry_authors_holder" @click.stop>
-            <li
-              v-for="(authorName, index) in publication.authorNames"
-              :key="index"
-            >
-              <a @click="toggleFilter('author', authorName)">{{
-                authorName
-              }}</a>
-            </li>
-          </div>
-        </ul>
-
-        <div class="flex flex-row">
-          <div class="entry__year_source" @click.stop>
-            <a
-              class="entry__year_source__year"
-              @click="toggleFilter('year', publication.year)"
-              >{{ publication.year }}</a
-            >
-            <a @click="toggleFilter('journal', publication.source)">{{
-              publication.source
-            }}</a>
-          </div>
-          <ul class="entry__disciplines">
-            <icon-science />
-            <li v-for="d in publication.disciplines" v-bind:key="d">
-              <a @click="toggleFilter('discipline', d)">{{ d }}</a>
-            </li>
-          </ul>
-        </div>
-
-        <slide-up-down :active="expanded" :duration="200">
-          <div class="entry__abstract">
-            <div class="entry__abstract_inner">
-              <icon-abstract />
-              <div class="entry__abstract_text" v-if="publication.abstract">
-                {{ publication.abstract }}
-              </div>
-              <div class="entry__abstract_text" v-else>
-                Abstract missing.
-              </div>
-            </div>
-          </div>
-        </slide-up-down>
-
-        <div v-if="expanded">
-          <div
-            class="entry__downloads-item"
-            v-for="website in publication.websites"
-            v-bind:key="website"
-          >
-            <icon-link />
-            <a target="_blank" rel="noopener noreferrer" :href="website"
-              >Visit publisher website
-            </a>
-          </div>
-
-          <div class="entry__downloads-item" v-if="publication.file_attached">
-            <icon-download big="false" />
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              :href="$api + '/documents/' + publication.id + '/download'"
-              >Download full text</a
-            >
-          </div>
-
-          <social-bar :publication="publication" />
-
-          <div
-            v-if="recommendations && recommendations.length"
-            class="card-container"
-          >
-            <div v-for="r in recommendations" v-bind:key="r.id">
-              <router-link :to="getLinkTo(r)">{{ r.title }}</router-link>
-            </div>
-          </div>
-        </div>
-        <!-- <router-link :to="{ path: '/' }">Back to all</router-link> -->
-      </div>
+  <li class="row pt-8 pb-8 mb-5 pr-8">
+    <div class="chevron-wrapper pt-3" @click="toggleExpand">
+      <icon-publication-chevron
+        :expanded="expanded"
+        :selectable="!isDetailView"
+      />
     </div>
-  </div>
+
+    <div class="content" @click.stop>
+      <h3 class="text-3xl">
+        {{ publication.title }}
+
+        <icon-download
+          @click="download(publication)"
+          v-if="publication.file_attached"
+          big="true"
+        />
+      </h3>
+
+      <ul class="entry__authors">
+        <icon-author />
+        <div class="entry_authors_holder" @click.stop>
+          <li
+            v-for="(authorName, index) in publication.authorNames"
+            :key="index"
+          >
+            <a @click="toggleFilter('author', authorName)">{{ authorName }}</a>
+          </li>
+        </div>
+      </ul>
+
+      <div class="flex flex-row justify-between">
+        <div class="entry__year_source" @click.stop>
+          <a
+            class="entry__year_source__year"
+            @click="toggleFilter('year', publication.year)"
+            >{{ publication.year }}</a
+          >
+          <a @click="toggleFilter('journal', publication.source)">{{
+            publication.source
+          }}</a>
+        </div>
+
+        <disciplines-list :disciplines="publication.disciplines" />
+      </div>
+
+      <slide-up-down :active="expanded" :duration="200">
+        <div class="entry__abstract">
+          <div class="entry__abstract_inner">
+            <icon-abstract />
+            <div class="entry__abstract_text" v-if="publication.abstract">
+              {{ publication.abstract }}
+            </div>
+            <div class="entry__abstract_text" v-else>
+              Abstract missing.
+            </div>
+          </div>
+        </div>
+      </slide-up-down>
+
+      <div v-if="expanded">
+        <div
+          class="entry__downloads-item"
+          v-for="website in publication.websites"
+          v-bind:key="website"
+        >
+          <icon-link />
+          <a target="_blank" rel="noopener noreferrer" :href="website"
+            >Visit publisher website
+          </a>
+        </div>
+
+        <div class="entry__downloads-item" v-if="publication.file_attached">
+          <icon-download big="false" />
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            :href="$api + '/documents/' + publication.id + '/download'"
+            >Download full text</a
+          >
+        </div>
+
+        <social-bar :publication="publication" />
+
+        <div
+          v-if="recommendations && recommendations.length"
+          class="card-container"
+        >
+          <div v-for="r in recommendations" v-bind:key="r.id">
+            <router-link :to="getLinkTo(r)">{{ r.title }}</router-link>
+          </div>
+        </div>
+      </div>
+      <!-- <router-link :to="{ path: '/' }">Back to all</router-link> -->
+    </div>
+  </li>
 </template>
 
 <script>
@@ -111,11 +102,12 @@
 import SlideUpDown from 'vue-slide-up-down'
 import { mapState } from 'vuex'
 import SocialBar from '@/components/SocialBar.vue'
+import DisciplinesList from '@/components/DisciplinesList.vue'
 import IconDownload from '@/components/Icons/IconDownload.vue'
 import IconAuthor from '@/components/Icons/IconAuthor.vue'
 import IconLink from '@/components/Icons/IconLink.vue'
 import IconAbstract from '@/components/Icons/IconAbstract.vue'
-import IconScience from '@/components/Icons/IconScience.vue'
+
 import IconPublicationChevron from '@/components/Icons/IconPublicationChevron.vue'
 import Filters from '../mixins/Filters'
 
@@ -126,7 +118,7 @@ export default {
     IconLink,
     IconAuthor,
     IconAbstract,
-    IconScience,
+    DisciplinesList,
     IconPublicationChevron,
     SlideUpDown,
     SocialBar,
@@ -192,22 +184,18 @@ export default {
 <style scoped lang="less">
 @import '~@/styles/variables';
 
-.row {
-  display: flex;
-  background-color: #fff;
-}
-
 .chevron-wrapper {
   min-width: 110px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 40px;
+  flex-grow: 1;
 }
 
-.entry {
-  margin: 0;
-  padding: 12px 20px 12px 0;
+.row {
+  display: flex;
+  background-color: #fff;
+
   /* width: 100%; */
 
   h3 {
@@ -241,23 +229,6 @@ export default {
     fill: none;
     stroke: #333;
     stroke-width: 1px;
-  }
-}
-
-.entry__disciplines {
-  list-style: none;
-  padding-bottom: 10px;
-  user-select: none;
-
-  a {
-    color: #34557f;
-    font-size: 1.2em;
-    font-weight: 700;
-    margin-right: 8px;
-
-    &:hover {
-      color: #607a9b;
-    }
   }
 }
 
