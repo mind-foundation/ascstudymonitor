@@ -8,7 +8,7 @@ export default {
   <h1>Explore curated publications on altered state of consciousness</h1>
 </template>
 
-<style lang="less">
+<style scoped lang="less">
 .modal-container {
   margin: 0px auto;
   background-color: #fefefe;

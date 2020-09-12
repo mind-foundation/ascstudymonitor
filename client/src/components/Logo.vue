@@ -10,7 +10,7 @@ export default {
   </div>
 </template>
 
-<style lang="less">
+<style scoped lang="less">
 #logo {
   position: absolute;
   top: 10px;

@@ -3,6 +3,7 @@ export default {
   name: 'top-navigation',
 }
 </script>
+
 <template>
   <div class="container flex flex-row-reverse mt-6">
     <t-button variant="cta" tabindex="-1" @click="$modal.show('donate-modal')">
@@ -18,7 +19,8 @@ export default {
     </t-button>
   </div>
 </template>
-<style>
+
+<style scoped>
 .container button {
   letter-spacing: 2px;
 }

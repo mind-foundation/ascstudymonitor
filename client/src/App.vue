@@ -97,4 +97,8 @@ button:focus {
 * {
   touch-action: manipulation;
 }
+
+.vm--modal {
+  background: none !important;
+}
 </style>

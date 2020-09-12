@@ -11,7 +11,7 @@ export default {
   </div>
 </template>
 
-<style>
+<style scoped>
 #bubble-left {
   position: absolute;
   top: 40px;

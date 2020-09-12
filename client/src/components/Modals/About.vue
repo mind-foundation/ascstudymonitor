@@ -51,7 +51,7 @@ export default {
   </modal>
 </template>
 
-<style lang="less">
+<style scoped lang="less">
 .modal-container {
   margin: 0px auto;
   background-color: #fefefe;

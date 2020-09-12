@@ -4,8 +4,11 @@ module.exports = {
     fontFamily: {
       sans: ['"Open Sans"', 'sans-serif'],
     },
+    container: {
+      center: true,
+    },
     colors: {
-      blue: '#6B97B2',
+      blue: '#76a1bb',
       superwhite: '#FFFFFF',
       white: '#EEF2F5', // contrast color
       black: '#00212b', // main font color

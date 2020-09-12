@@ -1,9 +1,13 @@
 <script>
 import SearchWidget from '@/components/Search/Widget'
+import CloseIcon from '@/components/Icons/Close'
+import FilterBar from '@/components/FilterBar'
 export default {
   name: 'search',
   components: {
     SearchWidget,
+    CloseIcon,
+    FilterBar,
   },
   methods: {
     beforeOpen() {
@@ -18,7 +22,7 @@ export default {
 <template>
   <modal
     name="search-modal"
-    class="backgroud-blue text-white"
+    class=""
     :adaptive="true"
     width="100%"
     height="100%"
@@ -26,34 +30,14 @@ export default {
     :focus-trap="true"
     transition="fade"
   >
-    <div
-      class="modal-container reveal bg-blue flex flex-col justify-center items-center"
-    >
-      <div class="flex flex-row justify-around w-4/5 xl:w-3/5">
-        <span class="inline-block mr-20 text-sm">fiter results</span>
-        <ul class="flex flex-row flex-grow justify-between">
-          <li>Dsciplines</li>
-          <li>Journals</li>
-          <li>Authors</li>
-          <li>Years</li>
-          <li>Keywords</li>
-        </ul>
-      </div>
-      <div
-        class="flex flex-grow flex-col justify-center items-center w-full h-40 "
-      >
-        <search-widget />
-      </div>
-      <div class="flex justify-center w-full sm:mb-10">
-        <t-button
-          classes="bg-blue pt-1 pb-1 pl-20 pr-20 text-white color-red"
-          :variant="{
-            error: true,
-          }"
-          tabindex="-1"
-        >
-          Show 8 results
-        </t-button>
+    <close-icon class="close-icon" />
+    <div class="bg-blue h-full w-full flex flex-col justify-center">
+      <div class="reveal container flex flex-col h-full  text-white">
+        <filter-bar />
+
+        <div class="flex flex-grow flex-col items-center w-full h-40 mt-20 ">
+          <search-widget />
+        </div>
       </div>
     </div>
   </modal>
@@ -66,6 +50,12 @@ export default {
   left: 0;
   bottom: 0;
   right: 0;
+}
+
+.close-icon {
+  position: absolute;
+  top: 30px;
+  right: 20px;
 }
 
 .modal-container {
