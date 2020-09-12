@@ -53,7 +53,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(-50px);
+  transform: translateY(-60px);
+  max-height: 60px; // prevent wrapping on smallest screens
 }
 .active {
   transform: translateY(30px);

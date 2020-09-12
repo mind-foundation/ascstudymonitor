@@ -22,7 +22,7 @@ const getGitHash = () => {
 const analyzeBundle = false
 
 module.exports = {
-  lintOnSave: false, //process.env.NODE_ENV !== 'production',
+  lintOnSave: true, //process.env.NODE_ENV !== 'production',
   configureWebpack: {
     optimization: {
       splitChunks: {

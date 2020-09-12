@@ -1,19 +1,20 @@
 <template>
-  <div id="app" class="lg:container lg:mx-aut4">
-    <logo />
-    <top-navigation />
-    <bubbles />
-    <hero-wrap>
-      <router-view name="hero" />
-    </hero-wrap>
+  <div id="app">
+    <div class="container">
+      <logo />
+      <top-navigation />
+      <bubbles />
+      <hero-wrap>
+        <router-view name="hero" />
+      </hero-wrap>
 
-    <router-view name="main" />
+      <router-view name="main" />
 
-    <keymap />
-    <!-- <router-view name="main" /> -->
-    <!-- <navigation />  -->
+      <keymap />
+      <!-- <router-view name="main" /> -->
+      <!-- <navigation />  -->
 
-    <!-- <main id="main" v-if="enoughDataToContinue">
+      <!-- <main id="main" v-if="enoughDataToContinue">
       <query-bar />
       <router-view />
     </main>
@@ -22,7 +23,8 @@
       <mindblower v-if="!enoughDataToContinue" />
     </transition>-->
 
-    <search />
+      <search />
+    </div>
     <about-modal />
     <donate-modal />
   </div>

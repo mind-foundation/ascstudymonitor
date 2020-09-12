@@ -6,8 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "NODE_ENV=production vue-cli-service build",
     "build:dev": "NODE_ENV=development vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
-    "test:unit:watch": "vue-cli-service test:unit --watch",
+    "test": "vue-cli-service test:unit",
+    "test:watch": "vue-cli-service test:unit --watch",
     "coveralls": "coveralls < ./coverage/lcov.info",
     "lint": "vue-cli-service lint"
   },

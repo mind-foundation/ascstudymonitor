@@ -33,6 +33,10 @@ export default {
           researchers, practitioners, students, and the interested public. This
           aims to enable high-quality, evidence-based public discussions of
           consciousness, its alterations, capabilities, and pathologies.
+
+          <span class="menu-bottom__love">
+            Made with ♥️ in Berlin
+          </span>
         </p>
         <p>
           Visit the MIND website for more information and ways to support this

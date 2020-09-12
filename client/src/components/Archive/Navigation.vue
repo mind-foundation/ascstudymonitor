@@ -4,7 +4,6 @@ import SlideUpDown from 'vue-slide-up-down'
 import Filters from '@/mixins/Filters'
 import IconFilters from '@/components/Icons/IconFilters'
 import IconChevron from '@/components/Icons/IconChevron'
-import MenuBottom from '@/components/MenuBottom'
 
 const accessors = {
   disciplines: 'disciplines',
@@ -21,7 +20,6 @@ export default {
     SlideUpDown,
     IconFilters,
     IconChevron,
-    MenuBottom,
   },
   data: () => ({
     open: [],
