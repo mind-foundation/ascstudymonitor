@@ -3,7 +3,10 @@ import Vue from 'vue'
 import Paginate from 'vuejs-paginate'
 import { mapGetters, mapState } from 'vuex'
 import PublicationListItem from '@/components/PublicationListItem/PublicationListItem'
-import SearchButton from '@/components/SearchButton'
+import SearchButton from '@/components/Search/Button'
+import SearchBar from '@/components/Search/Bar'
+import SearchWaypoint from '@/components/Search/Waypoint'
+
 Vue.component('paginate', Paginate)
 
 export default {
@@ -14,6 +17,8 @@ export default {
   components: {
     PublicationListItem,
     SearchButton,
+    SearchBar,
+    SearchWaypoint,
   },
   computed: {
     page: {
@@ -79,8 +84,11 @@ export default {
       mobileBarActivated: $store.state.mobileBarActivated,
     }"
   >
+    <search-bar />
     <div class="mb-12 mt-2 flex items-center justify-center">
-      <search-button />
+      <search-waypoint>
+        <search-button />
+      </search-waypoint>
     </div>
     <div v-if="pagination.items.length === 0" class="message">
       <p v-if="!loaded">

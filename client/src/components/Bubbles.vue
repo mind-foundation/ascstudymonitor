@@ -26,9 +26,9 @@ export default {
 #bubble-right {
   position: absolute;
   top: 40px;
-  right: -400px;
+  right: 0;
   height: 564px;
-  width: 751px;
+  width: 400px;
   z-index: -1;
 
   background: url('~assets/bubble_2.png') no-repeat;

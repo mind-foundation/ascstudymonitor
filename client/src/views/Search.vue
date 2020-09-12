@@ -1,5 +1,5 @@
 <script>
-import SearchWidget from '@/components/SearchWidget'
+import SearchWidget from '@/components/Search/Widget'
 export default {
   name: 'search',
   components: {

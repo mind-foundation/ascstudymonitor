@@ -6,6 +6,7 @@ import VueClipboard from 'vue-clipboard2'
 import Toasted from 'vue-toasted'
 import VueHotkey from 'v-hotkey'
 import * as Sentry from '@sentry/browser'
+import VueWaypoint from 'vue-waypoint'
 import { Vue as VueIntegration } from '@sentry/integrations'
 import App from './App.vue'
 import router from './router'
@@ -44,6 +45,7 @@ Vue.use(VueClipboard)
 Vue.use(Toasted)
 Vue.use(TButton, theme.TButton)
 Vue.use(VModal, { dialog: true })
+Vue.use(VueWaypoint)
 Vue.use(VueHotkey)
 
 new Vue({

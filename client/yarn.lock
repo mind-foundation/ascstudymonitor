@@ -10114,6 +10114,18 @@ vue-typer@^1.2.0:
   dependencies:
     lodash.split "^4.4.2"
 
+vue-waypoint@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/vue-waypoint/-/vue-waypoint-3.5.0.tgz#fb41ccc361cdf46fb0883ae349476d3d41014600"
+  integrity sha512-NYBVb8vrYuwOxrDagOg59JCQJspZHEa4dFe1AD194nEr/pELgOIsoew9GYIGzM0j/IpzbOXL+zrexh2ml7wdbQ==
+  dependencies:
+    vue "^2.5.2"
+
+vue@^2.5.2:
+  version "2.6.12"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
+  integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
+
 vue@^2.6.11:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
