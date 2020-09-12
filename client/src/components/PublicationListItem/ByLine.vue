@@ -17,8 +17,6 @@ export default {
 </template>
 
 <style lang="less" scoped>
-@import '~@/styles/variables';
-
 .entry__year_source a {
   display: inline-block;
   color: #333 !important;

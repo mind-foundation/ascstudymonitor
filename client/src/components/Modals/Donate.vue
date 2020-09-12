@@ -1,37 +1,30 @@
 <script>
 export default {
-  name: 'info-modal',
+  name: 'donate-modal',
   methods: {
     beforeOpen() {
-      window.analytics.page('InfoModal')
+      window.analytics.page('Modal.Donate')
     },
   },
 }
 </script>
 
 <template>
-  <modal name="info-modal" :width="600" :height="430" @before-open="beforeOpen">
+  <modal
+    name="donate-modal"
+    :width="600"
+    :height="430"
+    @before-open="beforeOpen"
+  >
     <div class="modal-container reveal">
-      <h3>Thank you for being here</h3>
+      <h3>Heading</h3>
 
       <div class="modal-body">
         <p>
-          The ASC Study Monitor is a curated, freely accessible, and regularly
-          updated database of scholarly publications concerning altered states
-          of consciousness (ASCs). The publications included in the ASC Study
-          Monitor mainly cover the field of the “mind &amp; brain sciences”
-          including philosophy, psychology, psychiatry, neuroscience, and
-          medicine as well as natural sciences. Moreover, the monitor covers
-          relevant publications from cultural studies and the social sciences
-          that discuss altered states of consciousness. With the ASC Study
-          Monitor, MIND provides a multidisciplinary reference base to
-          researchers, practitioners, students, and the interested public. This
-          aims to enable high-quality, evidence-based public discussions of
-          consciousness, its alterations, capabilities, and pathologies.
+          Paragraph 1
         </p>
         <p>
-          Visit the MIND website for more information and ways to support this
-          project.
+          Paragraph 2
         </p>
         <div>
           <a

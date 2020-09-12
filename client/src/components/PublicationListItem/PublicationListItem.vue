@@ -94,7 +94,7 @@ export default {
     </div>
 
     <div class="content" @click.stop>
-      <h3 class="text-3xl">
+      <h3 class="text-2xl">
         {{ publication.title }}
 
         <icon-download
@@ -165,8 +165,6 @@ export default {
 </template>
 
 <style scoped lang="less">
-@import '~@/styles/variables';
-
 .chevron-wrapper {
   min-width: 110px;
   display: flex;

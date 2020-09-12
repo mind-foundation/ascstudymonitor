@@ -4,7 +4,6 @@ import { sync } from 'vuex-router-sync'
 import VModal from 'vue-js-modal'
 import VueClipboard from 'vue-clipboard2'
 import Toasted from 'vue-toasted'
-import VueTailwind from 'vue-tailwind'
 import VueHotkey from 'v-hotkey'
 import * as Sentry from '@sentry/browser'
 import { Vue as VueIntegration } from '@sentry/integrations'
@@ -16,6 +15,10 @@ import { paramsToFilterConfiguration } from '@/mixins/Filters'
 import raf from 'raf'
 import '../assets/tailwind.css'
 import theme from '@/styles/tailwind.theme.js'
+// vue-modal and vue-tailwind create a conflict
+// at overriding Vue.prototype.$modal,
+// so import only components we need
+import TButton from 'vue-tailwind/dist/components/TButton.umd.js'
 
 raf.polyfill()
 
@@ -39,8 +42,8 @@ sync(store, router)
 Vue.use(VueSocialSharing)
 Vue.use(VueClipboard)
 Vue.use(Toasted)
-Vue.use(VueTailwind, theme)
-Vue.use(VModal)
+Vue.use(TButton, theme.TButton)
+Vue.use(VModal, { dialog: true })
 Vue.use(VueHotkey)
 
 new Vue({

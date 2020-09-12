@@ -135,8 +135,6 @@ export default {
 </template>
 
 <style lang="less" scoped>
-@import '~@/styles/variables';
-
 #menu {
   background-color: #34557f;
   position: fixed;
@@ -148,18 +146,18 @@ export default {
   align-items: stretch;
   color: #fff;
 
-  @media @for-phone {
-    width: 100%;
-    height: 54px;
-    // ios sticky fix
-    z-index: 2;
-    top: 0;
-    left: 0;
-    right: 0;
+  // @media @for-phone {
+  //   width: 100%;
+  //   height: 54px;
+  //   // ios sticky fix
+  //   z-index: 2;
+  //   top: 0;
+  //   left: 0;
+  //   right: 0;
 
-    overflow: hidden;
-    -webkit-overflow-scrolling: touch;
-  }
+  //   overflow: hidden;
+  //   -webkit-overflow-scrolling: touch;
+  // }
 }
 
 #menu-tablet {

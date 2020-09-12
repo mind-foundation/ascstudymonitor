@@ -25,8 +25,6 @@ export default {
 </template>
 
 <style lang="less" scoped>
-@import '~@/styles/variables';
-
 .chevron {
   transition: transform 0.2s ease-in;
   padding: 10px; // increase hit box
@@ -35,9 +33,9 @@ export default {
   width: 54px;
   margin-top: 3px;
 
-  @media @for-phone {
-    width: 30px;
-  }
+  // @media @for-phone {
+  //   width: 30px;
+  // }
 
   &.expanded {
     transform: rotate(0);

@@ -24,8 +24,6 @@ export default {
 </template>
 
 <style lang="less" scoped>
-@import '~@/styles/variables';
-
 .list {
   :last-child {
     margin-right: 0;

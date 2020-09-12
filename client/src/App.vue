@@ -1,16 +1,17 @@
 <template>
   <div id="app" class="lg:container lg:mx-aut4">
     <logo />
+    <top-navigation />
     <bubbles />
     <hero-wrap>
       <router-view name="hero" />
     </hero-wrap>
-    <!-- <router-view name="main" /> -->
-    <!-- <navigation />  -->
 
     <router-view name="main" />
 
     <keymap />
+    <!-- <router-view name="main" /> -->
+    <!-- <navigation />  -->
 
     <!-- <main id="main" v-if="enoughDataToContinue">
       <query-bar />
@@ -21,8 +22,9 @@
       <mindblower v-if="!enoughDataToContinue" />
     </transition>-->
 
-    <filter-modal />
-    <search-modal />
+    <search />
+    <about-modal />
+    <donate-modal />
   </div>
 </template>
 
@@ -32,22 +34,25 @@ import { mapState } from 'vuex'
 // import QueryBar from '@/components/QueryBar'
 // import Mindblower from '@/components/Mindblower'
 // // import InfoModal from '@/components/InfoModal'
-import FilterModal from '@/components/FilterModal'
-import SearchModal from '@/components/SearchModal'
+import TopNavigation from '@/components/TopNavigation'
+import Search from '@/views/Search'
 import Logo from '@/components/Logo'
 import Bubbles from '@/components/Bubbles'
 import HeroWrap from '@/components/HeroWrap'
 import Keymap from '@/components/Keymap'
+import DonateModal from '@/components/Modals/Donate'
+import AboutModal from '@/components/Modals/About'
 
 export default {
   components: {
     // Navigation,
     // QueryBar,
     Bubbles,
+    TopNavigation,
     // Mindblower,
-    // InfoModal,
-    FilterModal,
-    SearchModal,
+    AboutModal,
+    Search,
+    DonateModal,
     Logo,
     HeroWrap,
     Keymap,
@@ -63,11 +68,7 @@ export default {
 </script>
 
 <style lang="less">
-// @import '~@/styles/variables';
-// @import '~@/styles/core';
-
 html {
-  // font-smooth: auto;
   -webkit-font-smoothing: antialised;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -80,11 +81,7 @@ body {
   align-items: center;
 }
 
-// .fade-enter-active,
-// .fade-leave-active {
-//   transition: opacity 0.5s;
-// }
-// .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-//   opacity: 0;
-// }
+button:focus {
+  outline: none !important;
+}
 </style>

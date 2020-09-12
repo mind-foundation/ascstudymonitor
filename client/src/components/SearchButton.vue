@@ -8,14 +8,14 @@ export default {
   <div class="relative">
     <t-button
       @click="$modal.show('search-modal')"
-      classes="bg-blue pt-3 pb-3 pl-20 pr-20 text-white color-red font-bold"
+      classes="bg-blue pt-3 pb-3 pl-20 pr-20 text-white color-red font-bold text-sm"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="25.161"
         height="24.947"
         viewBox="0 0 25.161 24.947"
-        class="search inline-block mr-2"
+        class="search inline-block mr-3"
       >
         <g transform="translate(-659.798 -324.826)">
           <g
@@ -44,6 +44,6 @@ export default {
 <style lang="less">
 .search {
   position: relative;
-  top: -3px;
+  top: -2px;
 }
 </style>

@@ -93,8 +93,6 @@ export default {
 }
 </script>
 <style lang="less">
-@import '~@/styles/variables';
-
 .top-bar {
   padding: 0 !important;
   height: 70px;
@@ -135,9 +133,9 @@ export default {
     box-shadow: none;
     border-bottom: solid 1px #34557f;
 
-    @media @for-phone {
-      border-bottom: solid 3px @primary;
-    }
+    // @media @for-phone {
+    //   border-bottom: solid 3px @primary;
+    // }
   }
 }
 

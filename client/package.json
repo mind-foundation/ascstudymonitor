@@ -24,7 +24,7 @@
     "v-hotkey": "^0.8.0",
     "vue": "^2.6.11",
     "vue-clipboard2": "^0.3.1",
-    "vue-js-modal": "^2.0.0-rc.3",
+    "vue-js-modal": "^2.0.0-rc.6",
     "vue-router": "^3.2.0",
     "vue-slide-up-down": "^2.0.1",
     "vue-social-sharing": "^3.0.0-beta.11",
