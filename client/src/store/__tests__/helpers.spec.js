@@ -1,8 +1,9 @@
-import { transformPublication } from '@/store/helpers'
+import { transformPublication } from '../helpers'
 
 describe('transformPublication', () => {
   it('add author names', () => {
     const publication = {
+      year: 1234,
       authors: [
         {
           first_name: 'Testy',

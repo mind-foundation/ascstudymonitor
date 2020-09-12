@@ -93,7 +93,7 @@ export default {
     </div>
     <ul>
       <publication-list-item
-        :publicationId="publication.id"
+        :slug="publication.slug"
         v-for="publication in this.pagination.items"
         :key="publication.id"
       />

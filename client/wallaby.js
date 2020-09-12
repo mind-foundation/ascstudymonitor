@@ -8,7 +8,7 @@ module.exports = wallaby => {
   return {
     files: ['src/**/*', 'jest.config.js', 'package.json'],
 
-    tests: ['tests/**/*.spec.js'],
+    tests: ['src/**/*.spec.js'],
 
     env: {
       type: 'node',
@@ -29,7 +29,7 @@ module.exports = wallaby => {
     },
 
     setup: function(wallaby) {
-      const jestConfig = require('./package').jest || require('./jest.config')
+      const jestConfig = require('./package').jest
       jestConfig.transform = {}
       wallaby.testFramework.configure(jestConfig)
     },

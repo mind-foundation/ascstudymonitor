@@ -13,7 +13,7 @@ export default {
 
 <style>
 #bubble-left {
-  position: fixed;
+  position: absolute;
   top: 40px;
   left: -320px;
   width: 472px;
@@ -24,7 +24,7 @@ export default {
   background: url('~assets/bubble_1.png') no-repeat;
 }
 #bubble-right {
-  position: fixed;
+  position: absolute;
   top: 40px;
   right: -400px;
   height: 564px;

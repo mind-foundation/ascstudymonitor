@@ -2,7 +2,7 @@ import {
   paramsToFilterConfiguration,
   filterConfigurationToParams,
   toggleFacetInConfiguration,
-} from '@/mixins/Filters'
+} from '../Filters'
 
 describe('Filters.vue', () => {
   describe('toggleFacetInConfiguration', () => {

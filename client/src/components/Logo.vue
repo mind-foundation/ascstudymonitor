@@ -10,9 +10,9 @@ export default {
   </div>
 </template>
 
-<style>
+<style lang="less">
 #logo {
-  position: fixed;
+  position: absolute;
   top: 10px;
   left: 14px;
 

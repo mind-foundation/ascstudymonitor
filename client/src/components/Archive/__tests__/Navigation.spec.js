@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-import Navigation from '@/components/Navigation.vue'
-import constants from '../../src/constants'
+import Navigation from '../Navigation.vue'
+import constants from '@/constants'
 
 const localVue = createLocalVue()
 localVue.prototype.$constants = constants
@@ -17,11 +17,6 @@ describe('Navigation.vue', () => {
         loaded: false,
       },
     })
-  })
-
-  it('matches snapshot', () => {
-    const wrapper = shallowMount(Navigation, { store, localVue })
-    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('renders the entry', () => {

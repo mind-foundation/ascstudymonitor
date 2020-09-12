@@ -1,10 +1,10 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import SlideUpDown from 'vue-slide-up-down'
-import Filters from '../mixins/Filters'
-import IconFilters from './Icons/IconFilters'
-import IconChevron from './Icons/IconChevron'
-import MenuBottom from './MenuBottom'
+import Filters from '@/mixins/Filters'
+import IconFilters from '@/components/Icons/IconFilters'
+import IconChevron from '@/components/Icons/IconChevron'
+import MenuBottom from '@/components/MenuBottom'
 
 const accessors = {
   disciplines: 'disciplines',

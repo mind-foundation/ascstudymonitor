@@ -8,7 +8,6 @@
     "build:dev": "NODE_ENV=development vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:unit:watch": "vue-cli-service test:unit --watch",
-    "test:e2e": "vue-cli-service test:e2e --url http://localhost:5000 --headless",
     "coveralls": "coveralls < ./coverage/lcov.info",
     "lint": "vue-cli-service lint"
   },

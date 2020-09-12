@@ -1,7 +1,6 @@
 <script>
 import SlideUpDown from 'vue-slide-up-down'
 import { mapState } from 'vuex'
-import SocialBar from '@/components/SocialBar.vue'
 
 import IconDownload from '@/components/Icons/IconDownload.vue'
 
@@ -12,6 +11,7 @@ import Filters from '@/mixins/Filters'
 import DisciplinesList from './DisciplinesList.vue'
 import AuthorsList from './AuthorsList.vue'
 import ByLine from './ByLine.vue'
+import SocialBar from './SocialBar.vue'
 
 export default {
   name: 'Publication',
@@ -30,7 +30,9 @@ export default {
   data: () => ({
     expanded: null,
   }),
-  props: ['slug', 'publicationId'],
+  props: {
+    slug: String,
+  },
   computed: {
     isDetailView() {
       return (
@@ -40,10 +42,8 @@ export default {
     },
     ...mapState('publications', {
       publications: state => state.items,
-      publication: function(state) {
-        if (this.publicationId)
-          return state.items.find(p => p.id === this.publicationId)
-        else return state.items.find(p => p.slug === this.slug)
+      publication(state) {
+        return state.items.find(p => p.slug === this.slug)
       },
     }),
     ...mapState('recommendations', {

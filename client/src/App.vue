@@ -79,9 +79,22 @@ body {
   display: flex;
   flex-flow: column;
   align-items: center;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 12px;
 }
 
 button:focus {
   outline: none !important;
+}
+*,
+::after,
+::before {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+// Disables double tap to zoom
+* {
+  touch-action: manipulation;
 }
 </style>
