@@ -52,6 +52,7 @@
     "postcss-assets": "^5.0.0",
     "postcss-nested": "^4.2.3",
     "tailwindcss": "^1.8.8",
+    "vue-template-compiler": "^2.6.12",
     "wallaby-vue-compiler": "^1.0.6"
   },
   "eslintConfig": {

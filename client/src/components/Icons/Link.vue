@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'icon-link',
+  name: 'link-icon',
 }
 </script>
 <template>

@@ -1,12 +1,10 @@
 <script>
 import SlideUpDown from 'vue-slide-up-down'
 import { mapState } from 'vuex'
-
-import IconDownload from '@/components/Icons/IconDownload.vue'
-
-import IconLink from '@/components/Icons/IconLink.vue'
-import IconAbstract from '@/components/Icons/IconAbstract.vue'
-import IconPublicationChevron from '@/components/Icons/IconPublicationChevron.vue'
+import DownloadIcon from '@/components/Icons/Download.vue'
+import AbstractIcon from '@/components/Icons/Abstract.vue'
+import LinkIcon from '@/components/Icons/Link.vue'
+import PublicationChevronIcon from '@/components/Icons/PublicationChevron.vue'
 import Filters from '@/mixins/Filters'
 import DisciplinesList from './DisciplinesList.vue'
 import AuthorsList from './AuthorsList.vue'
@@ -16,13 +14,13 @@ import SocialBar from './SocialBar.vue'
 export default {
   name: 'Publication',
   components: {
+    DownloadIcon,
+    AbstractIcon,
+    LinkIcon,
     ByLine,
-    IconDownload,
-    IconLink,
     AuthorsList,
-    IconAbstract,
     DisciplinesList,
-    IconPublicationChevron,
+    PublicationChevronIcon,
     SlideUpDown,
     SocialBar,
   },
@@ -85,19 +83,19 @@ export default {
 </script>
 
 <template>
-  <li class="row pt-8 pb-8 mb-8 pr-16">
+  <li class="bg-superwhite flex pt-8 pb-8 mb-8 pr-16">
     <div class="chevron-wrapper" @click="toggleExpand">
-      <icon-publication-chevron
+      <publication-chevron-icon
         :expanded="expanded"
         :selectable="!isDetailView"
       />
     </div>
 
     <div class="content" @click.stop>
-      <h3 class="text-2xl">
+      <h3 class="text-2xl mt-0 text-black">
         {{ publication.title }}
 
-        <icon-download
+        <download-icon
           @click="download(publication)"
           v-if="publication.file_attached"
           big="true"
@@ -115,7 +113,7 @@ export default {
       <slide-up-down :active="expanded" :duration="200">
         <div class="entry__abstract">
           <div class="entry__abstract_inner">
-            <icon-abstract />
+            <abstract-icon />
             <div class="entry__abstract_text" v-if="publication.abstract">
               {{ publication.abstract }}
             </div>
@@ -132,14 +130,14 @@ export default {
           v-for="website in publication.websites"
           v-bind:key="website"
         >
-          <icon-link />
+          <link-icon />
           <a target="_blank" rel="noopener noreferrer" :href="website"
             >Visit publisher website
           </a>
         </div>
 
         <div class="entry__downloads-item" v-if="publication.file_attached">
-          <icon-download big="false" />
+          <download-icon big="false" />
           <a
             target="_blank"
             rel="noopener noreferrer"
@@ -174,14 +172,9 @@ export default {
 }
 
 .row {
-  display: flex;
-  background-color: #fff;
-
   /* width: 100%; */
 
   h3 {
-    margin-top: 0;
-    color: #333;
     font-weight: 700;
     letter-spacing: 0.015em;
     margin-bottom: 10px;

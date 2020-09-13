@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'icon-publication-chevron',
+  name: 'publication-chevron-icon',
   props: ['expanded', 'selectable'],
 }
 </script>

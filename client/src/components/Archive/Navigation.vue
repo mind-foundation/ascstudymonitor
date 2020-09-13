@@ -2,8 +2,8 @@
 import { mapGetters, mapState } from 'vuex'
 import SlideUpDown from 'vue-slide-up-down'
 import Filters from '@/mixins/Filters'
-import IconFilters from '@/components/Icons/IconFilters'
-import IconChevron from '@/components/Icons/IconChevron'
+import FiltersIcon from '@/components/Icons/Filters'
+import ChevronIcon from '@/components/Icons/Chevron'
 
 const accessors = {
   disciplines: 'disciplines',
@@ -18,8 +18,8 @@ export default {
   mixins: [Filters],
   components: {
     SlideUpDown,
-    IconFilters,
-    IconChevron,
+    FiltersIcon,
+    ChevronIcon,
   },
   data: () => ({
     open: [],
@@ -77,7 +77,7 @@ export default {
         >
           Search
         </div>
-        <icon-filters />
+        <filters-icon />
         <span>Filter</span>
       </div>
     </div>
@@ -97,7 +97,7 @@ export default {
           >
             <span class="menu__category-link-label">{{ category.title }}</span>
             <span class="menu__category-link-count">{{ category.total }}</span>
-            <icon-chevron :expanded="open.includes(key)" />
+            <chevron-icon :expanded="open.includes(key)" />
           </a>
 
           <slide-up-down :active="open.includes(key)" :duration="200">

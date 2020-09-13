@@ -42,6 +42,9 @@ describe('PublicationListItem.vue', () => {
               },
             ],
           },
+          actions: {
+            get: () => {},
+          },
         },
       },
     })

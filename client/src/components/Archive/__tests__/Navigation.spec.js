@@ -7,7 +7,7 @@ const localVue = createLocalVue()
 localVue.prototype.$constants = constants
 localVue.use(Vuex)
 
-describe('Navigation.vue', () => {
+describe.skip('Navigation.vue', () => {
   let store
 
   beforeEach(() => {

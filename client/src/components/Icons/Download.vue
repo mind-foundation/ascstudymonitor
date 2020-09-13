@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'icon-download',
+  name: 'download-icon',
   props: ['big'],
 }
 </script>

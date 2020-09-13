@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'icon-author',
+  name: 'author-icon',
 }
 </script>
 <template>

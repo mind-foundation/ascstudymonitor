@@ -7,6 +7,7 @@ import Toasted from 'vue-toasted'
 import VueHotkey from 'v-hotkey'
 import * as Sentry from '@sentry/browser'
 import VueWaypoint from 'vue-waypoint'
+import VueRouter from 'vue-router'
 import { Vue as VueIntegration } from '@sentry/integrations'
 import App from './App.vue'
 import router from './router'
@@ -40,6 +41,7 @@ Vue.prototype.$api =
 
 sync(store, router)
 
+Vue.use(VueRouter)
 Vue.use(VueSocialSharing)
 Vue.use(VueClipboard)
 Vue.use(Toasted)

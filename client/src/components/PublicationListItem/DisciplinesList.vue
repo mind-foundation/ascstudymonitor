@@ -1,16 +1,16 @@
 <script>
-import IconScience from '@/components/Icons/IconScience.vue'
+import ScienceIcon from '@/components/Icons/Science.vue'
 export default {
   name: 'disciplines-list',
   props: ['disciplines'],
   components: {
-    IconScience,
+    ScienceIcon,
   },
 }
 </script>
 <template>
   <div class="flex">
-    <icon-science />
+    <science-icon />
     <ul class="list list-none display-flex select-none">
       <li class="mr-8" v-for="d in disciplines" v-bind:key="d">
         <a

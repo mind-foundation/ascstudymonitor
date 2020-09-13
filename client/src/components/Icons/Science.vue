@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'icon-science',
+  name: 'science-icon',
 }
 </script>
 <template>

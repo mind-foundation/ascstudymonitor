@@ -1,19 +1,19 @@
 <script>
-import IconAuthor from '@/components/Icons/IconAuthor.vue'
+import AuthorIcon from '@/components/Icons/Author.vue'
 export default {
   name: 'authors-list',
   props: {
     authorNames: Array,
   },
   components: {
-    IconAuthor,
+    AuthorIcon,
   },
 }
 </script>
 <template>
   <div class="container inline-flex">
     <div class="icon-holder">
-      <icon-author />
+      <author-icon />
     </div>
     <ul class="list list-none display flex select-none" @click.stop>
       <li class="mr-2" v-for="(authorName, index) in authorNames" :key="index">
