@@ -1,7 +1,8 @@
 """ Flask Web app """
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from ariadne import (
+    ObjectType,
     QueryType,
     MutationType,
     graphql_sync,
@@ -123,6 +124,20 @@ def resolve_queue(*_, channel: str) -> Dict[str, Any]:
     raise NotImplementedError()
 
 
+document = ObjectType("Document")
+
+
+@document.field("recommendations")
+def resolve_recommendations(obj, info_, first: int) -> Dict[str, Any]:
+    """ Resolve recommendations for document """
+    docs = document_store.get_documents(first=first)
+    scores = [i / (len(docs) + 1) for i in range(1, len(docs) + 1)]
+    recommendations = []
+    for doc, score in zip(docs, scores[::-1]):
+        recommendations.append({"score": score, "document": doc})
+    return recommendations
+
+
 mutation = MutationType()
 
 
@@ -177,7 +192,7 @@ def resolve_post(*_, channel: str, secret: str):
     raise NotImplementedError()
 
 
-schema = make_executable_schema(type_defs, [query, mutation])
+schema = make_executable_schema(type_defs, query, document, mutation)
 
 
 @app.route("/graphql", methods=["GET"])

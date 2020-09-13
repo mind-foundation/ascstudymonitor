@@ -40,6 +40,8 @@ type Document {
   title: String!
   websites: [String!]
   year: Int
+
+  recommendations(first: Int!): [Recommendation!]!
 }
 
 """
@@ -54,8 +56,16 @@ type DocumentEdge {
 Paginated documents
 """
 type DocumentsConnection {
-  edges: [DocumentEdge]
+  edges: [DocumentEdge!]!
   pageInfo: PageInfo!
+}
+
+"""
+A recommendation with score
+"""
+type Recommendation {
+  score: Float!
+  document: Document
 }
 
 """
