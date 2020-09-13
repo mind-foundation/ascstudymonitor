@@ -1,0 +1,67 @@
+type PageInfo {
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Author {
+  first_name: String
+  last_name: String
+}
+
+type Document {
+  id: ID!
+  slug: String!
+  created: String!
+  title: String!
+  authors: [Author!]!
+  year: Int
+  source: String
+  keywords: [String!]!
+  websites: [String!]
+  file_attached: Boolean!
+  abstract: String!
+  disciplines: [String!]!
+}
+
+type DocumentEdge {
+  cursor: String!
+  node: Document
+}
+
+type DocumentsConnection {
+  edges: [DocumentEdge]
+  pageInfo: PageInfo!
+}
+
+input FilterArgs {
+  year: [Int!]
+  journal: [String!]
+  author: [String!]
+  discipline: [String!]
+  keyword: [String!]
+}
+
+type Query {
+  documents(
+    query: String
+    filters: FilterArgs
+    first: Int
+    after: String
+  ): DocumentsConnection
+
+  document(id: ID!): Document
+  documentBySlug(slug: String!): Document
+
+  queue(channel: String!): [Document!]
+}
+
+type Mutation {
+    appendToQueue(channel: String!, document: ID!)
+    moveUpInQueue(channel: String!, document: ID!)
+    moveDownInQueue(channel: String!, document: ID!)
+    removeFromQueue(channel: String!, document: ID!)
+
+    post(channel: String!, secret: String!)
+}
