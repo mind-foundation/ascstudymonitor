@@ -9,7 +9,7 @@ type PageInfo {
 }
 
 """
-Author of a document
+Author of a publication
 """
 type Author {
   firstName: String
@@ -17,7 +17,7 @@ type Author {
 }
 
 """
-Author of a document as input
+Author of a publication as input
 """
 input AuthorInput {
   firstName: String
@@ -27,7 +27,7 @@ input AuthorInput {
 """
 A publication as listed in the study monitor
 """
-type Document {
+type Publication {
   abstract: String!
   authors: [Author!]!
   created: String!
@@ -36,7 +36,7 @@ type Document {
   id: ID!
   keywords: [String!]!
   slug: String!
-  source: String
+  journal: String
   title: String!
   websites: [String!]
   year: Int
@@ -45,18 +45,18 @@ type Document {
 }
 
 """
-An edge in paginated documents
+An edge in paginated publications
 """
-type DocumentEdge {
+type PublicationEdge {
   cursor: String!
-  node: Document
+  node: Publication
 }
 
 """
-Paginated documents
+Paginated publications
 """
-type DocumentsConnection {
-  edges: [DocumentEdge!]!
+type PublicationsConnection {
+  edges: [PublicationEdge!]!
   pageInfo: PageInfo!
 }
 
@@ -65,22 +65,22 @@ A recommendation with score
 """
 type Recommendation {
   score: Float!
-  document: Document
+  publication: Publication
 }
 
 """
-Filters used when fetching documents
+Filters used when fetching publications
 """
 input FilterArgs {
   year: [Int!]
-  source: [String!]
+  journal: [String!]
   authors: [AuthorInput!]
   disciplines: [String!]
   keywords: [String!]
 }
 
 """
-Response for updating the document store
+Response for updating the publication store
 """
 type UpdateResponse {
   success: Boolean!
@@ -92,7 +92,7 @@ Response for mutations on a queue
 """
 type QueueMutationResponse {
   channel: String!
-  document: ID!
+  publication: ID!
   success: Boolean!
   message: String
 }
@@ -107,7 +107,7 @@ type TwitterResponse {
 
 """
 Response for a post mutation.
-Fields document, created, postPayload, postID and response
+Fields publication, created, postPayload, postID and response
 may be null if post failed at some point
 """
 type PostResponse {
@@ -115,7 +115,7 @@ type PostResponse {
   success: Boolean!
   message: String
 
-  document: ID
+  publication: ID
   created: String
   postPayload: String
   postID: String
@@ -123,40 +123,40 @@ type PostResponse {
 }
 
 type Query {
-  "Fetch paginated documents"
-  documents(
-    "Search query for fuzzy full text search in documents"
+  "Fetch paginated publications"
+  publications(
+    "Search query for fuzzy full text search in publications"
     query: String
-    "Hard filters for documents"
+    "Hard filters for publications"
     filters: FilterArgs
     "Size of page"
     first: Int
     "Cursor for page"
     after: String
-  ): DocumentsConnection
+  ): PublicationsConnection
 
-  "Fetch document by ID"
-  document(id: ID!): Document
+  "Fetch publication by ID"
+  publication(id: ID!): Publication
 
-  "Fetch document by slug"
-  documentBySlug(slug: String!): Document
+  "Fetch publication by slug"
+  publicationBySlug(slug: String!): Publication
 
-  "Get download Url for document or null if document has no attached files"
-  documentDownloadUrl(id: ID!): String
+  "Get download Url for publication or null if publication has no attached files"
+  publicationDownloadUrl(id: ID!): String
 
   "View the queue for a channel"
-  queue(channel: String!): [Document!]
+  queue(channel: String!): [Publication!]
 }
 
 type Mutation {
-  "Fetch documents from Mendeley and update internal document store "
-  updateDocuments: UpdateResponse!
+  "Fetch publications from Mendeley and update internal publication store "
+  updatePublications: UpdateResponse!
 
-  appendToQueue(channel: String!, document: ID!): QueueMutationResponse!
-  moveUpInQueue(channel: String!, document: ID!): QueueMutationResponse!
-  moveDownInQueue(channel: String!, document: ID!): QueueMutationResponse!
-  removeFromQueue(channel: String!, document: ID!): QueueMutationResponse!
+  appendToQueue(channel: String!, publication: ID!): QueueMutationResponse!
+  moveUpInQueue(channel: String!, publication: ID!): QueueMutationResponse!
+  moveDownInQueue(channel: String!, publication: ID!): QueueMutationResponse!
+  removeFromQueue(channel: String!, publication: ID!): QueueMutationResponse!
 
-  "Take first document from queue and post on channel, requires a secret token"
+  "Take first publication from queue and post on channel, requires a secret token"
   post(channel: String!, secret: String!): PostResponse!
 }
