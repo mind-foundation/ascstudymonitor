@@ -1,3 +1,6 @@
+"""
+Pagination info
+"""
 type PageInfo {
   hasPreviousPage: Boolean!
   hasNextPage: Boolean!
@@ -5,36 +8,51 @@ type PageInfo {
   endCursor: String
 }
 
+"""
+Author of a document
+"""
 type Author {
   firstName: String
   lastName: String
 }
 
+"""
+A publication as listed in the study monitor
+"""
 type Document {
-  id: ID!
-  slug: String!
-  created: String!
-  title: String!
-  authors: [Author!]!
-  year: Int
-  source: String
-  keywords: [String!]!
-  websites: [String!]
-  fileAttached: Boolean!
   abstract: String!
+  authors: [Author!]!
+  created: String!
   disciplines: [String!]!
+  fileAttached: Boolean!
+  id: ID!
+  keywords: [String!]!
+  slug: String!
+  source: String
+  title: String!
+  websites: [String!]
+  year: Int
 }
 
+"""
+An edge in paginated documents
+"""
 type DocumentEdge {
   cursor: String!
   node: Document
 }
 
+"""
+Paginated documents
+"""
 type DocumentsConnection {
   edges: [DocumentEdge]
   pageInfo: PageInfo!
 }
 
+"""
+Filters used when fetching documents
+"""
 input FilterArgs {
   year: [Int!]
   journal: [String!]
@@ -43,25 +61,84 @@ input FilterArgs {
   keyword: [String!]
 }
 
+"""
+Response for updating the document store
+"""
+type UpdateResponse {
+  success: Boolean!
+  message: String
+}
+
+"""
+Response for mutations on a queue
+"""
+type QueueMutationResponse {
+  channel: String!
+  document: ID!
+  success: Boolean!
+  message: String
+}
+
+"""
+Fields specific to a twitter post
+"""
+type TwitterResponse {
+  hashtags: [String!]!
+  urls: [String!]!
+}
+
+"""
+Response for a post mutation.
+Fields document, created, postPayload, postID and response
+may be null if post failed at some point
+"""
+type PostResponse {
+  channel: String!
+  success: Boolean!
+  message: String
+
+  document: ID
+  created: String
+  postPayload: String
+  postID: String
+  response: TwitterResponse
+}
+
 type Query {
+  "Fetch paginated documents"
   documents(
+    "Search query for fuzzy full text search in documents"
     query: String
+    "Hard filters for documents"
     filters: FilterArgs
+    "Size of page"
     first: Int
+    "Cursor for page"
     after: String
   ): DocumentsConnection
 
+  "Fetch document by ID"
   document(id: ID!): Document
+
+  "Fetch document by slug"
   documentBySlug(slug: String!): Document
 
+  "Get download Url for document or null if document has no attached files"
+  documentDownloadUrl(id: ID!): String
+
+  "View the queue for a channel"
   queue(channel: String!): [Document!]
 }
 
 type Mutation {
-    appendToQueue(channel: String!, document: ID!)
-    moveUpInQueue(channel: String!, document: ID!)
-    moveDownInQueue(channel: String!, document: ID!)
-    removeFromQueue(channel: String!, document: ID!)
+  "Fetch documents from Mendeley and update internal document store "
+  updateDocuments: UpdateResponse!
 
-    post(channel: String!, secret: String!)
+  appendToQueue(channel: String!, document: ID!): QueueMutationResponse!
+  moveUpInQueue(channel: String!, document: ID!): QueueMutationResponse!
+  moveDownInQueue(channel: String!, document: ID!): QueueMutationResponse!
+  removeFromQueue(channel: String!, document: ID!): QueueMutationResponse!
+
+  "Take first document from queue and post on channel, requires a secret token"
+  post(channel: String!, secret: String!): PostResponse!
 }
