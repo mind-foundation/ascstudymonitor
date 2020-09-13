@@ -56,7 +56,7 @@ describe('PublicationListItem.vue', () => {
       localVue,
       propsData,
     })
-    expect(wrapper.find('.row').exists()).toBe(true)
+    expect(wrapper.find('.chevron-wrapper').exists()).toBe(true)
   })
 
   it('expands', async () => {

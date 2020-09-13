@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import Close from '../Close'
 import Abstract from '../Abstract'
 import Chevron from '../Chevron'
@@ -11,8 +11,7 @@ import Science from '../Science'
 
 describe('Icons', () => {
   let store
-
-  const icons = [
+  ;[
     [Close, 'Close'],
     [Abstract, 'Abstract'],
     [Chevron, 'Chevron'],
