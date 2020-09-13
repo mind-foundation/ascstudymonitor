@@ -28,8 +28,3 @@ jobs:
         uses: borales/actions-yarn@v2.0.0
         with:
           cmd: --cwd client test --ci --collect-coverage
-
-      - name: yarn coveralls
-        uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: --cwd client coveralls -- -v
