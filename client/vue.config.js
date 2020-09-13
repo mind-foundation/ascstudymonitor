@@ -26,8 +26,8 @@ module.exports = {
   configureWebpack: {
     optimization: {
       splitChunks: {
-        minSize: 30000,
-        maxSize: 250000,
+        minSize: 100000,
+        maxSize: 300000,
       },
     },
   },
@@ -44,12 +44,12 @@ module.exports = {
   }),
   chainWebpack: config => {
     if (analyzeBundle) {
-      // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-      //   .BundleAnalyzerPlugin
-      // config
-      //   .plugin('webpack-bundle-analyzer')
-      //   .use(BundleAnalyzerPlugin)
-      //   .init(Plugin => new Plugin({}))
+      const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+        .BundleAnalyzerPlugin
+      config
+        .plugin('webpack-bundle-analyzer')
+        .use(BundleAnalyzerPlugin)
+        .init(Plugin => new Plugin({}))
     }
 
     config.resolve.alias.set('assets', path.resolve(__dirname, 'assets'))

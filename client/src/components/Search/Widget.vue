@@ -91,7 +91,6 @@ export default {
   },
 
   mounted() {
-    console.log('created')
     // setTimeout(() => {
     // console.log("timer fired")
     if (screen.height > 1024) {

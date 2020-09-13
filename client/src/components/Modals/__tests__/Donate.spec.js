@@ -10,6 +10,6 @@ describe('Donate.vue', () => {
 
   it('renders', () => {
     const wrapper = shallowMount(Donate, { store, localVue })
-    expect(wrapper.find('.modal-container').exists()).toBe(true)
+    expect(wrapper.find('.modal-container').isVisible()).toBe(true)
   })
 })
