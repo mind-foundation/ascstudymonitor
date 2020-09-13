@@ -6,8 +6,8 @@ type PageInfo {
 }
 
 type Author {
-  first_name: String
-  last_name: String
+  firstName: String
+  lastName: String
 }
 
 type Document {
@@ -20,7 +20,7 @@ type Document {
   source: String
   keywords: [String!]!
   websites: [String!]
-  file_attached: Boolean!
+  fileAttached: Boolean!
   abstract: String!
   disciplines: [String!]!
 }
