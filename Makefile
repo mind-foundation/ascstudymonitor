@@ -12,6 +12,7 @@ docker-prod-build:
 	docker-compose -f docker-compose.yaml build	
 
 docker-prod-up: docker-prod-build
+	rm -f cronicle/logs/cronicle.pid
 	docker-compose -f docker-compose.yaml up -d
 
 docker-bash-backend:

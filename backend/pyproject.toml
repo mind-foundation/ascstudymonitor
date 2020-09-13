@@ -17,6 +17,8 @@ mendeley = {git = "https://github.com/membranepotential/mendeley-python-sdk.git"
 python-slugify = "^4.0.0"
 attrs = "^19.3.0"
 python-dateutil = "^2.8.1"
+ariadne = "^0.12.0"
+pyhumps = "^1.6.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0"
@@ -28,3 +30,8 @@ ipdb = "^0.13.3"
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning:future"
+]

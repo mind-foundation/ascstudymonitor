@@ -6,7 +6,7 @@ from datetime import datetime
 from logging import getLogger
 from typing import Any, Optional
 
-from ascmonitor import DocumentType
+from ascmonitor.types import DocumentType
 
 logger = getLogger(__name__)
 
@@ -80,6 +80,11 @@ class SentPost(PreparedPost):
 
 class Channel(ABC):
     """ Abstract base class for channels """
+
+    @property
+    @abstractmethod
+    def name(self):
+        """ Unique name of channel """
 
     @abstractmethod
     def format(self, document: DocumentType) -> PreparedPost:

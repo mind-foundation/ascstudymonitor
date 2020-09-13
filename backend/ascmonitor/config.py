@@ -71,15 +71,12 @@ required_fields = {
     "authors",
     "created",
     "disciplines",
-    "file_attached",
+    "fileAttached",
     "id",
+    "keywords",
+    "slug",
     "source",
     "title",
     "websites",
     "year",
-    "slug",
-    "keywords",
 }
-
-# document cache expiry time in seconds
-cache_expires = 3600

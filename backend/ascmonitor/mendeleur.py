@@ -1,20 +1,21 @@
 """ Access the Mendeley Database """
 
+from dataclasses import dataclass
 import logging
 import re
-from typing import NamedTuple
 
-from dateutil.parser import parse as parse_datetime
+import humps
 import requests
+from dateutil.parser import parse as parse_datetime
 from mendeley import Mendeley
-from slugify import slugify
 
 from ascmonitor.config import required_fields
 
 logger = logging.getLogger(__name__)
 
 
-class MendeleyAuthInfo(NamedTuple):
+@dataclass
+class MendeleyAuthInfo:
     """ Authentication infos for Mendeley """
 
     client_id: str
@@ -27,7 +28,7 @@ class MendeleyAuthInfo(NamedTuple):
 class Mendeleur:
     """ Manages Mendeley session """
 
-    def __init__(self, authinfo, group_id):
+    def __init__(self, authinfo: MendeleyAuthInfo, group_id: str):
         """ Authenticate the Mendeley client """
         mendeley = Mendeley(
             client_id=authinfo.client_id,
@@ -43,6 +44,9 @@ class Mendeleur:
             allow_redirects=False,
             data={"username": authinfo.user, "password": authinfo.password},
         )
+        if not response.ok:
+            raise RuntimeError("Failed to authenticate at Mendeley")
+
         redirect_url = response.headers["Location"]
         redirect_url = redirect_url.replace("http://", "https://")
 
@@ -56,25 +60,19 @@ class Mendeleur:
         """
         logger.info("Fetching fresh documents from mendeley")
 
-        library = self.group.documents.iter(page_size=500, sort="created", order="desc", view="all")
+        library = self.group.documents.iter(
+            page_size=500, sort="created", order="desc", view="all"
+        )
         return list(self.transform_documents(doc for doc in library))
 
-    def get_download_url(self, document_id):
+    def get_download_url(self, document_id: str) -> str:
         """ Return mendeley download url for a given document id """
         try:
             files = self.session.documents.get(document_id).files
             first_file = next(files.iter())
-        except StopIteration:
-            raise ValueError("Document has no file attached")
+        except StopIteration as exc:
+            raise ValueError("Document has no file attached") from exc
         return first_file.download_url
-
-    def slugify(self, document):
-        """ Put slug in document """
-        first_id, *_ = document.json["id"].split("-")
-        document.json["slug"] = (
-            slugify(document.json["title"], max_length=60, word_boundary=True) + "-" + first_id
-        )
-        return document
 
     def extract_disciplines(self, document):
         """ Extract disciplines from document tags """
@@ -85,7 +83,9 @@ class Mendeleur:
                     disciplines.extend(tag[5:].split(":"))
 
             # strip bad characters and titelize
-            disciplines = [re.sub(r"[^\w\s]", "", disc).strip().title() for disc in disciplines]
+            disciplines = [
+                re.sub(r"[^\w\s]", "", disc).strip().title() for disc in disciplines
+            ]
 
             # make sure disciplines are unique
             disciplines = list(set(disciplines))
@@ -133,10 +133,20 @@ class Mendeleur:
             document.json["file_attached"] = bool(list(document.files.iter()))
         return document
 
+    def camel_case_fields(self, document):
+        """ Convert field names to camel case """
+        document.json = humps.camelize(document.json)
+        return document
+
     def filter_required_fields(self, document):
-        """ Remove fields that are not required """
+        """
+        Remove fields that are not required.
+        Expects fields to be camelCased.
+        """
         document.json = {
-            field: value for field, value in document.json.items() if field in required_fields
+            field: value
+            for field, value in document.json.items()
+            if field in required_fields
         }
         return document
 
@@ -149,7 +159,7 @@ class Mendeleur:
             document = self.ensure_year(document)
             document = self.ensure_keywords(document)
             document = self.fix_file_attached(document)
-            document = self.slugify(document)
             document = self.cast_created(document)
+            document = self.camel_case_fields(document)
             document = self.filter_required_fields(document)
             yield document.json

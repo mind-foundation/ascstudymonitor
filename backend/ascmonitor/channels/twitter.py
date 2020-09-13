@@ -8,9 +8,9 @@ import tweepy
 from tweepy import TweepError
 from flask import request, url_for
 
-from ascmonitor import DocumentType
 from ascmonitor.channels import Channel, PreparedPost, SentPost, PostSendException
 from ascmonitor.config import development
+from ascmonitor.types import DocumentType
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,12 @@ class TwitterChannel(Channel):
         "{title}",
         "{title_short}",
     ]
-    static_hashtags = ["PsychedelicResearch", "Psychedelic", "Science", "AcademicTwitter"]
+    static_hashtags = [
+        "PsychedelicResearch",
+        "Psychedelic",
+        "Science",
+        "AcademicTwitter",
+    ]
 
     def __init__(self, api_key, api_secret, access_token, access_secret):
         """ Connect to twitter """
@@ -105,7 +110,10 @@ class TwitterChannel(Channel):
 
         # find a headline
         space_for_headline = (
-            self.character_limit - self.space_for_hashtags - self.short_url_length_https - 1
+            self.character_limit
+            - self.space_for_hashtags
+            - self.short_url_length_https
+            - 1
         )
         for template in templates:
             status = template.format(title=title, title_short=title_short, **author)
@@ -120,7 +128,9 @@ class TwitterChannel(Channel):
 
         status += "\n{url}\n\n"
 
-        keywords = [kw for kw in document.get("keywords", []) if kw not in self.static_hashtags]
+        keywords = [
+            kw for kw in document.get("keywords", []) if kw not in self.static_hashtags
+        ]
         hashtags = self.static_hashtags + document.get("disciplines", []) + keywords
         for hashkw in hashtags:
             if " " in hashkw:
@@ -129,7 +139,10 @@ class TwitterChannel(Channel):
             hashtag = f" #{hashkw}"
 
             # win 5 and loose x chars by replacing {url}
-            if len(status) + len(hashtag) > self.character_limit + 5 - self.short_url_length_https:
+            if (
+                len(status) + len(hashtag)
+                > self.character_limit + 5 - self.short_url_length_https
+            ):
                 break
             status += hashtag
 
@@ -147,7 +160,10 @@ class TwitterChannel(Channel):
             hashtags = status.entities["hashtags"]
             urls = status.entities["urls"]
             return SentPost.from_prepared(
-                post, id_=post_id, created=created, response={"hashtags": hashtags, "urls": urls},
+                post,
+                id_=post_id,
+                created=created,
+                response={"hashtags": hashtags, "urls": urls},
             )
 
         except TweepError as error:

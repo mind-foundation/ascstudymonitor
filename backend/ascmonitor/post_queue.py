@@ -1,17 +1,44 @@
 """
-Provides interface to a post queue built from the event store
+A queue of documents which is specific to a channel.
+Documents can be appended, removed or reordered.
+The queue can be inspected with a user interface.
 """
 
+from logging import getLogger
+from pymongo.database import Database
+
+from ascmonitor.channels import Channel
 from ascmonitor.events import EventKind
+
+logger = getLogger(__name__)
 
 
 class PostQueue:
-    """ Get the next post or view the queue """
+    """ Manager of the post queues """
 
-    def __init__(self, event_store, channel):
-        """ Built a new post queue """
-        self.event_store = event_store
+    collection_name = "queues"
+
+    def __init__(self, channel: Channel, mongo: Database):
+        """ Initialize the post queue for a channel """
+        self._queue = mongo[self.collection_name]
         self.channel = channel
+        self._queue.up
+
+    def append(self, document_id: str):
+        """
+        Append a document to the end of the queue.
+        :raises ValueError: if document is already in queue
+        """
+        ...
+
+    def move_up(self, document_id):
+        ...
+
+    def move_down(self, document_id):
+        ...
+
+    def remove(self, document_id):
+        ...
 
     def __iter__(self):
         """ Iter all documents in the queue """

@@ -17,6 +17,14 @@ type Author {
 }
 
 """
+Author of a document as input
+"""
+input AuthorInput {
+  firstName: String
+  lastName: String
+}
+
+"""
 A publication as listed in the study monitor
 """
 type Document {
@@ -55,10 +63,10 @@ Filters used when fetching documents
 """
 input FilterArgs {
   year: [Int!]
-  journal: [String!]
-  author: [String!]
-  discipline: [String!]
-  keyword: [String!]
+  source: [String!]
+  authors: [AuthorInput!]
+  disciplines: [String!]
+  keywords: [String!]
 }
 
 """

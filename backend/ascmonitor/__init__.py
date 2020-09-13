@@ -10,7 +10,9 @@ dictConfig(
         "version": 1,
         "disable_existing_loggers": False,
         "formatters": {
-            "default": {"format": "[%(asctime)s] %(levelname)s in %(module)s: %(message)s",}
+            "default": {
+                "format": "[%(asctime)s] %(levelname)s in %(module)s: %(message)s",
+            }
         },
         "handlers": {
             "wsgi": {
@@ -31,9 +33,3 @@ if not development:
         "https://91d6a27d4de14deba93bac991e05185f@sentry.io/1661534",
         integrations=[FlaskIntegration()],
     )
-
-# some global types
-from typing import Any, List, Dict
-
-DocumentType = Dict[str, Any]
-DocumentsType = List[DocumentType]
