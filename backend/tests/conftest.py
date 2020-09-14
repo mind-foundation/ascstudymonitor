@@ -1,4 +1,5 @@
 import os
+import shutil
 import pytest
 
 from dateutil.parser import parse as parse_datetime
@@ -16,6 +17,14 @@ os.environ["TWITTER_API_KEY"] = "xxx"
 os.environ["TWITTER_API_SECRET"] = "xxx"
 os.environ["TWITTER_ACCESS_TOKEN"] = "xxx"
 os.environ["TWITTER_ACCESS_SECRET"] = "xxx"
+os.environ["SEARCH_INDEX_PATH"] = "publication_index_testing"
+
+
+@pytest.fixture(autouse=True, scope="session")
+def publication_search_index():
+    yield
+    # remove index after testing
+    shutil.rmtree(os.environ["SEARCH_INDEX_PATH"])
 
 
 @pytest.fixture
@@ -24,7 +33,7 @@ def mongo():
 
 
 @pytest.fixture
-def documents():
+def publications():
     return [
         {
             "title": "MDMA-assisted PTSD Therapy",
@@ -37,6 +46,7 @@ def documents():
             "file_attached": False,
             "abstract": "First abstract",
             "disciplines": ["Psychiatry"],
+            "keywords": ["therapy", "MDMA", "PTSD"],
         },
         {
             "title": "Free Energy Principle",
@@ -49,5 +59,10 @@ def documents():
             "file_attached": True,
             "abstract": "Second abstract",
             "disciplines": ["Neuroscience"],
+            "keywords": [
+                "Free Energy Principle",
+                "Variational Inference",
+                "Predictive Coding",
+            ],
         },
     ]

@@ -1,5 +1,5 @@
 """
-Keep log of changes to documents
+Keep log of changes to publications
 """
 
 from typing import Iterable, List, Optional, Tuple
@@ -19,22 +19,22 @@ class EventStore:
         """ Connect the event store to the database """
         self._collection = mongo[self.collection_name]
 
-    def put(self, document_id: str, event: BaseEvent):
+    def put(self, publication_id: str, event: BaseEvent):
         """ Put an event in the event store """
-        logger.debug("Put in document %s event: %s", document_id, event.as_dict())
-        query = {"_id": document_id}
+        logger.debug("Put in publication %s event: %s", publication_id, event.as_dict())
+        query = {"_id": publication_id}
         update = {"$push": {"events": event.as_dict()}}
         self._collection.update_one(query, update, upsert=True)
 
     def query(
-        self, document_ids: List[str], kinds: Optional[List[EventKind]] = None
+        self, publication_ids: List[str], kinds: Optional[List[EventKind]] = None
     ) -> Iterable[Tuple[str, BaseEvent]]:
         """
         Iterate events filtered by event kinds,
         starting with the newest
         """
         aggregation = [
-            {"$match": {"_id": {"$in": document_ids}}},
+            {"$match": {"_id": {"$in": publication_ids}}},
             {"$unwind": "$events"},
             {"$sort": {"events.timestamp": pymongo.DESCENDING}},
         ]

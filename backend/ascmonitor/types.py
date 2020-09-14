@@ -1,8 +1,8 @@
 """ Domain-specific types """
 from typing import Any, List, Dict, Optional, Union
 
-DocumentType = Dict[str, Any]
-DocumentsType = List[DocumentType]
+PublicationType = Dict[str, Any]
+PublicationsType = List[PublicationType]
 
 # Filters are mapping from field name to list of included items.
 # The list may be None to play nicely with GraphQL

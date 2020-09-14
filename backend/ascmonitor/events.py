@@ -1,7 +1,7 @@
 """
 Events which are put in the EventStore.
-An event is always associated with a document.
-The event store organized events by documents.
+An event is always associated with a publication.
+The event store organized events by publications.
 """
 # pylint: disable=too-few-public-methods
 
@@ -14,9 +14,9 @@ import attr
 class EventKind(Enum):
     """ Kind of an event """
 
-    new_document = "new_document"
-    updated_document = "updated_document"
-    deleted_document = "deleted_document"
+    new_publication = "new_publication"
+    updated_publication = "updated_publication"
+    deleted_publication = "deleted_publication"
     post_start = "post_start"
     post_success = "post_success"
     post_failure = "post_failure"
@@ -50,26 +50,26 @@ class BaseEvent:
 
 
 @attr.s(frozen=True, auto_attribs=True)
-class NewDocEvent(BaseEvent):
+class NewPubEvent(BaseEvent):
     """ Event """
 
-    kind: EventKind = EventKind.new_document
+    kind: EventKind = EventKind.new_publication
 
 
 @attr.s(frozen=True, auto_attribs=True)
-class UpdatedDocEvent(BaseEvent):
+class UpdatedPubEvent(BaseEvent):
     """ Event """
 
     updates: Dict[str, Any]
-    kind: EventKind = EventKind.updated_document
+    kind: EventKind = EventKind.updated_publication
     timestamp: datetime = attr.Factory(datetime.utcnow)
 
 
 @attr.s(frozen=True, auto_attribs=True)
-class DeletedDocEvent(BaseEvent):
+class DeletedPubEvent(BaseEvent):
     """ Event """
 
-    kind: EventKind = EventKind.deleted_document
+    kind: EventKind = EventKind.deleted_publication
 
 
 @attr.s(frozen=True, auto_attribs=True)

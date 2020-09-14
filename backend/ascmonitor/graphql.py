@@ -18,22 +18,22 @@ from ascmonitor.config import (
     mongo_db,
     channel_auths,
 )
-from ascmonitor.document_store import DocumentStore
+from ascmonitor.publication_store import PublicationStore
 from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import Mendeleur, MendeleyAuthInfo
 from ascmonitor.poster import Poster
-from ascmonitor.types import DocumentType, FilterList
+from ascmonitor.types import PublicationType, FilterList
 
 mendeleur = Mendeleur(MendeleyAuthInfo(**mendeley_authinfo), mendeley_group_id)
 mongo = MongoClient(**mongo_config)[mongo_db]
 event_store = EventStore(mongo)
-document_store = DocumentStore(
+publication_store = PublicationStore(
     mendeleur=mendeleur, mongo=mongo, event_store=event_store
 )
 poster = Poster(
     mongo=mongo,
     event_store=event_store,
-    document_store=document_store,
+    publication_store=publication_store,
     auths=channel_auths,
 )
 
@@ -44,15 +44,15 @@ query = QueryType()
 
 # pylint: disable=redefined-builtin,invalid-name
 @query.field("publication")
-def resolve_publication(*_, id: str) -> Optional[DocumentType]:
+def resolve_publication(*_, id: str) -> Optional[PublicationType]:
     """ Fetch publication by id """
-    return document_store.get_by_id(id)
+    return publication_store.get_by_id(id)
 
 
 @query.field("publicationBySlug")
-def resolve_publication_by_slug(*_, slug: str) -> Optional[DocumentType]:
+def resolve_publication_by_slug(*_, slug: str) -> Optional[PublicationType]:
     """ Fetch publication by slug """
-    return document_store.get_by_slug(slug)
+    return publication_store.get_by_slug(slug)
 
 
 @query.field("publications")
@@ -64,7 +64,9 @@ def resolve_publications(
     after: Optional[str] = None,
 ) -> Dict[str, Any]:
     """ Query, filter and paginate publications """
-    docs = document_store.get_documents(first=first, cursor=after, filters=filters)
+    docs = publication_store.get_publications(
+        first=first, cursor=after, filters=filters
+    )
     edges = [{"cursor": doc["cursor"], "node": doc} for doc in docs]
 
     return {
@@ -82,7 +84,7 @@ def resolve_publications(
 def resolve_publication_download_url(*_, id: str) -> Optional[str]:
     """ Resolves to download url or None on error """
     try:
-        return document_store.get_download_url(id)
+        return publication_store.get_download_url(id)
     except:  # pylint: disable=bare-except
         return None
 
@@ -103,7 +105,7 @@ publication_type = ObjectType("Publication")
 def resolve_recommendations(source, _info, first: int) -> List[Dict[str, Any]]:
     """ Resolve recommended publications for source publication """
     # TODO: stub
-    docs = document_store.get_documents(first=first)
+    docs = publication_store.get_publications(first=first)
     scores = [i / (len(docs) + 1) for i in range(1, len(docs) + 1)]
     recommendations = []
     for doc, score in zip(docs, scores[::-1]):
@@ -118,7 +120,7 @@ mutation = MutationType()
 def resolve_update_publications(*_) -> Dict[str, Any]:
     """ Update the publications in the document store """
     try:
-        document_store.update()
+        publication_store.update()
     except Exception as exc:  # pylint: disable=broad-except
         return {"success": False, "message": repr(exc)}
 
