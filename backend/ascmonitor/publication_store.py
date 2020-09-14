@@ -97,6 +97,7 @@ class PublicationStore:
         self,
         first: Optional[int] = None,
         cursor: Optional[str] = None,
+        search: Optional[str] = None,
         filters: Optional[FilterList] = None,
     ) -> PublicationsType:
         """
@@ -110,6 +111,15 @@ class PublicationStore:
         # parse cursor into mongo query
         if cursor:
             query["cursor"] = {"$lt": decode_cursor(cursor)}
+
+        # invoke search engine
+        if search is not None:
+            # if no cursor and first is given, limit search
+            limit = None
+            if not cursor and first is not None:
+                limit = first
+            ids = self.search_engine.search(search, limit)
+            query["_id"] = {"$in": ids}
 
         # put filters into mongo query
         if filters is not None:

@@ -19,6 +19,7 @@ attrs = "^19.3.0"
 python-dateutil = "^2.8.1"
 ariadne = "^0.12.0"
 pyhumps = "^1.6.1"
+whoosh = "^2.7.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0"

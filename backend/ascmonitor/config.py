@@ -3,11 +3,11 @@
 import json
 import os
 
-# makes some things faster
+
 development = os.environ.get("FLASK_ENV", "") == "development"
 
 
-def in_docker():
+def _in_docker():
     """ Returns: True if running in a Docker container """
     if not os.path.exists("/proc/1/cgroup"):
         # not on linux
@@ -17,16 +17,20 @@ def in_docker():
         return "docker" in ifh.read()
 
 
-env = os.environ
-secrets = {}
+in_docker = _in_docker()
 
-if in_docker():
+# load secrets from json if in docker
+# or environment variables
+secrets = {}
+if in_docker:
     with open("/run/secrets/asc-secret") as f:
         secret = json.load(f)
         secrets.update(secret)
 else:
-    secrets.update(env)
+    secrets.update(os.environ)
 
+
+# mendeley infos
 mendeley_authinfo = {
     "client_id": secrets["MENDELEY_CLIENT_ID"],
     "client_secret": secrets["MENDELEY_CLIENT_SECRET"],
@@ -34,7 +38,9 @@ mendeley_authinfo = {
     "user": secrets["MENDELEY_USER"],
     "password": secrets["MENDELEY_PASSWORD"],
 }
+mendeley_group_id = "d9389c6c-8ab5-3b8b-86ed-33db09ca0198"
 
+# authentication for channels to post on
 channel_auths = {
     "twitter": {
         "api_key": secrets["TWITTER_API_KEY"],
@@ -44,14 +50,14 @@ channel_auths = {
     }
 }
 
+# a secret token for trigerring posts
 post_secret_token = secrets.get("POST_SECRET_TOKEN", None)
 if not development and not post_secret_token:
     raise RuntimeError("post secret token missing")
 
 
-mendeley_group_id = "d9389c6c-8ab5-3b8b-86ed-33db09ca0198"
-
-if in_docker():
+# mongo db config
+if in_docker:
     mongo_config = {
         "host": "mongo",
         "port": 27017,
@@ -63,7 +69,14 @@ else:
         "host": "localhost",
         "port": 27017,
     }
+
 mongo_db = "asc"
+
+# search engine setup
+if in_docker:
+    search_index_path = "/run/publication_index"
+else:
+    search_index_path = os.environ.get("SEARCH_INDEX_PATH", "publication_index")
 
 # fields to send on the documents endpoint
 required_fields = {
