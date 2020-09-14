@@ -1,4 +1,8 @@
-""" Events which are put in the EventStore """
+"""
+Events which are put in the EventStore.
+An event is always associated with a document.
+The event store organized events by documents.
+"""
 # pylint: disable=too-few-public-methods
 
 from datetime import datetime
@@ -18,17 +22,10 @@ class EventKind(Enum):
     post_failure = "post_failure"
 
 
-def doc_for_event(document: Dict[str, Any]) -> Dict[str, Any]:
-    """ Extract keys for event from document """
-    keys = {"id", "title", "slug"}
-    return {k: v for k, v in document.items() if k in keys}
-
-
 def event_from_dict(event: Dict[str, Any]) -> "BaseEvent":
     """ Convert event dict to event """
     cls = globals()[event["class_name"]]
     del event["class_name"]
-    del event["_id"]
     kind = EventKind(event["kind"])
     assert isinstance(cls, type(BaseEvent))
     return cls(**{**event, "kind": kind})  # type: ignore
@@ -41,7 +38,6 @@ class BaseEvent:
     timestamps are in utc
     """
 
-    document: Dict[str, Any] = attr.ib(converter=doc_for_event)
     kind: EventKind
     timestamp: datetime = attr.Factory(datetime.utcnow)
 
@@ -64,7 +60,9 @@ class NewDocEvent(BaseEvent):
 class UpdatedDocEvent(BaseEvent):
     """ Event """
 
+    updates: Dict[str, Any]
     kind: EventKind = EventKind.updated_document
+    timestamp: datetime = attr.Factory(datetime.utcnow)
 
 
 @attr.s(frozen=True, auto_attribs=True)

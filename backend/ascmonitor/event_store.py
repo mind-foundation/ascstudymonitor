@@ -1,9 +1,8 @@
 """
-Keep track of changes to the document store
-and posted publications.
+Keep log of changes to documents
 """
 
-from typing import List
+from typing import Iterable, List, Optional, Tuple
 from logging import getLogger
 import pymongo
 from ascmonitor.events import BaseEvent, EventKind, event_from_dict
@@ -19,30 +18,35 @@ class EventStore:
     def __init__(self, mongo):
         """ Connect the event store to the database """
         self._collection = mongo[self.collection_name]
-        self._collection.create_index("timestamp")
 
-    def put(self, event):
+    def put(self, document_id: str, event: BaseEvent):
         """ Put an event in the event store """
-        logger.debug("Put event: %s", event.as_dict())
-        self._collection.insert(event.as_dict())
+        logger.debug("Put in document %s event: %s", document_id, event.as_dict())
+        query = {"_id": document_id}
+        update = {"$push": {"events": event.as_dict()}}
+        self._collection.update_one(query, update, upsert=True)
 
-    def put_many(self, events: List[BaseEvent]):
-        """ Put many events in the event store """
-        if not events:
-            return
-        events_for_db = [e.as_dict() for e in events]
-        self._collection.insert_many(events_for_db)
-
-    def query(self, kinds=None):
+    def query(
+        self, document_ids: List[str], kinds: Optional[List[EventKind]] = None
+    ) -> Iterable[Tuple[str, BaseEvent]]:
         """
         Iterate events filtered by event kinds,
         starting with the newest
         """
-        if kinds is not None:
-            query = {"kind": {"$in": [EventKind(k) for k in kinds]}}
-        else:
-            query = {}
+        aggregation = [
+            {"$match": {"_id": {"$in": document_ids}}},
+            {"$unwind": "$events"},
+            {"$sort": {"events.timestamp": pymongo.DESCENDING}},
+        ]
 
-        events = self._collection.find(query).sort("timestamp", pymongo.DESCENDING)
-        events = (event_from_dict(e) for e in events)
-        yield from events
+        if kinds:
+            kind_values = [kind.value for kind in kinds]
+            aggregation.append({"$match": {"events.kind": {"$in": kind_values}}})
+
+        events = self._collection.aggregate(aggregation)
+
+        for event in events:
+            yield (
+                event["_id"],
+                event_from_dict(event["events"]),
+            )

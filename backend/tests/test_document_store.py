@@ -1,3 +1,4 @@
+from datetime import datetime
 from unittest.mock import patch
 import pytest
 
@@ -46,32 +47,53 @@ def test_update(mendeleur, mongo, event_store):
     )
     document_store.update()
     mendeleur.all_documents.assert_called_once()
+    event_store.put.assert_called()
 
 
 def test_put(mendeleur, mongo, event_store, documents, documents_response):
     document_store = DocumentStore(
         mendeleur=mendeleur, mongo=mongo, event_store=event_store
     )
-    document_store.put(documents)
+    changes = document_store.put(documents)
     assert document_store.get_documents() == documents_response
+
+    created, removed, updated = changes
+    assert created == {doc["id"] for doc in documents}
+    assert removed == set()
+    assert updated == {}
 
 
 def test_put__ignore_old(document_store, documents, documents_response):
-    document_store.put(documents)
+    changes = document_store.put(documents)
     assert document_store.get_documents() == documents_response
+
+    created, removed, updated = changes
+    assert created == set()
+    assert removed == set()
+    assert updated == {}
 
 
 def test_put__update(document_store, documents, documents_response):
     updated = [{**documents[0], "year": 2050}, documents[1]]
     expected = [{**documents_response[0], "year": 2050}, documents_response[1]]
 
-    document_store.put(updated)
+    changes = document_store.put(updated)
     assert document_store.get_documents() == expected
+
+    created, removed, updated = changes
+    assert created == set()
+    assert removed == set()
+    assert updated == {documents[0]["id"]: {"year": 2050}}
 
 
 def test_put__delete(document_store, documents, documents_response):
-    document_store.put([documents[0]])
+    changes = document_store.put([documents[0]])
     assert document_store.get_documents() == [documents_response[0]]
+
+    created, removed, updated = changes
+    assert created == set()
+    assert removed == {documents[1]["id"]}
+    assert updated == {}
 
 
 def test_get_by_slug(document_store, documents, documents_response):

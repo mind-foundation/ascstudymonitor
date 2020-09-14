@@ -1,18 +1,21 @@
 """ Store and access documents in Mendeley """
 from base64 import b64encode, b64decode
 from logging import getLogger
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Optional, Set, Tuple
 
 from pymongo import DESCENDING
 from pymongo.database import Database
 from pymongo.errors import BulkWriteError
 from slugify import slugify
 
+from ascmonitor.events import NewDocEvent, UpdatedDocEvent, DeletedDocEvent
 from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import Mendeleur
 from ascmonitor.types import DocumentType, DocumentsType, FilterList
 
 logger = getLogger(__name__)
+
+Changes = Tuple[Set[str], Set[str], Dict[str, Dict[str, Any]]]
 
 
 def encode_cursor(cursor: Optional[str]) -> str:
@@ -132,16 +135,21 @@ class DocumentStore:
     def update(self):
         """ Update the document store by fetching from mendeley. """
         documents = self._mendeley.all_documents()
-        self.put(documents)
+        changes = self.put(documents)
+        self.emit_changes(changes)
 
     def get_download_url(self, document_id: str) -> str:
         """ Get download link for specified document """
         return self._mendeley.get_download_url(document_id)
 
-    def put(self, documents: DocumentsType):
+    def put(self, documents: DocumentsType) -> Changes:
         """ Put updated list of documents in document store """
         # preprocess documents
         documents = self._prepare_docs_for_insert(documents)
+
+        # find changes
+        current_documents = list(self._collection.find())
+        changes = self.compare_documents(documents, current_documents)
 
         # replace documents
         self._collection.delete_many({})
@@ -149,6 +157,46 @@ class DocumentStore:
 
         # update slugs
         self._put_slugs(documents)
+
+        return changes
+
+    @staticmethod
+    def compare_documents(new: DocumentsType, old: DocumentsType) -> Changes:
+        """
+        Compare new docs with old docs and save differences as events
+        :returns: Triple of created, removed, updated
+        """
+        old_docs = {d["id"]: d for d in old}
+        new_docs = {d["id"]: d for d in new}
+
+        old_ids = set(old_docs.keys())
+        new_ids = set(new_docs.keys())
+        created = new_ids - old_ids
+        removed = old_ids - new_ids
+
+        updated: Dict[str, Dict[str, Any]] = {}
+        for id_ in old_ids & new_ids:
+            for field_name, new_value in new_docs[id_].items():
+                old_value = old_docs[id_].get(field_name, None)
+                if new_value != old_value:
+                    updated.setdefault(id_, {})
+                    updated[id_][field_name] = new_value
+
+        return created, removed, updated
+
+    def emit_changes(self, changes: Changes):
+        """ Emit changes as events in the event store """
+        created, removed, updated = changes
+
+        for doc_id in created:
+            self._event_store.put(doc_id, NewDocEvent())
+
+        for doc_id in removed:
+            self._event_store.put(doc_id, DeletedDocEvent())
+
+        for doc_id, updates in updated.items():
+            event = UpdatedDocEvent(updates=updates)
+            self._event_store.put(doc_id, event)
 
     @staticmethod
     def _prepare_docs_for_insert(documents: DocumentsType) -> DocumentsType:
