@@ -14,6 +14,7 @@ Author of a publication
 type Author {
   firstName: String
   lastName: String
+  publicationCount: Int!
 }
 
 """
@@ -25,21 +26,53 @@ input AuthorInput {
 }
 
 """
+The year of a publication
+"""
+type Year {
+  value: Int!
+  publicationCount: Int!
+}
+
+"""
+An academic journal
+"""
+type Journal {
+  value: String!
+  publicationCount: Int!
+}
+
+"""
+Discipline of a publication, assigned by the ASC Studymonitor editors
+"""
+type Discipline {
+  value: String!
+  publicationCount: Int!
+}
+
+"""
+Keyword of a publication, usually assigned by the authors
+"""
+type Keyword {
+  value: String!
+  publicationCount: Int!
+}
+
+"""
 A publication as listed in the study monitor
 """
 type Publication {
   abstract: String!
   authors: [Author!]!
   created: String!
-  disciplines: [String!]!
+  disciplines: [Discipline!]!
   fileAttached: Boolean!
   id: ID!
-  keywords: [String!]!
+  keywords: [Keyword!]!
   slug: String!
-  journal: String
+  journal: Journal
   title: String!
   websites: [String!]
-  year: Int
+  year: Year
 
   recommendations(first: Int!): [Recommendation!]!
 }
@@ -58,6 +91,7 @@ Paginated publications
 type PublicationsConnection {
   edges: [PublicationEdge!]!
   pageInfo: PageInfo!
+  totalCount: Int!
 }
 
 """
@@ -71,7 +105,7 @@ type Recommendation {
 """
 Filters used when fetching publications
 """
-input FilterArgs {
+input FilterInput {
   year: [Int!]
   journal: [String!]
   authors: [AuthorInput!]
@@ -122,13 +156,18 @@ type PostResponse {
   response: TwitterResponse
 }
 
+"""
+A filterable field, returned as a filter suggestion
+"""
+union FilterableField = Year | Journal | Author | Discipline | Keyword
+
 type Query {
   "Fetch paginated publications"
   publications(
     "Search query for fuzzy full text search in publications"
-    query: String
+    search: String
     "Hard filters for publications"
-    filters: FilterArgs
+    filters: FilterInput
     "Size of page"
     first: Int
     "Cursor for page"
@@ -146,6 +185,24 @@ type Query {
 
   "View the queue for a channel"
   queue(channel: String!): [Publication!]
+
+  "Get suggestions for filters based on fuzzy search"
+  fieldSuggestions(query: String!, first: Int): [FilterableField!]!
+
+  "Get infos for all years"
+  years: [Year!]!
+
+  "Get infos for all journals"
+  journals: [Journal!]!
+
+  "Get infos for all authors"
+  authors: [Author!]!
+
+  "Get infos for all disciplines"
+  disciplines: [Discipline!]!
+
+  "Get infos for all keywords"
+  keywords: [Keyword!]!
 }
 
 type Mutation {

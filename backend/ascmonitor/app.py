@@ -15,7 +15,7 @@ from flask import (
 from flask_cors import CORS
 
 from ascmonitor.config import development
-from ascmonitor.graphql import document_store, schema
+from ascmonitor.graphql import publication_store, schema
 from ascmonitor.sitemap import sitemap_template
 
 static_folder = "../../client/dist/"
@@ -47,19 +47,19 @@ def graphql_server():
 
 @app.route("/publications/<id_>/download")
 def download(id_):
-    """ Download a attached PDF document """
+    """ Download a attached PDF publication """
     # TODO: error handling
-    download_url = document_store.get_download_url(id_)
+    download_url = publication_store.get_download_url(id_)
     return redirect(download_url, code=301)
 
 
 @app.route("/p/<slug>")
 def single_publication(slug):
     """
-    Provides static link to document.
+    Provides static link to publication.
     Includes meta tags.
     """
-    publication = document_store.get_by_slug(slug)
+    publication = publication_store.get_by_slug(slug)
     if publication is None:
         abort(404)
 
@@ -107,7 +107,7 @@ def sitemap():
     """ Build sitemap """
     urlset = [
         {"loc": url_for("single_publication", slug=d["slug"], _external=True)}
-        for d in document_store.get_documents()
+        for d in publication_store.get_publications()
     ]
     return render_template_string(sitemap_template, urlset=urlset)
 

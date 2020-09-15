@@ -1,4 +1,4 @@
-""" Channels format and send documents """
+""" Channels format and send publications """
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, asdict
@@ -6,7 +6,7 @@ from datetime import datetime
 from logging import getLogger
 from typing import Any, Optional
 
-from ascmonitor.types import DocumentType
+from ascmonitor.types import PublicationType
 
 logger = getLogger(__name__)
 
@@ -36,7 +36,7 @@ class PreparedPost:
     The payload can reconstruct a post.
     """
 
-    document: DocumentType
+    publication: PublicationType
     channel: "Channel"
     payload: Any
 
@@ -64,7 +64,7 @@ class SentPost(PreparedPost):
     ) -> "SentPost":
         """ Upgrade a PreparedPost """
         return cls(
-            document=post.document,
+            publication=post.publication,
             channel=post.channel,
             payload=post.payload,
             id_=id_,
@@ -87,8 +87,8 @@ class Channel(ABC):
         """ Unique name of channel """
 
     @abstractmethod
-    def format(self, document: DocumentType) -> PreparedPost:
-        """ Format a document to return a post """
+    def format(self, publication: PublicationType) -> PreparedPost:
+        """ Format a publication to return a post """
 
     @abstractmethod
     def send(self, post: PreparedPost) -> SentPost:

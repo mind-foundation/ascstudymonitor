@@ -1,6 +1,5 @@
 """ GraphQL resolvers """
 
-from pymongo import MongoClient
 from typing import Any, Dict, List, Optional
 
 from ariadne import (
@@ -10,6 +9,7 @@ from ariadne import (
     make_executable_schema,
     load_schema_from_path,
 )
+from pymongo import MongoClient
 
 from ascmonitor.config import (
     mendeley_authinfo,
@@ -58,18 +58,28 @@ def resolve_publication_by_slug(*_, slug: str) -> Optional[PublicationType]:
 @query.field("publications")
 def resolve_publications(
     *_,
-    query: Optional[str] = None,
+    search: Optional[str] = None,
     filters: Optional[FilterList] = None,
     first: Optional[int] = None,
     after: Optional[str] = None,
 ) -> Dict[str, Any]:
     """ Query, filter and paginate publications """
-    docs = publication_store.get_publications(
-        first=first, cursor=after, filters=filters
+    pubs = publication_store.get_publications(
+        first=first, cursor=after, search=search, filters=filters
     )
-    edges = [{"cursor": doc["cursor"], "node": doc} for doc in docs]
 
+    # embed filterable fields
+    for pub in pubs:
+        for field in ["year", "journal", "disciplines", "keywords"]:
+            pub[field] = {"value": pub[field]}
+
+    # build edges
+    edges = [{"cursor": pub["cursor"], "node": pub} for pub in pubs]
+
+    # also return the query to make it available to child resolvers
     return {
+        "search": search,
+        "filters": filters,
         "edges": edges,
         "pageInfo": {
             "hasNextPage": first is not None and len(edges) >= first,
@@ -98,6 +108,17 @@ def resolve_queue(*_, channel: str) -> Dict[str, Any]:
     raise NotImplementedError()
 
 
+publications_connection = ObjectType("PublicationsConnection")
+
+
+@publications_connection.field("totalCount")
+def publications_total_count(object, _info) -> int:
+    """ Return the total count of a publications connection """
+    search = object["search"]
+    filters = object["filters"]
+    return publication_store.get_publications_count(search, filters)
+
+
 publication_type = ObjectType("Publication")
 
 
@@ -111,6 +132,31 @@ def resolve_recommendations(source, _info, first: int) -> List[Dict[str, Any]]:
     for doc, score in zip(docs, scores[::-1]):
         recommendations.append({"score": score, "publication": doc})
     return recommendations
+
+
+author_type = ObjectType("Author")
+year_type = ObjectType("Year")
+journal_type = ObjectType("Journal")
+discipline_type = ObjectType("Discipline")
+keyword_type = ObjectType("Keyword")
+
+
+@author_type.field("publicationCount")
+@year_type.field("publicationCount")
+@journal_type.field("publicationCount")
+@discipline_type.field("publicationCount")
+@keyword_type.field("publicationCount")
+def resolve_publication_count(object, info) -> int:
+    """ Count the publications for a specific field """
+    value = object["value"]
+    field = {
+        "Author": "authors",
+        "Year": "year",
+        "Journal": "journal",
+        "Discipline": "disciplines",
+        "Keyword": "keyword",
+    }[info.parent_type.name]
+    return publication_store.count_publications(field, value)
 
 
 mutation = MutationType()
@@ -167,4 +213,15 @@ def resolve_post(*_, channel: str, secret: str):
     raise NotImplementedError()
 
 
-schema = make_executable_schema(type_defs, query, publication_type, mutation)
+schema = make_executable_schema(
+    type_defs,
+    query,
+    publication_type,
+    publications_connection,
+    author_type,
+    year_type,
+    journal_type,
+    discipline_type,
+    keyword_type,
+    mutation,
+)

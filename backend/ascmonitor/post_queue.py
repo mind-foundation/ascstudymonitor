@@ -1,5 +1,5 @@
 """
-A queue of documents which is specific to a channel.
+A queue of publications which is specific to a channel.
 Documents can be appended, removed or reordered.
 The queue can be inspected with a user interface.
 """
@@ -24,45 +24,45 @@ class PostQueue:
         self.channel = channel
         self._queue.up
 
-    def append(self, document_id: str):
+    def append(self, publication: str):
         """
-        Append a document to the end of the queue.
-        :raises ValueError: if document is already in queue
+        Append a publication to the end of the queue.
+        :raises ValueError: if publication is already in queue
         """
         ...
 
-    def move_up(self, document_id):
+    def move_up(self, publication_id):
         ...
 
-    def move_down(self, document_id):
+    def move_down(self, publication_id):
         ...
 
-    def remove(self, document_id):
+    def remove(self, publication_id):
         ...
 
     def __iter__(self):
-        """ Iter all documents in the queue """
+        """ Iter all publications in the queue """
         events = self.event_store.query()
 
         excluded = set()
         for event in events:
             kind = event.kind
-            document = event.document
+            publication = event.publication
 
-            if kind == EventKind.new_document:
-                if document["id"] not in excluded:
-                    yield document
-            elif kind == EventKind.deleted_document:
-                excluded.add(document["id"])
+            if kind == EventKind.new_publication:
+                if publication["id"] not in excluded:
+                    yield publication
+            elif kind == EventKind.deleted_publication:
+                excluded.add(publication["id"])
             elif kind == EventKind.post_start and event.channel == self.channel:
-                excluded.add(document["id"])
+                excluded.add(publication["id"])
             elif kind == EventKind.post_success and event.channel == self.channel:
-                excluded.add(document["id"])
+                excluded.add(publication["id"])
             elif kind == EventKind.post_failure and event.channel == self.channel:
-                if event.allow_retry and document["id"] not in excluded:
-                    yield document
-                    excluded.add(document)
+                if event.allow_retry and publication["id"] not in excluded:
+                    yield publication
+                    excluded.add(publication)
 
     def pop(self):
-        """ Return the next document in the queue """
+        """ Return the next publication in the queue """
         return next(iter(self))

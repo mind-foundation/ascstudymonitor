@@ -13,7 +13,7 @@ from ascmonitor.publication_store import (
 @pytest.fixture
 def mendeleur(publications):
     with patch("ascmonitor.mendeleur.Mendeleur") as mendeleur_mock:
-        mendeleur_mock.all_publications.return_value = publications
+        mendeleur_mock.all_documents.return_value = publications
         yield mendeleur_mock
 
 
@@ -46,7 +46,7 @@ def test_update(mendeleur, mongo, event_store):
         mendeleur=mendeleur, mongo=mongo, event_store=event_store
     )
     publication_store.update()
-    mendeleur.all_publications.assert_called_once()
+    mendeleur.all_documents.assert_called_once()
     event_store.put.assert_called()
 
 
@@ -167,5 +167,40 @@ def test_get_publications__filter_disciplines(publication_store, publications_re
 
 def test_get_publications__filter_unmatched(publication_store, publications_response):
     filters = {"disciplines": ["Invalid"]}
+    fetched = publication_store.get_publications(filters=filters)
+    assert fetched == []
+
+
+def test_get_publications__filter_combination_hit(
+    publication_store, publications, publications_response
+):
+    filters = {
+        "disciplines": [publications[0]["disciplines"][0]],
+        "keywords": [publications[0]["keywords"][0]],
+    }
+    fetched = publication_store.get_publications(filters=filters)
+    assert fetched == [publications_response[0]]
+
+
+def test_get_publications__filter_combination_multiple(
+    publication_store, publications, publications_response
+):
+    filters = {
+        "disciplines": [
+            publications[0]["disciplines"][0],
+            publications[1]["disciplines"][0],
+        ]
+    }
+    fetched = publication_store.get_publications(filters=filters)
+    assert fetched == publications_response
+
+
+def test_get_publications__filter_combination_exclusion(
+    publication_store, publications, publications_response
+):
+    filters = {
+        "disciplines": [publications[0]["disciplines"][0]],
+        "keywords": [publications[1]["keywords"][0]],
+    }
     fetched = publication_store.get_publications(filters=filters)
     assert fetched == []

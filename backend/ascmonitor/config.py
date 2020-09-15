@@ -72,12 +72,6 @@ else:
 
 mongo_db = "asc"
 
-# search engine setup
-if in_docker:
-    search_index_path = "/run/publication_index"
-else:
-    search_index_path = os.environ.get("SEARCH_INDEX_PATH", "publication_index")
-
 # fields to send on the documents endpoint
 required_fields = {
     "abstract",

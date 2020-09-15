@@ -119,6 +119,12 @@ class Mendeleur:
             document.json["keywords"] = []
         return document
 
+    def ensure_abstract(self, document):
+        """ Ensure abstract is present or '' """
+        if document.abstract is None:
+            document.json["abstract"] = ""
+        return document
+
     def cast_created(self, document):
         """ Cast created to datetime """
         created = document.json["created"].replace("Z", "")
@@ -154,9 +160,10 @@ class Mendeleur:
         for document in documents:
             document = self.extract_disciplines(document)
             document = self.ensure_authors(document)
-            document = self.ensure_journal(document)
+            document = self.rename_journal_field(document)
             document = self.ensure_year(document)
             document = self.ensure_keywords(document)
+            document = self.ensure_abstract(document)
             document = self.fix_file_attached(document)
             document = self.cast_created(document)
             document = self.camel_case_fields(document)

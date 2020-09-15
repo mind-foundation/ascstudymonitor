@@ -10,7 +10,7 @@ from flask import request, url_for
 
 from ascmonitor.channels import Channel, PreparedPost, SentPost, PostSendException
 from ascmonitor.config import development
-from ascmonitor.types import DocumentType
+from ascmonitor.types import PublicationType
 
 logger = logging.getLogger(__name__)
 
@@ -24,10 +24,10 @@ class TwitterChannel(Channel):
     space_for_hashtags = 100
 
     templates = [
-        "{title}\n{first_name} {last_name} et․al․",
-        "{title}\n{initial_name}. {last_name} et․al․",
-        "{title}\n{last_name} et․al․",
-        "{title_short}\n{initial_name} {last_name} et․al․",
+        "{title}\n{first_name} {last_name} et al",
+        "{title}\n{initial_name}. {last_name} et al",
+        "{title}\n{last_name} et al",
+        "{title_short}\n{initial_name} {last_name} et al",
         "{title}",
         "{title_short}",
     ]
@@ -64,10 +64,10 @@ class TwitterChannel(Channel):
         return self._short_url_length_https
 
     @staticmethod
-    def extract_author(document):
+    def extract_author(publication):
         """ Get author information reliably """
         names = {"first_name": "", "last_name": "", "initial_name": ""}
-        authors = document.get("authors", [])
+        authors = publication.get("authors", [])
         if not authors:
             return names
 
@@ -89,22 +89,22 @@ class TwitterChannel(Channel):
         return names
 
     @staticmethod
-    def get_url(document):
-        """ Build tweet url for document """
+    def get_url(publication):
+        """ Build tweet url for publication """
         if development:
             host = request.host_url
-            return host + url_for("publication", slug=document["slug"])
-        return url_for("publication", slug=document["slug"], _external=True)
+            return host + url_for("publication", slug=publication["slug"])
+        return url_for("publication", slug=publication["slug"], _external=True)
 
-    def format(self, document: DocumentType) -> PreparedPost:
-        """ Format a document to return a post """
+    def format(self, publication: PublicationType) -> PreparedPost:
+        """ Format a publication to return a post """
         templates = [*self.templates]
 
-        title = document["title"]
+        title = publication["title"]
         title_short = " ".join(title[:100].split(" ")[:-1]) + "…"
 
         # extract author and remove invalid templates
-        author = self.extract_author(document)
+        author = self.extract_author(publication)
         missing = {k for k, v in author.items() if not v}
         templates = [t for t in templates if not any(k in t for k in missing)]
 
@@ -122,16 +122,18 @@ class TwitterChannel(Channel):
         else:
             raise PostSendException(
                 "Could not find format fitting headline character limit: "
-                f"id={document['id']} - title={title}",
+                f"id={publication['id']} - title={title}",
                 allow_retry=False,
             )
 
         status += "\n{url}\n\n"
 
         keywords = [
-            kw for kw in document.get("keywords", []) if kw not in self.static_hashtags
+            kw
+            for kw in publication.get("keywords", [])
+            if kw not in self.static_hashtags
         ]
-        hashtags = self.static_hashtags + document.get("disciplines", []) + keywords
+        hashtags = self.static_hashtags + publication.get("disciplines", []) + keywords
         for hashkw in hashtags:
             if " " in hashkw:
                 hashkw = hashkw.title()
@@ -146,10 +148,10 @@ class TwitterChannel(Channel):
                 break
             status += hashtag
 
-        status = status.format(url=self.get_url(document))
+        status = status.format(url=self.get_url(publication))
 
         logger.debug("Prepared post %s, length %d", status, len(status))
-        return PreparedPost(document=document, channel=self, payload=status)
+        return PreparedPost(publication=publication, channel=self, payload=status)
 
     def send(self, post: PreparedPost) -> SentPost:
         """ Send a post via a channel """
@@ -167,4 +169,4 @@ class TwitterChannel(Channel):
             )
 
         except TweepError as error:
-            raise PostSendException(error.reason, allow_retry=False)
+            raise PostSendException(error.reason, allow_retry=False) from error

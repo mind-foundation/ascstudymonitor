@@ -3,7 +3,7 @@ from base64 import b64encode, b64decode
 from logging import getLogger
 from typing import Any, Dict, Optional, Set, Tuple
 
-from pymongo import DESCENDING
+from pymongo import DESCENDING, TEXT
 from pymongo.database import Database
 from pymongo.errors import BulkWriteError
 from slugify import slugify
@@ -11,8 +11,6 @@ from slugify import slugify
 from ascmonitor.events import NewPubEvent, UpdatedPubEvent, DeletedPubEvent
 from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import Mendeleur
-from ascmonitor.lock import mongo_lock, Locked
-from ascmonitor.search_engine import SearchEngine
 from ascmonitor.types import PublicationType, PublicationsType, FilterList
 
 logger = getLogger(__name__)
@@ -90,8 +88,22 @@ class PublicationStore:
         self._slugs.create_index("slug", unique=True)
         self._collection.create_index([("cursor", DESCENDING)])
 
-        # create the search engine
-        self.search_engine = SearchEngine(self.get_publications())
+        # let mongodb use index intersection for filters
+        self._collection.create_index("year")
+        self._collection.create_index("journal")
+        self._collection.create_index("disciplines")
+        self._collection.create_index("keywords")
+        self._collection.create_index("authors")
+
+        # use mongodb text index for full text search
+        self._collection.create_index(
+            [
+                ("title", TEXT),
+                ("authors", TEXT),
+                ("abstract", TEXT),
+                ("keywords", TEXT),
+            ]
+        )
 
     def get_publications(
         self,
@@ -104,35 +116,19 @@ class PublicationStore:
         Return page of publications.
         :param first: Maximum number of publications to return.
                       If None, return all.
-        :param cursor: Cursor to page. If None, return from first publication.
+        :param cursor: Cursor to page. If None or empty string, return from first publication.
         """
-        query: Dict[str, Any] = {}
+        if first is not None and first <= 0:
+            return []
 
-        # parse cursor into mongo query
-        if cursor:
+        query = self._build_query(search, filters)
+
+        if cursor is not None and cursor != "":
             query["cursor"] = {"$lt": decode_cursor(cursor)}
 
-        # invoke search engine
-        if search is not None:
-            # if no cursor and first is given, limit search
-            limit = None
-            if not cursor and first is not None:
-                limit = first
-            ids = self.search_engine.search(search, limit)
-            query["_id"] = {"$in": ids}
-
-        # put filters into mongo query
-        if filters is not None:
-            for attr, values in filters.items():
-                if values is not None:
-                    query[attr] = {"$in": values}
-
-        # execute mongodb query
-        logger.debug("Get publications with query: %s", query)
-        publications = self._collection.find(query, {"_id": False}).sort(
-            "cursor", DESCENDING
-        )
-
+        logger.debug("Get publications from mongodb with query: %s", query)
+        publications = self._collection.find(query, {"_id": False})
+        publications = publications.sort("cursor", DESCENDING)
         if first is not None:
             publications = publications.limit(first)
 
@@ -143,6 +139,17 @@ class PublicationStore:
             pub["cursor"] = encode_cursor(pub["cursor"])
 
         return publications
+
+    def get_publications_count(
+        self, search: Optional[str] = None, filters: Optional[FilterList] = None
+    ):
+        """ Get the total count of publications for a query """
+        query = self._build_query(search, filters)
+        return self._collection.count_documents(query)
+
+    def count_publications(self, field: str, value: str) -> int:
+        """ Count publications where a field has a specified value """
+        return self._collection.count_documents({field: value})
 
     def get_by_id(self, id_: str) -> Optional[PublicationType]:
         """ Return publication by slug or None if not found """
@@ -163,14 +170,9 @@ class PublicationStore:
         Update the publication store by fetching from mendeley.
         Fails if another process is currently updating the store.
         """
-        try:
-            with mongo_lock("updateLock", self._lock):
-                publications = self._mendeley.all_publications()
-                changes = self.put(publications)
-                self.emit_changes(changes)
-                self.search_engine.build_index(publications)
-        except Locked as exc:
-            raise UpdateLocked("Currently updating in another process") from exc
+        publications = self._mendeley.all_documents()
+        changes = self.put(publications)
+        self.emit_changes(changes)
 
     def get_download_url(self, publication_id: str) -> str:
         """ Get download link for specified publication """
@@ -231,6 +233,22 @@ class PublicationStore:
         for pub_id, updates in updated.items():
             event = UpdatedPubEvent(updates=updates)
             self._event_store.put(pub_id, event)
+
+    def _build_query(
+        self, search: Optional[str] = None, filters: Optional[FilterList] = None
+    ) -> Dict[str, Any]:
+        """ Build a mongo db query for a search query """
+        query: Dict[str, Any] = {}
+
+        if filters is not None:
+            for attr, values in filters.items():
+                if values is not None:
+                    query[attr] = {"$in": values}
+
+        if search is not None and search != "":
+            query["$text"] = {"$search": search}
+
+        return query
 
     @staticmethod
     def _prepare_for_insert(publications: PublicationsType) -> PublicationsType:

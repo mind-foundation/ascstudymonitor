@@ -17,14 +17,6 @@ os.environ["TWITTER_API_KEY"] = "xxx"
 os.environ["TWITTER_API_SECRET"] = "xxx"
 os.environ["TWITTER_ACCESS_TOKEN"] = "xxx"
 os.environ["TWITTER_ACCESS_SECRET"] = "xxx"
-os.environ["SEARCH_INDEX_PATH"] = "publication_index_testing"
-
-
-@pytest.fixture(autouse=True, scope="session")
-def publication_search_index():
-    yield
-    # remove index after testing
-    shutil.rmtree(os.environ["SEARCH_INDEX_PATH"])
 
 
 @pytest.fixture
