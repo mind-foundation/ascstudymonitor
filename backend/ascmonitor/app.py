@@ -48,8 +48,11 @@ def graphql_server():
 @app.route("/publications/<id_>/download")
 def download(id_):
     """ Download a attached PDF publication """
-    # TODO: error handling
-    download_url = publication_store.get_download_url(id_)
+    try:
+        download_url = publication_store.get_download_url(id_)
+    except ValueError:
+        abort(404)
+
     return redirect(download_url, code=301)
 
 

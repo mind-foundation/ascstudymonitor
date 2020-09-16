@@ -168,7 +168,7 @@ type Query {
     search: String
     "Hard filters for publications"
     filters: FilterInput
-    "Size of page"
+    "Size of page, default: 25"
     first: Int
     "Cursor for page"
     after: String

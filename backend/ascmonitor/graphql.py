@@ -60,7 +60,7 @@ def resolve_publications(
     *_,
     search: Optional[str] = None,
     filters: Optional[FilterList] = None,
-    first: Optional[int] = None,
+    first: Optional[int] = 25,
     after: Optional[str] = None,
 ) -> Dict[str, Any]:
     """ Query, filter and paginate publications """
@@ -99,7 +99,37 @@ def resolve_publication_download_url(*_, id: str) -> Optional[str]:
         return None
 
 
+@query.field("authors")
+def resolve_distinct_authors(*_) -> List[Dict[str, Any]]:
+    """ Resolve distinct authors """
+    authors = publication_store.get_distinct("authors")
+
+    # unpack value
+    for author in authors:
+        for field in ["firstName", "lastName"]:
+            if field in author["value"]:
+                author[field] = author["value"][field]
+        del author["value"]
+
+    return authors
+
+
+@query.field("years")
+@query.field("journals")
+@query.field("disciplines")
+@query.field("keywords")
 @query.field("queue")
+def resolve_distinct_fields(_, info) -> List[Dict[str, Any]]:
+    """ Resolve distinct values for a filterable field """
+    field = {
+        "[Year!]!": "year",
+        "[Journal!]!": "journal",
+        "[Discipline!]!": "disciplines",
+        "[Keyword!]!": "keywords",
+    }[str(info.return_type)]
+    return publication_store.get_distinct(field)
+
+
 def resolve_queue(*_, channel: str) -> Dict[str, Any]:
     """
     Show publications in queue for channel.
@@ -112,10 +142,10 @@ publications_connection = ObjectType("PublicationsConnection")
 
 
 @publications_connection.field("totalCount")
-def publications_total_count(object, _info) -> int:
+def publications_total_count(obj, _info) -> int:
     """ Return the total count of a publications connection """
-    search = object["search"]
-    filters = object["filters"]
+    search = obj["search"]
+    filters = obj["filters"]
     return publication_store.get_publications_count(search, filters)
 
 
@@ -123,9 +153,8 @@ publication_type = ObjectType("Publication")
 
 
 @publication_type.field("recommendations")
-def resolve_recommendations(source, _info, first: int) -> List[Dict[str, Any]]:
+def resolve_recommendations(_source, _info, first: int) -> List[Dict[str, Any]]:
     """ Resolve recommended publications for source publication """
-    # TODO: stub
     docs = publication_store.get_publications(first=first)
     scores = [i / (len(docs) + 1) for i in range(1, len(docs) + 1)]
     recommendations = []
@@ -142,19 +171,34 @@ keyword_type = ObjectType("Keyword")
 
 
 @author_type.field("publicationCount")
+def resolve_author_publication_count(obj, _info) -> int:
+    """ Count the publications for an author """
+    if "publicationCount" in obj:
+        return obj["publicationCount"]
+
+    author = {}
+    for field in ["firstName", "lastName"]:
+        if field in obj:
+            author[field] = obj[field]
+
+    return publication_store.count_publications("authors", author)
+
+
 @year_type.field("publicationCount")
 @journal_type.field("publicationCount")
 @discipline_type.field("publicationCount")
 @keyword_type.field("publicationCount")
-def resolve_publication_count(object, info) -> int:
-    """ Count the publications for a specific field """
-    value = object["value"]
+def resolve_publication_count(obj, info) -> int:
+    """ Count the publications for a filterable field """
+    if "publicationCount" in obj:
+        return obj["publicationCount"]
+
+    value = obj["value"]
     field = {
-        "Author": "authors",
         "Year": "year",
         "Journal": "journal",
         "Discipline": "disciplines",
-        "Keyword": "keyword",
+        "Keyword": "keywords",
     }[info.parent_type.name]
     return publication_store.count_publications(field, value)
 

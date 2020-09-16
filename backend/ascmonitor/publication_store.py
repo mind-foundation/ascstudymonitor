@@ -1,7 +1,7 @@
 """ Store and access publications in Mendeley """
 from base64 import b64encode, b64decode
 from logging import getLogger
-from typing import Any, Dict, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from pymongo import DESCENDING, TEXT
 from pymongo.database import Database
@@ -147,7 +147,43 @@ class PublicationStore:
         query = self._build_query(search, filters)
         return self._collection.count_documents(query)
 
-    def count_publications(self, field: str, value: str) -> int:
+    def get_distinct(self, field: str) -> List[Dict[str, Any]]:
+        """ Return all distinct values for a field and their publication counts """
+        # normalization step in aggregation pipeline for every possible field
+        try:
+            normalization = {
+                "year": "$year",
+                "authors": "$authors",
+                "journal": {"$toLower": "$journal"},
+                "disciplines": "$disciplines",
+                "keywords": {"$toLower": "$keywords"},
+            }[field]
+        except KeyError as exc:
+            raise ValueError(f"{field} is not a filterable field") from exc
+
+        aggregation = [
+            {"$unwind": f"${field}"},
+            {"$project": {field: 1}},
+            {
+                "$group": {
+                    "_id": normalization,
+                    "value": {"$first": f"${field}"},
+                    "count": {"$sum": 1},
+                }
+            },
+            {
+                "$project": {
+                    "_id": False,
+                    "value": True,
+                    "publicationCount": "$count",
+                }
+            },
+            {"$sort": {"publicationCount": -1}},
+        ]
+
+        return list(self._collection.aggregate(aggregation))
+
+    def count_publications(self, field: str, value: Any) -> int:
         """ Count publications where a field has a specified value """
         return self._collection.count_documents({field: value})
 

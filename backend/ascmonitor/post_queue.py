@@ -4,6 +4,8 @@ Documents can be appended, removed or reordered.
 The queue can be inspected with a user interface.
 """
 
+# pylint: skip-file
+
 from logging import getLogger
 from pymongo.database import Database
 

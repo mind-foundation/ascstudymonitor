@@ -1,4 +1,6 @@
 """ Common interface for posting from a queue """
+# pylint: skip-file
+
 from typing import Any, Dict
 
 from pymongo.database import Database
