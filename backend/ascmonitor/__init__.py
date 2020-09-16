@@ -2,8 +2,7 @@
 # pylint: disable=wrong-import-position,wrong-import-order
 __version__ = "3.0.0"
 
-from logging.config import dictConfig
-from ascmonitor.config import development
+# from logging.config import dictConfig
 
 # dictConfig(
 #     {

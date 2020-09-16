@@ -74,7 +74,10 @@ def resolve_publications(
     # embed filterable fields
     for pub in pubs:
         for field in ["year", "journal", "disciplines", "keywords"]:
-            pub[field] = {"value": pub[field]}
+            if isinstance(pub[field], list):
+                pub[field] = [{"value": val} for val in pub[field]]
+            else:
+                pub[field] = {"value": pub[field]}
 
     # build edges
     edges = [{"cursor": pub["cursor"], "node": pub} for pub in pubs]
