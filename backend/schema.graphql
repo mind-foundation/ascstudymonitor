@@ -161,6 +161,15 @@ A filterable field, returned as a filter suggestion
 """
 union FilterableField = Year | Journal | Author | Discipline | Keyword
 
+"""
+A scored filter suggestion
+"""
+type FilterSuggestion {
+  value: FilterableField!
+  field: String!
+  score: Float!
+}
+
 type Query {
   "Fetch paginated publications"
   publications(
@@ -187,7 +196,7 @@ type Query {
   queue(channel: String!): [Publication!]
 
   "Get suggestions for filters based on fuzzy search"
-  fieldSuggestions(query: String!, first: Int): [FilterableField!]!
+  fieldSuggestions(search: String!, first: Int): [FilterSuggestion!]!
 
   "Get infos for all years"
   years: [Year!]!

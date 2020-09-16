@@ -1,7 +1,7 @@
 """ Store and access publications in Mendeley """
 from base64 import b64encode, b64decode
 from logging import getLogger
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 from pymongo import DESCENDING, TEXT
 from pymongo.database import Database
@@ -11,6 +11,7 @@ from slugify import slugify
 from ascmonitor.events import NewPubEvent, UpdatedPubEvent, DeletedPubEvent
 from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import Mendeleur
+from ascmonitor.ngram_store import Token
 from ascmonitor.types import PublicationType, PublicationsType, FilterList
 
 logger = getLogger(__name__)
@@ -182,6 +183,27 @@ class PublicationStore:
         ]
 
         return list(self._collection.aggregate(aggregation))
+
+    def get_tokens(self) -> List[Token]:
+        """ Returns tokens to feed the ngram store """
+        fields = ["year", "authors", "journal", "disciplines", "keywords"]
+        textifications: Dict[str, Callable[[Any], str]] = {
+            "authors": lambda author: " ".join(author.values()),
+            "year": str,
+        }
+
+        tokens = []
+        for field in fields:
+            values = self.get_distinct(field)
+            for value in values:
+                text = value["value"]
+                if field in textifications:
+                    text = textifications[field](text)
+
+                token = Token(text=text, field=field, data=value)
+                tokens.append(token)
+
+        return tokens
 
     def count_publications(self, field: str, value: Any) -> int:
         """ Count publications where a field has a specified value """

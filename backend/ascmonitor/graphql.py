@@ -6,6 +6,7 @@ from ariadne import (
     ObjectType,
     QueryType,
     MutationType,
+    UnionType,
     make_executable_schema,
     load_schema_from_path,
 )
@@ -21,6 +22,7 @@ from ascmonitor.config import (
 from ascmonitor.publication_store import PublicationStore
 from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import Mendeleur, MendeleyAuthInfo
+from ascmonitor.ngram_store import NGramStore
 from ascmonitor.poster import Poster
 from ascmonitor.types import PublicationType, FilterList
 
@@ -30,6 +32,7 @@ event_store = EventStore(mongo)
 publication_store = PublicationStore(
     mendeleur=mendeleur, mongo=mongo, event_store=event_store
 )
+ngram_store = NGramStore(mongo=mongo)
 poster = Poster(
     mongo=mongo,
     event_store=event_store,
@@ -97,6 +100,33 @@ def resolve_publication_download_url(*_, id: str) -> Optional[str]:
         return publication_store.get_download_url(id)
     except:  # pylint: disable=bare-except
         return None
+
+
+@query.field("fieldSuggestions")
+def resolve_field_suggestions(*_, search: str, first: int = 10) -> List[Dict[str, Any]]:
+    """ Get suggestions for fields from the ngram store """
+    tokens = ngram_store.query(search, first)
+
+    results = []
+    for token in tokens:
+        assert token.data is not None
+        token.data["field"] = token.field  # for type resolver
+
+        # unwind an author
+        if token.field == "authors":
+            author = token.data["value"]
+            for field in ["firstName", "lastName"]:
+                if field in author:
+                    token.data[field] = author[field]
+
+        result = {
+            "value": token.data,
+            "field": token.field,
+            "score": token.score,
+        }
+        results.append(result)
+
+    return results
 
 
 @query.field("authors")
@@ -207,10 +237,11 @@ mutation = MutationType()
 
 
 @mutation.field("updatePublications")
-def resolve_update_publications(_, info) -> Dict[str, Any]:
+def resolve_update_publications(*_) -> Dict[str, Any]:
     """ Update the publications in the document store """
     try:
         publication_store.update()
+        ngram_store.update(publication_store.get_tokens())
     except Exception as exc:  # pylint: disable=broad-except
         return {"success": False, "message": repr(exc)}
 
@@ -257,6 +288,21 @@ def resolve_post(*_, channel: str, secret: str):
     raise NotImplementedError()
 
 
+filterable_field = UnionType("FilterableField")
+
+
+@filterable_field.type_resolver
+def resolve_filterable_field_type(obj, *_):
+    """ Type resolver a filterable field """
+    return {
+        "year": "Year",
+        "journal": "Journal",
+        "authors": "Author",
+        "disciplines": "Discipline",
+        "keywords": "Keyword",
+    }[obj["field"]]
+
+
 schema = make_executable_schema(
     type_defs,
     query,
@@ -268,4 +314,5 @@ schema = make_executable_schema(
     discipline_type,
     keyword_type,
     mutation,
+    filterable_field,
 )
