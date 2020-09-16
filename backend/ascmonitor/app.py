@@ -1,124 +1,137 @@
 """ Flask Web app """
-from ariadne import graphql_sync
-from ariadne.constants import PLAYGROUND_HTML
-from flask import (
-    Flask,
-    abort,
-    request,
-    jsonify,
-    redirect,
-    render_template,
-    render_template_string,
-    send_from_directory,
-    url_for,
-)
-from flask_cors import CORS
+from logging import getLogger
+from ariadne.asgi import GraphQL
+import sentry_sdk
+from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
+from starlette.applications import Starlette
+from starlette.middleware import Middleware
+from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import PlainTextResponse, RedirectResponse
+from starlette.routing import Route, Mount
+from starlette.staticfiles import StaticFiles
+from starlette.templating import Jinja2Templates
 
-from ascmonitor.config import development
+from ascmonitor.config import development, sentry_dsn, client_dist_path
 from ascmonitor.graphql import publication_store, schema
-from ascmonitor.sitemap import sitemap_template
 
-static_folder = "../../client/dist/"
-template_folder = static_folder
-app = Flask(__name__, static_folder=static_folder, template_folder=template_folder)
-CORS(app)
+logger = getLogger(__name__)
 
 if development:
-    app.logger.info("Environment: development")  # pylint: disable=no-member
+    logger.info("Environment: development")
 else:
-    app.logger.info("Environment: production")  # pylint: disable=no-member
+    logger.info("Environment: production")
+
+# initialize Sentry
+if not development:
+    sentry_sdk.init(dsn=sentry_dsn)
+
+sitemap_folder = Jinja2Templates(directory="sitemap")
+templates = Jinja2Templates(directory=client_dist_path)
 
 
-@app.route("/graphql", methods=["GET"])
-def graphql_playground():
-    """ GraphQL playground provided by ariadne """
-    return PLAYGROUND_HTML, 200
-
-
-@app.route("/graphql", methods=["POST"])
-def graphql_server():
-    """ Endpoint for GraphQL API """
-    data = request.get_json()
-    success, result = graphql_sync(schema, data, context_value=request, debug=app.debug)
-
-    status_code = 200 if success else 400
-    return jsonify(result), status_code
-
-
-@app.route("/publications/<id_>/download")
-def download(id_):
+def download_publication(request):
     """ Download a attached PDF publication """
     try:
+        id_ = request.path_params["id"]
         download_url = publication_store.get_download_url(id_)
     except ValueError:
-        abort(404)
+        return PlainTextResponse(
+            "Could not find a download for this publication.", status_code=404
+        )
 
-    return redirect(download_url, code=301)
+    return RedirectResponse(url=download_url)
 
 
-@app.route("/p/<slug>")
-def single_publication(slug):
+def single_publication(request):
     """
     Provides static link to publication.
     Includes meta tags.
     """
+    slug = request.path_params["slug"]
     publication = publication_store.get_by_slug(slug)
     if publication is None:
-        abort(404)
+        return PlainTextResponse("Could not find this publication", status_code=404)
 
-    # shorten abstract
-    try:
-        abstract = publication["abstract"]
-        if len(abstract) > 240:
-            paragraphs = abstract.split("\n")
-            abstract = ""
-            for par in paragraphs:
-                abstract += "\n" + par
-                if len(abstract) > 240:
-                    break
-    except KeyError:
+    abstract = publication["abstract"]
+
+    if not abstract:
+        # placeholder abstract
         abstract = (
             "The ASC Study Monitor is a curated, freely accessible, "
             + "and regularly updated database of scholarly publications concerning "
             + "altered states of consciousness."
         )
+    if len(abstract) > 240:
+        # shorten abstract
+        paragraphs = abstract.split("\n")
+        abstract = ""
+        for par in paragraphs:
+            abstract += "\n" + par
+            if len(abstract) > 240:
+                break
 
     # build url
-    url = url_for("publication", slug=slug, _external=True)
+    url = request.url_for("single_publication", slug=slug)
 
     # escape newlines in abstract
     abstract = abstract.replace("\n", "\\n").replace("\r", "\\r")
 
-    return render_template(
+    return templates.TemplateResponse(
         "index.html",
-        abstract=abstract,
-        title=publication["title"],
-        url=url,
-        initial_publication=publication,
+        {
+            "request": request,
+            "abstract": abstract,
+            "title": publication["title"],
+            "url": url,
+            "initial_publication": publication,
+        },
     )
 
 
-@app.route("/")
-@app.route("/index.html")
-def index():
+def index(request):
     """ Show the table as HTML """
-    return render_template("index.html")
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.route("/sitemap.xml")
-def sitemap():
+def sitemap(request):
     """ Build sitemap """
     urlset = [
-        {"loc": url_for("single_publication", slug=d["slug"], _external=True)}
-        for d in publication_store.get_publications()
+        {"loc": request.url_for("single_publication", slug=pub["slug"])}
+        for pub in publication_store.get_publications()
     ]
-    return render_template_string(sitemap_template, urlset=urlset)
+    return sitemap_folder.TemplateResponse(
+        "sitemap.xml", {"urlset": urlset, "request": request}
+    )
 
 
-@app.route("/<path:path>")
-def send_asset(path):
-    """ Send static js in development """
-    if not app.debug:
-        # pylint: disable=no-member
-        app.logger.warning("Sending static assed through flask while not in debug mode")
-    return send_from_directory(static_folder, path)
+graphql = GraphQL(schema, debug=development, context_value=lambda req: {"request": req})
+
+middleware = [
+    Middleware(CORSMiddleware, allow_origins=["*"]),
+]
+
+routes = [
+    Mount("/graphql", app=graphql),
+    Route(
+        "/publications/{id}/download",
+        endpoint=download_publication,
+        name="download_publication",
+    ),
+    Route("/p/{slug}", endpoint=single_publication),
+    Route("/sitemap.xml", endpoint=sitemap),
+]
+
+if development:
+    # send index.html and static js
+    dev_routes = [
+        Route("/", endpoint=index),
+        Route("/index.html", endpoint=index),
+        Route("/graphql", endpoint=lambda _: RedirectResponse("/graphql/")),
+        Mount("/", StaticFiles(directory=client_dist_path)),
+    ]
+    routes += dev_routes
+else:
+    # attach sentry
+    middleware.append(Middleware(SentryAsgiMiddleware))
+
+app = Starlette(debug=development, routes=routes, middleware=middleware)

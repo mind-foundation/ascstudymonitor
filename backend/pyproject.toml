@@ -1,23 +1,25 @@
 [tool.poetry]
 name = "ASCMonitor"
-version = "1.0.0"
+version = "3.0.0"
 description = ""
 authors = ["Felix Peppert <felix.peppert@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-requests = "^2.5"
-flask = "^1.1"
-flask-cors = "^3.0"
 gunicorn = "^20"
-sentry-sdk = {extras = ["flask"], version = "^0.16.3"}
-pymongo = "^3.10.1"
-tweepy = "^3.8.0"
+uvicorn = "^0.11.8"
+starlette = "^0.13.8"
+ariadne = "^0.12.0"
+aiofiles = "^0.5.0"
+jinja2 = "^2.11.2"
+sentry-sdk = "^0.16.3"
+pymongo = "^3.11"
+requests = "^2.5"
 mendeley = {git = "https://github.com/membranepotential/mendeley-python-sdk.git"}
-python-slugify = "^4.0.0"
+tweepy = "^3.8.0"
 attrs = "^19.3.0"
 python-dateutil = "^2.8.1"
-ariadne = "^0.12.0"
+python-slugify = "^4.0.0"
 pyhumps = "^1.6.1"
 
 [tool.poetry.dev-dependencies]

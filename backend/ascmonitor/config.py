@@ -4,7 +4,10 @@ import json
 import os
 
 
-development = os.environ.get("FLASK_ENV", "") == "development"
+development = os.environ.get("ASC_ENV", "") == "development"
+
+sentry_dsn = "https://91d6a27d4de14deba93bac991e05185f@sentry.io/1661534"
+client_dist_path = "../client/dist"
 
 
 def _in_docker():

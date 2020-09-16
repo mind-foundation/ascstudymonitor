@@ -1,4 +1,3 @@
-export FLASK_APP = ascmonitor.app:app
 export SOURCE_COMMIT = $(shell git rev-parse HEAD)
 SECRET_ENV = $(shell jq -r 'to_entries[] | "\(.key)=\"\(.value)\""' asc-secret.json)
 
@@ -39,9 +38,19 @@ mongod:
 	mkdir -p ./data
 	mongod --dbpath=./data
 
-flask-run: build-client-dev
+install-backend:
+	cd backend && poetry install
+
+backend-run: install-backend build-client-dev
 	cd backend; \
-	${SECRET_ENV} FLASK_ENV="development" poetry run flask run
+	${SECRET_ENV} ASC_ENV="development" \
+		poetry run uvicorn \
+			--host 127.0.0.1 \
+			--port 5000 \
+			--reload \
+			--access-log \
+			--log-level debug \
+			"ascmonitor.app:app"
 
 yarn-serve: install-client
 	cd client && yarn serve
@@ -52,5 +61,5 @@ client-test-e2e: install-client
 tmux-yarn-serve:
 	tmux \
 		new-session 'make mongod' \; \
-		split-window 'make flask-run' \; \
+		split-window 'make backend-run' \; \
 		split-window 'make yarn-serve' \;

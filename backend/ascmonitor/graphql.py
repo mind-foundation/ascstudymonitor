@@ -207,7 +207,7 @@ mutation = MutationType()
 
 
 @mutation.field("updatePublications")
-def resolve_update_publications(*_) -> Dict[str, Any]:
+def resolve_update_publications(_, info) -> Dict[str, Any]:
     """ Update the publications in the document store """
     try:
         publication_store.update()

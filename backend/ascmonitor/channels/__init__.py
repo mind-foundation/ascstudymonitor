@@ -37,6 +37,7 @@ class PreparedPost:
     """
 
     publication: PublicationType
+    publication_url: str
     channel: "Channel"
     payload: Any
 
@@ -65,6 +66,7 @@ class SentPost(PreparedPost):
         """ Upgrade a PreparedPost """
         return cls(
             publication=post.publication,
+            publication_url=post.publication_url,
             channel=post.channel,
             payload=post.payload,
             id_=id_,
@@ -87,7 +89,7 @@ class Channel(ABC):
         """ Unique name of channel """
 
     @abstractmethod
-    def format(self, publication: PublicationType) -> PreparedPost:
+    def format(self, publication: PublicationType, url: str) -> PreparedPost:
         """ Format a publication to return a post """
 
     @abstractmethod

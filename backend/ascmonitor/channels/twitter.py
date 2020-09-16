@@ -6,10 +6,8 @@ import re
 
 import tweepy
 from tweepy import TweepError
-from flask import request, url_for
 
 from ascmonitor.channels import Channel, PreparedPost, SentPost, PostSendException
-from ascmonitor.config import development
 from ascmonitor.types import PublicationType
 
 logger = logging.getLogger(__name__)
@@ -88,15 +86,7 @@ class TwitterChannel(Channel):
 
         return names
 
-    @staticmethod
-    def get_url(publication):
-        """ Build tweet url for publication """
-        if development:
-            host = request.host_url
-            return host + url_for("publication", slug=publication["slug"])
-        return url_for("publication", slug=publication["slug"], _external=True)
-
-    def format(self, publication: PublicationType) -> PreparedPost:
+    def format(self, publication: PublicationType, url: str) -> PreparedPost:
         """ Format a publication to return a post """
         templates = [*self.templates]
 
@@ -148,10 +138,15 @@ class TwitterChannel(Channel):
                 break
             status += hashtag
 
-        status = status.format(url=self.get_url(publication))
+        status = status.format(url=url)
 
         logger.debug("Prepared post %s, length %d", status, len(status))
-        return PreparedPost(publication=publication, channel=self, payload=status)
+        return PreparedPost(
+            publication=publication,
+            publication_url=url,
+            channel=self,
+            payload=status,
+        )
 
     def send(self, post: PreparedPost) -> SentPost:
         """ Send a post via a channel """
