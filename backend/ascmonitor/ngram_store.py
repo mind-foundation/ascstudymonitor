@@ -17,7 +17,7 @@ max_n = 3
 
 def get_ngrams(text) -> List[str]:
     """ Get the n-gram decomposition for this token """
-    texts = text.strip().split()
+    texts = text.strip().lower().split()
     texts = [token_regex.sub("", s) for s in texts]
     ngrams = []
     for subtext in texts:
