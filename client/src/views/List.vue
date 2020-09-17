@@ -1,13 +1,9 @@
 <script>
-import Vue from 'vue'
-import Paginate from 'vuejs-paginate'
-import { mapGetters, mapState } from 'vuex'
+import gql from 'graphql-tag'
 import PublicationListItem from '@/components/PublicationListItem/PublicationListItem'
 import SearchButton from '@/components/Search/Button'
 import SearchBar from '@/components/Search/Bar'
 import SearchWaypoint from '@/components/Search/Waypoint'
-
-Vue.component('paginate', Paginate)
 
 export default {
   name: 'list',
@@ -20,59 +16,41 @@ export default {
     SearchBar,
     SearchWaypoint,
   },
-  computed: {
-    page: {
-      get() {
-        const queryPage = this.$store.state.route.query?.page
-        const page = parseInt(queryPage)
-        if (page > 0 && page <= this.pageCount) {
-          return page
-        } else if (page > this.pageCount) {
-          return this.pageCount
-        } else {
-          // catches page = NaN
-          return 1
+  apollo: {
+    publications: {
+      query: gql`
+        {
+          publications: documents(first: 20) {
+            edges {
+              cursor
+              node {
+                id
+                abstract
+                authors {
+                  firstName
+                  lastName
+                }
+                created
+                disciplines
+                fileAttached
+                id
+                keywords
+                slug
+                source
+                title
+                websites
+                year
+              }
+            }
+
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+          }
         }
-      },
-      set(page) {
-        this.$router.push({
-          query: {
-            ...this.$store.state.route.query,
-            page,
-          },
-        })
-        setTimeout(() => {
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-          })
-        })
-      },
+      `,
     },
-    pageCount() {
-      return Math.ceil(this.publications.length / this.$constants.PAGE_SIZE)
-    },
-    pagination() {
-      const { route } = this.$store.state
-      const { page = 1 } = route.query
-      const pageIndex = Math.min(page, this.pageCount) - 1
-      const total = this.publications.length
-      const start = pageIndex * this.$constants.PAGE_SIZE
-      const end = Math.min((pageIndex + 1) * this.$constants.PAGE_SIZE, total)
-      const items = this.publications.slice(start, end)
-      return {
-        items,
-        start,
-        end,
-        total,
-      }
-    },
-    ...mapState({
-      loaded: state => state.loaded,
-    }),
-    ...mapGetters('publications', {
-      publications: 'queryPublications',
-    }),
   },
 }
 </script>
@@ -81,7 +59,7 @@ export default {
   <div
     id="list"
     :class="{
-      mobileBarActivated: $store.state.mobileBarActivated,
+      mobileBarActivated: false, //$store.state.mobileBarActivated,
     }"
   >
     <search-bar />
@@ -90,7 +68,7 @@ export default {
         <search-button />
       </search-waypoint>
     </div>
-    <div v-if="pagination.items.length === 0" class="message">
+    <!-- <div v-if="pagination.items.length === 0" class="message">
       <p v-if="!loaded">
         Loading..
       </p>
@@ -98,18 +76,18 @@ export default {
         No articles found matching your query. Try a different search instead.
         <router-link to="/">Or reset search.</router-link>
       </p>
-    </div>
+    </div> -->
     <ul>
       <publication-list-item
         :slug="publication.slug"
-        v-for="publication in this.pagination.items"
+        v-for="publication in this.publications.edges"
         :key="publication.id"
       />
       <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
           publication.title
         }}</router-link> -->
     </ul>
-
+    <!--
     <div v-if="pagination.items.length !== 0" class="pagination--wrapper">
       <paginate
         v-model="page"
@@ -128,11 +106,12 @@ export default {
         :next-class="'pagination--page-item'"
       >
       </paginate>
-      <p>
+       -->
+    <!-- <p>
         Showing {{ pagination.start + 1 }} to {{ pagination.end }} of
         {{ publications.length }} entries
-      </p>
-    </div>
+      </p> -->
+    <!-- </div> -->
   </div>
 </template>
 

@@ -1,0 +1,32 @@
+#import "./MessageFragment.gql"
+
+query search($term: String!) {
+  fieldSuggestions(search: $term, first: 10) {
+    value {
+      __typename
+      ... on Year {
+        year: value
+        publicationCount
+      }
+      ... on Author {
+        firstName
+        lastName
+        publicationCount
+      }
+      ... on Journal {
+        value
+        publicationCount
+      }
+      ... on Discipline {
+        value
+        publicationCount
+      }
+      ... on Keyword {
+        value
+        publicationCount
+      }
+    }
+    field
+    score
+  }
+}

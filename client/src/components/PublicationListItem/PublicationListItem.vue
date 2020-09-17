@@ -1,6 +1,5 @@
 <script>
 import SlideUpDown from 'vue-slide-up-down'
-import { mapState } from 'vuex'
 import DownloadIcon from '@/components/Icons/Download.vue'
 import AbstractIcon from '@/components/Icons/Abstract.vue'
 import LinkIcon from '@/components/Icons/Link.vue'
@@ -34,24 +33,9 @@ export default {
   computed: {
     isDetailView() {
       return (
-        this.publication &&
-        this.$store.state.route.params?.slug === this.publication.slug
+        this.publication && this.$route.params?.slug === this.publication.slug
       )
     },
-    ...mapState('publications', {
-      publications: state => state.items,
-      publication(state) {
-        return state.items.find(p => p.slug === this.slug)
-      },
-    }),
-    ...mapState('recommendations', {
-      recommendations: function(state) {
-        const recommendationIds = state.items[this.publication.id]
-        return recommendationIds?.map(id =>
-          this.publications.find(p => p.id === id),
-        )
-      },
-    }),
   },
   methods: {
     toggleExpand() {
@@ -59,7 +43,7 @@ export default {
       this.expanded = !this.expanded
       if (this.expanded) {
         window.analytics.page('Publication')
-        this.$store.dispatch('recommendations/get', this.publication.id)
+        // this.$store.dispatch('recommendations/get', this.publication.id)
       }
     },
     getLinkTo(r) {
@@ -68,15 +52,11 @@ export default {
       }
     },
   },
-  watch: {
-    publication: function(publication) {
-      this.$store.dispatch('recommendations/get', publication.id)
-    },
-  },
+
   created() {
     this.expanded = this.isDetailView
     if (this.expanded) {
-      this.$store.dispatch('recommendations/get', this.publication.id)
+      // this.$store.dispatch('recommendations/get', this.publication.id)
     }
   },
 }

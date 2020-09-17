@@ -35,11 +35,11 @@ export default {
         : [...this.open, key]
     },
 
-    toggleSortKey() {
-      const newSortKey =
-        this.$store.state.sortKey === 'count' ? 'label' : 'count'
-      this.$store.commit('publications/setSortKey', newSortKey)
-    },
+    // toggleSortKey() {
+    //   const newSortKey =
+    //     this.$store.state.sortKey === 'count' ? 'label' : 'count'
+    //   this.$store.commit('publications/setSortKey', newSortKey)
+    // },
   },
   computed: {
     ...mapState('publications', {
@@ -71,10 +71,11 @@ export default {
   <nav id="menu" role="navigation">
     <div>
       <div id="menu-header" @click="toggleSortKey()">
-        <div
+        <div id="mobile-only-search-icon">
+          <!-- <div
           id="mobile-only-search-icon"
           @click="$store.commit('toggleMobileSearch')"
-        >
+        > -->
           Search
         </div>
         <filters-icon />

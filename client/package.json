@@ -5,22 +5,27 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "NODE_ENV=production vue-cli-service build",
+    "lint": "vue-cli-service lint",
     "build:dev": "NODE_ENV=development vue-cli-service build",
     "test": "vue-cli-service test:unit",
-    "test:watch": "vue-cli-service test:unit --watch",
-    "lint": "vue-cli-service lint"
+    "test:watch": "vue-cli-service test:unit --watch"
   },
   "dependencies": {
     "@sentry/browser": "^5.23.0",
     "@sentry/integrations": "^5.23.0",
+    "@vue/apollo-composable": "^4.0.0-alpha.10",
+    "@vue/composition-api": "^1.0.0-beta.14",
+    "apollo-boost": "^0.4.9",
     "core-js": "^3.6.5",
     "debug": "^4.1.1",
     "fuse.js": "^6.0.0",
+    "graphql": "^15.3.0",
     "localforage": "^1.9.0",
     "qs": "^6.9.4",
     "raf": "^3.4.1",
     "v-hotkey": "^0.8.0",
     "vue": "^2.6.12",
+    "vue-apollo": "^3.0.4",
     "vue-clipboard2": "^0.3.1",
     "vue-js-modal": "^2.0.0-rc.6",
     "vue-router": "^3.4.3",
@@ -32,8 +37,7 @@
     "vue-waypoint": "^3.5.0",
     "vuejs-paginate": "^2.1.0",
     "vuex": "^3.5",
-    "vuex-persist": "^2.2.0",
-    "vuex-router-sync": "^5.0.0"
+    "vuex-persist": "^2.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5",
@@ -47,6 +51,7 @@
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.2.2",
     "git-rev-sync": "^3.0.0",
+    "graphql-tag": "^2.9.0",
     "less": "^3.12.2",
     "less-loader": "^7.0.0",
     "postcss-assets": "^5.0.0",

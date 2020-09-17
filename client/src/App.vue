@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 // import Navigation from '@/components/Navigation'
 // import QueryBar from '@/components/QueryBar'
 // import Mindblower from '@/components/Mindblower'
@@ -59,13 +58,6 @@ export default {
     HeroWrap,
     Keymap,
   },
-  created() {
-    this.$store.dispatch('publications/init')
-    this.$store.dispatch('publications/load')
-  },
-  computed: mapState('publications', {
-    enoughDataToContinue: state => state.items?.length > 0,
-  }),
 }
 </script>
 

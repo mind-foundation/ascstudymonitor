@@ -24,6 +24,7 @@ const analyzeBundle = false
 module.exports = {
   lintOnSave: true, //process.env.NODE_ENV !== 'production',
   configureWebpack: {
+    devtool: 'source-map',
     optimization: {
       splitChunks: {
         minSize: 100000,

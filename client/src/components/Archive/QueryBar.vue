@@ -3,7 +3,7 @@
     class="top-bar"
     :class="{
       focussed: isFocussed,
-      mobileBarActivated: $store.state.mobileBarActivated,
+      mobileBarActivated: false, // $store.state.mobileBarActivated,
     }"
     @click="activate"
   >
@@ -50,7 +50,7 @@ export default {
     VueTyper,
   },
   data() {
-    const paramQuery = this.$store.state.route.query?.search
+    const paramQuery = this.$route.query?.search
     const query = paramQuery ? paramQuery.replace(/\+/g, ' ') : ''
     return {
       query,
@@ -79,10 +79,10 @@ export default {
 
       clearTimeout(this.debounce)
       this.debounce = setTimeout(() => {
-        if (this.$store.state.route.query.search !== e.target.value) {
+        if (this.$route.query.search !== e.target.value) {
           this.$router.replace({
             query: {
-              ...this.$store.state.route.query,
+              ...this.$route.query,
               search: e.target.value.replace(/\s/g, '+'),
             },
           })

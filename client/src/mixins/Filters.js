@@ -11,9 +11,9 @@ export default {
   methods: {
     toggleFilter: function(facet, value) {
       const slugifiedValue = slugifyMemo(facet, value)
-      const currentFilterConfiguration = this.$store.getters[
+      const currentFilterConfiguration = {} /*this.$store.getters[
         'publications/filters'
-      ]
+      ]*/
       const targetFilterConfiguration = toggleFacetInConfiguration(
         currentFilterConfiguration,
         facet,
@@ -26,11 +26,11 @@ export default {
 
       const query = filterParams
 
-      if (this.$store.state.route.query?.search) {
-        query.search = this.$store.state.route.query.search
+      if (this.$route.query?.search) {
+        query.search = this.$route.query.search
       }
-      if (this.$store.state.route.query?.page) {
-        query.page = this.$store.state.route.query.page
+      if (this.$route.query?.page) {
+        query.page = this.$route.query.page
       }
 
       this.$router.push({ query })

@@ -1,7 +1,7 @@
 <script>
 import Vue from 'vue'
 import Paginate from 'vuejs-paginate'
-import { mapGetters, mapState } from 'vuex'
+import gql from 'graphql-tag'
 import PublicationListItem from '@/components/PublicationListItem/PublicationListItem'
 
 Vue.component('paginate', Paginate)
@@ -15,53 +15,71 @@ export default {
     PublicationListItem,
   },
   computed: {
-    ...mapState({
-      loaded: state => state.loaded,
-    }),
-    ...mapGetters('publications', {
-      publications: 'queryPublications',
-    }),
-    ...mapState('publications', {
-      publication(state) {
-        return state.items.find(
-          p => p.slug === this.$store.state.route.params?.slug,
-        )
+    slug() {
+      console.log(this.$router)
+      return this.$route.params?.slug
+    },
+  },
+  apollo: {
+    publication: {
+      query: gql`
+        query documentBySlug($slug: String!) {
+          publication: documentBySlug(slug: $slug) {
+            abstract
+            authors {
+              firstName
+              lastName
+            }
+            created
+            disciplines
+            fileAttached
+            id
+            keywords
+            slug
+            source
+            title
+            websites
+            year
+            recommendations(first: 2) {
+              score
+              document {
+                slug
+                title
+              }
+            }
+          }
+        }
+      `,
+      variables() {
+        return {
+          slug: this.slug,
+        }
       },
-    }),
-    ...mapState('recommendations', {
-      recommendations: function() {
-        return []
-        // const a = state.items[this.publication.id]
-        // return [a, a, a]
-
-        // const recommendationIds = state.items[this.publication.id]
-        // return recommendationIds?.map(id =>
-        //   this.publications.find(p => p.id === id),
-        // )
-      },
-    }),
+    },
   },
 }
 </script>
 
 <template>
   <div id="container">
-    <p v-if="!loaded">
+    <!-- <p v-if>
       Loading..
-    </p>
-    <p v-else>
+    </p> -->
+    <!-- <p v-else>
       No articles found matching your query. Try a different search instead.
       <router-link to="/">Or reset search.</router-link>
-    </p>
+    </p> -->
+    <publication-list-item :slug="this.slug" />
     <ul>
       <publication-list-item
-        v-for="publication in this.recommendations"
-        :slug="publication.slug"
-        :key="publication.id"
+        v-for="r in publication.recommendations"
+        :slug="r.document.slug"
+        :key="r.document.id"
       />
-      <router-link :to="{ path: '/publication/' + publication.slug }">{{
-        publication.title
-      }}</router-link>
+
+      <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
+          publication.title
+        }}</router-link> -->
     </ul>
   </div>
 
