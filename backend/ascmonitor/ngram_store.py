@@ -122,7 +122,7 @@ class NGramStore:
             for result in self._collection.aggregate(aggregation)
         ]
 
-    def get_tokens_for_field(self, field: str):
+    def get_tokens_for_field(self, field: str) -> List[Dict[str, Any]]:
         """ Returns all tokens for a field """
         return list(
             self._collection.find(

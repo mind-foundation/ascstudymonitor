@@ -1,9 +1,12 @@
 import os
-import shutil
 import pytest
+import shutil
+from subprocess import Popen, PIPE
+from tempfile import TemporaryDirectory
 
 from dateutil.parser import parse as parse_datetime
-from mongomock import MongoClient
+from mongomock import MongoClient as MongoMock
+from pymongo import MongoClient
 
 # setup environment for testing
 os.environ["FLASK_ENV"] = "development"
@@ -19,9 +22,27 @@ os.environ["TWITTER_ACCESS_TOKEN"] = "xxx"
 os.environ["TWITTER_ACCESS_SECRET"] = "xxx"
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True, scope="session")
+def mongodb_server():
+    """ Launches a real mongo server on port 27018 """
+    with TemporaryDirectory() as tmpdir:
+        mongodb = Popen(
+            ["mongod", "--dbpath", tmpdir, "--port", "27018"],
+            stdout=PIPE,
+            stdin=PIPE,
+        )
+        yield
+        mongodb.kill()
+
+
+@pytest.fixture()
 def mongo():
-    return MongoClient()["asc-test"]
+    return MongoMock()["asc-test"]
+
+
+@pytest.fixture()
+def real_mongo(mongodb_server):
+    return MongoClient(port=27018)["asc-test"]
 
 
 @pytest.fixture
