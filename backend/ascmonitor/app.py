@@ -89,7 +89,7 @@ def single_publication(request):
 
 
 def index(request):
-    """ Show the table as HTML """
+    """ Serve the client with meta tags """
     return templates.TemplateResponse("index.html", {"request": request})
 
 
@@ -112,6 +112,8 @@ middleware = [
 
 routes = [
     Mount("/graphql", app=graphql),
+    Route("/", endpoint=index),
+    Route("/index.html", endpoint=index),
     Route(
         "/publications/{id}/download",
         endpoint=download_publication,
@@ -124,8 +126,6 @@ routes = [
 if development:
     # send index.html and static js
     dev_routes = [
-        Route("/", endpoint=index),
-        Route("/index.html", endpoint=index),
         Route("/graphql", endpoint=lambda _: RedirectResponse("/graphql/")),
         Mount("/", StaticFiles(directory=client_dist_path)),
     ]
