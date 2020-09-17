@@ -44,7 +44,7 @@ mendeley_authinfo = {
 mendeley_group_id = "d9389c6c-8ab5-3b8b-86ed-33db09ca0198"
 
 # authentication for channels to post on
-channel_auths = {
+channel_configs = {
     "twitter": {
         "api_key": secrets["TWITTER_API_KEY"],
         "api_secret": secrets["TWITTER_API_SECRET"],

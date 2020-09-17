@@ -45,7 +45,7 @@ def real_mongo(mongodb_server):
     return MongoClient(port=27018)["asc-test"]
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def publications():
     return [
         {

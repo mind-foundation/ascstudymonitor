@@ -17,12 +17,13 @@ from ascmonitor.config import (
     mendeley_group_id,
     mongo_config,
     mongo_db,
-    channel_auths,
+    channel_configs,
 )
 from ascmonitor.publication_store import PublicationStore
 from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import Mendeleur, MendeleyAuthInfo
 from ascmonitor.ngram_store import NGramStore
+from ascmonitor.post_queue import PostQueue
 from ascmonitor.poster import Poster
 from ascmonitor.types import PublicationType, FilterList
 
@@ -37,7 +38,7 @@ poster = Poster(
     mongo=mongo,
     event_store=event_store,
     publication_store=publication_store,
-    auths=channel_auths,
+    auths=channel_configs,
 )
 
 # setup graphql
@@ -163,12 +164,17 @@ def resolve_distinct_fields(_, info) -> List[Dict[str, Any]]:
     return publication_store.get_distinct(field)
 
 
-def resolve_queue(*_, channel: str) -> Dict[str, Any]:
+def resolve_queue(*_, channel: str) -> Optional[List[PublicationType]]:
     """
     Show publications in queue for channel.
     Documents are ordered such that first is next doc to be posted.
     """
-    raise NotImplementedError()
+    if channel not in channel_configs:
+        return None
+
+    queue = PostQueue(channel, mongo)
+    ids = queue.view()
+    return publication_store.get_by_ids(ids)
 
 
 publications_connection = ObjectType("PublicationsConnection")
@@ -252,27 +258,83 @@ def resolve_update_publications(*_) -> Dict[str, Any]:
 
 
 @mutation.field("appendToQueue")
-def resolve_append_to_queue(*_, channel: str, publication: str):
+def resolve_append_to_queue(*_, channel: str, publication: str) -> Dict[str, Any]:
     """ Append publication to queue for channel """
-    raise NotImplementedError()
+    args = {
+        "channel": channel,
+        "publication": publication,
+    }
+    if channel not in channel_configs:
+        return {**args, "success": False, "message": "Unsupported channel"}
+
+    queue = PostQueue(channel, mongo)
+
+    try:
+        queue.append(publication)
+    except (ValueError, RuntimeError) as error:
+        return {**args, "success": False, "message": str(error)}
+
+    return {**args, "success": True}
 
 
 @mutation.field("moveUpInQueue")
-def resolve_move_up_in_queue(*_, channel: str, publication: str):
+def resolve_move_up_in_queue(*_, channel: str, publication: str) -> Dict[str, Any]:
     """ Move publication up in queue for channel """
-    raise NotImplementedError()
+    args = {
+        "channel": channel,
+        "publication": publication,
+    }
+    if channel not in channel_configs:
+        return {**args, "success": False, "message": "Unsupported channel"}
+
+    queue = PostQueue(channel, mongo)
+
+    try:
+        queue.move_up(publication)
+    except (ValueError, RuntimeError) as error:
+        return {**args, "success": False, "message": str(error)}
+
+    return {**args, "success": True}
 
 
 @mutation.field("moveDownInQueue")
-def resolve_move_down_in_queue(*_, channel: str, publication: str):
+def resolve_move_down_in_queue(*_, channel: str, publication: str) -> Dict[str, Any]:
     """ Move publication down in queue for channel """
-    raise NotImplementedError()
+    args = {
+        "channel": channel,
+        "publication": publication,
+    }
+    if channel not in channel_configs:
+        return {**args, "success": False, "message": "Unsupported channel"}
+
+    queue = PostQueue(channel, mongo)
+
+    try:
+        queue.move_down(publication)
+    except (ValueError, RuntimeError) as error:
+        return {**args, "success": False, "message": str(error)}
+
+    return {**args, "success": True}
 
 
 @mutation.field("removeFromQueue")
-def resolve_remove_from_queue(*_, channel: str, publication: str):
+def resolve_remove_from_queue(*_, channel: str, publication: str) -> Dict[str, Any]:
     """ Remove publication from queue for channel """
-    raise NotImplementedError()
+    args = {
+        "channel": channel,
+        "publication": publication,
+    }
+    if channel not in channel_configs:
+        return {**args, "success": False, "message": "Unsupported channel"}
+
+    queue = PostQueue(channel, mongo)
+
+    try:
+        queue.remove(publication)
+    except (ValueError, RuntimeError) as error:
+        return {**args, "success": False, "message": str(error)}
+
+    return {**args, "success": True}
 
 
 @mutation.field("post")

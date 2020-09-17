@@ -135,6 +135,11 @@ def test_get_publications(publication_store, publications_response):
     assert fetched == publications_response
 
 
+def test_get_publications_by_id(publication_store, publications_response):
+    ids = [pub["id"] for pub in publications_response]
+    assert publication_store.get_by_ids(ids) == publications_response
+
+
 def test_get_publications__limit(publication_store, publications_response):
     fetched = publication_store.get_publications(first=1)
     assert fetched == [publications_response[0]]

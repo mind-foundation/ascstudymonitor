@@ -210,10 +210,20 @@ class PublicationStore:
         return self._collection.count_documents({field: value})
 
     def get_by_id(self, id_: str) -> Optional[PublicationType]:
-        """ Return publication by slug or None if not found """
+        """ Return publication by id or None if not found. """
         publication = self._collection.find_one({"_id": id_}, {"_id": False})
         publication["cursor"] = encode_cursor(publication["cursor"])
         return publication
+
+    def get_by_ids(self, ids: List[str]) -> PublicationsType:
+        """ Return multiple publication by ids """
+        publications = self._collection.find({"_id": {"$in": ids}}, {"_id": False})
+        publications = list(publications)
+
+        for pub in publications:
+            pub["cursor"] = encode_cursor(pub["cursor"])
+
+        return publications
 
     def get_by_slug(self, slug: str) -> Optional[PublicationType]:
         """ Return publication by slug or None if not found """
