@@ -147,19 +147,20 @@ class PostQueue:
             else:
                 raise QueueLockedException("Queue is locked") from exc
 
-        # fetch and yield the queue
-        queue_doc = self._collection.find_one({"_id": self.channel})
-        if queue_doc is None:
-            # queue is empty
-            queue_doc = {"_id": self.channel, "queue": []}
+        try:
+            # fetch and yield the queue
+            queue_doc = self._collection.find_one({"_id": self.channel})
+            if queue_doc is None:
+                # queue is empty
+                queue_doc = {"_id": self.channel, "queue": []}
 
-        queue = Queue(queue_doc)
-        yield queue
+            queue = Queue(queue_doc)
+            yield queue
 
-        # update the queue
-        self._collection.replace_one(
-            {"_id": self.channel}, queue.to_mongo(), upsert=True
-        )
-
-        # release the lock
-        self._collection.delete_one({"_id": self.lock_name})
+            # update the queue
+            self._collection.replace_one(
+                {"_id": self.channel}, queue.to_mongo(), upsert=True
+            )
+        finally:
+            # release the lock
+            self._collection.delete_one({"_id": self.lock_name})
