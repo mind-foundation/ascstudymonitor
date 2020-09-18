@@ -107,7 +107,12 @@ def sitemap(request):
 graphql = GraphQL(schema, debug=development, context_value=lambda req: {"request": req})
 
 middleware = [
-    Middleware(CORSMiddleware, allow_origins=["*"]),
+    Middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_methods=["*"],
+        allow_headers=["*"],
+    ),
 ]
 
 routes = [
@@ -126,7 +131,11 @@ routes = [
 if development:
     # send index.html and static js
     dev_routes = [
-        Route("/graphql", endpoint=lambda _: RedirectResponse("/graphql/")),
+        Route(
+            "/graphql",
+            methods=["GET", "POST"],
+            endpoint=lambda _: RedirectResponse("/graphql/"),
+        ),
         Mount("/", StaticFiles(directory=client_dist_path)),
     ]
     routes += dev_routes
