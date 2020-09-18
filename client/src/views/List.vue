@@ -16,11 +16,14 @@ export default {
     SearchBar,
     SearchWaypoint,
   },
+  data: () => ({
+    publications: {},
+  }),
   apollo: {
     publications: {
       query: gql`
         {
-          publications: documents(first: 20) {
+          publications(first: 20) {
             edges {
               cursor
               node {
@@ -31,15 +34,23 @@ export default {
                   lastName
                 }
                 created
-                disciplines
+                disciplines {
+                  value
+                }
                 fileAttached
                 id
-                keywords
+                keywords {
+                  value
+                }
                 slug
-                source
+                journal {
+                  value
+                }
                 title
                 websites
-                year
+                year {
+                  value
+                }
               }
             }
 
@@ -79,9 +90,10 @@ export default {
     </div> -->
     <ul>
       <publication-list-item
-        :slug="publication.slug"
-        v-for="publication in this.publications.edges"
-        :key="publication.id"
+        v-for="publication in publications.edges"
+        :publication="publication.node"
+        :slug="publication.node.slug"
+        :key="publication.node.id"
       />
       <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
           publication.title

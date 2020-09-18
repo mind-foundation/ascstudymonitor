@@ -29,6 +29,7 @@ export default {
   }),
   props: {
     slug: String,
+    publication: Object,
   },
   computed: {
     isDetailView() {
@@ -85,7 +86,10 @@ export default {
       <authors-list :authorNames="publication.authorNames" />
 
       <div class="flex flex-row justify-between">
-        <by-line :year="publication.year" :source="publication.source" />
+        <by-line
+          :year="publication.year.value"
+          :journal="publication.journal.value"
+        />
 
         <disciplines-list :disciplines="publication.disciplines" />
       </div>

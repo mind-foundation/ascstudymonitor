@@ -15,8 +15,8 @@ export default {
       <li class="mr-8" v-for="d in disciplines" v-bind:key="d">
         <a
           class="font-bold  text-aqua"
-          @click="toggleFilter('discipline', d)"
-          >{{ d }}</a
+          @click="toggleFilter('discipline', d.value)"
+          >{{ d.value }}</a
         >
       </li>
     </ul>

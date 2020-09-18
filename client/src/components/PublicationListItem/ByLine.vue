@@ -2,7 +2,7 @@
 export default {
   name: 'by-line',
   props: {
-    source: String,
+    journal: String,
     year: Number,
   },
 }
@@ -10,14 +10,14 @@ export default {
 <template>
   <div class="container mt-2 flex text-sm" @click.stop>
     <a class="year text-gray" @click="toggleFilter('year', year)">{{ year }}</a>
-    <a class="source text-gray" @click="toggleFilter('journal', source)">{{
-      source
+    <a class="journal text-gray" @click="toggleFilter('journal', journal)">{{
+      journal
     }}</a>
   </div>
 </template>
 
 <style lang="less" scoped>
-.entry__year_source a {
+.entry__year_journal a {
   display: inline-block;
   color: #333 !important;
 }
@@ -26,7 +26,7 @@ export default {
   width: 42px;
 }
 
-.source {
+.journal {
   flex-grow: 1;
 }
 </style>
