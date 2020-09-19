@@ -2,7 +2,9 @@
 import ScienceIcon from '@/components/Icons/Science.vue'
 export default {
   name: 'disciplines-list',
-  props: ['disciplines'],
+  props: {
+    disciplines: Array,
+  },
   components: {
     ScienceIcon,
   },
@@ -12,7 +14,7 @@ export default {
   <div class="flex">
     <science-icon />
     <ul class="list list-none display-flex select-none">
-      <li class="mr-8" v-for="d in disciplines" v-bind:key="d">
+      <li class="mr-8" v-for="d in disciplines" v-bind:key="d.value">
         <a
           class="font-bold  text-aqua"
           @click="toggleFilter('discipline', d.value)"
