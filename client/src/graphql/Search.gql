@@ -1,6 +1,4 @@
-#import "./MessageFragment.gql"
-
-query search($term: String!) {
+query Search($term: String!) {
   fieldSuggestions(search: $term, first: 10) {
     value {
       __typename
@@ -28,5 +26,14 @@ query search($term: String!) {
     }
     field
     score
+  }
+
+  publications(search: $term, first: 1) {
+    edges {
+      node {
+        id
+        title
+      }
+    }
   }
 }

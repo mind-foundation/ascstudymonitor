@@ -10,7 +10,7 @@
           ref="input"
           class="primary-search bg-transparent color-white w-full p-2 pl-6 pb-3 font-light text-3xl"
           placeholder="Search for.."
-          :value="query"
+          :value="searchInput"
           :focus="handleFocus(true)"
           :blur="handleFocus(false)"
           @input="handleChange"
@@ -42,52 +42,97 @@
 </template>
 
 <script>
+import SearchQuery from '@/graphql/Search.gql'
+
 export default {
   name: 'search-widget',
+
   data: () => ({
-    query: '',
-    mobileExposureActive: true,
-    suggestions() {
-      return [
-        { title: 'Jasmin Jones', kind: 'Author' },
-        { title: 'Jam', kind: 'Keyword' },
-        { title: 'Jas', kind: 'Full Text Search' },
-      ].map(x => ({
-        ...x,
-        id: [x.title, x.kind].join('-'),
-      }))
-    },
+    message: null,
+    typing: null,
+    debounce: null,
+    searchInput: null,
+    term: '',
+    publications: [],
+    fieldSuggestions: [],
   }),
+
+  apollo: {
+    // Query with parameters
+    searchResults: {
+      // gql query
+      query: SearchQuery,
+      // Static parameters
+      variables() {
+        // Use vue reactive properties here
+        return {
+          term: this.term,
+        }
+      },
+      result(data) {
+        if (data) {
+          console.log(data)
+          this.fieldSuggestions = data.fieldSuggestions
+          this.publications = data.publications
+        }
+      },
+    },
+  },
+
+  // data: () => ({
+  //   query: '',
+  //   mobileExposureActive: true,
+  //   suggestions() {
+  //     return [
+  //       { title: 'Jasmin Jones', kind: 'Author' },
+  //       { title: 'Jam', kind: 'Keyword' },
+  //       { title: 'Jas', kind: 'Full Text Search' },
+  //     ].map(x => ({
+  //       ...x,
+  //       id: [x.title, x.kind].join('-'),
+  //     }))
+  //   },
+  // }),
 
   methods: {
     handleFocus: () => {},
-    handleChange({ target: { value } }) {
-      let samples = [
-        { title: 'Jasmin Jones', kind: 'Author' },
-        { title: 'Jam', kind: 'Keyword' },
-        { title: 'Jas', kind: 'Full Text Search' },
-      ].map(x => ({
-        ...x,
-        id: [x.title, x.kind].join('-'),
-      }))
 
-      for (let i = samples.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * i)
-        const temp = samples[i]
-        samples[i] = samples[j]
-        samples[j] = temp
-      }
-
-      if (Math.random() < 0.4) {
-        samples.pop()
-      }
-      if (Math.random() < 0.2) {
-        samples = []
-      }
-
-      this.suggestions = samples
-      this.query = value
+    handleChange(event) {
+      this.message = null
+      this.searchInput = event.target.value
+      clearTimeout(this.debounce)
+      this.debounce = setTimeout(() => {
+        this.term = event.target.value
+      }, 200)
     },
+
+    // handleChange({ target: { value } }) {
+    //   let samples = [
+    //     { title: 'Jasmin Jones', kind: 'Author' },
+    //     { title: 'Jam', kind: 'Keyword' },
+    //     { title: 'Jas', kind: 'Full Text Search' },
+    //   ].map(x => ({
+    //     ...x,
+    //     id: [x.title, x.kind].join('-'),
+    //   }))
+
+    //   for (let i = samples.length - 1; i > 0; i--) {
+    //     const j = Math.floor(Math.random() * i)
+    //     const temp = samples[i]
+    //     samples[i] = samples[j]
+    //     samples[j] = temp
+    //   }
+
+    //   if (Math.random() < 0.4) {
+    //     samples.pop()
+    //   }
+    //   if (Math.random() < 0.2) {
+    //     samples = []
+    //   }
+
+    //   this.suggestions = samples
+    //   this.query = value
+    // },
   },
 
   mounted() {
@@ -99,7 +144,12 @@ export default {
     // })
   },
 
-  computed: {},
+  computed: {
+    suggestions() {
+      console.log(this.fieldSuggestions)
+      return [] // this.fieldSuggestions
+    },
+  },
 }
 </script>
 

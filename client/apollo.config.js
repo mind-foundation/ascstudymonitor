@@ -1,19 +1,14 @@
 const path = require('path')
 
 // Load .env files
-const env = require('../asc-secret.json')
+// const env = require('../asc-secret.json')
 
+console.log(path.resolve(__dirname, '../schema.graphql'))
 module.exports = {
   client: {
-    service: 'ascstudymontior',
+    service: {
+      localSchemaFile: path.resolve(__dirname, '../schema.graphql'),
+    },
     includes: ['src/**/*.{js,vue,gql}'],
-  },
-  service: {
-    name: 'ascstudymontior',
-    localSchemaFile: path.resolve(__dirname, '../backend/schema.graphql'),
-  },
-  engine: {
-    endpoint: 'http://localhost:5000/graphql',
-    apiKey: env.VUE_APP_APOLLO_ENGINE_KEY,
   },
 }
