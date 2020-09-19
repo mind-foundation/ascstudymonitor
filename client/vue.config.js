@@ -53,6 +53,13 @@ module.exports = {
         .init(Plugin => new Plugin({}))
     }
 
+    config.module
+      .rule('graphql')
+      .test(/\.gql$/)
+      .use('graphql-tag/loader')
+      .loader('graphql-tag/loader')
+      .end()
+
     config.resolve.alias.set('assets', path.resolve(__dirname, 'assets'))
 
     config.plugin('define').tap(definitions => {

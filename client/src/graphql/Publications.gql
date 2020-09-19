@@ -1,0 +1,38 @@
+query Publcations {
+  publications(first: 20) {
+    edges {
+      cursor
+      node {
+        id
+        abstract
+        authors {
+          firstName
+          lastName
+        }
+        created
+        disciplines {
+          value
+        }
+        fileAttached
+        id
+        keywords {
+          value
+        }
+        slug
+        journal {
+          value
+        }
+        title
+        websites
+        year {
+          value
+        }
+      }
+    }
+
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

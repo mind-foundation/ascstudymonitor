@@ -1,9 +1,9 @@
 <script>
-import gql from 'graphql-tag'
 import PublicationListItem from '@/components/PublicationListItem/PublicationListItem'
 import SearchButton from '@/components/Search/Button'
 import SearchBar from '@/components/Search/Bar'
 import SearchWaypoint from '@/components/Search/Waypoint'
+import PublicationsQuery from '@/graphql/Publications.gql'
 
 export default {
   name: 'list',
@@ -20,48 +20,7 @@ export default {
     publications: {},
   }),
   apollo: {
-    publications: {
-      query: gql`
-        {
-          publications(first: 20) {
-            edges {
-              cursor
-              node {
-                id
-                abstract
-                authors {
-                  firstName
-                  lastName
-                }
-                created
-                disciplines {
-                  value
-                }
-                fileAttached
-                id
-                keywords {
-                  value
-                }
-                slug
-                journal {
-                  value
-                }
-                title
-                websites
-                year {
-                  value
-                }
-              }
-            }
-
-            pageInfo {
-              hasNextPage
-              endCursor
-            }
-          }
-        }
-      `,
-    },
+    publications: PublicationsQuery,
   },
 }
 </script>
