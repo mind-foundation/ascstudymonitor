@@ -13,7 +13,6 @@
   "dependencies": {
     "@sentry/browser": "^5.23.0",
     "@sentry/integrations": "^5.23.0",
-    "@vue/apollo-composable": "^4.0.0-alpha.10",
     "@vue/composition-api": "^1.0.0-beta.14",
     "apollo-boost": "^0.4.9",
     "core-js": "^3.6.5",
