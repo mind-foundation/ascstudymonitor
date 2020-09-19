@@ -42,7 +42,7 @@ poster = Poster(
 )
 
 # setup graphql
-type_defs = load_schema_from_path("schema.graphql")
+type_defs = load_schema_from_path("../schema.graphql")
 
 query = QueryType()
 
