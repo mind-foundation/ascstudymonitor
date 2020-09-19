@@ -6,17 +6,21 @@ export default {
 
 <template>
   <div class="container flex flex-row-reverse mt-6">
-    <t-button variant="cta" tabindex="-1" @click="$modal.show('donate-modal')">
+    <button
+      class="pt-3 pb-3 pl-8 pr-8 leading-none bg-navy bg-transparent text-white text-xs"
+      tabindex="-1"
+      @click="$modal.show('donate-modal')"
+    >
       DONATE
-    </t-button>
+    </button>
 
-    <t-button
-      variant="transparent"
+    <button
+      class="pt-3 pb-3 pl-8 pr-8 leading-none border-transparent bg-transparent text-xs"
       tabindex="-1"
       @click="$modal.show('about-modal')"
     >
       ABOUT
-    </t-button>
+    </button>
   </div>
 </template>
 

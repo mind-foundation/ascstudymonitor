@@ -5,7 +5,10 @@ export default {
 </script>
 
 <template>
-  <t-button @click="$modal.show('search-modal')" variant="search">
+  <button
+    @click="$modal.show('search-modal')"
+    class="bg-blue pt-3 pb-3 pl-20 pr-20 text-white color-red font-bold text-sm"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="25.161"
@@ -32,8 +35,8 @@ export default {
         />
       </g>
     </svg>
-    Search and Filter all Publications</t-button
-  >
+    Search and Filter all Publications
+  </button>
 </template>
 
 <style lang="less">

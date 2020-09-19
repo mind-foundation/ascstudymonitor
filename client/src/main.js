@@ -15,12 +15,6 @@ import constants from './constants'
 import { paramsToFilterConfiguration } from '@/mixins/Filters'
 import raf from 'raf'
 import '../assets/tailwind.css'
-import theme from '@/styles/tailwind.theme.js'
-
-// vue-modal and vue-tailwind create a conflict
-// at overriding Vue.prototype.$modal,
-// so import only components we need
-import TButton from 'vue-tailwind/dist/components/TButton.umd.js'
 
 import { createProvider } from './vue-apollo'
 
@@ -44,7 +38,6 @@ Vue.use(VueRouter)
 Vue.use(VueSocialSharing)
 Vue.use(VueClipboard)
 Vue.use(Toasted)
-Vue.use(TButton, theme.TButton)
 Vue.use(VModal, { dialog: true })
 Vue.use(VueWaypoint)
 Vue.use(VueHotkey)

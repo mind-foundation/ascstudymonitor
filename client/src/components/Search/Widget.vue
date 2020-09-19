@@ -134,7 +134,7 @@ export default {
       clearTimeout(this.debounce)
       this.debounce = setTimeout(() => {
         this.term = event.target.value
-      }, 200)
+      }, 50)
     },
     getLinkTo(r) {
       return {
