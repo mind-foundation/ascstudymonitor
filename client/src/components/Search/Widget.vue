@@ -18,25 +18,52 @@
       </div>
       <div
         class="t-4 border-2 border-white w-full border-t-0"
-        v-if="this.suggestions.length"
+        v-if="suggestions.publications.length"
+      >
+        <ul @click="$modal.hide('search-modal')">
+          <li v-for="p in this.suggestions.publications" :key="p.id">
+            <router-link :to="getLinkTo(p)">
+              <div class="suggestion-row flex justify-between" :tabindex="0">
+                <p class="py-2 px-6 font-bold text-left">{{ p.title }}</p>
+                <p class="py-2 px-6 font-bold text-right">Publication</p>
+              </div>
+            </router-link>
+          </li>
+        </ul>
+      </div>
+      <div
+        class="t-4 border-2 border-white w-full border-t-0"
+        v-if="this.suggestions.fields.length"
       >
         <ul>
-          <li v-for="s in this.suggestions" :key="s.id">
-            <div class="suggestion-row flex justify-between" :tabindex="0">
-              <p class="py-2 px-6 font-bold text-left">{{ s.title }}</p>
-              <p class="py-2 px-6 font-bold text-right">{{ s.kind }}</p>
+          <li v-for="fs in this.suggestions.fields" :key="fs.value">
+            <div
+              class="suggestion-row suggestion-row__field-suggestion flex justify-between"
+              :tabindex="0"
+            >
+              <p class="py-2 px-6 font-bold text-left">{{ fs.value }}</p>
+              <p class="py-2 px-6 font-bold text-right">
+                {{ fs.type }} ({{ fs.count }})
+              </p>
             </div>
           </li>
         </ul>
       </div>
     </div>
     <div class="button-wrapper w-full sm:w-3/6 sm:mb-10">
-      <t-button
+      <button
+        class="leading-none w-full pt-6 pb-6 pl-20 pr-20 text-navy bg-white text-lg font-bold"
+        :class="{
+          'opacity-25': suggestions.publications.length === 0,
+        }"
         tabindex="-1"
-        :variant="this.suggestions.length > 0 ? 'results' : 'results-inactive'"
       >
-        {{ suggestions.length > 0 ? suggestions.length : 'No' }} results
-      </t-button>
+        {{
+          suggestions.publications.length > 0
+            ? `${suggestions.publications.length} results`
+            : 'No matching publications'
+        }}
+      </button>
     </div>
   </div>
 </template>
@@ -53,46 +80,50 @@ export default {
     debounce: null,
     searchInput: null,
     term: '',
-    publications: [],
-    fieldSuggestions: [],
+    suggestions: {
+      fields: [],
+      publications: [],
+    },
   }),
 
   apollo: {
-    // Query with parameters
-    searchResults: {
-      // gql query
+    fieldSuggestions: {
+      // has to be named like a root from resukt
       query: SearchQuery,
-      // Static parameters
       variables() {
-        // Use vue reactive properties here
         return {
           term: this.term,
         }
       },
-      result(data) {
+      result({ data }) {
         if (data) {
-          console.log(data)
-          this.fieldSuggestions = data.fieldSuggestions
-          this.publications = data.publications
+          this.suggestions = {
+            publications: data.publications.edges.map(({ node }) => ({
+              ...node,
+            })),
+            fields: data.fieldSuggestions.map(
+              s =>
+                console.log(s) || {
+                  type: {
+                    authors: 'Author',
+                    keywords: 'Keyword',
+                    year: 'Year',
+                    journal: 'Journal',
+                    disciplines: 'Discipline',
+                  }[s.field],
+                  score: s.score,
+                  value:
+                    s.value.value ||
+                    s.value.year ||
+                    [s.value.firstName, s.value.lastName].join(' '),
+                  count: s.value.publicationCount,
+                },
+            ),
+          }
         }
       },
     },
   },
-
-  // data: () => ({
-  //   query: '',
-  //   mobileExposureActive: true,
-  //   suggestions() {
-  //     return [
-  //       { title: 'Jasmin Jones', kind: 'Author' },
-  //       { title: 'Jam', kind: 'Keyword' },
-  //       { title: 'Jas', kind: 'Full Text Search' },
-  //     ].map(x => ({
-  //       ...x,
-  //       id: [x.title, x.kind].join('-'),
-  //     }))
-  //   },
-  // }),
 
   methods: {
     handleFocus: () => {},
@@ -105,51 +136,19 @@ export default {
         this.term = event.target.value
       }, 200)
     },
-
-    // handleChange({ target: { value } }) {
-    //   let samples = [
-    //     { title: 'Jasmin Jones', kind: 'Author' },
-    //     { title: 'Jam', kind: 'Keyword' },
-    //     { title: 'Jas', kind: 'Full Text Search' },
-    //   ].map(x => ({
-    //     ...x,
-    //     id: [x.title, x.kind].join('-'),
-    //   }))
-
-    //   for (let i = samples.length - 1; i > 0; i--) {
-    //     const j = Math.floor(Math.random() * i)
-    //     const temp = samples[i]
-    //     samples[i] = samples[j]
-    //     samples[j] = temp
-    //   }
-
-    //   if (Math.random() < 0.4) {
-    //     samples.pop()
-    //   }
-    //   if (Math.random() < 0.2) {
-    //     samples = []
-    //   }
-
-    //   this.suggestions = samples
-    //   this.query = value
-    // },
-  },
-
-  mounted() {
-    // setTimeout(() => {
-    // console.log("timer fired")
-    if (screen.height > 1024) {
-      this.$refs.input.focus()
-    }
-    // })
-  },
-
-  computed: {
-    suggestions() {
-      console.log(this.fieldSuggestions)
-      return [] // this.fieldSuggestions
+    getLinkTo(r) {
+      return {
+        path: window.urlForPublication.replace(':slug', r.slug),
+      }
     },
   },
+
+  // mounted() {
+  //   setTimeout(() => {
+  //   if (screen.height > 1024) {
+  //     this.$refs.input.focus()
+  //   }
+  // },
 }
 </script>
 
@@ -168,10 +167,15 @@ export default {
 }
 
 .suggestion-row {
-  &:focus {
+  &:focus,
+  &:hover {
     outline: 0;
     color: #000;
     background-color: #fff;
+
+    &.suggestion-row__field-suggestion {
+      cursor: copy;
+    }
   }
 }
 

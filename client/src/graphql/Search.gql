@@ -1,5 +1,5 @@
 query Search($term: String!) {
-  fieldSuggestions(search: $term, first: 10) {
+  fieldSuggestions(search: $term, first: 5) {
     value {
       __typename
       ... on Year {
@@ -28,11 +28,12 @@ query Search($term: String!) {
     score
   }
 
-  publications(search: $term, first: 1) {
+  publications(search: $term, first: 3) {
     edges {
       node {
         id
         title
+        slug
       }
     }
   }
