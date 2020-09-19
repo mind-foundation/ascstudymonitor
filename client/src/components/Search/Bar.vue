@@ -20,13 +20,12 @@ export default {
 
   created() {
     EventBus.$on('searchbar.show', () => {
-      console.log('stuck true')
-
       this.stuck = true
+      // console.log('stuck', this.stuck)
     })
     EventBus.$on('searchbar.hide', () => {
       this.stuck = false
-      console.log('stuck false')
+      // console.log('stuck', this.stuck)
     })
   },
 }

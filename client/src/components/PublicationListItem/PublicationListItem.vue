@@ -72,7 +72,7 @@ export default {
       />
     </div>
 
-    <div class="content" @click.stop>
+    <div class="content flex-grow" @click.stop>
       <h3 class="text-2xl mt-0 text-black">
         {{ publication.title }}
 
@@ -152,7 +152,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  flex-grow: 1;
 }
 
 .row {
