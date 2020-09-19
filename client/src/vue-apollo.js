@@ -2,7 +2,10 @@ import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import { createHttpLink } from 'apollo-link-http'
 import { ApolloClient } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import {
+  InMemoryCache,
+  IntrospectionFragmentMatcher,
+} from 'apollo-cache-inmemory'
 
 // Install the vue plugin
 Vue.use(VueApollo)
@@ -21,7 +24,15 @@ const defaultOptions = {
     // You should use an absolute URL here
     uri: Vue.prototype.$api + '/graphql',
   }),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    fragmentMatcher: new IntrospectionFragmentMatcher({
+      // In order to avoid heuristic fragment matching
+      // errors, a possible types file is required
+      // see https://medium.com/commutatus/whats-going-on-with-the-heuristic-fragment-matcher-in-graphql-apollo-client-e721075e92be
+      // for more information
+      introspectionQueryResultData: require('./possibleTypes.json'),
+    }),
+  }),
 
   // You can use `wss` for secure connection (recommended in production)
   // Use `null` to disable subscriptions
