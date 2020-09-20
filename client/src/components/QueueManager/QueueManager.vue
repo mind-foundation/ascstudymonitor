@@ -24,17 +24,19 @@ export default {
     <li
       v-for="publication in publications"
       :key="publication.id"
-      class="bg-superwhite flex justify-between w-full pt-8 pb-8 mb-8 pr-16"
+      class="bg-superwhite flex justify-between w-full pt-4 pb-4 pl-4 mb-8 pr-16 text-lg"
     >
-      <a class="w-2/4" :href="link(publication)">{{ publication.title }}</a>
-      <div class="w-2/4">
-        <button @click="$emit('move-up', publication.id)">
+      <a class="flex-grow" :href="link(publication)" target="blank">{{
+        publication.title
+      }}</a>
+      <div>
+        <button @click="$emit('move-up', publication.id)" class="m-2">
           <move-up-icon />
         </button>
-        <button @click="$emit('move-down', publication.id)">
+        <button @click="$emit('move-down', publication.id)" class="m-2">
           <move-down-icon />
         </button>
-        <button @click="$emit('remove', publication.id)">
+        <button @click="$emit('remove', publication.id)" class="m-2">
           <remove-from-queue-icon />
         </button>
       </div>

@@ -101,24 +101,21 @@ export default {
             publications: data.publications.edges.map(({ node }) => ({
               ...node,
             })),
-            fields: data.fieldSuggestions.map(
-              s =>
-                console.log(s) || {
-                  type: {
-                    authors: 'Author',
-                    keywords: 'Keyword',
-                    year: 'Year',
-                    journal: 'Journal',
-                    disciplines: 'Discipline',
-                  }[s.field],
-                  score: s.score,
-                  value:
-                    s.value.value ||
-                    s.value.year ||
-                    [s.value.firstName, s.value.lastName].join(' '),
-                  count: s.value.publicationCount,
-                },
-            ),
+            fields: data.fieldSuggestions.map(s => ({
+              type: {
+                authors: 'Author',
+                keywords: 'Keyword',
+                year: 'Year',
+                journal: 'Journal',
+                disciplines: 'Discipline',
+              }[s.field],
+              score: s.score,
+              value:
+                s.value.value ||
+                s.value.year ||
+                [s.value.firstName, s.value.lastName].join(' '),
+              count: s.value.publicationCount,
+            })),
           }
         }
       },

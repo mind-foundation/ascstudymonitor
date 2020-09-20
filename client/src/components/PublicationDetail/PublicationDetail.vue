@@ -1,40 +1,14 @@
 <script>
-import Vue from 'vue'
-import Paginate from 'vuejs-paginate'
-import PublicationDetail from '@/components/PublicationDetail/PublicationDetail'
-import PublicationQuery from '@/graphql/queries/Publication.gql'
-
-Vue.component('paginate', Paginate)
-
 export default {
-  name: 'single',
-  components: {
-    PublicationDetail,
-  },
-  mounted() {
-    window.analytics.page('List')
-  },
-  computed: {
-    slug() {
-      return this.$route.params?.slug
-    },
-  },
-  apollo: {
-    publication: {
-      query: PublicationQuery,
-      variables() {
-        return {
-          slug: this.slug,
-        }
-      },
-    },
-  },
+  name: 'publication-detail',
+  props: {
+    publication: Object,
+  }
 }
 </script>
 
 <template>
   <div id="container">
-    <publication-detail :publication="publication" />
     <!-- <p v-if>
       Loading..
     </p> -->
@@ -50,10 +24,10 @@ export default {
         :key="r.document.id"
       /> -->
 
-    <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
+      <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
           publication.title
         }}</router-link> -->
-    <!-- </ul> -->
+    </ul>
   </div>
 
   <!-- <div v-if="publication.recommendations.length !== 0" class="pagination--wrapper">

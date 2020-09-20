@@ -1,0 +1,35 @@
+query Publication($slug: String!) {
+  publicationBySlug(slug: $slug) {
+    abstract
+    authors {
+      firstName
+      lastName
+    }
+    created
+    disciplines {
+      value
+    }
+    fileAttached
+    id
+    keywords {
+      value
+    }
+    slug
+    journal {
+      value
+    }
+    title
+    websites
+    year {
+      value
+    }
+    recommendations(first: 5) {
+      score
+      publication {
+        id
+        slug
+        title
+      }
+    }
+  }
+}

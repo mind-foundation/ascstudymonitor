@@ -32,9 +32,9 @@ module.exports = {
       ],
     },
   },
-  // future: {
-  //   // remove after upgrading due vue-tailwind@2.0.0
-  //   removeDeprecatedGapUtilities: true,
-  //   purgeLayersByDefault: true,
-  // },
+  future: {
+    // remove after upgrading due vue-tailwind@2.0.0
+    removeDeprecatedGapUtilities: true,
+    purgeLayersByDefault: true,
+  },
 }

@@ -5,9 +5,11 @@ export default {
 </script>
 
 <template>
-  <div id="logo">
-    <img src="../../assets/logo.png" />
-  </div>
+  <router-link to="/">
+    <div id="logo">
+      <img src="../../assets/logo.png" />
+    </div>
+  </router-link>
 </template>
 
 <style scoped lang="less">

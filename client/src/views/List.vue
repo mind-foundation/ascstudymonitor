@@ -4,7 +4,7 @@ import PublicationListItem from '@/components/PublicationListItem/PublicationLis
 import SearchButton from '@/components/Search/Button'
 import SearchBar from '@/components/Search/Bar'
 import SearchWaypoint from '@/components/Search/Waypoint'
-import PublicationsQuery from '@/graphql/Publications.gql'
+import PublicationsQuery from '@/graphql/queries/Publications.gql'
 import { EventBus } from '@/event-bus'
 
 export default {

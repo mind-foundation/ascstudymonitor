@@ -1,7 +1,7 @@
 <script>
 import QueueManager from '@/components/QueueManager/QueueManager'
 import SimplePublications from '@/components/QueueManager/SimplePublications'
-import QueueQuery from '@/graphql/Queue.gql'
+import Queue from '@/graphql/queries/Queue.gql'
 import AppendToQueueMutation from '@/graphql/mutations/AppendToQueue.gql'
 import MoveUpInQueueMutation from '@/graphql/mutations/MoveUpInQueue.gql'
 import MoveDownInQueueMutation from '@/graphql/mutations/MoveDownInQueue.gql'
@@ -29,6 +29,9 @@ export default {
   }),
   computed: {},
   methods: {
+    // Todo: Hanlde Mutations
+    // https://apollo.vuejs.org/guide/apollo/mutations.html#server-side-example
+    // https://github.com/Akryum/vue-apollo-todos/blob/master/src/components/TodoListItem.vue
     handleChange(event) {
       this.searchInput = event.target.value
       this.debounce = setTimeout(() => {
@@ -74,7 +77,7 @@ export default {
   },
   apollo: {
     queue: {
-      query: QueueQuery,
+      query: Queue,
       variables() {
         return {
           channel: this.channel,
@@ -94,13 +97,14 @@ export default {
 </script>
 
 <template>
-  <div id="queue">
+  <div id="queue" class="containe">
     <queue-manager
       :publications="queue"
       @move-up="moveUpInQueue"
       @move-down="moveDownInQueue"
       @remove="removeFromQueue"
     />
+    <hr />
     <input
       class="bg-transparent color-white w-full p-2 pl-6 pb-3 font-light text-3xl"
       placeholder="Search for..."
