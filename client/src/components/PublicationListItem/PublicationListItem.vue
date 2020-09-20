@@ -88,7 +88,7 @@ export default {
       <div class="flex flex-row justify-between">
         <by-line
           :year="publication.year.value"
-          :journal="publication.journal.value"
+          :journal="publication.journal && publication.journal.value"
         />
 
         <disciplines-list :disciplines="publication.disciplines" />

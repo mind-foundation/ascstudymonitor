@@ -1,5 +1,10 @@
-query Publcations {
-  publications(first: 20) {
+query Publcations($after: String) {
+  publications(after: $after) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+
     edges {
       cursor
       node {
@@ -28,11 +33,6 @@ query Publcations {
           value
         }
       }
-    }
-
-    pageInfo {
-      hasNextPage
-      endCursor
     }
   }
 }

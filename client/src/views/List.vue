@@ -1,9 +1,11 @@
 <script>
+import InfiniteScrollingWaypoint from '@/components/InfiniteScrollingWaypoint'
 import PublicationListItem from '@/components/PublicationListItem/PublicationListItem'
 import SearchButton from '@/components/Search/Button'
 import SearchBar from '@/components/Search/Bar'
 import SearchWaypoint from '@/components/Search/Waypoint'
 import PublicationsQuery from '@/graphql/Publications.gql'
+import { EventBus } from '@/event-bus'
 
 export default {
   name: 'list',
@@ -15,12 +17,42 @@ export default {
     SearchButton,
     SearchBar,
     SearchWaypoint,
+    InfiniteScrollingWaypoint,
   },
   data: () => ({
     publications: {},
+    cursor: null,
   }),
   apollo: {
     publications: PublicationsQuery,
+  },
+  created() {
+    EventBus.$on('infinityscroller.loadmore', () => {
+      this.showMore()
+    })
+  },
+
+  methods: {
+    showMore() {
+      this.$apollo.queries.publications.fetchMore({
+        variables: {
+          after: this.publications.edges[this.publications.edges.length - 1]
+            .cursor,
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          return {
+            publications: {
+              __typename: previousResult.publications.__typename,
+              edges: [
+                ...previousResult.publications.edges,
+                ...fetchMoreResult.publications.edges,
+              ],
+              pageInfo: fetchMoreResult.publications.pageInfo,
+            },
+          }
+        },
+      })
+    },
   },
 }
 </script>
@@ -58,6 +90,9 @@ export default {
           publication.title
         }}</router-link> -->
     </ul>
+    <infinite-scrolling-waypoint
+      v-if="publications.pageInfo && publications.pageInfo.hasNextPage"
+    />
     <!--
     <div v-if="pagination.items.length !== 0" class="pagination--wrapper">
       <paginate
