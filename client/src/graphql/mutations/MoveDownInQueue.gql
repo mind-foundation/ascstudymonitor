@@ -1,0 +1,6 @@
+mutation MoveDownInQueue($channel: String!, $publication: ID!) {
+  moveDownInQueue(channel: $channel, publication: $publication) {
+    success
+    message
+  }
+}

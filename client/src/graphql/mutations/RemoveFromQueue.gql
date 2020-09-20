@@ -1,0 +1,6 @@
+mutation RemoveFromQueue($channel: String!, $publication: ID!) {
+  removeFromQueue(channel: $channel, publication: $publication) {
+    success
+    message
+  }
+}

@@ -75,6 +75,7 @@ type Publication {
   year: Year
 
   recommendations(first: Int!): [Recommendation!]!
+  hasBeenPosted(channel: String!): Boolean!
 }
 
 """
@@ -125,8 +126,6 @@ type UpdateResponse {
 Response for mutations on a queue
 """
 type QueueMutationResponse {
-  channel: String!
-  publication: ID!
   success: Boolean!
   message: String
 }

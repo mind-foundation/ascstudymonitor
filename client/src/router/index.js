@@ -2,6 +2,7 @@ import qs from 'qs'
 import VueRouter from 'vue-router'
 import List from '@/views/List.vue'
 import Single from '@/views/Single.vue'
+import Queue from '@/views/Queue.vue'
 import ListHero from '@/components/ListHero.vue'
 import SinglePublicationHero from '@/components/SinglePublicationHero.vue'
 
@@ -18,6 +19,12 @@ const routes = [
       main: Single,
     },
     props: true,
+  },
+  {
+    path: '/queue/:channel',
+    name: 'Queue',
+    components: { main: Queue },
+    props: { main: true },
   },
   {
     path: '*',

@@ -1,6 +1,6 @@
 """ GraphQL resolvers """
 
-from typing import Any, Dict, List, Optional
+from typing import cast, Any, Dict, List, Optional
 
 from ariadne import (
     ObjectType,
@@ -21,6 +21,7 @@ from ascmonitor.config import (
 )
 from ascmonitor.publication_store import PublicationStore
 from ascmonitor.event_store import EventStore
+from ascmonitor.events import EventKind, PostSuccessEvent
 from ascmonitor.mendeleur import Mendeleur, MendeleyAuthInfo
 from ascmonitor.ngram_store import NGramStore
 from ascmonitor.post_queue import PostQueue
@@ -75,8 +76,9 @@ def resolve_publications(
     # embed filterable fields
     for pub in pubs:
         for field in ["year", "journal", "disciplines", "keywords"]:
-            if pub[field] is None: 
+            if pub[field] is None:
                 continue
+
             if isinstance(pub[field], list):
                 pub[field] = [{"value": val} for val in pub[field]]
             else:
@@ -154,7 +156,6 @@ def resolve_distinct_authors(*_) -> List[Dict[str, Any]]:
 @query.field("journals")
 @query.field("disciplines")
 @query.field("keywords")
-@query.field("queue")
 def resolve_distinct_fields(_, info) -> List[Dict[str, Any]]:
     """ Resolve distinct values for a filterable field """
     field = {
@@ -166,6 +167,7 @@ def resolve_distinct_fields(_, info) -> List[Dict[str, Any]]:
     return publication_store.get_distinct(field)
 
 
+@query.field("queue")
 def resolve_queue(*_, channel: str) -> Optional[List[PublicationType]]:
     """
     Show publications in queue for channel.
@@ -202,6 +204,14 @@ def resolve_recommendations(_source, _info, first: int) -> List[Dict[str, Any]]:
     for doc, score in zip(docs, scores[::-1]):
         recommendations.append({"score": score, "publication": doc})
     return recommendations
+
+
+@publication_type.field("hasBeenPosted")
+def resolve_has_been_posted(obj, _info, channel: str) -> bool:
+    """ Resolve if publication has been posted before """
+    id_ = obj["id"]
+    events = event_store.query([id_], kinds=[EventKind.post_success])
+    return any(cast(PostSuccessEvent, event).channel == channel for _, event in events)
 
 
 author_type = ObjectType("Author")
@@ -262,81 +272,65 @@ def resolve_update_publications(*_) -> Dict[str, Any]:
 @mutation.field("appendToQueue")
 def resolve_append_to_queue(*_, channel: str, publication: str) -> Dict[str, Any]:
     """ Append publication to queue for channel """
-    args = {
-        "channel": channel,
-        "publication": publication,
-    }
     if channel not in channel_configs:
-        return {**args, "success": False, "message": "Unsupported channel"}
+        return {"success": False, "message": "Unsupported channel"}
 
     queue = PostQueue(channel, mongo)
 
     try:
         queue.append(publication)
     except (ValueError, RuntimeError) as error:
-        return {**args, "success": False, "message": str(error)}
+        return {"success": False, "message": str(error)}
 
-    return {**args, "success": True}
+    return {"success": True}
 
 
 @mutation.field("moveUpInQueue")
 def resolve_move_up_in_queue(*_, channel: str, publication: str) -> Dict[str, Any]:
     """ Move publication up in queue for channel """
-    args = {
-        "channel": channel,
-        "publication": publication,
-    }
     if channel not in channel_configs:
-        return {**args, "success": False, "message": "Unsupported channel"}
+        return {"success": False, "message": "Unsupported channel"}
 
     queue = PostQueue(channel, mongo)
 
     try:
         queue.move_up(publication)
     except (ValueError, RuntimeError) as error:
-        return {**args, "success": False, "message": str(error)}
+        return {"success": False, "message": str(error)}
 
-    return {**args, "success": True}
+    return {"success": True}
 
 
 @mutation.field("moveDownInQueue")
 def resolve_move_down_in_queue(*_, channel: str, publication: str) -> Dict[str, Any]:
     """ Move publication down in queue for channel """
-    args = {
-        "channel": channel,
-        "publication": publication,
-    }
     if channel not in channel_configs:
-        return {**args, "success": False, "message": "Unsupported channel"}
+        return {"success": False, "message": "Unsupported channel"}
 
     queue = PostQueue(channel, mongo)
 
     try:
         queue.move_down(publication)
     except (ValueError, RuntimeError) as error:
-        return {**args, "success": False, "message": str(error)}
+        return {"success": False, "message": str(error)}
 
-    return {**args, "success": True}
+    return {"success": True}
 
 
 @mutation.field("removeFromQueue")
 def resolve_remove_from_queue(*_, channel: str, publication: str) -> Dict[str, Any]:
     """ Remove publication from queue for channel """
-    args = {
-        "channel": channel,
-        "publication": publication,
-    }
     if channel not in channel_configs:
-        return {**args, "success": False, "message": "Unsupported channel"}
+        return {"success": False, "message": "Unsupported channel"}
 
     queue = PostQueue(channel, mongo)
 
     try:
         queue.remove(publication)
     except (ValueError, RuntimeError) as error:
-        return {**args, "success": False, "message": str(error)}
+        return {"success": False, "message": str(error)}
 
-    return {**args, "success": True}
+    return {"success": True}
 
 
 @mutation.field("post")
