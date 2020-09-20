@@ -75,6 +75,8 @@ def resolve_publications(
     # embed filterable fields
     for pub in pubs:
         for field in ["year", "journal", "disciplines", "keywords"]:
+            if pub[field] is None: 
+                continue
             if isinstance(pub[field], list):
                 pub[field] = [{"value": val} for val in pub[field]]
             else:
