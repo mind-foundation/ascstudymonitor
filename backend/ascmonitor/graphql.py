@@ -177,8 +177,16 @@ def resolve_queue(*_, channel: str) -> Optional[List[PublicationType]]:
         return None
 
     queue = PostQueue(channel, mongo)
+    # breakpoint()
+
+
     ids = queue.view()
-    return publication_store.get_by_ids(ids)
+    publications = publication_store.get_by_ids(ids)
+
+    publications = { pub["id"]: pub for pub in publications }
+    publications = [ publications[id_] for id_ in ids ] 
+
+    return publications
 
 
 publications_connection = ObjectType("PublicationsConnection")
