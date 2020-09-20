@@ -9,7 +9,7 @@ from ascmonitor.events import PostStartEvent, PostSuccessEvent, PostFailureEvent
 from ascmonitor.post_queue import PostQueue
 from ascmonitor.channels import PostSendException, SentPost
 from ascmonitor.channels.twitter import TwitterChannel
-from ascmonitor.types import PublicationType
+from ascmonitor.publication import Publication
 
 
 class Poster:
@@ -24,22 +24,22 @@ class Poster:
         # init channels and queues
         self.channels = {"twitter": TwitterChannel(**auths["twitter"])}
 
-    def emit_start(self, publication: PublicationType, channel: str):
+    def emit_start(self, publication: Publication, channel: str):
         """ Notify event store about starting to post """
         event = PostStartEvent(channel=channel)
-        self.event_store.put(publication["id"], event)
+        self.event_store.put(publication.id_, event)
 
-    def emit_success(self, publication: PublicationType, post: SentPost, channel: str):
+    def emit_success(self, publication: Publication, post: SentPost, channel: str):
         """ Notify event store about a successful post """
         event = PostSuccessEvent(
             channel=channel,
             post=post.as_dict(),
             timestamp=post.created,
         )
-        self.event_store.put(publication["id"], event)
+        self.event_store.put(publication.id_, event)
 
     def emit_fail(
-        self, publication: PublicationType, error: PostSendException, channel: str
+        self, publication: Publication, error: PostSendException, channel: str
     ):
         """ Notify event store about a failed post """
         event = PostFailureEvent(
@@ -47,10 +47,10 @@ class Poster:
             allow_retry=error.allow_retry,
             channel=channel,
         )
-        self.event_store.put(publication["id"], event)
+        self.event_store.put(publication.id_, event)
 
     def post(
-        self, channel_name: str, publication: PublicationType, url: str
+        self, channel_name: str, publication: Publication, url: str
     ) -> Dict[str, Any]:
         """
         Post the next publication in queue

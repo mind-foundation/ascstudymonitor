@@ -8,7 +8,7 @@ import tweepy
 from tweepy import TweepError
 
 from ascmonitor.channels import Channel, PreparedPost, SentPost, PostSendException
-from ascmonitor.types import PublicationType
+from ascmonitor.publication import Publication
 
 logger = logging.getLogger(__name__)
 
@@ -86,11 +86,11 @@ class TwitterChannel(Channel):
 
         return names
 
-    def format(self, publication: PublicationType, url: str) -> PreparedPost:
+    def format(self, publication: Publication, url: str) -> PreparedPost:
         """ Format a publication to return a post """
         templates = [*self.templates]
 
-        title = publication["title"]
+        title = publication.title
         title_short = " ".join(title[:100].split(" ")[:-1]) + "…"
 
         # extract author and remove invalid templates
@@ -112,18 +112,14 @@ class TwitterChannel(Channel):
         else:
             raise PostSendException(
                 "Could not find format fitting headline character limit: "
-                f"id={publication['id']} - title={title}",
+                f"id={publication.id_} - title={title}",
                 allow_retry=False,
             )
 
         status += "\n{url}\n\n"
 
-        keywords = [
-            kw
-            for kw in publication.get("keywords", [])
-            if kw not in self.static_hashtags
-        ]
-        hashtags = self.static_hashtags + publication.get("disciplines", []) + keywords
+        keywords = [kw for kw in publication.keywords if kw not in self.static_hashtags]
+        hashtags = self.static_hashtags + publication.disciplines + keywords
         for hashkw in hashtags:
             if " " in hashkw:
                 hashkw = hashkw.title()

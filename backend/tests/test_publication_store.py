@@ -51,7 +51,9 @@ def test_put(mendeleur, mongo, event_store, publications):
         mendeleur=mendeleur, mongo=mongo, event_store=event_store
     )
     changes = publication_store.put(publications)
-    assert publication_store.get_publications() == publications
+    assert publication_store.get_publications() == [
+        replace(pub, _cursor=pub.cursor) for pub in publications
+    ]
 
     created, removed, updated = changes
     assert created == {pub.id_ for pub in publications}
@@ -61,7 +63,9 @@ def test_put(mendeleur, mongo, event_store, publications):
 
 def test_put__ignore_old(publication_store, publications):
     changes = publication_store.put(publications)
-    assert publication_store.get_publications() == publications
+    assert publication_store.get_publications() == [
+        replace(pub, _cursor=pub.cursor) for pub in publications
+    ]
 
     created, removed, updated = changes
     assert created == set()
@@ -73,7 +77,9 @@ def test_put__update(publication_store, publications):
     updated = [replace(publications[0], year=2050), publications[1]]
 
     changes = publication_store.put(updated)
-    assert publication_store.get_publications() == updated
+    assert publication_store.get_publications() == [
+        replace(pub, _cursor=pub.cursor) for pub in updated
+    ]
 
     created, removed, updated = changes
     assert created == set()
@@ -83,7 +89,9 @@ def test_put__update(publication_store, publications):
 
 def test_put__delete(publication_store, publications):
     changes = publication_store.put([publications[0]])
-    assert publication_store.get_publications() == [publications[0]]
+    assert publication_store.get_publications() == [
+        replace(publications[0], _cursor=publications[0].cursor)
+    ]
 
     created, removed, updated = changes
     assert created == set()
@@ -114,8 +122,7 @@ def test_get_by_slug(publication_store, publications):
 
 def test_get_publications(publication_store, publications):
     fetched = publication_store.get_publications()
-    assert fetched == publications
-    assert all(pub.cursor is None for pub in fetched)
+    assert fetched == [replace(pub, _cursor=pub.cursor) for pub in publications]
 
 
 def test_get_publications_by_id(publication_store_real, publications):
@@ -126,30 +133,30 @@ def test_get_publications_by_id(publication_store_real, publications):
 
 def test_get_publications__limit(publication_store, publications):
     fetched = publication_store.get_publications(first=1)
-    assert fetched == [publications[0]]
+    assert fetched == [replace(publications[0], _cursor=publications[0].cursor)]
 
 
 def test_get_publications__cursor(publication_store, publications):
     fetched = publication_store.get_publications(cursor=publications[0].encoded_cursor)
-    assert fetched == [publications[1]]
+    assert fetched == [replace(publications[1], _cursor=publications[1].cursor)]
 
 
 def test_get_publications__filter_authors(publication_store, publications):
     filters = {"authors": [publications[0].authors[0].as_dict()]}
     fetched = publication_store.get_publications(filters=filters)
-    assert fetched == [publications[0]]
+    assert fetched == [replace(publications[0], _cursor=publications[0].cursor)]
 
 
 def test_get_publications__filter_year(publication_store, publications):
     filters = {"year": [publications[0].year]}
     fetched = publication_store.get_publications(filters=filters)
-    assert fetched == publications
+    assert fetched == [replace(pub, _cursor=pub.cursor) for pub in publications]
 
 
 def test_get_publications__filter_disciplines(publication_store, publications):
     filters = {"disciplines": [publications[0].disciplines[0]]}
     fetched = publication_store.get_publications(filters=filters)
-    assert fetched == [publications[0]]
+    assert fetched == [replace(publications[0], _cursor=publications[0].cursor)]
 
 
 def test_get_publications__filter_unmatched(publication_store):
@@ -164,7 +171,7 @@ def test_get_publications__filter_combination_hit(publication_store, publication
         "keywords": [publications[0].keywords[0]],
     }
     fetched = publication_store.get_publications(filters=filters)
-    assert fetched == [publications[0]]
+    assert fetched == [replace(publications[0], _cursor=publications[0].cursor)]
 
 
 def test_get_publications__filter_combination_multiple(publication_store, publications):
@@ -175,7 +182,7 @@ def test_get_publications__filter_combination_multiple(publication_store, public
         ]
     }
     fetched = publication_store.get_publications(filters=filters)
-    assert fetched == publications
+    assert fetched == [replace(pub, _cursor=pub.cursor) for pub in publications]
 
 
 def test_get_publications__filter_combination_exclusion(
@@ -194,8 +201,9 @@ def test_get_publications__search(publication_store_real, publications):
         search="formal statement equilibrium"
     )
     assert len(fetched) == 1
-    assert replace(fetched[0], _cursor=None) == publications[1]
+    assert replace(fetched[0], _cursor=None, score=None) == publications[1]
     assert fetched[0].cursor == "1578947/2"
+    assert fetched[0].score == pytest.approx(1.578947)
 
 
 def test_get_publications__search_pagination(publication_store_real, publications):
@@ -208,7 +216,7 @@ def test_get_publications__search_pagination(publication_store_real, publication
         search="testing abstract", first=1
     )
     assert len(fetched) == 1
-    assert replace(fetched[0], _cursor=None) == pubs[1]
+    assert replace(fetched[0], _cursor=None, score=None) == pubs[1]
     assert fetched[0]._cursor is not None
 
     # second page
@@ -216,4 +224,4 @@ def test_get_publications__search_pagination(publication_store_real, publication
         search="testing abstract", first=1, cursor=fetched[0].encoded_cursor
     )
     assert len(fetched) == 1
-    assert replace(fetched[0], _cursor=None) == pubs[0]
+    assert replace(fetched[0], _cursor=None, score=None) == pubs[0]

@@ -20,13 +20,14 @@ from ascmonitor.config import (
     channel_configs,
 )
 from ascmonitor.publication_store import PublicationStore
+from ascmonitor.publication import PublicationID
 from ascmonitor.event_store import EventStore
 from ascmonitor.events import EventKind, PostSuccessEvent
 from ascmonitor.mendeleur import Mendeleur, MendeleyAuthInfo
 from ascmonitor.ngram_store import NGramStore
 from ascmonitor.post_queue import PostQueue
 from ascmonitor.poster import Poster
-from ascmonitor.types import PublicationType, FilterList
+from ascmonitor.types import FilterList
 
 mendeleur = Mendeleur(MendeleyAuthInfo(**mendeley_authinfo), mendeley_group_id)
 mongo = MongoClient(**mongo_config)[mongo_db]
@@ -49,7 +50,7 @@ query = QueryType()
 
 # pylint: disable=redefined-builtin,invalid-name
 @query.field("publication")
-def resolve_publication(*_, id: str) -> Optional[PublicationType]:
+def resolve_publication(*_, id: PublicationID) -> Optional[Dict[str, Any]]:
     """ Fetch publication by id """
     pub = publication_store.get_by_id(id)
     if pub is None:
@@ -58,7 +59,7 @@ def resolve_publication(*_, id: str) -> Optional[PublicationType]:
 
 
 @query.field("publicationBySlug")
-def resolve_publication_by_slug(*_, slug: str) -> Optional[PublicationType]:
+def resolve_publication_by_slug(*_, slug: str) -> Optional[Dict[str, Any]]:
     """ Fetch publication by slug """
     pub = publication_store.get_by_slug(slug)
     if pub is None:
@@ -81,7 +82,12 @@ def resolve_publications(
 
     # build edges
     edges = [
-        {"cursor": pub.encoded_cursor, "node": pub.as_gql_response()} for pub in pubs
+        {
+            "cursor": pub.encoded_cursor,
+            "score": pub.score,
+            "node": pub.as_gql_response(),
+        }
+        for pub in pubs
     ]
 
     # also return the query to make it available to child resolvers
@@ -99,7 +105,7 @@ def resolve_publications(
 
 
 @query.field("publicationDownloadUrl")
-def resolve_publication_download_url(*_, id: str) -> Optional[str]:
+def resolve_publication_download_url(*_, id: PublicationID) -> Optional[str]:
     """ Resolves to download url or None on error """
     try:
         return publication_store.get_download_url(id)
@@ -165,7 +171,7 @@ def resolve_distinct_fields(_, info) -> List[Dict[str, Any]]:
 
 
 @query.field("queue")
-def resolve_queue(*_, channel: str) -> Optional[List[PublicationType]]:
+def resolve_queue(*_, channel: str) -> Optional[List[Dict[str, Any]]]:
     """
     Show publications in queue for channel.
     Documents are ordered such that first is next doc to be posted.
@@ -175,7 +181,7 @@ def resolve_queue(*_, channel: str) -> Optional[List[PublicationType]]:
 
     queue = PostQueue(channel, mongo)
 
-    ids = queue.view()
+    ids = cast(List[PublicationID], queue.view())
     publications = publication_store.get_by_ids(ids)
     return [pub.as_gql_response() for pub in publications]
 
@@ -197,11 +203,11 @@ publication_type = ObjectType("Publication")
 @publication_type.field("recommendations")
 def resolve_recommendations(_source, _info, first: int) -> List[Dict[str, Any]]:
     """ Resolve recommended publications for source publication """
-    docs = publication_store.get_publications(first=first)
-    scores = [i / (len(docs) + 1) for i in range(1, len(docs) + 1)]
+    pubs = publication_store.get_publications(first=first)
+    scores = [i / (len(pubs) + 1) for i in range(1, len(pubs) + 1)]
     recommendations = []
-    for doc, score in zip(docs, scores[::-1]):
-        recommendations.append({"score": score, "publication": doc})
+    for pub, score in zip(pubs, scores[::-1]):
+        recommendations.append({"score": score, "publication": pub.as_gql_response()})
     return recommendations
 
 
@@ -263,7 +269,8 @@ def resolve_update_publications(*_) -> Dict[str, Any]:
         publication_store.update()
         ngram_store.update(publication_store.get_tokens())
     except Exception as exc:  # pylint: disable=broad-except
-        return {"success": False, "message": repr(exc)}
+        # return {"success": False, "message": repr(exc)}
+        raise exc
 
     return {"success": True}
 

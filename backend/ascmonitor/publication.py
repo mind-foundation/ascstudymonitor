@@ -57,6 +57,7 @@ class Publication:
     keywords: List[str]
     file_attached: bool
 
+    score: Optional[float] = None
     _cursor: Optional[str] = None
 
     @classmethod
@@ -76,6 +77,7 @@ class Publication:
             disciplines=document["disciplines"],
             keywords=document["keywords"],
             file_attached=document["file_attached"],
+            score=document.get("score", None),
             _cursor=cursor,
         )
 

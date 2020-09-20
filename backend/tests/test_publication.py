@@ -15,7 +15,7 @@ def test_as_gql_response(publications):
         "created": parse_datetime("2020-01-02T12:00:00.000"),
         "fileAttached": False,
         "abstract": (
-            "We are studying whether MDMA-assisted psychotherapy"
+            "We are studying whether MDMA-assisted psychotherapy "
             "can help heal the psychological and emotional damage caused by "
             "sexual assault, war, violent crime, and other traumas."
         ),
@@ -23,6 +23,7 @@ def test_as_gql_response(publications):
         "keywords": [{"value": "therapy"}, {"value": "MDMA"}, {"value": "PTSD"}],
         "cursor": "MjAyMC0wMS0wMlQxMjowMDowMC8x",
         "slug": "mdma-assisted-ptsd-therapy-1",
+        "score": None,
     }
     assert publications[0].as_gql_response() == expected
 

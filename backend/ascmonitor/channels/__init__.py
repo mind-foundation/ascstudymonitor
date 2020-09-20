@@ -6,7 +6,7 @@ from datetime import datetime
 from logging import getLogger
 from typing import Any, Optional
 
-from ascmonitor.types import PublicationType
+from ascmonitor.publication import Publication
 
 logger = getLogger(__name__)
 
@@ -36,7 +36,7 @@ class PreparedPost:
     The payload can reconstruct a post.
     """
 
-    publication: PublicationType
+    publication: Publication
     publication_url: str
     channel: "Channel"
     payload: Any
@@ -89,7 +89,7 @@ class Channel(ABC):
         """ Unique name of channel """
 
     @abstractmethod
-    def format(self, publication: PublicationType, url: str) -> PreparedPost:
+    def format(self, publication: Publication, url: str) -> PreparedPost:
         """ Format a publication to return a post """
 
     @abstractmethod

@@ -3,13 +3,14 @@
 from dataclasses import dataclass
 import logging
 import re
+from typing import Iterable
 
-import humps
 import requests
 from dateutil.parser import parse as parse_datetime
 from mendeley import Mendeley
 
 from ascmonitor.config import required_fields
+from ascmonitor.publication import Publication
 
 logger = logging.getLogger(__name__)
 
@@ -127,6 +128,12 @@ class Mendeleur:
         document.json["abstract"] = document.json["abstract"].strip()
         return document
 
+    def ensure_websites(self, document):
+        """ Ensure websites are present or [] """
+        if document.websites is None:
+            document.json["websites"] = []
+        return document
+
     def cast_created(self, document):
         """ Cast created to datetime """
         created = document.json["created"].replace("Z", "")
@@ -138,11 +145,6 @@ class Mendeleur:
         """ Test file_attached attribute """
         if document.file_attached:
             document.json["file_attached"] = bool(list(document.files.iter()))
-        return document
-
-    def camel_case_fields(self, document):
-        """ Convert field names to camel case """
-        document.json = humps.camelize(document.json)
         return document
 
     def filter_required_fields(self, document):
@@ -157,7 +159,7 @@ class Mendeleur:
         }
         return document
 
-    def transform_documents(self, documents):
+    def transform_documents(self, documents) -> Iterable[Publication]:
         """ Generator that transforms mendeley documents """
         for document in documents:
             document = self.extract_disciplines(document)
@@ -166,8 +168,8 @@ class Mendeleur:
             document = self.ensure_year(document)
             document = self.ensure_keywords(document)
             document = self.ensure_abstract(document)
+            document = self.ensure_websites(document)
             document = self.fix_file_attached(document)
             document = self.cast_created(document)
-            document = self.camel_case_fields(document)
             document = self.filter_required_fields(document)
-            yield document.json
+            yield Publication.from_dict(document.json)

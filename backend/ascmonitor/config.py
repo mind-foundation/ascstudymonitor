@@ -81,7 +81,7 @@ required_fields = {
     "authors",
     "created",
     "disciplines",
-    "fileAttached",
+    "file_attached",
     "id",
     "journal",
     "keywords",

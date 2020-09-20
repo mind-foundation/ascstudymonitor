@@ -11,7 +11,7 @@ from ascmonitor.events import NewPubEvent, UpdatedPubEvent, DeletedPubEvent
 from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import Mendeleur
 from ascmonitor.ngram_store import Token
-from ascmonitor.publication import Publication, PublicationID
+from ascmonitor.publication import Author, Publication, PublicationID
 from ascmonitor.types import FilterList
 
 logger = getLogger(__name__)
@@ -143,7 +143,7 @@ class PublicationStore:
         """ Returns tokens to feed the ngram store """
         field_names = ["year", "authors", "journal", "disciplines", "keywords"]
         textifications: Dict[str, Callable[[Any], str]] = {
-            "authors": lambda author: " ".join(author.values()),
+            "authors": lambda author: Author.from_dict(author).text,
             "year": str,
         }
 
@@ -164,7 +164,7 @@ class PublicationStore:
         """ Count publications where a field has a specified value """
         return self._collection.count_documents({field: value})
 
-    def get_by_id(self, id_: str) -> Optional[Publication]:
+    def get_by_id(self, id_: PublicationID) -> Optional[Publication]:
         """ Return publication by id or None if not found. """
         publication = self._collection.find_one({"_id": id_})
         if publication is None:
@@ -172,7 +172,7 @@ class PublicationStore:
 
         return Publication.from_dict(publication)
 
-    def get_by_ids(self, ids: List[str]) -> List[Publication]:
+    def get_by_ids(self, ids: List[PublicationID]) -> List[Publication]:
         """ Return multiple publication by ids """
         aggregation = [
             {"$match": {"_id": {"$in": ids}}},
@@ -200,7 +200,7 @@ class PublicationStore:
         changes = self.put(publications)
         self.emit_changes(changes)
 
-    def get_download_url(self, publication_id: str) -> str:
+    def get_download_url(self, publication_id: PublicationID) -> str:
         """ Get download link for specified publication """
         return self._mendeley.get_download_url(publication_id)
 
@@ -236,6 +236,9 @@ class PublicationStore:
         updated: Dict[PublicationID, Dict[str, Any]] = {}
         for id_ in old_ids & new_ids:
             for field in fields(Publication):
+                if field.name.startswith("_"):
+                    continue
+
                 old_value = getattr(old_pubs[id_], field.name)
                 new_value = getattr(new_pubs[id_], field.name)
                 if new_value != old_value:
