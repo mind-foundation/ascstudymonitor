@@ -8,6 +8,8 @@ from dateutil.parser import parse as parse_datetime
 from mongomock import MongoClient as MongoMock
 from pymongo import MongoClient
 
+from ascmonitor.publication import Publication
+
 # setup environment for testing
 os.environ["FLASK_ENV"] = "development"
 os.environ["POST_SECRET_TOKEN"] = "post_secret_token_test"
@@ -42,12 +44,14 @@ def mongo():
 
 @pytest.fixture()
 def real_mongo(mongodb_server):
-    return MongoClient(port=27018)["asc-test"]
+    mongo = MongoClient(port=27018)
+    yield mongo["asc-test"]
+    mongo.drop_database("asc-test")
 
 
 @pytest.fixture(scope="session")
 def publications():
-    return [
+    pubs = [
         {
             "title": "MDMA-assisted PTSD Therapy",
             "authors": [{"first_name": "Rick", "last_name": "Doblin"}],
@@ -57,7 +61,11 @@ def publications():
             "id": "1",
             "created": parse_datetime("2020-01-02T12:00:00.000"),
             "file_attached": False,
-            "abstract": "First abstract",
+            "abstract": (
+                "We are studying whether MDMA-assisted psychotherapy "
+                "can help heal the psychological and emotional damage caused by "
+                "sexual assault, war, violent crime, and other traumas."
+            ),
             "disciplines": ["Psychiatry"],
             "keywords": ["therapy", "MDMA", "PTSD"],
         },
@@ -70,7 +78,12 @@ def publications():
             "id": "2",
             "created": parse_datetime("2020-01-01T12:00:00.000"),
             "file_attached": True,
-            "abstract": "Second abstract",
+            "abstract": (
+                "The free energy principle is a formal statement "
+                "that explains how living and non-living systems remain "
+                "in non-equilibrium steady-states by restricting themselves "
+                "to a limited number of states."
+            ),
             "disciplines": ["Neuroscience"],
             "keywords": [
                 "Free Energy Principle",
@@ -79,3 +92,4 @@ def publications():
             ],
         },
     ]
+    return [Publication.from_dict(pub) for pub in pubs]

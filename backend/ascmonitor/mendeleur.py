@@ -123,6 +123,8 @@ class Mendeleur:
         """ Ensure abstract is present or '' """
         if document.abstract is None:
             document.json["abstract"] = ""
+
+        document.json["abstract"] = document.json["abstract"].strip()
         return document
 
     def cast_created(self, document):

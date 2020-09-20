@@ -51,13 +51,19 @@ query = QueryType()
 @query.field("publication")
 def resolve_publication(*_, id: str) -> Optional[PublicationType]:
     """ Fetch publication by id """
-    return publication_store.get_by_id(id)
+    pub = publication_store.get_by_id(id)
+    if pub is None:
+        return None
+    return pub.as_gql_response()
 
 
 @query.field("publicationBySlug")
 def resolve_publication_by_slug(*_, slug: str) -> Optional[PublicationType]:
     """ Fetch publication by slug """
-    return publication_store.get_by_slug(slug)
+    pub = publication_store.get_by_slug(slug)
+    if pub is None:
+        return None
+    return pub.as_gql_response()
 
 
 @query.field("publications")
@@ -73,19 +79,10 @@ def resolve_publications(
         first=first, cursor=after, search=search, filters=filters
     )
 
-    # embed filterable fields
-    for pub in pubs:
-        for field in ["year", "journal", "disciplines", "keywords"]:
-            if pub[field] is None:
-                continue
-
-            if isinstance(pub[field], list):
-                pub[field] = [{"value": val} for val in pub[field]]
-            else:
-                pub[field] = {"value": pub[field]}
-
     # build edges
-    edges = [{"cursor": pub["cursor"], "node": pub} for pub in pubs]
+    edges = [
+        {"cursor": pub.encoded_cursor, "node": pub.as_gql_response()} for pub in pubs
+    ]
 
     # also return the query to make it available to child resolvers
     return {
@@ -177,16 +174,10 @@ def resolve_queue(*_, channel: str) -> Optional[List[PublicationType]]:
         return None
 
     queue = PostQueue(channel, mongo)
-    # breakpoint()
-
 
     ids = queue.view()
     publications = publication_store.get_by_ids(ids)
-
-    publications = { pub["id"]: pub for pub in publications }
-    publications = [ publications[id_] for id_ in ids ] 
-
-    return publications
+    return [pub.as_gql_response() for pub in publications]
 
 
 publications_connection = ObjectType("PublicationsConnection")

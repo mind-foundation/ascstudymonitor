@@ -939,7 +939,7 @@ testing = ["jaraco.itertools", "func-timeout"]
 [metadata]
 lock-version = "1.0"
 python-versions = "^3.7"
-content-hash = "bf26c960d6d653bbc0e67d3fb616ed62b363c01a0739625bbf030637ccd957ca"
+content-hash = "364ab62bfbe3a268825d09259a16c3b567f40038f77334b83d0999d8a514e526"
 
 [metadata.files]
 aiofiles = [
