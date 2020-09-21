@@ -11,7 +11,7 @@ from ariadne import (
     load_schema_from_path,
 )
 from pymongo import MongoClient
-from humps import camelize
+from humps import camelize, decamelize
 
 from ascmonitor.config import (
     mendeley_authinfo,
@@ -148,10 +148,9 @@ def resolve_distinct_authors(*_) -> List[Dict[str, Any]]:
 
     # unpack value
     for author in authors:
-        for field in ["firstName", "lastName"]:
+        for field in ["first_name", "last_name"]:
             if field in author["value"]:
-                author[field] = author["value"][field]
-        del author["value"]
+                author[camelize(field)] = author["value"][field]
 
     return authors
 
@@ -236,7 +235,7 @@ def resolve_author_publication_count(obj, _info) -> int:
     author = {}
     for field in ["firstName", "lastName"]:
         if field in obj:
-            author[field] = obj[field]
+            author[decamelize(field)] = obj[field]
 
     return publication_store.count_publications("authors", author)
 
