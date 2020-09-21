@@ -104,7 +104,7 @@ def sitemap(request):
     )
 
 
-graphql = GraphQL(schema, debug=development, context_value=lambda req: {"request": req})
+graphql = GraphQL(schema, debug=development, context_value=lambda request: request)
 
 middleware = [
     Middleware(

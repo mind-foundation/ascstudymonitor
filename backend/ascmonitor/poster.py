@@ -5,24 +5,30 @@ from typing import Any, Dict
 
 from pymongo.database import Database
 
+from ascmonitor.channels import Channel
+from ascmonitor.event_store import EventStore
 from ascmonitor.events import PostStartEvent, PostSuccessEvent, PostFailureEvent
 from ascmonitor.post_queue import PostQueue
 from ascmonitor.channels import PostSendException, SentPost
 from ascmonitor.channels.twitter import TwitterChannel
 from ascmonitor.publication import Publication
+from ascmonitor.publication_store import PublicationStore
 
 
 class Poster:
     """ Posts publications to channels """
 
-    def __init__(self, mongo: Database, event_store, publication_store, auths):
-        self.mongo = mongo
+    def __init__(
+        self,
+        channel: Channel,
+        mongo: Database,
+        event_store: EventStore,
+        publication_store: PublicationStore,
+    ):
         self.event_store = event_store
         self.publication_store = publication_store
-        self.auths = auths
-
-        # init channels and queues
-        self.channels = {"twitter": TwitterChannel(**auths["twitter"])}
+        self.channel = channel
+        self.post_queue = PostQueue(channel.name, mongo)
 
     def emit_start(self, publication: Publication, channel: str):
         """ Notify event store about starting to post """
@@ -49,26 +55,15 @@ class Poster:
         )
         self.event_store.put(publication.id_, event)
 
-    def post(
-        self, channel_name: str, publication: Publication, url: str
-    ) -> Dict[str, Any]:
-        """
-        Post the next publication in queue
-        :param channel: Name of channel to post to
-        :raises: KeyError if channel unknown
-        """
-        channel = self.channels[channel_name]
+    def post(self, publication: Publication, url: str) -> SentPost:
+        """ Post a publication """
 
-        self.emit_start(publication, channel_name)
+        self.emit_start(publication, self.channel.name)
         try:
-            post = channel.format(publication, url)
-            post = channel.send(post)
-            self.emit_success(publication, post, channel_name)
-            return post.as_dict()
+            post = self.channel.format(publication, url)
+            post = self.channel.send(post)
+            self.emit_success(publication, post, self.channel.name)
+            return post
         except PostSendException as error:
-            self.emit_fail(publication, error, channel_name)
-            return {
-                "publication": publication,
-                "channel": channel_name,
-                "error": error.as_dict(),
-            }
+            self.emit_fail(publication, error, self.channel.name)
+            raise error

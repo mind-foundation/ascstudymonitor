@@ -145,7 +145,6 @@ Fields publication, created, postPayload, postID and response
 may be null if post failed at some point
 """
 type PostResponse {
-  channel: String!
   success: Boolean!
   message: String
 

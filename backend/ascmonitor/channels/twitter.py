@@ -7,7 +7,9 @@ import re
 import tweepy
 from tweepy import TweepError
 
-from ascmonitor.channels import Channel, PreparedPost, SentPost, PostSendException
+from ascmonitor.channels.post import PreparedPost, SentPost
+from ascmonitor.channels.channel import Channel
+from ascmonitor.channels.exceptions import PostSendException
 from ascmonitor.publication import Publication
 
 logger = logging.getLogger(__name__)
@@ -140,7 +142,6 @@ class TwitterChannel(Channel):
         return PreparedPost(
             publication=publication,
             publication_url=url,
-            channel=self,
             payload=status,
         )
 

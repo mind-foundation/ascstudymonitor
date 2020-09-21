@@ -13,12 +13,14 @@ from ariadne import (
 from pymongo import MongoClient
 from humps import camelize, decamelize
 
+from ascmonitor.channels import CHANNELS, PostSendException
 from ascmonitor.config import (
     mendeley_authinfo,
     mendeley_group_id,
     mongo_config,
     mongo_db,
     channel_configs,
+    post_secret_token,
 )
 from ascmonitor.publication_store import PublicationStore
 from ascmonitor.publication import PublicationID
@@ -26,7 +28,7 @@ from ascmonitor.event_store import EventStore
 from ascmonitor.events import EventKind, PostSuccessEvent
 from ascmonitor.mendeleur import Mendeleur, MendeleyAuthInfo
 from ascmonitor.ngram_store import NGramStore
-from ascmonitor.post_queue import PostQueue
+from ascmonitor.post_queue import PostQueue, QueueEmptyException
 from ascmonitor.poster import Poster
 from ascmonitor.types import FilterList
 
@@ -37,12 +39,6 @@ publication_store = PublicationStore(
     mendeleur=mendeleur, mongo=mongo, event_store=event_store
 )
 ngram_store = NGramStore(mongo=mongo)
-poster = Poster(
-    mongo=mongo,
-    event_store=event_store,
-    publication_store=publication_store,
-    auths=channel_configs,
-)
 
 # setup graphql
 type_defs = load_schema_from_path("../schema.graphql")
@@ -268,20 +264,15 @@ mutation = MutationType()
 @mutation.field("updatePublications")
 def resolve_update_publications(*_) -> Dict[str, Any]:
     """ Update the publications in the document store """
-    try:
-        publication_store.update()
-        ngram_store.update(publication_store.get_tokens())
-    except Exception as exc:  # pylint: disable=broad-except
-        # return {"success": False, "message": repr(exc)}
-        raise exc
-
+    publication_store.update()
+    ngram_store.update(publication_store.get_tokens())
     return {"success": True}
 
 
 @mutation.field("appendToQueue")
 def resolve_append_to_queue(*_, channel: str, publication: str) -> Dict[str, Any]:
     """ Append publication to queue for channel """
-    if channel not in channel_configs:
+    if channel not in CHANNELS:
         return {"success": False, "message": "Unsupported channel"}
 
     queue = PostQueue(channel, mongo)
@@ -343,19 +334,49 @@ def resolve_remove_from_queue(*_, channel: str, publication: str) -> Dict[str, A
 
 
 @mutation.field("post")
-def resolve_post(*_, channel: str, secret: str):
+def resolve_post(_, info, channel: str, secret: str):
     """ Post next publication in queue for channel """
-    # if post_secret_token:
-    #     if secret != post_secret_token:
-    #         abort(404)
+    if post_secret_token:
+        if secret != post_secret_token:
+            return {"success": False, "message": "Bad secret"}
 
-    # try:
-    #     response = poster.post(channel)
-    # except KeyError:
-    #     abort(404)
+    if channel not in CHANNELS:
+        return {"success": False, "message": "Unsupported channel"}
 
-    # return jsonify(response)
-    raise NotImplementedError()
+    try:
+        queue = PostQueue(channel, mongo)
+        publication_id = cast(PublicationID, queue.pop())
+        publication = publication_store.get_by_id(publication_id)
+
+        if publication is None:
+            return {"success": False, "message": "Queued publication is not in store"}
+
+        url = info.context.url_for("single_publication", slug=publication.slug)
+    except QueueEmptyException:
+        return {
+            "success": False,
+            "message": f"Post queue is empty for channel {channel}",
+        }
+
+    try:
+        poster = Poster(
+            channel=CHANNELS[channel](**channel_configs.get(channel, {})),
+            mongo=mongo,
+            event_store=event_store,
+            publication_store=publication_store,
+        )
+        sent_post = poster.post(publication, url)
+    except PostSendException as error:
+        return {"success": False, "message": error.message}
+
+    return {
+        "success": True,
+        "publication": publication.id_,
+        "created": sent_post.created,
+        "postPayload": sent_post.payload,
+        "postID": sent_post.id_,
+        "response": sent_post.response,
+    }
 
 
 filterable_field = UnionType("FilterableField")
