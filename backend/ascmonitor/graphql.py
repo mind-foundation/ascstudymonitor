@@ -11,6 +11,7 @@ from ariadne import (
     load_schema_from_path,
 )
 from pymongo import MongoClient
+from humps import camelize
 
 from ascmonitor.config import (
     mendeley_authinfo,
@@ -126,9 +127,9 @@ def resolve_field_suggestions(*_, search: str, first: int = 10) -> List[Dict[str
         # unwind an author
         if token.field == "authors":
             author = token.data["value"]
-            for field in ["firstName", "lastName"]:
+            for field in ["first_name", "last_name"]:
                 if field in author:
-                    token.data[field] = author[field]
+                    token.data[camelize(field)] = author[field]
 
         result = {
             "value": token.data,
