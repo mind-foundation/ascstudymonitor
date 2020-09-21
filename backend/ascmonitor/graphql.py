@@ -115,8 +115,11 @@ def resolve_publication_download_url(*_, id: PublicationID) -> Optional[str]:
 
 
 @query.field("fieldSuggestions")
-def resolve_field_suggestions(*_, search: str, first: int = 10) -> List[Dict[str, Any]]:
+def resolve_field_suggestions(
+    *_, search: str, first: int = 10, filters: Optional[FilterList]
+) -> List[Dict[str, Any]]:
     """ Get suggestions for fields from the ngram store """
+    # pylint: disable=unused-argument
     tokens = ngram_store.query(search, first)
 
     results = []

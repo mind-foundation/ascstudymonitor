@@ -83,6 +83,7 @@ An edge in paginated publications
 """
 type PublicationEdge {
   cursor: String!
+  score: Float
   node: Publication
 }
 
@@ -195,7 +196,12 @@ type Query {
   queue(channel: String!): [Publication!]
 
   "Get suggestions for filters based on fuzzy search"
-  fieldSuggestions(search: String!, first: Int): [FilterSuggestion!]!
+  fieldSuggestions(
+    search: String!
+    first: Int
+    "If given, only returns suggestions if there is overlap with other filters "
+    filters: FilterInput
+  ): [FilterSuggestion!]!
 
   "Get infos for all years"
   years: [Year!]!
