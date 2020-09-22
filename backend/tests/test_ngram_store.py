@@ -84,7 +84,45 @@ def test_query(ngram_store, tokens):
     ngram_store.update(tokens)
     result = ngram_store.query(query, first=1)[0]
     assert result.text == "therapy"
-    assert abs(result.score - exp_score) < 0.001
+    assert result.score == pytest.approx(exp_score)
+
+
+def test_query__year(ngram_store, tokens):
+    ngram_store.update(
+        [
+            *tokens,
+            Token(text="2018", field="years", data={"value": 2018}),
+            Token(text="2019", field="years", data={"value": 2019}),
+        ]
+    )
+    results = ngram_store.query("2018", first=10)
+    assert len(results) == 2
+
+    assert results[0].text == "2018"
+    assert results[0].score == pytest.approx(1.0)
+
+    assert results[1].text == "2019"
+    assert results[1].score == pytest.approx(1 / 3)
+
+
+def test_query__start_of_text(ngram_store, tokens):
+    query = "th"
+
+    ngram_store.update(tokens)
+    result = ngram_store.query(query, first=10)[0]
+    assert result.text == "therapy"
+    assert result.score == pytest.approx(2 / 7)
+
+
+def test_query__short_token(ngram_store, tokens):
+    query = "LS"
+
+    tokens.append(Token(text="lsd", field="keywords", data={"value": "LSD"}))
+    ngram_store.update(tokens)
+    results = ngram_store.query(query, first=10)
+    assert len(results) == 1
+    assert results[0].text == "lsd"
+    assert results[0].score == pytest.approx(2 / 3)
 
 
 def test_get_tokens_for_field(ngram_store, tokens):

@@ -92,6 +92,7 @@ class NGramStore:
         Perform a fuzzy search in the ngram store.
         Return only `first` top results
         """
+        search = search.strip().lower()
         ngrams = get_ngrams(search)
 
         # jaccard score (intersection over union) as mongodb aggregation
@@ -102,16 +103,38 @@ class NGramStore:
             ]
         }
 
+        # prefix scorer is fraction of matching characters from the start
+        prefix_scorer = {
+            "$cond": {
+                "if": {"$eq": [{"$substrCP": ["$text", 0, len(search)]}, search]},
+                "then": {"$divide": [len(search), {"$strLenCP": "$text"}]},
+                "else": 0.0,
+            },
+        }
+
         aggregation = [
-            {"$match": {"ngrams": {"$in": ngrams}}},
+            {
+                "$match": {
+                    "$or": [
+                        {"ngrams": {"$in": ngrams}},
+                        {"ngrams": {"$regex": f"^{search}"}},
+                    ]
+                }
+            },
+            {
+                "$addFields": {
+                    "jaccardScore": jaccard_scorer,
+                    "prefixScore": prefix_scorer,
+                }
+            },
             {
                 "$project": {
                     "_id": False,
                     "text": True,
                     "field": True,
                     "data": True,
-                    "score": jaccard_scorer,
-                }
+                    "score": {"$max": ["$jaccardScore", "$prefixScore"]},
+                },
             },
             {"$sort": {"score": -1}},
             {"$limit": first},
