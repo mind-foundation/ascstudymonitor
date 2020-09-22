@@ -23,7 +23,7 @@
       <mindblower v-if="!enoughDataToContinue" />
     </transition>-->
 
-      <search />
+      <search :filters="filters" />
     </div>
     <about-modal />
     <donate-modal />
@@ -43,7 +43,17 @@ import HeroWrap from '@/components/HeroWrap'
 import Keymap from '@/components/Keymap'
 import DonateModal from '@/components/Modals/Donate'
 import AboutModal from '@/components/Modals/About'
+import { EventBus } from '@/event-bus'
 
+function getDefaultFilters() {
+  return {
+    year: [],
+    journal: [],
+    authors: [],
+    disciplines: [],
+    keywords: [],
+  }
+}
 export default {
   components: {
     // Navigation,
@@ -57,6 +67,73 @@ export default {
     Logo,
     HeroWrap,
     Keymap,
+  },
+  data: () => ({
+    filters: getDefaultFilters(),
+  }),
+  created() {
+    EventBus.$on('filters.add', filter => {
+      const {
+        field,
+        value: { value },
+      } = filter
+
+      let alreadyFiltered
+
+      switch (field) {
+        case 'year':
+        case 'journal':
+        case 'disciplines':
+        case 'keywords':
+          alreadyFiltered = this.filters[field].includes(value)
+          break
+        case 'authors':
+          alreadyFiltered = this.filters[field].some(
+            ({ firstName, lastName }) =>
+              firstName === value.firstName && lastName === value.lastName,
+          )
+          break
+        default:
+          throw new Error('Trying to filter for unknown field: ' + field)
+      }
+      const prepareForGraphQl = value => {
+        if (value.value) return prepareForGraphQl(value.value)
+        else {
+          delete value.publicationCount
+          delete value.__typename
+          return value
+        }
+      }
+      if (!alreadyFiltered) this.filters[field].push(prepareForGraphQl(value))
+    })
+    EventBus.$on('filters.remove', filter => {
+      const { field, value } = filter
+
+      switch (field) {
+        case 'year':
+        case 'journal':
+        case 'disciplines':
+        case 'keywords':
+          this.filters[field] = this.filters[field].filter(
+            activeFilter => activeFilter !== value,
+          )
+          break
+        case 'authors':
+          this.filters[field] = this.filters[field].filter(
+            activeFilter =>
+              !(
+                activeFilter.firstName === value.firstName &&
+                activeFilter.lastName === value.lastName
+              ),
+          )
+          break
+        default:
+          throw new Error('Trying to filter for unknown field: ' + field)
+      }
+    })
+    EventBus.$on('filters.clear', () => {
+      this.filters = getDefaultFilters()
+    })
   },
 }
 </script>

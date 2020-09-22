@@ -21,11 +21,9 @@ export default {
   created() {
     EventBus.$on('searchbar.show', () => {
       this.stuck = true
-      // console.log('stuck', this.stuck)
     })
     EventBus.$on('searchbar.hide', () => {
       this.stuck = false
-      // console.log('stuck', this.stuck)
     })
   },
 }

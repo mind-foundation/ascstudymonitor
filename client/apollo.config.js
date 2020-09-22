@@ -3,7 +3,6 @@ const path = require('path')
 // Load .env files
 // const env = require('../asc-secret.json')
 
-console.log(path.resolve(__dirname, '../schema.graphql'))
 module.exports = {
   client: {
     service: {

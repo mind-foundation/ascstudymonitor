@@ -4,6 +4,11 @@ import CloseIcon from '@/components/Icons/Close'
 import FilterBar from '@/components/FilterBar'
 export default {
   name: 'search',
+
+  props: {
+    filters: Object,
+  },
+
   components: {
     SearchWidget,
     CloseIcon,
@@ -33,10 +38,10 @@ export default {
     <close-icon class="close-icon" />
     <div class="bg-blue h-full w-full flex flex-col justify-center">
       <div class="reveal container flex flex-col h-full  text-white">
-        <filter-bar />
+        <filter-bar :filters="filters" />
 
         <div class="flex flex-grow flex-col items-center w-full h-40 mt-20 ">
-          <search-widget />
+          <search-widget :filters="filters" />
         </div>
       </div>
     </div>

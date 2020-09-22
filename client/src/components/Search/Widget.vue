@@ -17,6 +17,27 @@
         />
       </div>
       <div
+        class="pl-3 pr-4 mt-4  text-black justify-around "
+        v-if="filterList.length"
+      >
+        <ul class="list-none flex">
+          <li
+            :key="f.label"
+            v-for="f in this.filterList"
+            class="inline-block bg-superwhite p-2 mr-4"
+          >
+            <span class="inline-block mr-1">
+              <filter-icon :field="f.field" /> </span
+            >{{ f.label
+            }}<span
+              @click="removeFilter(f)"
+              class="inline-block ml-2 cursor-pointer"
+              >X</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div
         class="t-4 border-2 border-white w-full border-t-0"
         v-if="suggestions.publications.length"
       >
@@ -36,14 +57,15 @@
         v-if="this.suggestions.fields.length"
       >
         <ul>
-          <li v-for="fs in this.suggestions.fields" :key="fs.value">
+          <li v-for="fs in this.suggestions.fields" :key="fs.label">
             <div
               class="suggestion-row suggestion-row__field-suggestion flex justify-between"
               :tabindex="0"
+              @click="addFilter(fs)"
             >
-              <p class="py-2 px-6 font-bold text-left">{{ fs.value }}</p>
+              <p class="py-2 px-6 font-bold text-left">{{ fs.label }}</p>
               <p class="py-2 px-6 font-bold text-right">
-                {{ fs.type }} ({{ fs.count }})
+                {{ fs.kind }} ({{ fs.count }})
               </p>
             </div>
           </li>
@@ -70,9 +92,22 @@
 
 <script>
 import SearchQuery from '@/graphql/Search.gql'
+import FilterIcon from '@/components/Icons/Filter'
+import { EventBus } from '@/event-bus'
+
+const valueToLabel = value =>
+  value.value ||
+  (value.firstName ? [value.firstName, value.lastName].join(' ') : value)
 
 export default {
   name: 'search-widget',
+
+  components: {
+    FilterIcon,
+  },
+  props: {
+    filters: Object,
+  },
 
   data: () => ({
     message: null,
@@ -93,6 +128,7 @@ export default {
       variables() {
         return {
           term: this.term,
+          filters: this.filters,
         }
       },
       result({ data }) {
@@ -102,7 +138,8 @@ export default {
               ...node,
             })),
             fields: data.fieldSuggestions.map(s => ({
-              type: {
+              field: s.field,
+              kind: {
                 authors: 'Author',
                 keywords: 'Keyword',
                 year: 'Year',
@@ -110,10 +147,8 @@ export default {
                 disciplines: 'Discipline',
               }[s.field],
               score: s.score,
-              value:
-                s.value.value ||
-                s.value.year ||
-                [s.value.firstName, s.value.lastName].join(' '),
+              value: s.value,
+              label: valueToLabel(s.value),
               count: s.value.publicationCount,
             })),
           }
@@ -137,6 +172,30 @@ export default {
       return {
         path: window.urlForPublication.replace(':slug', r.slug),
       }
+    },
+    addFilter(filter) {
+      this.searchInput = ''
+      this.term = ''
+      EventBus.$emit('filters.add', filter)
+    },
+    removeFilter(filter) {
+      EventBus.$emit('filters.remove', filter)
+    },
+  },
+
+  computed: {
+    filterList() {
+      return Object.entries(this.filters).reduce(
+        (arr, [field, values]) => [
+          ...arr,
+          ...values.map(v => ({
+            field,
+            value: v,
+            label: valueToLabel(v),
+          })),
+        ],
+        [],
+      )
     },
   },
 
