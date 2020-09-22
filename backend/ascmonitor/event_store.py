@@ -2,10 +2,12 @@
 Keep log of changes to publications
 """
 
-from typing import Iterable, List, Optional, Tuple
+from typing import Iterable, List, Optional
 from logging import getLogger
 import pymongo
+
 from ascmonitor.events import BaseEvent, EventKind, event_from_dict
+from ascmonitor.publication import PublicationID
 
 logger = getLogger(__name__)
 
@@ -19,7 +21,7 @@ class EventStore:
         """ Connect the event store to the database """
         self._collection = mongo[self.collection_name]
 
-    def put(self, publication_id: str, event: BaseEvent):
+    def put(self, publication_id: PublicationID, event: BaseEvent):
         """ Put an event in the event store """
         logger.debug("Put in publication %s event: %s", publication_id, event.as_dict())
         query = {"_id": publication_id}
@@ -27,14 +29,14 @@ class EventStore:
         self._collection.update_one(query, update, upsert=True)
 
     def query(
-        self, publication_ids: List[str], kinds: Optional[List[EventKind]] = None
-    ) -> Iterable[Tuple[str, BaseEvent]]:
+        self, publication_id: PublicationID, kinds: Optional[List[EventKind]] = None
+    ) -> Iterable[BaseEvent]:
         """
         Iterate events filtered by event kinds,
         starting with the newest
         """
         aggregation = [
-            {"$match": {"_id": {"$in": publication_ids}}},
+            {"$match": {"_id": publication_id}},
             {"$unwind": "$events"},
             {"$sort": {"events.timestamp": pymongo.DESCENDING}},
         ]
@@ -46,7 +48,4 @@ class EventStore:
         events = self._collection.aggregate(aggregation)
 
         for event in events:
-            yield (
-                event["_id"],
-                event_from_dict(event["events"]),
-            )
+            yield event_from_dict(event["events"])

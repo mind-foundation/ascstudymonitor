@@ -78,7 +78,7 @@ class PostStartEvent(BaseEvent):
 
     channel: str
     kind: EventKind = EventKind.post_start
-    timestamp: datetime = attr.Factory(datetime.now)
+    timestamp: datetime = attr.Factory(datetime.utcnow)
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -88,7 +88,7 @@ class PostSuccessEvent(BaseEvent):
     channel: str
     post: Dict[str, Any]
     kind: EventKind = EventKind.post_success
-    timestamp: datetime = attr.Factory(datetime.now)
+    timestamp: datetime = attr.Factory(datetime.utcnow)
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -99,4 +99,4 @@ class PostFailureEvent(BaseEvent):
     error: str
     allow_retry: bool
     kind: EventKind = EventKind.post_failure
-    timestamp: datetime = attr.Factory(datetime.now)
+    timestamp: datetime = attr.Factory(datetime.utcnow)

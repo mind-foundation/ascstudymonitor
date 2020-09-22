@@ -49,10 +49,10 @@ def test_query(event_store):
     event_store.put("1", DeletedPubEvent(timestamp=datetime(2020, 1, 3)))
     event_store.put("2", NewPubEvent(timestamp=datetime(2020, 1, 2)))
 
-    events = event_store.query(["1"])
+    events = event_store.query("1")
     assert list(events) == [
-        ("1", DeletedPubEvent(timestamp=datetime(2020, 1, 3))),
-        ("1", NewPubEvent(timestamp=datetime(2020, 1, 1))),
+        DeletedPubEvent(timestamp=datetime(2020, 1, 3)),
+        NewPubEvent(timestamp=datetime(2020, 1, 1)),
     ]
 
 
@@ -61,8 +61,7 @@ def test_query__kinds(event_store):
     event_store.put("1", DeletedPubEvent(timestamp=datetime(2020, 1, 3)))
     event_store.put("2", NewPubEvent(timestamp=datetime(2020, 1, 2)))
 
-    events = event_store.query(["1", "2"], kinds=[EventKind.new_publication])
+    events = event_store.query("1", kinds=[EventKind.new_publication])
     assert list(events) == [
-        ("2", NewPubEvent(timestamp=datetime(2020, 1, 2))),
-        ("1", NewPubEvent(timestamp=datetime(2020, 1, 1))),
+        NewPubEvent(timestamp=datetime(2020, 1, 1)),
     ]

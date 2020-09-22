@@ -42,11 +42,16 @@ def mongo():
     return MongoMock()["asc-test"]
 
 
+@pytest.fixture(scope="session")
+def real_mongo_connection(mongodb_server):
+    mongo = MongoClient(host="localhost", port=27018)
+    yield mongo
+
+
 @pytest.fixture()
-def real_mongo(mongodb_server):
-    mongo = MongoClient(port=27018)
-    yield mongo["asc-test"]
-    mongo.drop_database("asc-test")
+def real_mongo(real_mongo_connection):
+    yield real_mongo_connection["asc-test"]
+    real_mongo_connection.drop_database("asc-test")
 
 
 @pytest.fixture(scope="session")

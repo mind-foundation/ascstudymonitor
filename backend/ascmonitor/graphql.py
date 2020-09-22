@@ -214,8 +214,8 @@ def resolve_recommendations(_source, _info, first: int) -> List[Dict[str, Any]]:
 def resolve_has_been_posted(obj, _info, channel: str) -> bool:
     """ Resolve if publication has been posted before """
     id_ = obj["id"]
-    events = event_store.query([id_], kinds=[EventKind.post_success])
-    return any(cast(PostSuccessEvent, event).channel == channel for _, event in events)
+    events = event_store.query(id_, kinds=[EventKind.post_success])
+    return any(cast(PostSuccessEvent, event).channel == channel for event in events)
 
 
 author_type = ObjectType("Author")
