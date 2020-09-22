@@ -274,7 +274,7 @@ class PublicationStore:
 
         if filters is not None:
             for attr, values in filters.items():
-                if values is not None:
+                if values:
                     query[attr] = {"$in": values}
 
         if not search and cursor:
