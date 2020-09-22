@@ -111,13 +111,14 @@ class Mendeleur:
 
     def rename_journal_field(self, document):
         """ Ensure journal is present or None """
-        document.json["journal"] = document.source
+        document.json["journal"] = document.source.strip()
         return document
 
     def ensure_keywords(self, document):
         """ Ensure keywords are present or [] """
-        if document.keywords is None:
-            document.json["keywords"] = []
+        keywords = document.keywords or []
+        keywords = [kw.strip() for kw in keywords]
+        document.json["keywords"] = keywords
         return document
 
     def ensure_abstract(self, document):
@@ -130,8 +131,9 @@ class Mendeleur:
 
     def ensure_websites(self, document):
         """ Ensure websites are present or [] """
-        if document.websites is None:
-            document.json["websites"] = []
+        websites = document.websites or []
+        websites = [kw.strip() for kw in websites]
+        document.json["websites"] = websites
         return document
 
     def cast_created(self, document):

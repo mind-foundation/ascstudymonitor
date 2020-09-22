@@ -1,12 +1,14 @@
-""" Flask Web app """
+""" Starlette Web App """
 from logging import getLogger
+from textwrap import shorten
+
 from ariadne.asgi import GraphQL
 import sentry_sdk
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
-from starlette.responses import FileResponse, PlainTextResponse, RedirectResponse
+from starlette.responses import PlainTextResponse, RedirectResponse
 from starlette.routing import Route, Mount
 from starlette.templating import Jinja2Templates
 
@@ -62,12 +64,7 @@ def single_publication(request):
         )
     if len(abstract) > 240:
         # shorten abstract
-        paragraphs = abstract.split("\n")
-        abstract = ""
-        for par in paragraphs:
-            abstract += "\n" + par
-            if len(abstract) > 240:
-                break
+        abstract = shorten(abstract, width=237, placeholder="...")
 
     # build url
     url = request.url_for("single_publication", slug=slug)
@@ -89,11 +86,6 @@ def single_publication(request):
 def index(request):
     """ Serve the client with meta tags """
     return templates.TemplateResponse("index.html", {"request": request})
-
-
-def robots(_):
-    """ Serve robots.txt """
-    return FileResponse("sitemap/robots.txt")
 
 
 def sitemap(request):
