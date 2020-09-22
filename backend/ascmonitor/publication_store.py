@@ -200,9 +200,13 @@ class PublicationStore:
         changes = self.put(publications)
         self.emit_changes(changes)
 
-    def get_download_url(self, publication_id: PublicationID) -> str:
+    def get_download_url(self, slug: str) -> str:
         """ Get download link for specified publication """
-        return self._mendeley.get_download_url(publication_id)
+        slug_doc = self._slugs.find_one({"slug": slug})
+        if slug_doc is None:
+            raise ValueError("No publication with this slug")
+        id_ = slug_doc["publication"]
+        return self._mendeley.get_download_url(id_)
 
     def put(self, publications: List[Publication]) -> Changes:
         """ Replace publications in the database """

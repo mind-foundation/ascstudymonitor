@@ -125,7 +125,7 @@ export default {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            :href="$api + '/documents/' + publication.id + '/download'"
+            :href="$api + '/p/' + publication.slug + '/download'"
             >Download full text</a
           >
         </div>

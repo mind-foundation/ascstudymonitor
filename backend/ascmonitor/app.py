@@ -8,7 +8,6 @@ from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import FileResponse, PlainTextResponse, RedirectResponse
 from starlette.routing import Route, Mount
-from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
 from ascmonitor.config import development, sentry_dsn, client_dist_path
@@ -32,8 +31,8 @@ templates = Jinja2Templates(directory=client_dist_path)
 def download_publication(request):
     """ Download a attached PDF publication """
     try:
-        id_ = request.path_params["id"]
-        download_url = publication_store.get_download_url(id_)
+        slug = request.path_params["slug"]
+        download_url = publication_store.get_download_url(slug)
     except ValueError:
         return PlainTextResponse(
             "Could not find a download for this publication.", status_code=404
@@ -52,7 +51,7 @@ def single_publication(request):
     if publication is None:
         return PlainTextResponse("Could not find this publication", status_code=404)
 
-    abstract = publication["abstract"]
+    abstract = publication.abstract
 
     if not abstract:
         # placeholder abstract
@@ -81,9 +80,8 @@ def single_publication(request):
         {
             "request": request,
             "abstract": abstract,
-            "title": publication["title"],
+            "title": publication.title,
             "url": url,
-            "initial_publication": publication,
         },
     )
 
@@ -101,7 +99,7 @@ def robots(_):
 def sitemap(request):
     """ Build sitemap """
     urlset = [
-        {"loc": request.url_for("single_publication", slug=pub["slug"])}
+        {"loc": request.url_for("single_publication", slug=pub.slug)}
         for pub in publication_store.get_publications()
     ]
     return sitemap_folder.TemplateResponse(
@@ -125,14 +123,12 @@ routes = [
     Route("/", endpoint=index),
     Route("/index.html", endpoint=index),
     Route(
-        "/publications/{id}/download",
+        "/p/{slug}/download",
         endpoint=download_publication,
         name="download_publication",
     ),
     Route("/p/{slug}", endpoint=single_publication),
-    Route("/robots.txt", endpoint=robots),
     Route("/sitemap.xml", endpoint=sitemap),
-    Mount("/", StaticFiles(directory=client_dist_path)),
 ]
 
 if not development:

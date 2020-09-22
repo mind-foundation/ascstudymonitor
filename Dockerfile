@@ -25,6 +25,6 @@ COPY ./backend/pyproject.toml ./backend/poetry.lock /app/backend/
 RUN poetry install --no-dev
 
 ADD . /app
-COPY --from=builder /client/dist /app/client/dist
+COPY --from=builder /client/dist/*.html /app/client/dist/
 
 CMD ["poetry", "run", "gunicorn", "-c", "/app/etc/gunicorn.py", "ascmonitor.app:app"]

@@ -25,7 +25,11 @@ services:
       - mongodb-data:/data/db
 
   nginx:
-    image: nginx:latest
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+      args:
+        - SOURCE_COMMIT=${SOURCE_COMMIT}
     volumes:
       - ./etc/nginx-dev.conf:/etc/nginx/nginx.conf
     ports:
