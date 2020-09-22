@@ -14,7 +14,7 @@ services:
     restart: always
 
   mongo:
-    image: mongo:4.2-bionic
+    image: mongo:4.4-bionic
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -28,7 +28,6 @@ services:
     image: nginx:latest
     volumes:
       - ./etc/nginx-dev.conf:/etc/nginx/nginx.conf
-      - ./static:/static
     ports:
       - 80:80
 

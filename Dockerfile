@@ -18,13 +18,13 @@ FROM python:3.7-slim AS backend
 RUN apt-get update && apt-get install -y git-core
 
 EXPOSE 8000
-WORKDIR /app
+WORKDIR /app/backend
 
 RUN pip install poetry
-COPY ./backend/pyproject.toml ./backend/poetry.lock /app/
+COPY ./backend/pyproject.toml ./backend/poetry.lock /app/backend/
 RUN poetry install --no-dev
 
-ADD ./backend /app
+ADD . /app
 COPY --from=builder /client/dist /app/client/dist
 
-CMD ["poetry", "run", "gunicorn", "-c", "etc/gunicorn.py", "ascmonitor.app:app"]
+CMD ["poetry", "run", "gunicorn", "-c", "/app/etc/gunicorn.py", "ascmonitor.app:app"]

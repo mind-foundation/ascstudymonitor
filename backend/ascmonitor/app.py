@@ -6,7 +6,7 @@ from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
-from starlette.responses import PlainTextResponse, RedirectResponse
+from starlette.responses import FileResponse, PlainTextResponse, RedirectResponse
 from starlette.routing import Route, Mount
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
@@ -93,6 +93,11 @@ def index(request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
+def robots(_):
+    """ Serve robots.txt """
+    return FileResponse("sitemap/robots.txt")
+
+
 def sitemap(request):
     """ Build sitemap """
     urlset = [
@@ -125,21 +130,12 @@ routes = [
         name="download_publication",
     ),
     Route("/p/{slug}", endpoint=single_publication),
+    Route("/robots.txt", endpoint=robots),
     Route("/sitemap.xml", endpoint=sitemap),
+    Mount("/", StaticFiles(directory=client_dist_path)),
 ]
 
-if development:
-    # send index.html and static js
-    dev_routes = [
-        Route(
-            "/graphql",
-            methods=["GET", "POST"],
-            endpoint=lambda _: RedirectResponse("/graphql/"),
-        ),
-        Mount("/", StaticFiles(directory=client_dist_path)),
-    ]
-    routes += dev_routes
-else:
+if not development:
     # attach sentry
     middleware.append(Middleware(SentryAsgiMiddleware))
 

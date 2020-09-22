@@ -1,11 +1,10 @@
-.venv
-.pytest_cache
-*.egg-info
-__pycache__
-*env.sh*
+**/.venv
+**/.pytest_cache
+**/.egg-info
+**/__pycache__
 asc-secret.json
 asc.db
-requirements.txt
+data
 Makefile
 
 # Elastic Beanstalk Files

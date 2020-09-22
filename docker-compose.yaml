@@ -14,7 +14,7 @@ services:
     restart: always
 
   mongo:
-    image: mongo:4.2-bionic
+    image: mongo:4.4-bionic
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root

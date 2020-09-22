@@ -22,7 +22,7 @@ const defaultOptions = {
 
   link: createHttpLink({
     // You should use an absolute URL here
-    uri: Vue.prototype.$api + '/graphql',
+    uri: Vue.prototype.$api + '/graphql/',
   }),
   cache: new InMemoryCache({
     fragmentMatcher: new IntrospectionFragmentMatcher({

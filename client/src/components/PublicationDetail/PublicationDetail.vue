@@ -3,7 +3,7 @@ export default {
   name: 'publication-detail',
   props: {
     publication: Object,
-  }
+  },
 }
 </script>
 
@@ -24,10 +24,10 @@ export default {
         :key="r.document.id"
       /> -->
 
-      <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
+    <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
           publication.title
-        }}</router-link> -->
-    </ul>
+        }}</router-link>
+    </ul> -->
   </div>
 
   <!-- <div v-if="publication.recommendations.length !== 0" class="pagination--wrapper">
