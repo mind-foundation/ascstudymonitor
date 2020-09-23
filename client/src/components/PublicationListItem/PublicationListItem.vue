@@ -31,16 +31,8 @@ export default {
     slug: String,
     publication: Object,
   },
-  computed: {
-    isDetailView() {
-      return (
-        this.publication && this.$route.params?.slug === this.publication.slug
-      )
-    },
-  },
   methods: {
     toggleExpand() {
-      if (this.isDetailView) return false
       this.expanded = !this.expanded
       if (this.expanded) {
         window.analytics.page('Publication')
@@ -53,23 +45,13 @@ export default {
       }
     },
   },
-
-  created() {
-    this.expanded = this.isDetailView
-    if (this.expanded) {
-      // this.$store.dispatch('recommendations/get', this.publication.id)
-    }
-  },
 }
 </script>
 
 <template>
   <li class="bg-superwhite flex pt-8 pb-8 mb-8 pr-16">
     <div class="chevron-wrapper" @click="toggleExpand">
-      <publication-chevron-icon
-        :expanded="expanded"
-        :selectable="!isDetailView"
-      />
+      <publication-chevron-icon :expanded="expanded" />
     </div>
 
     <div class="content flex-grow" @click.stop>
@@ -78,12 +60,12 @@ export default {
 
         <download-icon
           @click="download(publication)"
-          v-if="publication.file_attached"
+          v-if="publication.fileAttached"
           big="true"
         />
       </h3>
 
-      <authors-list :authorNames="publication.authorNames" />
+      <authors-list :authors="publication.authors" />
 
       <div class="flex flex-row justify-between">
         <by-line
@@ -120,7 +102,7 @@ export default {
           </a>
         </div>
 
-        <div class="entry__downloads-item" v-if="publication.file_attached">
+        <div class="entry__downloads-item" v-if="publication.fileAttached">
           <download-icon big="false" />
           <a
             target="_blank"
@@ -131,17 +113,7 @@ export default {
         </div>
 
         <social-bar :publication="publication" />
-
-        <div
-          v-if="recommendations && recommendations.length"
-          class="card-container"
-        >
-          <div v-for="r in recommendations" v-bind:key="r.id">
-            <router-link :to="getLinkTo(r)">{{ r.title }}</router-link>
-          </div>
-        </div>
       </div>
-      <!-- <router-link :to="{ path: '/' }">Back to all</router-link> -->
     </div>
   </li>
 </template>

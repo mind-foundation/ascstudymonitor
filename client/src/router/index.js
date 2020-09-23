@@ -4,21 +4,13 @@ import List from '@/views/List.vue'
 import Single from '@/views/Single.vue'
 import Queue from '@/views/Queue.vue'
 import ListHero from '@/components/ListHero.vue'
-import SinglePublicationHero from '@/components/SinglePublicationHero.vue'
 
 const routes = [
   {
     path: window.urlForPublication,
-    name: 'Publication',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    components: {
-      hero: SinglePublicationHero,
-      main: Single,
-    },
-    props: true,
+    name: 'Single',
+    components: { main: Single },
+    props: { main: true },
   },
   {
     path: '/queue/:channel',

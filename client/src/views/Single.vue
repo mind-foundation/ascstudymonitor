@@ -1,24 +1,26 @@
 <script>
-import Vue from 'vue'
-import Paginate from 'vuejs-paginate'
 import PublicationDetail from '@/components/PublicationDetail/PublicationDetail'
+import RelatedBanner from '@/components/PublicationDetail/RelatedBanner'
+import PublicationListItem from '@/components/PublicationListItem/PublicationListItem'
 import PublicationQuery from '@/graphql/queries/Publication.gql'
-
-Vue.component('paginate', Paginate)
-
 export default {
   name: 'single',
   components: {
     PublicationDetail,
+    PublicationListItem,
+    RelatedBanner,
   },
   mounted() {
-    window.analytics.page('List')
+    window.analytics.page('Single')
   },
   computed: {
     slug() {
       return this.$route.params?.slug
     },
   },
+  data: () => ({
+    publication: {},
+  }),
   apollo: {
     publication: {
       query: PublicationQuery,
@@ -33,52 +35,18 @@ export default {
 </script>
 
 <template>
-  <div id="container">
+  <div class="container">
     <publication-detail :publication="publication" />
-    <!-- <p v-if>
-      Loading..
-    </p> -->
-    <!-- <p v-else>
-      No articles found matching your query. Try a different search instead.
-      <router-link to="/">Or reset search.</router-link>
-    </p> -->
-    <!-- <publication-list-item :slug="this.slug" /> -->
-    <!-- <ul>
+    <related-banner />
+    <ul>
       <publication-list-item
-        v-for="r in publication.recommendations"
-        :slug="r.document.slug"
-        :key="r.document.id"
-      /> -->
-
-    <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
-          publication.title
-        }}</router-link> -->
-    <!-- </ul> -->
+        v-for="recommendation in publication.recommendations"
+        :publication="recommendation.publication"
+        :slug="recommendation.publication.slug"
+        :key="recommendation.publication.id"
+      />
+    </ul>
   </div>
-
-  <!-- <div v-if="publication.recommendations.length !== 0" class="pagination--wrapper">
-    <paginate
-      v-model="page"
-      :force-page="page"
-      :page-count="pageCount"
-      :page-range="3"
-      :margin-pages="2"
-      :prev-text="'&lt;'"
-      :next-text="'&gt;'"
-      :break-view-text="'…'"
-      :container-class="'pagination--container'"
-      :active-class="'pagination--active'"
-      :page-class="'pagination--page-item'"
-      :page-link-class="'pagination--page-link'"
-      :prev-class="'pagination--page-item'"
-      :next-class="'pagination--page-item'"
-    >
-    </paginate>
-    <p>
-      Showing {{ pagination.start + 1 }} to {{ pagination.end }} of
-      {{ publications.length }} entries
-    </p>
-  </div> -->
 </template>
 
 <style lang="less">
@@ -116,48 +84,5 @@ export default {
       color: #607a9b;
     }
   }
-}
-
-.pagination--wrapper {
-  padding-right: 10px;
-  a {
-    cursor: pointer;
-    display: block;
-    height: 30px;
-    width: 30px;
-    padding: 0;
-    line-height: 2.5em;
-  }
-  p {
-    text-align: right;
-    padding-right: 10px;
-  }
-}
-
-.pagination--container {
-  margin-top: 8px;
-  display: flex;
-  justify-content: flex-end;
-}
-.pagination--page-item {
-  color: #333 !important;
-  box-sizing: border-box;
-  display: inline-block;
-  min-width: 1.5em;
-  margin-left: 2px;
-  text-align: center;
-  text-decoration: none !important;
-  color: #333 !important;
-  border: 0px solid #0000;
-  border-radius: 0px;
-}
-
-.pagination--page-link:focus {
-  outline: 0 !important;
-}
-
-.pagination--active {
-  background: #dbdbdb;
-  font-weight: bold;
 }
 </style>

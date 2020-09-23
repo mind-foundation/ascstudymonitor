@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'list-hero',
+  name: 'hero-wrap',
 }
 </script>
 

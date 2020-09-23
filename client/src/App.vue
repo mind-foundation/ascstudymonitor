@@ -11,18 +11,6 @@
       <router-view name="main" />
 
       <keymap />
-      <!-- <router-view name="main" /> -->
-      <!-- <navigation />  -->
-
-      <!-- <main id="main" v-if="enoughDataToContinue">
-      <query-bar />
-      <router-view />
-    </main>
-
-    <transition name="fade">
-      <mindblower v-if="!enoughDataToContinue" />
-    </transition>-->
-
       <search :filters="filters" />
     </div>
     <about-modal />
@@ -31,10 +19,6 @@
 </template>
 
 <script>
-// import Navigation from '@/components/Navigation'
-// import QueryBar from '@/components/QueryBar'
-// import Mindblower from '@/components/Mindblower'
-// // import InfoModal from '@/components/InfoModal'
 import TopNavigation from '@/components/TopNavigation'
 import Search from '@/views/Search'
 import Logo from '@/components/Logo'
@@ -56,11 +40,8 @@ function getDefaultFilters() {
 }
 export default {
   components: {
-    // Navigation,
-    // QueryBar,
     Bubbles,
     TopNavigation,
-    // Mindblower,
     AboutModal,
     Search,
     DonateModal,

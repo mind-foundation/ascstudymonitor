@@ -79,6 +79,7 @@ def single_publication(request):
             "abstract": abstract,
             "title": publication.title,
             "url": url,
+            "initialPublication": publication.as_dict(),
         },
     )
 

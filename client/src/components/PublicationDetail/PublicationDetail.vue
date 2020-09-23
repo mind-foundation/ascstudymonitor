@@ -1,6 +1,20 @@
 <script>
+import SinglePublicationHero from './SinglePublicationHero.vue'
+
+import AuthorsList from '@/components/PublicationListItem/AuthorsList'
+import DisciplinesList from '@/components/PublicationListItem/DisciplinesList'
+import SocialBar from '@/components/PublicationListItem/SocialBar'
+import ByLine from '@/components/PublicationListItem/ByLine'
+
 export default {
   name: 'publication-detail',
+  components: {
+    SinglePublicationHero,
+    AuthorsList,
+    DisciplinesList,
+    SocialBar,
+    ByLine,
+  },
   props: {
     publication: Object,
   },
@@ -8,51 +22,62 @@ export default {
 </script>
 
 <template>
-  <div id="container">
-    <!-- <p v-if>
-      Loading..
-    </p> -->
-    <!-- <p v-else>
-      No articles found matching your query. Try a different search instead.
-      <router-link to="/">Or reset search.</router-link>
-    </p> -->
-    <!-- <publication-list-item :slug="this.slug" /> -->
-    <!-- <ul>
-      <publication-list-item
-        v-for="r in publication.recommendations"
-        :slug="r.document.slug"
-        :key="r.document.id"
-      /> -->
+  <div class="container">
+    <single-publication-hero
+      :title="publication.title"
+      :file-attached="publication.fileAttached"
+    />
+    <div class="content bg-superwhite flex pt-8 pb-8 mb-8 pr-16" @click.stop>
+      <authors-list :authors="publication.authors" />
 
-    <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
-          publication.title
-        }}</router-link>
-    </ul> -->
+      <div class="flex flex-row justify-between">
+        <by-line
+          :year="publication.year.value"
+          :journal="publication.journal && publication.journal.value"
+        />
+        <disciplines-list :disciplines="publication.disciplines" />
+      </div>
+
+      <div class="entry__abstract flex-row">
+        <div class="entry__abstract_inner">
+          <abstract-icon />
+          <div class="entry__abstract_text" v-if="publication.abstract">
+            {{ publication.abstract }}
+          </div>
+          <div class="entry__abstract_text" v-else>
+            Abstract missing.
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-row">
+        <div
+          class="entry__downloads-item"
+          v-for="website in publication.websites"
+          v-bind:key="website"
+        >
+          <link-icon />
+          <a target="_blank" rel="noopener noreferrer" :href="website"
+            >Visit publisher website
+          </a>
+        </div>
+
+        <div class="entry__downloads-item" v-if="publication.fileAttached">
+          <download-icon big="false" />
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            :href="$api + '/p/' + publication.slug + '/download'"
+            >Download full text</a
+          >
+        </div>
+      </div>
+
+      <div class="flex-row">
+        <social-bar :publication="publication" />
+      </div>
+    </div>
   </div>
-
-  <!-- <div v-if="publication.recommendations.length !== 0" class="pagination--wrapper">
-    <paginate
-      v-model="page"
-      :force-page="page"
-      :page-count="pageCount"
-      :page-range="3"
-      :margin-pages="2"
-      :prev-text="'&lt;'"
-      :next-text="'&gt;'"
-      :break-view-text="'…'"
-      :container-class="'pagination--container'"
-      :active-class="'pagination--active'"
-      :page-class="'pagination--page-item'"
-      :page-link-class="'pagination--page-link'"
-      :prev-class="'pagination--page-item'"
-      :next-class="'pagination--page-item'"
-    >
-    </paginate>
-    <p>
-      Showing {{ pagination.start + 1 }} to {{ pagination.end }} of
-      {{ publications.length }} entries
-    </p>
-  </div> -->
 </template>
 
 <style lang="less">
@@ -90,48 +115,5 @@ export default {
       color: #607a9b;
     }
   }
-}
-
-.pagination--wrapper {
-  padding-right: 10px;
-  a {
-    cursor: pointer;
-    display: block;
-    height: 30px;
-    width: 30px;
-    padding: 0;
-    line-height: 2.5em;
-  }
-  p {
-    text-align: right;
-    padding-right: 10px;
-  }
-}
-
-.pagination--container {
-  margin-top: 8px;
-  display: flex;
-  justify-content: flex-end;
-}
-.pagination--page-item {
-  color: #333 !important;
-  box-sizing: border-box;
-  display: inline-block;
-  min-width: 1.5em;
-  margin-left: 2px;
-  text-align: center;
-  text-decoration: none !important;
-  color: #333 !important;
-  border: 0px solid #0000;
-  border-radius: 0px;
-}
-
-.pagination--page-link:focus {
-  outline: 0 !important;
-}
-
-.pagination--active {
-  background: #dbdbdb;
-  font-weight: bold;
 }
 </style>

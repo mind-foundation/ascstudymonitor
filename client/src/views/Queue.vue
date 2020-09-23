@@ -97,7 +97,7 @@ export default {
 </script>
 
 <template>
-  <div id="queue" class="containe">
+  <div class="container">
     <queue-manager
       :publications="queue"
       @move-up="moveUpInQueue"

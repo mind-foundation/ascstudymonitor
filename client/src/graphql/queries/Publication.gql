@@ -1,5 +1,5 @@
 query Publication($slug: String!) {
-  publicationBySlug(slug: $slug) {
+  publication: publicationBySlug(slug: $slug) {
     abstract
     authors {
       firstName
@@ -26,9 +26,29 @@ query Publication($slug: String!) {
     recommendations(first: 5) {
       score
       publication {
+        abstract
+        authors {
+          firstName
+          lastName
+        }
+        created
+        disciplines {
+          value
+        }
+        fileAttached
         id
+        keywords {
+          value
+        }
         slug
+        journal {
+          value
+        }
         title
+        websites
+        year {
+          value
+        }
       }
     }
   }

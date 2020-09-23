@@ -3,10 +3,19 @@ import AuthorIcon from '@/components/Icons/Author.vue'
 export default {
   name: 'authors-list',
   props: {
-    authorNames: Array,
+    authors: Array,
   },
   components: {
     AuthorIcon,
+  },
+  computed: {
+    authorNames() {
+      return this.$props.authors.map(author =>
+        author.firstName
+          ? `${author.firstName} ${author.lastName}`
+          : author.lastName,
+      )
+    },
   },
 }
 </script>

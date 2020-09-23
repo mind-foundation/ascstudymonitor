@@ -13,7 +13,7 @@ Author of a publication
 """
 type Author {
   firstName: String
-  lastName: String
+  lastName: String!
   publicationCount: Int!
 }
 
@@ -22,7 +22,7 @@ Author of a publication as input
 """
 input AuthorInput {
   firstName: String
-  lastName: String
+  lastName: String!
 }
 
 """
