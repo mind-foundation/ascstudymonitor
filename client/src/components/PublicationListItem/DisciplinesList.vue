@@ -3,7 +3,10 @@ import ScienceIcon from '@/components/Icons/Science.vue'
 export default {
   name: 'disciplines-list',
   props: {
-    disciplines: Array,
+    disciplines: {
+      type: Array,
+      required: true,
+    },
   },
   components: {
     ScienceIcon,
@@ -11,15 +14,16 @@ export default {
 }
 </script>
 <template>
-  <div class="flex">
+  <div class="flex" v-if="disciplines.length">
     <science-icon />
     <ul class="list list-none display-flex select-none">
-      <li class="mr-8" v-for="d in disciplines" v-bind:key="d.value">
+      <li class="mr-8" v-for="d in disciplines" :key="d.value">
         <a
           class="font-bold  text-aqua"
           @click="toggleFilter('discipline', d.value)"
-          >{{ d.value }}</a
         >
+          {{ d.value }}
+        </a>
       </li>
     </ul>
   </div>

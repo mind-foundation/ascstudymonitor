@@ -7,7 +7,7 @@ export default {
 
 <template>
   <div
-    class="w-full md:w-9/12 h-30 text-4xl m-auto mt-24 mb-6 text-center font-light"
+    class="w-full md:w-9/12 h-30 text-4xl m-auto mt-24 mb-16 text-center font-light leading-tight"
   >
     <h1>{{ title }}</h1>
     <download-icon

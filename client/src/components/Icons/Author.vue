@@ -38,10 +38,9 @@ export default {
 }
 
 .container svg {
-  height: 18px;
   position: relative;
-  bottom: -4px;
-  left: 4px;
+  bottom: -2px;
+  left: 1px;
 }
 
 .container svg .a3 {

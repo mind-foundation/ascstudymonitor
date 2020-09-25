@@ -22,12 +22,11 @@ export default {
 <style scoped lang="less">
 #logo {
   position: absolute;
-  top: 10px;
-  left: 14px;
+  top: 20px;
+  left: 20px;
 
   img {
-    width: 106px;
-    height: 26px;
+    width: 120px;
   }
 }
 </style>

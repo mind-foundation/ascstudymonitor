@@ -5,7 +5,9 @@ export default {
 </script>
 
 <template>
-  <h1>Explore curated publications on altered state of consciousness</h1>
+  <div class="container">
+    <h1>Explore curated publications on altered state of consciousness</h1>
+  </div>
 </template>
 
 <style scoped lang="less"></style>

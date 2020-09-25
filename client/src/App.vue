@@ -14,7 +14,6 @@
       <search :filters="filters" />
     </div>
     <about-modal />
-    <donate-modal />
   </div>
 </template>
 
@@ -25,7 +24,6 @@ import Logo from '@/components/Logo'
 import Bubbles from '@/components/Bubbles'
 import HeroWrap from '@/components/HeroWrap'
 import Keymap from '@/components/Keymap'
-import DonateModal from '@/components/Modals/Donate'
 import AboutModal from '@/components/Modals/About'
 import { EventBus } from '@/event-bus'
 
@@ -44,7 +42,6 @@ export default {
     TopNavigation,
     AboutModal,
     Search,
-    DonateModal,
     Logo,
     HeroWrap,
     Keymap,
@@ -126,8 +123,8 @@ html {
 }
 
 body {
-  background-color: #eef2f5;
-  color: #0b2d3d;
+  background-color: #eef2f5; // "white"
+  color: #00212b; // "black"
   display: flex;
   flex-flow: column;
   align-items: center;

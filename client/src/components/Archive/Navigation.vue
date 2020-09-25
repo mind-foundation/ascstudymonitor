@@ -1,7 +1,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import SlideUpDown from 'vue-slide-up-down'
-import Filters from '@/mixins/Filters'
+// import Filters from '@/mixins/Filters'
 import FiltersIcon from '@/components/Icons/Filters'
 import ChevronIcon from '@/components/Icons/Chevron'
 
@@ -15,7 +15,7 @@ const accessors = {
 
 export default {
   name: 'navigation',
-  mixins: [Filters],
+  // mixins: [Filters],
   components: {
     SlideUpDown,
     FiltersIcon,

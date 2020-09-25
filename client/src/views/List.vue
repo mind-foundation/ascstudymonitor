@@ -93,31 +93,6 @@ export default {
     <infinite-scrolling-waypoint
       v-if="publications.pageInfo && publications.pageInfo.hasNextPage"
     />
-    <!--
-    <div v-if="pagination.items.length !== 0" class="pagination--wrapper">
-      <paginate
-        v-model="page"
-        :force-page="page"
-        :page-count="pageCount"
-        :page-range="3"
-        :margin-pages="2"
-        :prev-text="'&lt;'"
-        :next-text="'&gt;'"
-        :break-view-text="'…'"
-        :container-class="'pagination--container'"
-        :active-class="'pagination--active'"
-        :page-class="'pagination--page-item'"
-        :page-link-class="'pagination--page-link'"
-        :prev-class="'pagination--page-item'"
-        :next-class="'pagination--page-item'"
-      >
-      </paginate>
-       -->
-    <!-- <p>
-        Showing {{ pagination.start + 1 }} to {{ pagination.end }} of
-        {{ publications.length }} entries
-      </p> -->
-    <!-- </div> -->
   </div>
 </template>
 

@@ -1,36 +1,49 @@
 <script>
 import SinglePublicationHero from './SinglePublicationHero.vue'
-
+import BackButton from '@/components/PublicationDetail/BackButton'
 import AuthorsList from '@/components/PublicationListItem/AuthorsList'
 import DisciplinesList from '@/components/PublicationListItem/DisciplinesList'
-import SocialBar from '@/components/PublicationListItem/SocialBar'
+// import SocialBar from '@/components/PublicationListItem/SocialBar'
+import Abstract from '@/components/PublicationListItem/Abstract'
 import ByLine from '@/components/PublicationListItem/ByLine'
+import KeywordsList from '@/components/PublicationListItem/KeywordsList'
+import Links from '@/components/PublicationListItem/Links'
 
 export default {
   name: 'publication-detail',
   components: {
     SinglePublicationHero,
+    BackButton,
     AuthorsList,
     DisciplinesList,
-    SocialBar,
+    KeywordsList,
+    // SocialBar,
+    Abstract,
     ByLine,
+    Links,
   },
   props: {
-    publication: Object,
+    publication: { type: Object, required: true },
   },
 }
 </script>
 
 <template>
-  <div class="container">
+  <div class="container relative">
     <single-publication-hero
       :title="publication.title"
       :file-attached="publication.fileAttached"
     />
-    <div class="content bg-superwhite flex pt-8 pb-8 mb-8 pr-16" @click.stop>
+    <div
+      class="content relative bg-superwhite flex flex-col pt-12 pb-12 mb-8 pl-12 pr-12 lg:pl-16 lg:pr-16"
+      @click.stop
+    >
+      <back-button />
       <authors-list :authors="publication.authors" />
+      <keywords-list :keywords="publication.keywords" />
+      <abstract :abstract="publication.abstract" />
 
-      <div class="flex flex-row justify-between">
+      <div class="flex flex-row justify-between mr-1 ml-1">
         <by-line
           :year="publication.year.value"
           :journal="publication.journal && publication.journal.value"
@@ -38,44 +51,11 @@ export default {
         <disciplines-list :disciplines="publication.disciplines" />
       </div>
 
-      <div class="entry__abstract flex-row">
-        <div class="entry__abstract_inner">
-          <abstract-icon />
-          <div class="entry__abstract_text" v-if="publication.abstract">
-            {{ publication.abstract }}
-          </div>
-          <div class="entry__abstract_text" v-else>
-            Abstract missing.
-          </div>
-        </div>
-      </div>
+      <links :publication="publication" />
 
-      <div class="flex-row">
-        <div
-          class="entry__downloads-item"
-          v-for="website in publication.websites"
-          v-bind:key="website"
-        >
-          <link-icon />
-          <a target="_blank" rel="noopener noreferrer" :href="website"
-            >Visit publisher website
-          </a>
-        </div>
-
-        <div class="entry__downloads-item" v-if="publication.fileAttached">
-          <download-icon big="false" />
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            :href="$api + '/p/' + publication.slug + '/download'"
-            >Download full text</a
-          >
-        </div>
-      </div>
-
-      <div class="flex-row">
+      <!-- <div class="flex-row">
         <social-bar :publication="publication" />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

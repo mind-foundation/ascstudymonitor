@@ -6,20 +6,24 @@ export default {
 
 <template>
   <div class="container flex flex-row-reverse mt-6">
-    <button
-      class="pt-3 pb-3 pl-8 pr-8 leading-none bg-navy bg-transparent text-white text-xs"
-      tabindex="-1"
-      @click="$modal.show('donate-modal')"
+    <a
+      href="https://mind-foundation.org/donate/?utm_source=asc-studymonitor&utm_medium=donate-cta"
+      target="_blank"
     >
-      DONATE
-    </button>
+      <button
+        class="pt-3 pb-3 pl-10 pr-10 leading-none bg-navy hover:bg-danger bg-transparent text-white text-xs font-bold uppercase"
+        tabindex="-1"
+      >
+        Donate
+      </button>
+    </a>
 
     <button
-      class="pt-3 pb-3 pl-8 pr-8 leading-none border-transparent bg-transparent text-xs"
+      class="pt-3 pb-3 pl-10 pr-10 leading-none border-transparent bg-transparent text-lightblue hover:text-navy text-xs font-bold uppercase"
       tabindex="-1"
       @click="$modal.show('about-modal')"
     >
-      ABOUT
+      About
     </button>
   </div>
 </template>
@@ -27,5 +31,9 @@ export default {
 <style scoped>
 .container button {
   letter-spacing: 2px;
+}
+
+button {
+  transition: all 0.15s ease-in-out;
 }
 </style>

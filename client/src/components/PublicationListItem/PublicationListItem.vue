@@ -1,10 +1,9 @@
 <script>
 import SlideUpDown from 'vue-slide-up-down'
 import DownloadIcon from '@/components/Icons/Download.vue'
-import AbstractIcon from '@/components/Icons/Abstract.vue'
 import LinkIcon from '@/components/Icons/Link.vue'
+import AbstractIcon from '@/components/Icons/Abstract.vue'
 import PublicationChevronIcon from '@/components/Icons/PublicationChevron.vue'
-import Filters from '@/mixins/Filters'
 import DisciplinesList from './DisciplinesList.vue'
 import AuthorsList from './AuthorsList.vue'
 import ByLine from './ByLine.vue'
@@ -23,7 +22,6 @@ export default {
     SlideUpDown,
     SocialBar,
   },
-  mixins: [Filters],
   data: () => ({
     expanded: null,
   }),
@@ -55,7 +53,7 @@ export default {
     </div>
 
     <div class="content flex-grow" @click.stop>
-      <h3 class="text-2xl mt-0 text-black">
+      <h3 class="text-2xl mt-0 mb-4 text-black font-semibold">
         {{ publication.title }}
 
         <download-icon
@@ -76,7 +74,7 @@ export default {
         <disciplines-list :disciplines="publication.disciplines" />
       </div>
 
-      <slide-up-down :active="expanded" :duration="200">
+      <slide-up-down :active="expanded" :duration="150">
         <div class="entry__abstract">
           <div class="entry__abstract_inner">
             <abstract-icon />
@@ -108,8 +106,9 @@ export default {
             target="_blank"
             rel="noopener noreferrer"
             :href="$api + '/p/' + publication.slug + '/download'"
-            >Download full text</a
           >
+            Download full text
+          </a>
         </div>
 
         <social-bar :publication="publication" />
@@ -146,7 +145,7 @@ export default {
 }
 
 .entry__chevron-wrapper svg {
-  transition: transform 0.2s ease-in;
+  transition: transform 0.15s ease-in;
 }
 
 .entry__icon {

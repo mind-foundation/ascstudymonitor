@@ -12,7 +12,7 @@ import { Vue as VueIntegration } from '@sentry/integrations'
 import App from './App.vue'
 import router from './router'
 import constants from './constants'
-import { paramsToFilterConfiguration } from '@/mixins/Filters'
+// import { paramsToFilterConfiguration } from '@/mixins/Filters'
 import raf from 'raf'
 import '../assets/tailwind.css'
 
@@ -48,12 +48,12 @@ new Vue({
   render: h => h(App),
 }).$mount('#app')
 
-router.afterEach(to => {
-  const config = paramsToFilterConfiguration(to.query)
-  const keywords = Object.values(config)
-    .flat()
-    .filter(Boolean)
-    .map(String)
+// router.afterEach(to => {
+//   const config = paramsToFilterConfiguration(to.query)
+//   const keywords = Object.values(config)
+//     .flat()
+//     .filter(Boolean)
+//     .map(String)
 
-  window.analytics.page('Filter', { keywords, searchterm: to.query.search })
-})
+//   window.analytics.page('Filter', { keywords, searchterm: to.query.search })
+// })

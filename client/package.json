@@ -33,7 +33,6 @@
     "vue-toasted": "^1.1.28",
     "vue-typer": "^1.2.0",
     "vue-waypoint": "^3.5.0",
-    "vuejs-paginate": "^2.1.0",
     "vuex": "^3.5",
     "vuex-persist": "^2.2.0"
   },

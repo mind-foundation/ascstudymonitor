@@ -1,35 +1,34 @@
 <script>
-import AuthorIcon from '@/components/Icons/Author.vue'
+import KeywordsIcon from '@/components/Icons/Keywords.vue'
 export default {
-  name: 'authors-list',
+  name: 'keywords-list',
   props: {
-    authors: Array,
+    keywords: {
+      type: Array,
+      required: true,
+    },
   },
   components: {
-    AuthorIcon,
+    KeywordsIcon,
   },
   computed: {
-    authorNames() {
-      return this.$props.authors.map(author =>
-        author.firstName
-          ? `${author.firstName} ${author.lastName}`
-          : author.lastName,
-      )
+    unwrapped() {
+      return this.keywords.map(node => node.value)
     },
   },
 }
 </script>
 <template>
-  <div class="container inline-flex mb-3">
+  <div class="container inline-flex">
     <div class="icon-holder">
-      <author-icon />
+      <keywords-icon />
     </div>
     <ul
-      class="flex flex-wrap flex-1 list list-none select-none whitespace-no-wrap"
+      class="list list-none flex flex-1 select-none text-lightgrey italic"
       @click.stop
     >
-      <li class="mr-2" v-for="(authorName, index) in authorNames" :key="index">
-        <a @click="toggleFilter('author', authorName)">{{ authorName }}</a>
+      <li class="mr-2" v-for="keyword in unwrapped" :key="keyword">
+        {{ keyword }}
       </li>
     </ul>
   </div>

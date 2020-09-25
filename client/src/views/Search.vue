@@ -48,7 +48,7 @@ export default {
   </modal>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
 .modal-backplate {
   position: fixed;
   top: 0;
