@@ -5,7 +5,7 @@ docker-dev-build:
 	docker-compose -f docker-compose-dev.yaml build
 
 docker-dev-up: docker-dev-build
-	docker-compose -f docker-compose-dev.yaml up
+	docker-compose -f docker-compose-dev.yaml up -d
 
 docker-prod-build:
 	docker-compose -f docker-compose.yaml build	
@@ -20,14 +20,6 @@ docker-bash-backend:
 docker-mongo:
 	docker exec -it $$(docker ps -f name=ascstudymonitor_mongo -q) mongo -u root -p integration
 
-deploy:
-	# not yet functional
-	eval $(docker-machine env asc-studymonitor)
-	docker-compose down
-	docker-compose build
-	docker-compose up -d
-	docker logs -f $(docker ps -f name=app -q)
-
 install-client:
 	cd client && yarn install
 
@@ -36,7 +28,7 @@ build-client-dev: install-client
 
 mongod:
 	mkdir -p ./data
-	mongod --dbpath=./data
+	mongod --dbpath=./data --wiredTigerCacheSizeGB 12
 
 install-backend:
 	cd backend && poetry install
