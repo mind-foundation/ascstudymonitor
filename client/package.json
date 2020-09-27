@@ -32,16 +32,13 @@
     "vue-social-sharing": "^3.0.0-beta.11",
     "vue-toasted": "^1.1.28",
     "vue-typer": "^1.2.0",
-    "vue-waypoint": "^3.5.0",
-    "vuex": "^3.5",
-    "vuex-persist": "^2.2.0"
+    "vue-waypoint": "^3.5.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5",
     "@vue/cli-plugin-eslint": "^4.5",
     "@vue/cli-plugin-router": "^4.5",
     "@vue/cli-plugin-unit-jest": "^4.5",
-    "@vue/cli-plugin-vuex": "^4.5",
     "@vue/cli-service": "^4.5",
     "@vue/test-utils": "^1.1.0",
     "babel-eslint": "^10.1.0",
