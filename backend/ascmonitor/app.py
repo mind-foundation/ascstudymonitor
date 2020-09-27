@@ -10,6 +10,7 @@ from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import PlainTextResponse, RedirectResponse
 from starlette.routing import Route, Mount
+from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
 from ascmonitor.config import development, sentry_dsn, client_dist_path
@@ -124,7 +125,9 @@ routes = [
     Route("/sitemap.xml", endpoint=sitemap),
 ]
 
-if not development:
+if development:
+    routes.append(Mount("/", app=StaticFiles(directory=client_dist_path)))
+else:
     # attach sentry
     middleware.append(Middleware(SentryAsgiMiddleware))
 

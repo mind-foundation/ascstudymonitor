@@ -28,7 +28,7 @@ build-client-dev: install-client
 
 mongod:
 	mkdir -p ./data
-	mongod --dbpath=./data --wiredTigerCacheSizeGB 12
+	mongod --dbpath=./data
 
 install-backend:
 	cd backend && poetry install

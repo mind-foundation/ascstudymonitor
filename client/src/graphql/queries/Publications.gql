@@ -1,4 +1,4 @@
-query Publcations($after: String) {
+query Publications($after: String) {
   publications(after: $after) {
     pageInfo {
       hasNextPage
