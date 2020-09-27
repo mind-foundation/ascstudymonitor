@@ -51,44 +51,51 @@ export default {
   }),
   created() {
     EventBus.$on('filters.add', filter => {
-      const {
-        field,
-        value: { value },
-      } = filter
+      const { field, value } = filter
 
-      let alreadyFiltered
+      const prepareForGraphQl = value => {
+        delete value.publicationCount
+        delete value.__typename
+        return value
+      }
+
+      var alreadyFiltered
 
       switch (field) {
-        case 'year':
         case 'journal':
-        case 'disciplines':
         case 'keywords':
-          alreadyFiltered = this.filters[field].includes(value)
+        case 'disciplines':
+          alreadyFiltered = this.filters[field].includes(value.value)
+          !alreadyFiltered &&
+            this.filters[field].push(prepareForGraphQl(value.value))
+
+          break
+        case 'year':
+          alreadyFiltered = this.filters[field].includes(value.year)
+          !alreadyFiltered &&
+            this.filters[field].push(prepareForGraphQl(value.year))
           break
         case 'authors':
           alreadyFiltered = this.filters[field].some(
             ({ firstName, lastName }) =>
               firstName === value.firstName && lastName === value.lastName,
           )
+          !alreadyFiltered && this.filters[field].push(prepareForGraphQl(value))
           break
         default:
           throw new Error('Trying to filter for unknown field: ' + field)
       }
-      const prepareForGraphQl = value => {
-        if (value.value) return prepareForGraphQl(value.value)
-        else {
-          delete value.publicationCount
-          delete value.__typename
-          return value
-        }
-      }
-      if (!alreadyFiltered) this.filters[field].push(prepareForGraphQl(value))
     })
     EventBus.$on('filters.remove', filter => {
       const { field, value } = filter
 
+      console.log(value)
       switch (field) {
         case 'year':
+          this.filters[field] = this.filters[field].filter(
+            activeFilter => activeFilter !== value,
+          )
+          break
         case 'journal':
         case 'disciplines':
         case 'keywords':

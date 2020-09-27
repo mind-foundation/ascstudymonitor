@@ -5,6 +5,19 @@
   >
     <div class="search-wraper flex-grow w-full">
       <h1 class="text-center text-6xl font-light mb-6">Search and Filter</h1>
+
+      <div class="pl-3 pr-4 mt-4 mb-4 text-black justify-around">
+        <ul class="list-none flex">
+          <li
+            :key="f.label"
+            v-for="f in this.filterList"
+            class="inline-block bg-superwhite pl-3 pr-3 pt-1 pb-1 mr-4"
+          >
+            <pill :filter="f" />
+          </li>
+        </ul>
+      </div>
+
       <div class="t-4 border-2 border-white w-full">
         <input
           ref="input"
@@ -16,27 +29,7 @@
           @input="handleChange"
         />
       </div>
-      <div
-        class="pl-3 pr-4 mt-4  text-black justify-around "
-        v-if="filterList.length"
-      >
-        <ul class="list-none flex">
-          <li
-            :key="f.label"
-            v-for="f in this.filterList"
-            class="inline-block bg-superwhite p-2 mr-4"
-          >
-            <span class="inline-block mr-1">
-              <filter-icon :field="f.field" /> </span
-            >{{ f.label
-            }}<span
-              @click="removeFilter(f)"
-              class="inline-block ml-2 cursor-pointer"
-              >X</span
-            >
-          </li>
-        </ul>
-      </div>
+
       <div
         class="t-4 border-2 border-white w-full border-t-0"
         v-if="suggestions.publications.length"
@@ -81,9 +74,11 @@
         tabindex="-1"
       >
         {{
-          suggestions.publications.length > 0
+          suggestions.publications.length == 0
+            ? 'No matching publications'
+            : suggestions.publications.length > 1
             ? `${suggestions.publications.length} results`
-            : 'No matching publications'
+            : `1 result`
         }}
       </button>
     </div>
@@ -92,18 +87,18 @@
 
 <script>
 import SearchQuery from '@/graphql/Search.gql'
-import FilterIcon from '@/components/Icons/Filter'
+import Pill from '@/components/Search/Pill'
 import { EventBus } from '@/event-bus'
 
 const valueToLabel = value =>
   value.value ||
+  value.year ||
   (value.firstName ? [value.firstName, value.lastName].join(' ') : value)
 
 export default {
   name: 'search-widget',
-
   components: {
-    FilterIcon,
+    Pill,
   },
   props: {
     filters: Object,
@@ -130,6 +125,9 @@ export default {
           term: this.term,
           filters: this.filters,
         }
+      },
+      skip() {
+        return this.term === '' && this.filterList.length == 0
       },
       result({ data }) {
         if (data) {
@@ -166,6 +164,12 @@ export default {
       clearTimeout(this.debounce)
       this.debounce = setTimeout(() => {
         this.term = event.target.value
+        if (this.term === '') {
+          this.suggestions = {
+            fields: [],
+            publications: [],
+          }
+        }
       }, 50)
     },
     getLinkTo(r) {
@@ -176,10 +180,15 @@ export default {
     addFilter(filter) {
       this.searchInput = ''
       this.term = ''
+      this.suggestions = {
+        fields: [],
+        publications: [],
+      }
+      setTimeout(() => {
+        this.$refs.input.focus()
+      })
+
       EventBus.$emit('filters.add', filter)
-    },
-    removeFilter(filter) {
-      EventBus.$emit('filters.remove', filter)
     },
   },
 
@@ -198,13 +207,18 @@ export default {
       )
     },
   },
-
-  // mounted() {
-  //   setTimeout(() => {
-  //   if (screen.height > 1024) {
-  //     this.$refs.input.focus()
-  //   }
-  // },
+  mounted() {
+    EventBus.$on('filters.remove', () => {
+      setTimeout(() => {
+        this.$refs.input.focus()
+      }, 10)
+    })
+    // setTimeout(() => {
+    //   if (screen.height > 1024) {
+    //     this.$refs.input.focus()
+    //   }
+    // })
+  },
 }
 </script>
 
@@ -236,7 +250,7 @@ export default {
 }
 
 .search-wraper {
-  max-height: 400px;
+  max-height: 550px;
 }
 
 .button-wrapper {

@@ -1,7 +1,7 @@
 <script>
 import SearchWidget from '@/components/Search/Widget'
 import CloseIcon from '@/components/Icons/Close'
-import FilterBar from '@/components/FilterBar'
+// // import FilterBar from '@/components/FilterBar'
 export default {
   name: 'search',
 
@@ -12,7 +12,7 @@ export default {
   components: {
     SearchWidget,
     CloseIcon,
-    FilterBar,
+    // FilterBar,
   },
   methods: {
     beforeOpen() {
@@ -38,7 +38,7 @@ export default {
     <close-icon class="close-icon" />
     <div class="bg-blue h-full w-full flex flex-col justify-center">
       <div class="reveal container flex flex-col h-full  text-white">
-        <filter-bar :filters="filters" />
+        <!-- <filter-bar :filters="filters" /> -->
 
         <div class="flex flex-grow flex-col items-center w-full h-40 mt-20 ">
           <search-widget :filters="filters" />

@@ -1,5 +1,5 @@
 <script>
-import KeywordsIcon from '@/components/Icons/Keywords.vue'
+import KeywordIcon from '@/components/Icons/Keyword'
 export default {
   name: 'keywords-list',
   props: {
@@ -9,7 +9,7 @@ export default {
     },
   },
   components: {
-    KeywordsIcon,
+    KeywordIcon,
   },
   computed: {
     unwrapped() {
@@ -21,7 +21,7 @@ export default {
 <template>
   <div class="container inline-flex">
     <div class="icon-holder">
-      <keywords-icon />
+      <keyword-icon />
     </div>
     <ul
       class="list list-none flex flex-1 select-none text-lightgrey italic"

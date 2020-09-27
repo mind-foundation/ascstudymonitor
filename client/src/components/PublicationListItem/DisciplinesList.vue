@@ -1,5 +1,5 @@
 <script>
-import ScienceIcon from '@/components/Icons/Science.vue'
+import DisciplineIcon from '@/components/Icons/Discipline.vue'
 export default {
   name: 'disciplines-list',
   props: {
@@ -9,13 +9,13 @@ export default {
     },
   },
   components: {
-    ScienceIcon,
+    DisciplineIcon,
   },
 }
 </script>
 <template>
   <div class="flex" v-if="disciplines.length">
-    <science-icon />
+    <discipline-icon />
     <ul class="list list-none display-flex select-none">
       <li class="mr-8" v-for="d in disciplines" :key="d.value">
         <a

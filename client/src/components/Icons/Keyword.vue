@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'keywords-icon',
+  name: 'keyword-icon',
 }
 </script>
 <template>
