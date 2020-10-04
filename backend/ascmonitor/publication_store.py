@@ -86,15 +86,6 @@ class PublicationStore:
         ]
         return publications
 
-    def search_publications(
-        self,
-        first: Optional[int] = None,
-        cursor: Optional[str] = None,
-        search: Optional[str] = None,
-        filters: Optional[FilterList] = None,
-    ):
-        """ Return page for a full text search """
-
     def get_publications_count(
         self, search: Optional[str] = None, filters: Optional[FilterList] = None
     ):
@@ -190,6 +181,19 @@ class PublicationStore:
             return None
 
         return self.get_by_id(slug_doc["publication"])
+
+    def get_by_title(self, title: str, first: int) -> List[Publication]:
+        """ Return publications where title starts with query """
+        if first <= 0:
+            return []
+
+        if title == "":
+            return []
+
+        query = {"title": {"$regex": rf"^{title}", "$options": "i"}}
+        cursor = self._collection.find(query).sort("created", DESCENDING).limit(first)
+        publications = [Publication.from_dict(pub) for pub in cursor]
+        return publications
 
     def update(self):
         """

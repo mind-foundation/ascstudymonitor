@@ -225,3 +225,9 @@ def test_get_publications__search_pagination(publication_store_real, publication
     )
     assert len(fetched) == 1
     assert replace(fetched[0], _cursor=None, score=None) == pubs[0]
+
+
+def test_get_by_title(publication_store, publications):
+    title = publications[0].title[:10]
+    results = publication_store.get_by_title(title, first=10)
+    assert results == [publications[0]]

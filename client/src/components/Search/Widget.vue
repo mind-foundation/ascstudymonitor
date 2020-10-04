@@ -40,7 +40,10 @@
         v-if="this.suggestions.fields.length"
       >
         <ul>
-          <li v-for="fs in this.suggestions.fields" :key="fs.label">
+          <li
+            v-for="fs in this.suggestions.fields"
+            :key="fs.field + '-' + fs.label"
+          >
             <div
               class="suggestion-row suggestion-row__field-suggestion flex justify-between"
               :tabindex="0"

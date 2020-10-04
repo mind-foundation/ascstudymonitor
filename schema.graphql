@@ -191,6 +191,9 @@ type Query {
   "Get download Url for publication or null if publication has no attached files"
   publicationDownloadUrl(id: ID!): String
 
+  "Find publication by first letters of title"
+  publicationsByTitle(title: String!, first: Int): [Publication!]!
+
   "View the queue for a channel"
   queue(channel: String!): [Publication!]
 

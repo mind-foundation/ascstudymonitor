@@ -101,6 +101,18 @@ def resolve_publications(
     }
 
 
+@query.field("publicationsByTitle")
+def resolve_publications_by_title(
+    *_, title: str, first: Optional[int] = None
+) -> List[Dict[str, Any]]:
+    """ Resolves simple title search for publications """
+    if first is None:
+        first = 10
+
+    pubs = publication_store.get_by_title(title=title, first=first)
+    return [pub.as_gql_response() for pub in pubs]
+
+
 @query.field("publicationDownloadUrl")
 def resolve_publication_download_url(*_, id: PublicationID) -> Optional[str]:
     """ Resolves to download url or None on error """
