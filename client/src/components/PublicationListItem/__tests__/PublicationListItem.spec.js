@@ -1,8 +1,7 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import PublicationListItem from '../PublicationListItem.vue'
 
 describe('PublicationListItem.vue', () => {
-  let store
   let propsData
 
   beforeEach(() => {
