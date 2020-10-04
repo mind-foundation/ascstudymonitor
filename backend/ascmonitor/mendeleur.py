@@ -111,7 +111,10 @@ class Mendeleur:
 
     def rename_journal_field(self, document):
         """ Ensure journal is present or None """
-        document.json["journal"] = document.source.strip()
+        if document.source is None:
+            document.json["journal"] = None
+        else:
+            document.json["journal"] = document.source.strip()
         return document
 
     def ensure_keywords(self, document):

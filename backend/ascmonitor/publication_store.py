@@ -247,6 +247,8 @@ class PublicationStore:
                 new_value = getattr(new_pubs[id_], field.name)
                 if new_value != old_value:
                     updated.setdefault(id_, {})
+                    if hasattr(new_value, "as_dict"):
+                        new_value = new_value.as_dict()
                     updated[id_][field.name] = new_value
 
         return created, removed, updated
