@@ -231,3 +231,14 @@ def test_get_by_title(publication_store, publications):
     title = publications[0].title[:10]
     results = publication_store.get_by_title(title, first=10)
     assert results == [publications[0]]
+
+
+def test_get_publications_count(publication_store, publications):
+    assert publication_store.get_publications_count() == len(publications)
+
+
+def test_get_publications_count__empty(publication_store_real):
+    assert (
+        publication_store_real.get_publications_count(search="not existing publication")
+        == 0
+    )

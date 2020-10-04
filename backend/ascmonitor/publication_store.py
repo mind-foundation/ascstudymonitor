@@ -92,7 +92,12 @@ class PublicationStore:
         """ Get the total count of publications for a query """
         aggregation = self._build_search_aggregation(search=search, filters=filters)
         aggregation += [{"$count": "count"}]
-        return next(self._collection.aggregate(aggregation))["count"]
+        result = list(self._collection.aggregate(aggregation))
+
+        if not result:
+            return 0
+
+        return result[0]["count"]
 
     def get_distinct(self, field: str) -> List[Dict[str, Any]]:
         """ Return all distinct values for a field and their publication counts """
