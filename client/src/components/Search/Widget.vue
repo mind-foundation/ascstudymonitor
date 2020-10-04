@@ -6,17 +6,7 @@
     <div class="search-wraper flex-grow w-full">
       <h1 class="text-center text-6xl font-light mb-6">Search and Filter</h1>
 
-      <div class="pl-3 pr-4 mt-4 mb-4 text-black justify-around">
-        <ul class="list-none flex">
-          <li
-            :key="f.label"
-            v-for="f in this.filterList"
-            class="inline-block bg-superwhite pl-3 pr-3 pt-1 pb-1 mr-4"
-          >
-            <pill :filter="f" />
-          </li>
-        </ul>
-      </div>
+      
 
       <div class="t-4 border-2 border-white w-full">
         <input
@@ -30,7 +20,7 @@
         />
       </div>
 
-      <div
+      <!-- <div
         class="t-4 border-2 border-white w-full border-t-0"
         v-if="suggestions.publications.length"
       >
@@ -44,7 +34,7 @@
             </router-link>
           </li>
         </ul>
-      </div>
+      </div> -->
       <div
         class="t-4 border-2 border-white w-full border-t-0"
         v-if="this.suggestions.fields.length"
@@ -64,23 +54,41 @@
           </li>
         </ul>
       </div>
+      <div class="pl-3 pr-4 mb-4 text-black flex bg-superwhite">
+        <div class="w-6/12 flex items-center">
+          <ul class="list-none flex">
+            <li
+              :key="f.label"
+              v-for="f in this.filterList"
+              class="inline-block bg-superwhite pl-3 pr-3 pt-1 pb-1 mr-4"
+            >
+              <pill  :filter="f" />
+            </li>
+          </ul>
+        </div>
+        <div class="w-6/12">
+          <button
+            class="leading-none w-full pt-5 pb-5 pl-5 pr-5 text-navy bg-superwhite  text-lg font-bold text-right"
+            :class="{
+              'opacity-25': suggestions.publications.length === 0,
+            }"
+            tabindex="-1"
+          >
+            {{
+              suggestions.publications.length == 0
+                ? 'No matching publications'
+                : suggestions.publications.length > 1
+                ? `Show ${suggestions.publications.length} results`
+                : `Show 1 result`
+            }}
+          </button>
+        </div>
+        
+      </div>
+     
     </div>
     <div class="button-wrapper w-full sm:w-3/6 sm:mb-10">
-      <button
-        class="leading-none w-full pt-6 pb-6 pl-20 pr-20 text-navy bg-white text-lg font-bold"
-        :class="{
-          'opacity-25': suggestions.publications.length === 0,
-        }"
-        tabindex="-1"
-      >
-        {{
-          suggestions.publications.length == 0
-            ? 'No matching publications'
-            : suggestions.publications.length > 1
-            ? `${suggestions.publications.length} results`
-            : `1 result`
-        }}
-      </button>
+      
     </div>
   </div>
 </template>

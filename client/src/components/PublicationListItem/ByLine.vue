@@ -8,7 +8,7 @@ export default {
 }
 </script>
 <template>
-  <div class="container mt-2 flex text-sm" @click.stop>
+  <div class="container mb-5 flex text-sm" @click.stop>
     <a class="year text-gray" @click="toggleFilter('year', year)">{{ year }}</a>
     <a
       class="journal text-gray"
