@@ -11,6 +11,7 @@
     "test:watch": "vue-cli-service test:unit --watch"
   },
   "dependencies": {
+    "@jagi/jest-transform-graphql": "^1.0.2",
     "@sentry/browser": "^5.23.0",
     "@sentry/integrations": "^5.23.0",
     "@vue/composition-api": "^1.0.0-beta.14",
@@ -89,6 +90,9 @@
     "setupFiles": [
       "<rootDir>/jest.init.js"
     ],
+    "transform": {
+      "\\.(gql|graphql)$": "@jagi/jest-transform-graphql"
+    },
     "collectCoverage": false,
     "collectCoverageFrom": [
       "**/src/**/*.{js,vue}",

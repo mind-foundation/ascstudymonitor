@@ -7,7 +7,6 @@ import Download from '../Download'
 import Filters from '../Filters'
 import Link from '../Link'
 import PublicationChevron from '../PublicationChevron'
-import Science from '../Science'
 
 describe('Icons', () => {
   let store
@@ -20,7 +19,6 @@ describe('Icons', () => {
     [Filters, 'Filters'],
     [Link, 'Link'],
     [PublicationChevron, 'PublicationChevron'],
-    [Science, 'Science'],
   ].forEach(([Component, name]) => {
     it(name, () => {
       const wrapper = shallowMount(Component, { store })

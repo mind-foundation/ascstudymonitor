@@ -947,6 +947,11 @@
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
 
+"@jagi/jest-transform-graphql@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@jagi/jest-transform-graphql/-/jest-transform-graphql-1.0.2.tgz#63d5a9c201dc18dbdf508a0d4c3029448d7b5250"
+  integrity sha512-VgdTMAI7LwOOhPP1TeZvm6knYbrcp3NOpP58/Rt9ldUwQSToDwlMyCrun9NR/BaBzd10QhBgt/BrOKQ8qjEbIQ==
+
 "@jest/console@^24.7.1", "@jest/console@^24.9.0":
   version "24.9.0"
   resolved "https://registry.yarnpkg.com/@jest/console/-/console-24.9.0.tgz#79b1bc06fb74a8cfb01cbdedf945584b1b9707f0"
