@@ -13,9 +13,9 @@ export default {
 
 <style scoped>
 #bubble-left {
-  position: absolute;
+  position: fixed;
   top: 40px;
-  left: -320px;
+  left: -280px;
   width: 472px;
   height: 345px;
 
@@ -24,7 +24,7 @@ export default {
   background: url('~assets/bubble_1.png') no-repeat;
 }
 #bubble-right {
-  position: absolute;
+  position: fixed;
   top: 40px;
   right: 0;
   height: 564px;
