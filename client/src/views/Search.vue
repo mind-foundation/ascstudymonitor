@@ -6,7 +6,10 @@ export default {
   name: 'search',
 
   props: {
-    filters: Object,
+    filters: {
+      type: Object,
+      required: true,
+    },
   },
 
   components: {

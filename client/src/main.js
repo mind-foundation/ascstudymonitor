@@ -11,7 +11,6 @@ import VueRouter from 'vue-router'
 import { Vue as VueIntegration } from '@sentry/integrations'
 import App from './App.vue'
 import router from './router'
-import constants from './constants'
 // import { paramsToFilterConfiguration } from '@/mixins/Filters'
 import raf from 'raf'
 import '../assets/tailwind.css'
@@ -30,8 +29,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 Vue.config.productionTip = false
-
-Vue.prototype.$constants = constants
 
 Vue.use(VueApollo)
 Vue.use(VueRouter)

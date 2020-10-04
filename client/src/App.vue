@@ -86,6 +86,7 @@ export default {
           throw new Error('Trying to filter for unknown field: ' + field)
       }
     })
+
     EventBus.$on('filters.remove', filter => {
       const { field, value } = filter
 
