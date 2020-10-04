@@ -1,5 +1,5 @@
-query Search($term: String!, $filters: FilterInput!) {
-  fieldSuggestions(search: $term, first: 5, filters: $filters) {
+query Search($search: String!, $filters: FilterInput!) {
+  fieldSuggestions(search: $search, first: 5, filters: $filters) {
     value {
       __typename
       ... on Year {
@@ -28,7 +28,8 @@ query Search($term: String!, $filters: FilterInput!) {
     score
   }
 
-  publications(search: $term, filters: $filters, first: 3) {
+  publications(search: $search, filters: $filters, first: 3) {
+    totalCount
     edges {
       node {
         id

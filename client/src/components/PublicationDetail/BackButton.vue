@@ -5,7 +5,7 @@ export default {
 </script>
 
 <template>
-  <div class="align ">
+  <div class="align">
     <router-link to="/">
       <button
         class="bg-superwhite hover:bg-lightblue hover:text-white border-lightblue border-2 pt-3 pb-3 pl-16 pr-16 font-bold text-sm"

@@ -24,7 +24,16 @@ export default {
     cursor: null,
   }),
   apollo: {
-    publications: PublicationsQuery,
+    publications: {
+      query: PublicationsQuery,
+      variables() {
+        const { search, ...fields } = this.$attrs.filters
+        return {
+          search: search,
+          filters: fields,
+        }
+      },
+    },
   },
   created() {
     EventBus.$on('infinityscroller.loadmore', () => {

@@ -43,7 +43,7 @@ export default {
       <div class="reveal container flex flex-col h-full  text-white">
         <!-- <filter-bar :filters="filters" /> -->
 
-        <div class="flex flex-grow flex-col items-center w-full h-40 mt-20 ">
+        <div class="flex flex-grow flex-col items-center w-full h-40 mt-20">
           <search-widget :filters="filters" />
         </div>
       </div>

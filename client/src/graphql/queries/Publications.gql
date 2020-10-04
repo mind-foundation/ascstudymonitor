@@ -1,5 +1,5 @@
-query Publications($after: String) {
-  publications(after: $after) {
+query Publications($search: String, $filters: FilterInput, $after: String) {
+  publications(search: $search, filters: $filters, after: $after) {
     pageInfo {
       hasNextPage
       endCursor

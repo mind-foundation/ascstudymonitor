@@ -6,8 +6,6 @@
     <div class="search-wraper flex-grow w-full">
       <h1 class="text-center text-6xl font-light mb-6">Search and Filter</h1>
 
-      
-
       <div class="t-4 border-2 border-white w-full">
         <input
           ref="input"
@@ -22,7 +20,7 @@
 
       <!-- <div
         class="t-4 border-2 border-white w-full border-t-0"
-        v-if="suggestions.publications.length"
+        v-if="suggestions.totalPublications"
       >
         <ul @click="$modal.hide('search-modal')">
           <li v-for="p in this.suggestions.publications" :key="p.id">
@@ -65,34 +63,31 @@
               v-for="f in this.filterList"
               class="inline-block bg-superwhite pl-3 pr-3 pt-1 pb-1 mr-4"
             >
-              <pill  :filter="f" />
+              <pill :filter="f" />
             </li>
           </ul>
         </div>
         <div class="w-6/12">
           <button
-            class="leading-none w-full pt-5 pb-5 pl-5 pr-5 text-navy bg-superwhite  text-lg font-bold text-right"
+            class="leading-none w-full pt-5 pb-5 pl-5 pr-5 text-navy bg-superwhite text-lg font-bold text-right"
             :class="{
-              'opacity-25': suggestions.publications.length === 0,
+              'opacity-25': suggestions.totalPublications === 0,
             }"
             tabindex="-1"
+            @click="showResults()"
           >
             {{
-              suggestions.publications.length == 0
+              suggestions.totalPublications == 0
                 ? 'No matching publications'
-                : suggestions.publications.length > 1
-                ? `Show ${suggestions.publications.length} results`
+                : suggestions.totalPublications > 1
+                ? `Show ${suggestions.totalPublications} results`
                 : `Show 1 result`
             }}
           </button>
         </div>
-        
       </div>
-     
     </div>
-    <div class="button-wrapper w-full sm:w-3/6 sm:mb-10">
-      
-    </div>
+    <div class="button-wrapper w-full sm:w-3/6 sm:mb-10"></div>
   </div>
 </template>
 
@@ -124,6 +119,7 @@ export default {
     suggestions: {
       fields: [],
       publications: [],
+      totalPublications: 0,
     },
   }),
 
@@ -132,9 +128,10 @@ export default {
       // has to be named like a root from resukt
       query: SearchQuery,
       variables() {
+        const { search, ...fields } = this.filters
         return {
-          term: this.term,
-          filters: this.filters,
+          search: this.term,
+          filters: fields,
         }
       },
       skip() {
@@ -160,6 +157,7 @@ export default {
               label: valueToLabel(s.value),
               count: s.value.publicationCount,
             })),
+            totalPublications: data.publications.totalCount,
           }
         }
       },
@@ -181,7 +179,7 @@ export default {
             publications: [],
           }
         }
-      }, 50)
+      }, 100)
     },
     getLinkTo(r) {
       return {
@@ -201,11 +199,27 @@ export default {
 
       EventBus.$emit('filters.add', filter)
     },
+    showResults() {
+      if (this.term !== '') {
+        EventBus.$emit('filters.add', {
+          field: 'search',
+          value: this.term,
+        })
+      }
+      if (this.$route.path !== '/') {
+        this.$router.push({
+          path: '',
+        })
+      }
+      this.$modal.hide('search-modal')
+    },
   },
 
   computed: {
     filterList() {
-      return Object.entries(this.filters).reduce(
+      const { search, ...fields } = this.filters
+
+      return Object.entries(fields).reduce(
         (arr, [field, values]) => [
           ...arr,
           ...values.map(v => ({

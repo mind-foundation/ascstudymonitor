@@ -8,7 +8,7 @@
         <router-view name="hero" />
       </hero-wrap>
 
-      <router-view name="main" />
+      <router-view name="main" :filters="filters" />
 
       <keymap />
       <search :filters="filters" />
@@ -34,6 +34,7 @@ function getDefaultFilters() {
     authors: [],
     disciplines: [],
     keywords: [],
+    search: '',
   }
 }
 export default {
@@ -62,13 +63,15 @@ export default {
       var alreadyFiltered
 
       switch (field) {
+        case 'search':
+          this.filters[field] = value
+          break
         case 'journal':
         case 'keywords':
         case 'disciplines':
           alreadyFiltered = this.filters[field].includes(value.value)
           !alreadyFiltered &&
             this.filters[field].push(prepareForGraphQl(value.value))
-
           break
         case 'year':
           alreadyFiltered = this.filters[field].includes(value.year)
