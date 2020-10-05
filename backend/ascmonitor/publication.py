@@ -7,7 +7,7 @@ from dataclasses import dataclass, asdict
 from datetime import datetime
 from typing import Any, Dict, List, NewType, Optional
 
-from humps import camelize
+from humps import camelize, decamelize
 from slugify import slugify
 
 PublicationID = NewType("PublicationID", str)
@@ -23,6 +23,7 @@ class Author:
     @classmethod
     def from_dict(cls, document: Dict[str, str]) -> "Author":
         """ Construct from dictionary """
+        document = decamelize(document)
         return cls(
             first_name=document.get("first_name", None), last_name=document["last_name"]
         )
@@ -97,11 +98,21 @@ class Publication:
         pub["cursor"] = self.cursor
         return pub
 
-    def as_gql_response(self) -> Dict[str, Any]:
+    def as_gql_response(
+        self, with_cursor: bool = True, created_as_str: bool = False
+    ) -> Dict[str, Any]:
         """ Return as GraphQL response """
         pub = self.as_dict()
         pub["slug"] = self.slug
-        pub["cursor"] = self.encoded_cursor
+
+        if with_cursor:
+            pub["cursor"] = self.encoded_cursor
+
+        if self.score is None:
+            del pub["score"]
+
+        if created_as_str:
+            pub["created"] = self.created.isoformat().replace("T", " ")
 
         # embed filterable fields
         for field in ["year", "journal", "disciplines", "keywords"]:

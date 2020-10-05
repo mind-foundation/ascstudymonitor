@@ -10,35 +10,19 @@ from ariadne import (
     make_executable_schema,
     load_schema_from_path,
 )
-from pymongo import MongoClient
 from humps import camelize, decamelize
 
 from ascmonitor.channels import CHANNELS, PostSendException
 from ascmonitor.config import (
-    mendeley_authinfo,
-    mendeley_group_id,
-    mongo_config,
-    mongo_db,
     channel_configs,
     post_secret_token,
 )
-from ascmonitor.publication_store import PublicationStore
+from ascmonitor.globals import mongo, publication_store, event_store, ngram_store
 from ascmonitor.publication import PublicationID
-from ascmonitor.event_store import EventStore
 from ascmonitor.events import EventKind, PostSuccessEvent
-from ascmonitor.mendeleur import Mendeleur, MendeleyAuthInfo
-from ascmonitor.ngram_store import NGramStore
+from ascmonitor.filter_list import FilterList
 from ascmonitor.post_queue import PostQueue, QueueEmptyException
 from ascmonitor.poster import Poster
-from ascmonitor.types import FilterList
-
-mendeleur = Mendeleur(MendeleyAuthInfo(**mendeley_authinfo), mendeley_group_id)
-mongo = MongoClient(**mongo_config)[mongo_db]
-event_store = EventStore(mongo)
-publication_store = PublicationStore(
-    mendeleur=mendeleur, mongo=mongo, event_store=event_store
-)
-ngram_store = NGramStore(mongo=mongo)
 
 # setup graphql
 type_defs = load_schema_from_path("../schema.graphql")
@@ -68,13 +52,14 @@ def resolve_publication_by_slug(*_, slug: str) -> Optional[Dict[str, Any]]:
 def resolve_publications(
     *_,
     search: Optional[str] = None,
-    filters: Optional[FilterList] = None,
+    filters: Optional[Dict[str, List[Any]]] = None,
     first: Optional[int] = 25,
     after: Optional[str] = None,
 ) -> Dict[str, Any]:
     """ Query, filter and paginate publications """
+    filter_list = FilterList.from_dict(filters)
     pubs = publication_store.get_publications(
-        first=first, cursor=after, search=search, filters=filters
+        first=first, cursor=after, search=search, filters=filter_list
     )
 
     # build edges
@@ -124,11 +109,12 @@ def resolve_publication_download_url(*_, id: PublicationID) -> Optional[str]:
 
 @query.field("fieldSuggestions")
 def resolve_field_suggestions(
-    *_, search: str, first: int = 10, filters: Optional[FilterList] = None
+    *_, search: str, first: int = 10, filters: Optional[Dict[str, Any]] = None
 ) -> List[Dict[str, Any]]:
     """ Get suggestions for fields from the ngram store """
     # pylint: disable=unused-argument
-    tokens = ngram_store.query(search, first)
+    filter_list = FilterList.from_dict(filters)
+    tokens = ngram_store.query(search, first, filter_list)
 
     results = []
     for token in tokens:
@@ -205,6 +191,8 @@ def publications_total_count(obj, _info) -> int:
     """ Return the total count of a publications connection """
     search = obj["search"]
     filters = obj["filters"]
+    if filters is not None and isinstance(filters, dict):
+        filters = FilterList.from_dict(filters)
     return publication_store.get_publications_count(search, filters)
 
 
@@ -277,7 +265,7 @@ mutation = MutationType()
 def resolve_update_publications(*_) -> Dict[str, Any]:
     """ Update the publications in the document store """
     publication_store.update()
-    ngram_store.update(publication_store.get_tokens())
+    ngram_store.update_from_store(publication_store)
     return {"success": True}
 
 

@@ -1,7 +1,7 @@
 """ Store and access publications in Mendeley """
 from dataclasses import fields
 from logging import getLogger
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from pymongo import DESCENDING, TEXT
 from pymongo.database import Database
@@ -10,9 +10,8 @@ from pymongo.errors import BulkWriteError
 from ascmonitor.events import NewPubEvent, UpdatedPubEvent, DeletedPubEvent
 from ascmonitor.event_store import EventStore
 from ascmonitor.mendeleur import Mendeleur
-from ascmonitor.ngram_store import Token
 from ascmonitor.publication import Author, Publication, PublicationID
-from ascmonitor.types import FilterList
+from ascmonitor.filter_list import FilterList
 
 logger = getLogger(__name__)
 
@@ -99,8 +98,11 @@ class PublicationStore:
 
         return result[0]["count"]
 
-    def get_distinct(self, field: str) -> List[Dict[str, Any]]:
-        """ Return all distinct values for a field and their publication counts """
+    def get_distinct(self, field: str, as_dict: bool = True) -> List[Dict[str, Any]]:
+        """
+        Return all distinct values for a field and their publication counts
+        :param as_dict: If False, parse values
+        """
         # normalization step in aggregation pipeline for every possible field
         try:
             normalization = {
@@ -127,34 +129,23 @@ class PublicationStore:
                 "$project": {
                     "_id": False,
                     "value": True,
+                    "field": {"$literal": field},
                     "publicationCount": "$count",
                 }
             },
             {"$sort": {"publicationCount": -1}},
         ]
 
-        return list(self._collection.aggregate(aggregation))
+        cursor = self._collection.aggregate(aggregation)
 
-    def get_tokens(self) -> List[Token]:
-        """ Returns tokens to feed the ngram store """
-        field_names = ["year", "authors", "journal", "disciplines", "keywords"]
-        textifications: Dict[str, Callable[[Any], str]] = {
-            "authors": lambda author: Author.from_dict(author).text,
-            "year": str,
-        }
+        if not as_dict:
+            if field == "authors":
+                cursor = (
+                    {**item, "value": Author.from_dict(item["value"])}
+                    for item in cursor
+                )
 
-        tokens = []
-        for field in field_names:
-            values = self.get_distinct(field)
-            for value in values:
-                text = value["value"]
-                if field in textifications:
-                    text = textifications[field](text)
-
-                token = Token(text=text, field=field, data=value)
-                tokens.append(token)
-
-        return tokens
+        return list(cursor)
 
     def count_publications(self, field: str, value: Any) -> int:
         """ Count publications where a field has a specified value """

@@ -1,49 +1,17 @@
 from dataclasses import replace
 from datetime import datetime
-from unittest.mock import patch
 import pytest
 
 from ascmonitor.publication_store import PublicationStore
 
 
-@pytest.fixture
-def mendeleur(publications):
-    with patch("ascmonitor.mendeleur.Mendeleur") as mendeleur_mock:
-        mendeleur_mock.all_documents.return_value = publications
-        yield mendeleur_mock
-
-
-@pytest.fixture
-def event_store(mongo):
-    with patch("ascmonitor.event_store.EventStore") as event_store_mock:
-        yield event_store_mock
-
-
-@pytest.fixture
-def publication_store(mendeleur, event_store, mongo):
+def test_update(mendeleur, mongo, event_store_mock):
     publication_store = PublicationStore(
-        mendeleur=mendeleur, mongo=mongo, event_store=event_store
-    )
-    publication_store.update()
-    return publication_store
-
-
-@pytest.fixture
-def publication_store_real(mendeleur, event_store, real_mongo):
-    publication_store = PublicationStore(
-        mendeleur=mendeleur, mongo=real_mongo, event_store=event_store
-    )
-    publication_store.update()
-    return publication_store
-
-
-def test_update(mendeleur, mongo, event_store):
-    publication_store = PublicationStore(
-        mendeleur=mendeleur, mongo=mongo, event_store=event_store
+        mendeleur=mendeleur, mongo=mongo, event_store=event_store_mock
     )
     publication_store.update()
     mendeleur.all_documents.assert_called_once()
-    event_store.put.assert_called()
+    event_store_mock.put.assert_called()
 
 
 def test_put(mendeleur, mongo, event_store, publications):
@@ -202,8 +170,8 @@ def test_get_publications__search(publication_store_real, publications):
     )
     assert len(fetched) == 1
     assert replace(fetched[0], _cursor=None, score=None) == publications[1]
-    assert fetched[0].cursor == "1578947/2"
-    assert fetched[0].score == pytest.approx(1.578947)
+    assert fetched[0].cursor == "1571428/2"
+    assert fetched[0].score == pytest.approx(1.571428)
 
 
 def test_get_publications__search_pagination(publication_store_real, publications):
@@ -242,3 +210,18 @@ def test_get_publications_count__empty(publication_store_real):
         publication_store_real.get_publications_count(search="not existing publication")
         == 0
     )
+
+
+def test_get_distinct__authors(publication_store, publications):
+    expected = []
+    for pub in publications:
+        for author in pub.authors:
+            expected.append(
+                {"value": author.as_dict(), "field": "authors", "publicationCount": 1}
+            )
+    expected.sort(key=lambda item: item["value"]["last_name"])
+
+    results = publication_store.get_distinct("authors")
+    results.sort(key=lambda item: item["value"]["last_name"])
+
+    assert results == expected

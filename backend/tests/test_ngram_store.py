@@ -1,11 +1,7 @@
 import pytest
 
+from ascmonitor.filter_list import FilterList
 from ascmonitor.ngram_store import get_ngrams, NGramStore, Token, TokenResult
-
-
-@pytest.fixture
-def ngram_store(real_mongo):
-    return NGramStore(real_mongo)
 
 
 @pytest.fixture
@@ -82,7 +78,7 @@ def test_query(ngram_store, tokens):
     exp_score = len(inters) / len(union)
 
     ngram_store.update(tokens)
-    result = ngram_store.query(query, first=1)[0]
+    result = ngram_store.query(query, first=1, filters=FilterList())[0]
     assert result.text == "therapy"
     assert result.score == pytest.approx(exp_score)
 
@@ -95,7 +91,7 @@ def test_query__year(ngram_store, tokens):
             Token(text="2019", field="years", data={"value": 2019}),
         ]
     )
-    results = ngram_store.query("2018", first=10)
+    results = ngram_store.query("2018", first=10, filters=FilterList())
     assert len(results) == 2
 
     assert results[0].text == "2018"
@@ -109,7 +105,7 @@ def test_query__start_of_text(ngram_store, tokens):
     query = "th"
 
     ngram_store.update(tokens)
-    result = ngram_store.query(query, first=10)[0]
+    result = ngram_store.query(query, first=10, filters=FilterList())[0]
     assert result.text == "therapy"
     assert result.score == pytest.approx(2 / 7)
 
@@ -119,7 +115,7 @@ def test_query__short_token(ngram_store, tokens):
 
     tokens.append(Token(text="lsd", field="keywords", data={"value": "LSD"}))
     ngram_store.update(tokens)
-    results = ngram_store.query(query, first=10)
+    results = ngram_store.query(query, first=10, filters=FilterList())
     assert len(results) == 1
     assert results[0].text == "lsd"
     assert results[0].score == pytest.approx(2 / 3)
@@ -127,8 +123,21 @@ def test_query__short_token(ngram_store, tokens):
 
 def test_get_tokens_for_field(ngram_store, tokens):
     ngram_store.update(tokens)
-
-    expected = [tokens[0].as_entry()]
-    del expected[0]["ngrams"]
-
+    expected = [tokens[0]]
     assert ngram_store.get_tokens_for_field("keywords") == expected
+
+
+def test_update_from_store(ngram_store, publication_store, publications, mongo):
+    ngram_store.update_from_store(publication_store)
+
+    for field in ["year", "authors", "journal", "disciplines", "keywords"]:
+        expected = []
+        for pub in publications:
+            values = getattr(pub, field)
+            if not isinstance(values, list):
+                values = [values]
+            for value in values:
+                expected.append(Token.from_field_value(field, value))
+
+        tokens = ngram_store.get_tokens_for_field(field)
+        assert set(tokens) == set(expected)
