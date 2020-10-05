@@ -62,6 +62,9 @@ export default {
         },
       })
     },
+    resetSearch() {
+      EventBus.$emit('filters.clear')
+    },
   },
 }
 </script>
@@ -79,16 +82,18 @@ export default {
         <search-button />
       </search-waypoint>
     </div>
-    <!-- <div v-if="pagination.items.length === 0" class="message">
-      <p v-if="!loaded">
-        Loading..
-      </p>
-      <p v-else>
+    <div
+      v-if="publications.edges && publications.edges.length === 0"
+      class="message"
+    >
+      <p class="text-center">
         No articles found matching your query. Try a different search instead.
-        <router-link to="/">Or reset search.</router-link>
+        <a href="" @click="resetSearch">
+          Or reset search.
+        </a>
       </p>
-    </div> -->
-    <ul>
+    </div>
+    <ul v-else>
       <publication-list-item
         v-for="publication in publications.edges"
         :publication="publication.node"
