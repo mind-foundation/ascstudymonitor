@@ -71,13 +71,6 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
     <script>
-      <% if( process.env.NODE_ENV === 'production' ) {  %>
-        window.initialPublication = {% if initial_publication is defined %} '{{ initial_publication | tojson }}' {% else %} '' {% endif %}
-        window.urlForPublication = '{{ url_for("single_publication", slug=":slug") }}'
-        <% } else { %>
-          // window.initialPublication = '{"authors": [{"first_name": "Graham", "last_name": "St. John"}], "created": "Mon, 20 May 2019 16:46:30 GMT", "disciplines": [], "file_attached": false, "id": "9f4f0d0b-dce8-352f-bfc0-afc05e25ebf9", "slug": "the-cultural-heroes-of-do-ocracy-burning-man-catharsis-on-of-9f4f0d0b", "source": "Liminalities: A Journal of Performance Studies", "title": "The Cultural Heroes of Do-ocracy: Burning Man, Catharsis on the Mall and Caps of Liberty", "websites": ["http://liminalities.net/15-1/"], "year": 2019}'
-          window.urlForPublication = '/p/:slug'
-      <% }  %>
       window.VERSION = '<%= process.env.VERSION  %>'
       window.COMMIT_HASH = '<%= process.env.COMMIT_HASH %>'
       window.ENV = '<%= process.env.NODE_ENV %>'
