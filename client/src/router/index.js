@@ -1,4 +1,4 @@
-// import qs from 'qs'
+import qs from 'qs'
 import VueRouter from 'vue-router'
 import List from '@/views/List.vue'
 import Single from '@/views/Single.vue'
@@ -30,30 +30,15 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes,
-  // parseQuery(query) {
-  //   const parsed = qs.parse(query)
+  parseQuery(query) {
+    return qs.parse(query)
+  },
+  stringifyQuery(query) {
+    var result = qs.stringify(query, { encode: false })
 
-  //   // put the + back in search
-  //   if (parsed.search) {
-  //     parsed.search = parsed.search.replace(/\s/g, '+')
-  //   }
-  //   return parsed
-  // },
-  // stringifyQuery(query) {
-  //   // remove empty strings
-  //   for (const k in query) {
-  //     if (query[k] === '') {
-  //       delete query[k]
-  //     }
-  //   }
-
-  //   return qs.stringify(query, {
-  //     encode: false,
-  //     addQueryPrefix: true,
-  //   })
-  // },
+    return result ? '?' + result : ''
+  },
 })
 
 export default router

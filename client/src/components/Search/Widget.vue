@@ -197,20 +197,27 @@ export default {
         this.$refs.input.focus()
       })
 
-      EventBus.$emit('filters.add', filter)
+      EventBus.$emit('filters.apply', filter)
     },
     showResults() {
       if (this.term !== '') {
-        EventBus.$emit('filters.add', {
+        EventBus.$emit('filters.apply', {
           field: 'search',
           value: this.term,
         })
       }
-      if (this.$route.path !== '/') {
+
+      const isSingleResult = this.suggestions.totalPublications === 1
+      const destination = isSingleResult
+        ? `/p/${this.suggestions.publications[0].slug}`
+        : '/'
+
+      if (this.$route.path !== destination) {
         this.$router.push({
-          path: '',
+          path: destination,
         })
       }
+
       this.$modal.hide('search-modal')
     },
   },
@@ -233,10 +240,10 @@ export default {
     },
   },
   mounted() {
-    EventBus.$on('filters.remove', () => {
+    EventBus.$on('filters.disable', () => {
       setTimeout(() => {
         this.$refs.input.focus()
-      }, 10)
+      }, 50)
     })
     // setTimeout(() => {
     //   if (screen.height > 1024) {

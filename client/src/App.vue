@@ -34,7 +34,7 @@ function getDefaultFilters() {
     authors: [],
     disciplines: [],
     keywords: [],
-    search: '',
+    search: undefined,
   }
 }
 export default {
@@ -50,8 +50,28 @@ export default {
   data: () => ({
     filters: getDefaultFilters(),
   }),
+  watch: {
+    filters: {
+      deep: true,
+      handler: function(_, newFilters) {
+        this.$router.push({
+          query: newFilters,
+        })
+      },
+    },
+  },
   created() {
-    EventBus.$on('filters.add', filter => {
+    // safely! replace expected query params
+    for (const key in getDefaultFilters()) {
+      if (this.$route.query[key]) {
+        this.filters[key] =
+          key === 'year' // to be refactored..
+            ? parseInt(this.$route.query[key])
+            : this.$route.query[key]
+      }
+    }
+
+    EventBus.$on('filters.apply', filter => {
       const { field, value } = filter
 
       const prepareForGraphQl = value => {
@@ -90,7 +110,7 @@ export default {
       }
     })
 
-    EventBus.$on('filters.remove', filter => {
+    EventBus.$on('filters.disable', filter => {
       const { field, value } = filter
 
       console.log(value)
@@ -121,7 +141,11 @@ export default {
       }
     })
     EventBus.$on('filters.clear', () => {
-      this.filters = getDefaultFilters()
+      // Dont do this, we want to keep the filters reference
+      // this.filters = getDefaultFilters()
+
+      // Overwrite properties instead
+      Object.assign(this.filters, getDefaultFilters())
     })
   },
 }

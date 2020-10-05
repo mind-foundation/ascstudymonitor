@@ -15,7 +15,7 @@ export default {
   },
   methods: {
     removeFilter() {
-      EventBus.$emit('filters.remove', this.filter)
+      EventBus.$emit('filters.disable', this.filter)
     },
   },
 }
