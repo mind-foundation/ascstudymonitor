@@ -7,7 +7,7 @@ export default {
   props: ['publications'],
   methods: {
     link(publication) {
-      return window.urlForPublication.replace(':slug', publication.slug)
+      return '/p/' + publication.slug
     },
   },
 }

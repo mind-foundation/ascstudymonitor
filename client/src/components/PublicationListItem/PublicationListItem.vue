@@ -39,7 +39,7 @@ export default {
     },
     getLinkTo(r) {
       return {
-        path: window.urlForPublication.replace(':slug', r.slug),
+        path: '/p/' + r.slug,
       }
     },
   },

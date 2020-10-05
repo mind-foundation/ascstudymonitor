@@ -7,7 +7,7 @@ import ListHero from '@/components/ListHero.vue'
 
 const routes = [
   {
-    path: window.urlForPublication,
+    path: '/p/:slug',
     name: 'Single',
     components: { main: Single },
     props: { main: true },
