@@ -7,6 +7,11 @@ docker-dev-build:
 docker-dev-up: docker-dev-build
 	docker-compose -f docker-compose-dev.yaml up -d
 
+docker-dev-deploy:
+	git pull
+	docker-compose -f docker-compose-dev.yaml down
+	make docker-dev-up
+
 docker-prod-build:
 	docker-compose -f docker-compose.yaml build	
 

@@ -69,9 +69,7 @@ jobs:
         with:
           command: |
             cd /root/ascstudymonitor
-            docker-compose down
-            git pull
-            make docker-dev-up
+            make docker-dev-deploy
           host: ${{ secrets.STAGE_HOST }}
           user: ${{ secrets.STAGE_USER }}
           key: ${{ secrets.STAGE_PRIV_KEY}}
