@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import VueSocialSharing from 'vue-social-sharing'
 import VModal from 'vue-js-modal'
+import VBodyScrollLock from 'v-body-scroll-lock'
 import VueClipboard from 'vue-clipboard2'
 import Toasted from 'vue-toasted'
 import VueHotkey from 'v-hotkey'
@@ -36,6 +37,7 @@ Vue.use(VueSocialSharing)
 Vue.use(VueClipboard)
 Vue.use(Toasted)
 Vue.use(VModal, { dialog: true })
+Vue.use(VBodyScrollLock)
 Vue.use(VueWaypoint)
 Vue.use(VueHotkey)
 

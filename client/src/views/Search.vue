@@ -17,11 +17,19 @@ export default {
     CloseIcon,
     // FilterBar,
   },
+
+  data: () => ({
+    open: false,
+  }),
   methods: {
     beforeOpen() {
+      this.open = true
       setTimeout(() => {
         window.analytics.page('Search')
       }, 200)
+    },
+    beforeClose() {
+      this.open = false
     },
   },
 }
@@ -35,6 +43,8 @@ export default {
     width="100%"
     height="100%"
     @before-open="beforeOpen"
+    @before-close="beforeClose"
+    v-body-scroll-lock="open"
     :focus-trap="true"
     transition="fade"
   >
