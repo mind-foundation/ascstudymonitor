@@ -3,6 +3,7 @@ import InfiniteScrollingWaypoint from '@/components/InfiniteScrollingWaypoint'
 import PublicationListItem from '@/components/PublicationListItem/PublicationListItem'
 import SearchButton from '@/components/Search/Button'
 import SearchBar from '@/components/Search/Bar'
+import BackButton from '@/components/BackButton'
 import SearchWaypoint from '@/components/Search/Waypoint'
 import PublicationsQuery from '@/graphql/queries/Publications.gql'
 import { EventBus } from '@/event-bus'
@@ -13,11 +14,12 @@ export default {
     window.analytics.page('List')
   },
   components: {
-    PublicationListItem,
-    SearchButton,
-    SearchBar,
-    SearchWaypoint,
+    BackButton,
     InfiniteScrollingWaypoint,
+    PublicationListItem,
+    SearchBar,
+    SearchButton,
+    SearchWaypoint,
   },
   data: () => ({
     publications: {},
@@ -40,7 +42,13 @@ export default {
       this.showMore()
     })
   },
-
+  computed: {
+    hasActiveFilters() {
+      const { search, ...fields } = this.$attrs.filters
+      console.log(this.$attrs.filters)
+      return search || Object.entries(fields).some(([, value]) => value.length)
+    },
+  },
   methods: {
     showMore() {
       this.$apollo.queries.publications.fetchMore({
@@ -93,7 +101,10 @@ export default {
         </a>
       </p>
     </div>
-    <ul v-else>
+    <div class="relative" v-else>
+      <back-button v-if="hasActiveFilters" label="Clear filters" />
+    </div>
+    <ul>
       <publication-list-item
         v-for="publication in publications.edges"
         :publication="publication.node"

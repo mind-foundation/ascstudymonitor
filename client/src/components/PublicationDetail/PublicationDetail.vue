@@ -1,6 +1,6 @@
 <script>
 import SinglePublicationHero from './SinglePublicationHero.vue'
-import BackButton from '@/components/PublicationDetail/BackButton'
+import BackButton from '@/components/BackButton'
 import AuthorsList from '@/components/PublicationListItem/AuthorsList'
 import DisciplinesList from '@/components/PublicationListItem/DisciplinesList'
 // import SocialBar from '@/components/PublicationListItem/SocialBar'
@@ -38,7 +38,7 @@ export default {
       class="content relative bg-superwhite flex flex-col pt-12 pb-12 mb-8 pl-12 pr-12 lg:pl-16 lg:pr-16"
       @click.stop
     >
-      <back-button />
+      <back-button label="Publication index from the ASC Study Monitor" />
       <authors-list :authors="publication.authors" />
       <keywords-list :keywords="publication.keywords" />
       <abstract :abstract="publication.abstract" />

@@ -13,11 +13,6 @@ export default {
   mounted() {
     window.analytics.page('Single')
   },
-  computed: {
-    slug() {
-      return this.$route.params?.slug
-    },
-  },
   data: () => ({
     publication: {},
   }),
@@ -26,7 +21,7 @@ export default {
       query: PublicationQuery,
       variables() {
         return {
-          slug: this.slug,
+          slug: this.$route.params?.slug,
         }
       },
     },
