@@ -63,7 +63,6 @@ export default {
 .wrapper svg {
   height: 20px;
   position: relative;
-  bottom: -3px;
 }
 
 .wrapper svg .a4 {

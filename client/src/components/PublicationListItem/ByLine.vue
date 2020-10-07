@@ -1,20 +1,34 @@
 <script>
+import { EventBus } from '@/event-bus'
+
 export default {
   name: 'by-line',
   props: {
-    journal: String,
-    year: Number,
+    journal: Object,
+    year: Object,
+  },
+  methods: {
+    applyFilter(field, value) {
+      EventBus.$emit('filters.apply', {
+        field,
+        value,
+      })
+    },
   },
 }
 </script>
 <template>
-  <div class="container mb-5 flex text-sm" @click.stop>
-    <a class="year text-gray" @click="toggleFilter('year', year)">{{ year }}</a>
+  <div class="mb-5 flex text-sm" @click.stop>
     <a
-      class="journal text-gray"
-      @click="toggleFilter('journal', journal)"
+      class="year text-gray hover:text-lightblue cursor-pointer"
+      @click="applyFilter('year', year)"
+      >{{ year.value }}</a
+    >
+    <a
+      class="journal text-gray hover:text-lightblue cursor-pointer"
+      @click="applyFilter('journal', journal)"
       v-if="journal"
-      >{{ journal }}</a
+      >{{ journal.value }}</a
     >
   </div>
 </template>

@@ -12,15 +12,15 @@ import Links from '@/components/PublicationListItem/Links'
 export default {
   name: 'publication-detail',
   components: {
-    SinglePublicationHero,
-    BackButton,
-    AuthorsList,
-    DisciplinesList,
-    KeywordsList,
     // SocialBar,
     Abstract,
+    AuthorsList,
+    BackButton,
     ByLine,
+    DisciplinesList,
+    KeywordsList,
     Links,
+    SinglePublicationHero,
   },
   props: {
     publication: { type: Object, required: true },

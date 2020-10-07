@@ -1,5 +1,7 @@
 <script>
 import KeywordIcon from '@/components/Icons/Keyword'
+import { EventBus } from '@/event-bus'
+
 export default {
   name: 'keywords-list',
   props: {
@@ -11,24 +13,32 @@ export default {
   components: {
     KeywordIcon,
   },
-  computed: {
-    unwrapped() {
-      return this.keywords.map(node => node.value)
+  methods: {
+    applyFilter(keyword) {
+      EventBus.$emit('filters.apply', {
+        field: 'keywords',
+        value: keyword,
+      })
     },
   },
 }
 </script>
 <template>
-  <div class="container inline-flex">
+  <div class="container inline-flex mb-3" v-if="keywords.length">
     <div class="icon-holder">
       <keyword-icon />
     </div>
     <ul
-      class="list list-none flex flex-1 select-none text-lightgrey italic"
+      class="list list-none flex flex-wrap flex-1 select-none italic"
       @click.stop
     >
-      <li class="mr-2" v-for="keyword in unwrapped" :key="keyword">
-        {{ keyword }}
+      <li
+        :key="keyword.value"
+        v-for="keyword in keywords"
+        @click="applyFilter(keyword)"
+        class="mr-4 whitespace-no-wrap text-lightgrey hover:text-lightblue cursor-pointer"
+      >
+        {{ keyword.value }}
       </li>
     </ul>
   </div>

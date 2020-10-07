@@ -1,5 +1,7 @@
 <script>
 import AuthorIcon from '@/components/Icons/Author.vue'
+import { EventBus } from '@/event-bus'
+
 export default {
   name: 'authors-list',
   props: {
@@ -8,13 +10,17 @@ export default {
   components: {
     AuthorIcon,
   },
-  computed: {
-    authorNames() {
-      return this.$props.authors.map(author =>
-        author.firstName
-          ? `${author.firstName} ${author.lastName}`
-          : author.lastName,
-      )
+  methods: {
+    format(author) {
+      return author.firstName
+        ? `${author.firstName} ${author.lastName}`
+        : author.lastName
+    },
+    applyFilter(author) {
+      EventBus.$emit('filters.apply', {
+        field: 'authors',
+        value: author,
+      })
     },
   },
 }
@@ -26,10 +32,13 @@ export default {
     </div>
     <ul
       class="flex flex-wrap flex-1 list list-none select-none whitespace-no-wrap"
-      @click.stop
     >
-      <li class="mr-2" v-for="(authorName, index) in authorNames" :key="index">
-        <a @click="toggleFilter('author', authorName)">{{ authorName }}</a>
+      <li
+        class="mr-2 cursor-pointer"
+        v-for="(author, index) in authors"
+        :key="index"
+      >
+        <a @click="applyFilter(author)">{{ format(author) }}</a>
       </li>
     </ul>
   </div>

@@ -6,18 +6,20 @@ import AbstractIcon from '@/components/Icons/Abstract.vue'
 import PublicationChevronIcon from '@/components/Icons/PublicationChevron.vue'
 import DisciplinesList from './DisciplinesList.vue'
 import AuthorsList from './AuthorsList.vue'
+import KeywordsList from './KeywordsList.vue'
 import ByLine from './ByLine.vue'
 import SocialBar from './SocialBar.vue'
 
 export default {
   name: 'Publication',
   components: {
-    DownloadIcon,
     AbstractIcon,
-    LinkIcon,
-    ByLine,
     AuthorsList,
+    ByLine,
     DisciplinesList,
+    DownloadIcon,
+    KeywordsList,
+    LinkIcon,
     PublicationChevronIcon,
     SlideUpDown,
     SocialBar,
@@ -64,12 +66,10 @@ export default {
       </h3>
 
       <authors-list :authors="publication.authors" />
+      <keywords-list :keywords="publication.keywords" />
 
       <div class="flex flex-row justify-between">
-        <by-line
-          :year="publication.year.value"
-          :journal="publication.journal && publication.journal.value"
-        />
+        <by-line :year="publication.year" :journal="publication.journal" />
 
         <disciplines-list :disciplines="publication.disciplines" />
       </div>

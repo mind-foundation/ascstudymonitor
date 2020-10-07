@@ -128,7 +128,7 @@ export default {
       // has to be named like a root from resukt
       query: SearchQuery,
       variables() {
-        const { search, ...fields } = this.filters // eslint-disable-line no-unused-vars
+        const { search, ...fields } = this.filters
         return {
           search: this.term,
           filters: fields,
@@ -224,7 +224,7 @@ export default {
 
   computed: {
     filterList() {
-      const { search, ...fields } = this.filters // eslint-disable-line no-unused-vars
+      const { search, ...fields } = this.filters
 
       return Object.entries(fields).reduce(
         (arr, [field, values]) => [

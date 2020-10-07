@@ -26,26 +26,19 @@ export default {
 <template>
   <div class="flex" v-if="disciplines.length">
     <discipline-icon />
-    <ul class="list list-none display-flex select-none">
-      <li class="mr-8" v-for="d in disciplines" :key="d.value">
-        <a class="font-bold  text-aqua" @click="applyFilter(d)">
-          {{ d.value }}
-        </a>
+    <ul
+      class="list list-none display-flex select-none flex-1 flex-reverse -m-1"
+    >
+      <li
+        :key="d.value"
+        v-for="d in disciplines"
+        @click="applyFilter(d)"
+        class="inline-block p-1 font-bold  text-aqua hover:text-lightblue cursor-pointer"
+      >
+        {{ d.value }}
       </li>
     </ul>
   </div>
 </template>
 
-<style lang="less" scoped>
-.list {
-  :last-child {
-    margin-right: 0;
-  }
-
-  a {
-    &:hover {
-      color: #607a9b;
-    }
-  }
-}
-</style>
+<style lang="less" scoped></style>

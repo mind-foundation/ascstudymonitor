@@ -54,8 +54,17 @@ export default {
     filters: {
       deep: true,
       handler: function(_, newFilters) {
-        this.$router.push({
+        // use replace instead of push until
+        // navigating back could trigger a change in filters.
+        // for that, we need two way router binding
+        this.$router.replace({
           query: newFilters,
+        })
+        requestAnimationFrame(() => {
+          window.scrollTo({
+            top: 280,
+            behavior: 'smooth',
+          })
         })
       },
     },
@@ -94,9 +103,9 @@ export default {
             this.filters[field].push(prepareForGraphQl(value.value))
           break
         case 'year':
-          alreadyFiltered = this.filters[field].includes(value.year)
+          alreadyFiltered = this.filters[field].includes(value.value)
           !alreadyFiltered &&
-            this.filters[field].push(prepareForGraphQl(value.year))
+            this.filters[field].push(prepareForGraphQl(value.value))
           break
         case 'authors':
           alreadyFiltered = this.filters[field].some(
@@ -113,7 +122,6 @@ export default {
     EventBus.$on('filters.disable', filter => {
       const { field, value } = filter
 
-      console.log(value)
       switch (field) {
         case 'year':
           this.filters[field] = this.filters[field].filter(
