@@ -6,7 +6,7 @@ const localVue = createLocalVue()
 
 localVue.use(VueSocialSharing)
 
-describe.skip('SocialBar.vue', () => {
+describe('SocialBar.vue', () => {
   const publication = {
     slug: '6666666666-hi-im-a-slug',
     title: 'read me i’m interesting',
