@@ -45,7 +45,6 @@ export default {
   computed: {
     hasActiveFilters() {
       const { search, ...fields } = this.$attrs.filters
-      console.log(this.$attrs.filters)
       return search || Object.entries(fields).some(([, value]) => value.length)
     },
   },
@@ -96,9 +95,7 @@ export default {
     >
       <p class="text-center">
         No articles found matching your query. Try a different search instead.
-        <a href="" @click="resetSearch">
-          Or reset search.
-        </a>
+        <a href="" @click="resetSearch"> Or reset search. </a>
       </p>
     </div>
     <div class="relative" v-else>
