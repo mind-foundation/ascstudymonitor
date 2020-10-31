@@ -25,12 +25,6 @@ module.exports = {
   lintOnSave: true, //process.env.NODE_ENV !== 'production',
   configureWebpack: {
     devtool: 'source-map',
-    optimization: {
-      splitChunks: {
-        minSize: 100000,
-        maxSize: 300000,
-      },
-    },
   },
   css: {
     loaderOptions: {

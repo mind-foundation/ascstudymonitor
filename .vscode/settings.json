@@ -8,7 +8,9 @@
     "ascstudymonitor",
     "conda",
     "deserializes",
+    "devtool",
     "fastify",
+    "lightblue",
     "localforage",
     "mixins",
     "nestjs",
@@ -16,6 +18,9 @@
     "searchterm",
     "slugified",
     "slugified value",
+    "superwhite",
+    "tailwindcss",
     "value"
-  ]
+  ],
+  "css.validate": false // use vscode style lint extension instead
 }

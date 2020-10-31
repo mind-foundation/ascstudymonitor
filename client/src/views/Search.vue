@@ -38,7 +38,6 @@ export default {
 <template>
   <modal
     name="search-modal"
-    class=""
     :adaptive="true"
     width="100%"
     height="100%"
@@ -61,7 +60,7 @@ export default {
   </modal>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 .modal-backplate {
   position: fixed;
   top: 0;
@@ -82,7 +81,7 @@ export default {
 
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  transition: all 0.3s ease;
+  /* transition: all 0.3s ease; */
 
   h3 {
     margin-top: 0;
@@ -91,15 +90,7 @@ export default {
   }
 }
 
-/* .fade-leave-active below version 2.1.8 */
 /* 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter, .fade-leave-to  {
-  opacity: 0;
-}
  .prep-transition {
    will-change: transform;
    transform: translateY(0%);

@@ -27,9 +27,12 @@ export default {
   transition: transform 0.15s ease-in;
   padding: 10px; /* increase hit box */
   transform: rotate(-90deg);
-  user-select: none;
   width: 54px;
   margin-top: 3px;
+  cursor: pointer;
+  path {
+    user-select: none;
+  }
 
   &.expanded {
     transform: rotate(0);

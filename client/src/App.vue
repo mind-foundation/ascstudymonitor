@@ -185,12 +185,22 @@ button:focus {
   box-sizing: inherit;
 }
 
-// Disables double tap to zoom
+/* Disables double tap to zoom */
 * {
   touch-action: manipulation;
 }
 
 .vm--modal {
   background: none !important;
+}
+
+/* global transition for modals */
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-in;
 }
 </style>
