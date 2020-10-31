@@ -33,7 +33,7 @@ export default {
   </svg>
 </template>
 
-<style lang="less" scoped>
+<style scoped>
 .filter_header__svg_a,
 .filter_header__svg_d {
   fill: #fff;

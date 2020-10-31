@@ -56,7 +56,7 @@ export default {
   </div>
 </template>
 
-<style lang="less" scoped>
+<style scoped>
 .wrapper {
   svg {
     width: 12px;

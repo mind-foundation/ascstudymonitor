@@ -39,7 +39,7 @@ export default {
   </button>
 </template>
 
-<style lang="less">
+<style>
 .search {
   position: relative;
   top: -2px;

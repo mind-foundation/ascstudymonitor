@@ -159,15 +159,15 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style>
 html {
   -webkit-font-smoothing: antialised;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background-color: #eef2f5; // "white"
-  color: #00212b; // "black"
+  background-color: #eef2f5;
+  color: #00212b;
   display: flex;
   flex-flow: column;
   align-items: center;

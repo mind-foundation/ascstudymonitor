@@ -33,7 +33,7 @@ export default {
   </div>
 </template>
 
-<style lang="less" scoped>
+<style scoped>
 .entry__year_journal a {
   display: inline-block;
   color: #333 !important;

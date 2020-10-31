@@ -19,7 +19,7 @@ export default {
   </router-link>
 </template>
 
-<style scoped lang="less">
+<style scoped>
 #logo {
   position: absolute;
   top: 20px;

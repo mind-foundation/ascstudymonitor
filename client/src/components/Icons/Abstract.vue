@@ -20,7 +20,7 @@ export default {
   </div>
 </template>
 
-<style lang="less" scoped>
+<style scoped>
 .entry__icon {
   width: 35px;
   min-width: 35px;

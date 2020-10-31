@@ -117,7 +117,7 @@ export default {
   </li>
 </template>
 
-<style scoped lang="less">
+<style scoped>
 .chevron-wrapper {
   min-width: 110px;
   display: flex;

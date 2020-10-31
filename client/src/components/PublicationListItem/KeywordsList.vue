@@ -44,7 +44,7 @@ export default {
   </div>
 </template>
 
-<style lang="less" scoped>
+<style scoped>
 .container {
   line-height: 2;
 

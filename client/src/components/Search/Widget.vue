@@ -254,7 +254,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style>
 .primary-search {
   background-color: transparent;
   outline-style: none !important;
@@ -264,7 +264,7 @@ export default {
   &::placeholder {
     color: #fff;
     opacity: 0.3;
-    // color: red;
+    /* color: red; */
   }
 }
 
@@ -288,8 +288,4 @@ export default {
 .button-wrapper {
   width: 300px;
 }
-
-// ::placeholder {
-
-// }
 </style>

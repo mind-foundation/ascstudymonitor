@@ -45,7 +45,7 @@ export default {
   </div>
 </template>
 
-<style lang="less" scoped>
+<style scoped>
 .container {
   position: relative;
   bottom: -2px;

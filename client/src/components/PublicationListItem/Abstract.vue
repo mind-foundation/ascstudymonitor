@@ -22,7 +22,7 @@ export default {
   </div>
 </template>
 
-<style lang="less" scoped>
+<style scoped>
 .icon-holder {
   flex-basis: 42px;
   position: relative;

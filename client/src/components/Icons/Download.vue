@@ -37,7 +37,7 @@ export default {
   </div>
 </template>
 
-<style lang="less" scoped>
+<style scoped>
 .entry__downloads-icon {
   height: 24px;
   width: 24px;

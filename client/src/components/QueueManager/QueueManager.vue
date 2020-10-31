@@ -44,4 +44,4 @@ export default {
   </ul>
 </template>
 
-<style lang="less"></style>
+<style></style>

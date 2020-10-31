@@ -22,10 +22,10 @@ export default {
   </svg>
 </template>
 
-<style lang="less" scoped>
+<style scoped>
 .chevron {
   transition: transform 0.15s ease-in;
-  padding: 10px; // increase hit box
+  padding: 10px; /* increase hit box */
   transform: rotate(-90deg);
   user-select: none;
   width: 54px;

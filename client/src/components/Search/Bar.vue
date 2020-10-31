@@ -35,7 +35,7 @@ export default {
   </div>
 </template>
 
-<style lang="less">
+<style>
 .search {
   position: relative;
   top: -2px;
@@ -51,7 +51,7 @@ export default {
   justify-content: center;
   align-items: center;
   transform: translateY(-60px);
-  max-height: 60px; // prevent wrapping on smallest screens
+  max-height: 60px; /* prevent wrapping on smallest screens */
 }
 .active {
   transform: translateY(30px);

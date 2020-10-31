@@ -141,7 +141,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style>
 #social-bar {
   display: inline-flex;
 

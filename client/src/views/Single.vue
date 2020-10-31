@@ -44,7 +44,7 @@ export default {
   </div>
 </template>
 
-<style lang="less">
+<style>
 #list {
   margin-top: 30px;
   scroll-behavior: smooth;
@@ -55,14 +55,6 @@ export default {
   }
 
   transition: transform 0.1s ease-in-out;
-
-  // @media @for-phone {
-  //   margin-top: @mobile-header-height;
-
-  //   &.mobileBarActivated {
-  //     transform: translateY(34px);
-  //   }
-  // }
 }
 
 .message {

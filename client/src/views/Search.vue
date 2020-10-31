@@ -61,7 +61,7 @@ export default {
   </modal>
 </template>
 
-<style lang="less" scoped>
+<style scoped lang="postcss">
 .modal-backplate {
   position: fixed;
   top: 0;
@@ -91,58 +91,60 @@ export default {
   }
 }
 
+/* .fade-leave-active below version 2.1.8 */
+/* 
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter, .fade-leave-to  {
   opacity: 0;
 }
-// .prep-transition {
-//   will-change: transform;
-//   transform: translateY(0%);
-//   transition: transform 1s;
-// }
+ .prep-transition {
+   will-change: transform;
+   transform: translateY(0%);
+   transition: transform 1s;
+ }
 
-// .effect-leave-active {
-//   transition: transform 1s;
-// }
+ .effect-leave-active {
+   transition: transform 1s;
+ }
 
-// .effect-enter {
-//   transform: translateY(100%);
-// }
+ .effect-enter {
+   transform: translateY(100%);
+ }
 
-// .effect-enter-to {
-//   transform: translateY(0%);
-// }
-// .effect-leave {
-//   transform: translateY(0%);
-// }
-// .effect-leave-to {
-//   transform: translateY(100%);
-// }
+ .effect-enter-to {
+   transform: translateY(0%);
+ }
+ .effect-leave {
+   transform: translateY(0%);
+ }
+ .effect-leave-to {
+   transform: translateY(100%);
+ }
 
-// .effect-background-enter-active {
-//   transition: transform 0.5s;
-// }
-// .effect-background-leave-active {
-//   transition: transform 0.5s;
-// }
+ .effect-background-enter-active {
+   transition: transform 0.5s;
+ }
+ .effect-background-leave-active {
+   transition: transform 0.5s;
+ }
 
-// .effect-background-enter {
-//   transform: scale(1);
-// }
+ .effect-background-enter {
+   transform: scale(1);
+ }
 
-// .effect-background-enter-to {
-//   transform: scale(0.8);
-// }
-// .effect-background-leave {
-//   transform: scale(0.8);
-// }
-// .effect-background-leave-to {
-//   transform: scale(1);
-// }
-// https://github.com/codrops/FullscreenOverlayStyles/blob/master/css/style8.css
-// tried above effect here but had perf issues.. maybe no problem
-// on production. will need to check later
+ .effect-background-enter-to {
+   transform: scale(0.8);
+ }
+ .effect-background-leave {
+   transform: scale(0.8);
+ }
+ .effect-background-leave-to {
+   transform: scale(1);
+ }
+ https://github.com/codrops/FullscreenOverlayStyles/blob/master/css/style8.css
+ tried above effect here but had perf issues.. maybe no problem
+ on production. will need to check later */
 </style>

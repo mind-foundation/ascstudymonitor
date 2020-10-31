@@ -23,7 +23,7 @@ export default {
   </svg>
 </template>
 
-<style lang="less" scoped>
+<style scoped>
 .menu__chev {
   margin-top: 9px;
   height: 10px;

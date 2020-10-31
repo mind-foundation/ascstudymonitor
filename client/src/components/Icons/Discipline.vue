@@ -38,7 +38,7 @@ export default {
   </div>
 </template>
 
-<style lang="less" scoped>
+<style scoped>
 .wrapper .l {
   fill: none;
   stroke: #333;

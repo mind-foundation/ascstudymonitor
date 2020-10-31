@@ -32,6 +32,18 @@ module.exports = {
       },
     },
   },
+  css: {
+    loaderOptions: {
+      postcss: {
+        plugins: [
+          require('postcss-assets'),
+          require('postcss-nested'),
+          require('autoprefixer'),
+          require('tailwindcss'),
+        ],
+      },
+    },
+  },
   devServer: {
     // enables debugging on remote iPad :)
     disableHostCheck: true,
