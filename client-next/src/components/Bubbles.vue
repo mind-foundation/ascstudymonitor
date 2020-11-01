@@ -21,7 +21,7 @@ export default {
 
   z-index: -1;
 
-  background: url('~assets/bubble_1.png') no-repeat;
+  background: url('/assets/bubble_1.png') no-repeat;
 }
 #bubble-right {
   position: fixed;
@@ -31,6 +31,6 @@ export default {
   width: 400px;
   z-index: -1;
 
-  background: url('~assets/bubble_2.png') no-repeat;
+  background: url('/assets/bubble_2.png') no-repeat;
 }
 </style>

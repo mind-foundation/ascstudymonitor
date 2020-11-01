@@ -1,6 +1,7 @@
 <script>
 export default {
   name: 'top-navigation',
+  inject: ['$events'],
 }
 </script>
 
@@ -21,7 +22,7 @@ export default {
     <button
       class="pt-3 pb-3 pl-10 pr-10 leading-none border-transparent bg-transparent text-lightblue hover:text-navy text-xs font-bold uppercase"
       tabindex="-1"
-      @click="$modal.show('about-modal')"
+      @click="$events.emit('modals.about.show')"
     >
       About
     </button>

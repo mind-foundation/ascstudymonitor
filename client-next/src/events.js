@@ -19,7 +19,7 @@ class Event {
     }
   }
 
-  trigger(eventName, data) {
+  emit(eventName, data) {
     if (this.events[eventName]) {
       this.events[eventName].forEach(function (fn) {
         fn(data)

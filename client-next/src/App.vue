@@ -2,16 +2,17 @@
   <div id="app">
     <div class="container">
       <logo />
-      <!-- <top-navigation />
       <bubbles />
-      <hero-wrap>
+      <top-navigation />
+      <!--       <hero-wrap>
         <router-view name="hero" />
       </hero-wrap>
 
       <router-view name="main" :filters="filters" />
 
-      <keymap />
-      <search :filters="filters" /> -->
+ -->
+      <!-- <keymap /> -->
+      <!-- <search :filters="filters" /> -->
     </div>
     <about-modal />
   </div>
@@ -19,32 +20,38 @@
 
 <script>
 // import List from './views/List.vue'
-// import TopNavigation from '/@/components/TopNavigation.vue'
+import TopNavigation from '/@/components/TopNavigation.vue'
 // import Search from '/@/views/Search.vue'
 import Logo from '/@/components/Logo.vue'
-// import Bubbles from '/@/components/Bubbles.vue'
+import Bubbles from '/@/components/Bubbles.vue'
 // import HeroWrap from '/@/components/HeroWrap.vue'
 // import Keymap from '/@/components/Keymap.vue'
-// import AboutModal from '/@/components/Modals/About.vue'
+import AboutModal from '/@/components/Modals/About.vue'
 import $events from './events.js'
 
 export default {
   name: 'App',
   components: {
-    //  Bubbles,
-    //     TopNavigation,
-    //     AboutModal,
+    Bubbles,
+    TopNavigation,
+    AboutModal,
     //     Search,
     Logo,
     //     HeroWrap,
-    //     Keymap,
+    // Keymap,
   },
   provide: {
     $events,
   },
-  data: () => ({
-    filters: getDefaultFilters(),
-  }),
+  created() {
+    console.log(this.showModal)
+  },
+  data() {
+    return {
+      filters: getDefaultFilters(),
+      showModal: false,
+    }
+  },
   watch: {
     filters: {
       deep: true,

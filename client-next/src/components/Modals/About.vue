@@ -1,22 +1,37 @@
 <script>
+import Modal from '/@/components/Modal.vue'
 export default {
   name: 'about-modal',
+  components: {
+    Modal,
+  },
+  data() {
+    return {
+      show: false,
+    }
+  },
   methods: {
     beforeOpen() {
       window.analytics.page('Modal.About')
     },
   },
+  inject: ['$events'],
+  created() {
+    this.$events.on('modals.about.show', () => {
+      this.show = true
+    })
+  },
 }
 </script>
 
 <template>
-  <modal
-    name="about-modal"
-    :width="600"
-    :height="430"
-    @before-open="beforeOpen"
-  >
-    <div class="container modal-container bg-superwhite p-6">
+  <!-- <button id="show-modal" @click="show = true">Show Modal</button> -->
+  <!-- use the modal component, pass in the prop -->
+  <modal v-if="show" @close="show = false">
+    <!-- <div class="container modal-container bg-superwhite p-6">
+    </div> -->
+
+    <template v-slot:body>
       <h3 class="text-navy text-3xl mb-3">Thank you for being here</h3>
 
       <p class="leading-6 mb-6">
@@ -51,11 +66,9 @@ export default {
             </button>
           </a>
         </p>
-        <p class="mt-2">
-          Made with ♥️ in Berlin
-        </p>
+        <p class="mt-2">Made with ♥️ in Berlin</p>
       </div>
-    </div>
+    </template>
   </modal>
 </template>
 
@@ -68,35 +81,4 @@ export default {
 button {
   transition: all 0.2s ease-in-out;
 }
-
-/*
-.reveal {
-  text-align: left;
-  padding: 30px 45px;
-  position: relative;
-  outline: none;
-
-  h3 {
-    text-align: left;
-    font-weight: 300;
-  }
-
-  p {
-    margin: 0;
-    text-align: left;
-    line-height: 1.8;
-    padding-bottom: 20px;
-  }
-
-  a {
-    font-weight: 600;
-    color: #fff;
-    background: linear-gradient(to right, #1a9da4, #34557f);
-    padding: 3px 20px;
-    font-size: 15px;
-    line-height: 3em;
-    display: inline-block;
-  }
-}
-*/
 </style>
