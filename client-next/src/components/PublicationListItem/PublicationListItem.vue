@@ -1,5 +1,5 @@
 <script>
-import SlideUpDown from 'vue-slide-up-down'
+import SlideUpDown from '/@/components/SlideUpDown.js'
 import DownloadIcon from '/@/components/Icons/Download.vue'
 import LinkIcon from '/@/components/Icons/Link.vue'
 import AbstractIcon from '/@/components/Icons/Abstract.vue'
@@ -35,7 +35,7 @@ export default {
     toggleExpand() {
       this.expanded = !this.expanded
       if (this.expanded) {
-        window.analytics.page('Publication')
+        // window.analytics.page('Publication')
         // this.$store.dispatch('recommendations/get', this.publication.id)
       }
     },
@@ -108,8 +108,8 @@ export default {
             Download full text
           </a>
         </div>
-
-        <social-bar :publication="publication" />
+        <!-- TODO: Re-enable me -->
+        <!-- <social-bar :publication="publication" /> -->
       </div>
     </div>
   </li>

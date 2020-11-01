@@ -1,6 +1,7 @@
 import { createApp, h, provide } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { DefaultApolloClient } from '@vue/apollo-composable'
+// import VueWaypoint from 'vue-waypoint'
 import App from './App.vue'
 import './index.css'
 import $events from './events.ts'
@@ -45,6 +46,8 @@ const router = createRouter({
     },
   ],
 })
+
+// app.use(VueWaypoint)
 
 app.use(router)
 

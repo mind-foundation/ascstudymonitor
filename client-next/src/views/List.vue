@@ -115,15 +115,18 @@ export default {
   <div
     id="list"
     :class="{
-      mobileBarActivated: false, //$store.state.mobileBarActivated,
+      mobileBarActivated: false,
     }"
   >
-    <!-- <search-bar />
+    <search-bar />
+
     <div class="mb-12 mt-2 flex items-center justify-center">
-      <search-waypoint>
+      <!-- Uncomment me when vue-waypoint works -->
+      <!-- <search-waypoint>
         <search-button />
-      </search-waypoint>
+      </search-waypoint> -->
     </div>
+    <!--
     <div
       v-if="publications.edges && publications.edges.length === 0"
       class="message"
@@ -132,25 +135,17 @@ export default {
         No articles found matching your query. Try a different search instead.
         <a href="" @click="resetSearch"> Or reset search. </a>
       </p>
-    </div>
+    </div> 
     <div class="relative" v-else>
       <back-button v-if="hasActiveFilters" label="Clear filters" />
     </div> -->
     <ul>
-      <li
+      <publication-list-item
         v-for="publication in publications.edges"
         :publication="publication.node"
         :slug="publication.node.slug"
         :key="publication.node.id"
-      >
-        {{ publication.node.slug }}
-      </li>
-      <!-- <publication-list-item
-        v-for="publication in publications.edges"
-        :publication="publication.node"
-        :slug="publication.node.slug"
-        :key="publication.node.id"
-      /> -->
+      />
       <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
         publication.title
       }}</router-link> -->

@@ -1,11 +1,25 @@
 <script>
+import { inject, ref } from 'vue'
+import { EventsSymbol } from '/@/symbols.ts'
+
 export default {
   name: 'close-icon',
+
+  setup() {
+    const $events = inject(EventsSymbol)
+    const show = ref(false)
+
+    const hide = () => $events.emit('modals.search.hide')
+
+    return {
+      hide,
+    }
+  },
 }
 </script>
 
 <template>
-  <div @click="$modal.hide('search-modal')" class="cursor-pointer p-4">
+  <div @click="hide()" class="cursor-pointer p-4">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="51.757"

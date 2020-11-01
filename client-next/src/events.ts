@@ -21,9 +21,9 @@ export class EventBridge {
     }
   }
 
-  emit(eventName: string, data: Function) {
+  emit(eventName: string, data: any) {
     if (this.events[eventName]) {
-      this.events[eventName].forEach(function (fn) {
+      this.events[eventName].forEach(function (fn: Function) {
         fn(data)
       })
     }
