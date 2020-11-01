@@ -1,7 +1,8 @@
 <script>
-import SearchWidget from '/@/components/Search/Widget'
-import CloseIcon from '/@/components/Icons/Close'
-// // import FilterBar from '/@/components/FilterBar'
+import SearchWidget from '/@/components/Search/Widget.vue'
+import CloseIcon from '/@/components/Icons/Close.vue'
+// // import FilterBar from '/@/components/FilterBar.vue'
+import Modal from '/@/components/Modal.vue'
 export default {
   name: 'search',
 
@@ -12,52 +13,47 @@ export default {
     },
   },
 
+  inject: ['$events'],
+  created() {
+    this.$events.on('modals.search.show', () => {
+      this.show = true
+      // window.analytics.page('Search')
+    })
+    this.$events.on('modals.search.hide', () => {
+      this.show = false
+    })
+  },
+
   components: {
     SearchWidget,
     CloseIcon,
+    Modal,
     // FilterBar,
   },
 
   data: () => ({
-    open: false,
+    show: false,
   }),
-  methods: {
-    beforeOpen() {
-      this.open = true
-      setTimeout(() => {
-        window.analytics.page('Search')
-      }, 200)
-    },
-    beforeClose() {
-      this.open = false
-    },
-  },
 }
 </script>
 
 <template>
-  <modal
-    name="search-modal"
-    :adaptive="true"
-    width="100%"
-    height="100%"
-    @before-open="beforeOpen"
-    @before-close="beforeClose"
-    v-body-scroll-lock="open"
-    :focus-trap="true"
-    transition="fade"
-  >
-    <close-icon class="close-icon" />
-    <div class="bg-blue h-full w-full flex flex-col justify-center">
-      <div class="reveal container flex flex-col h-full text-white">
-        <!-- <filter-bar :filters="filters" /> -->
+  <transition name="fade">
+    <modal v-if="show" @close="show = false">
+      <template v-slot:body>
+        <close-icon class="close-icon" />
+        <div class="bg-blue h-full w-full flex flex-col justify-center">
+          <div class="reveal container flex flex-col h-full text-white">
+            <!-- <filter-bar :filters="filters" /> -->
 
-        <div class="flex flex-grow flex-col items-center w-full h-40 mt-20">
-          <search-widget :filters="filters" />
+            <div class="flex flex-grow flex-col items-center w-full h-40 mt-20">
+              <search-widget :filters="filters" />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </modal>
+      </template>
+    </modal>
+  </transition>
 </template>
 
 <style scoped>
@@ -75,7 +71,8 @@ export default {
   right: 20px;
 }
 
-.modal-container {
+/* ::v-deep allow to target .modal-container specific to search modal */
+::v-deep(.modal-container) {
   height: 100%;
   width: 100%;
 

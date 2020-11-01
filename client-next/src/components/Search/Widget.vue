@@ -24,7 +24,7 @@
       >
         <ul @click="$modal.hide('search-modal')">
           <li v-for="p in this.suggestions.publications" :key="p.id">
-            <router-link :to="getLinkTo(p)">
+            <router-link :to="'/publication/' + p.slug">
               <div class="suggestion-row flex justify-between" :tabindex="0">
                 <p class="py-2 px-6 font-bold text-left">{{ p.title }}</p>
                 <p class="py-2 px-6 font-bold text-right">Publication</p>
@@ -93,7 +93,7 @@
 
 <script>
 import SearchQuery from '/@/graphql/Search.gql'
-import Pill from '/@/components/Search/Pill'
+import Pill from '/@/components/Search/Pill.vue'
 
 const valueToLabel = value =>
   value.value ||
@@ -108,6 +108,8 @@ export default {
   props: {
     filters: Object,
   },
+
+  inject: ['$events'],
 
   data: () => ({
     message: null,
@@ -180,11 +182,7 @@ export default {
         }
       }, 100)
     },
-    getLinkTo(r) {
-      return {
-        path: '/p/' + r.slug,
-      }
-    },
+
     addFilter(filter) {
       this.searchInput = ''
       this.term = ''
@@ -239,11 +237,13 @@ export default {
     },
   },
   mounted() {
-    this.$events.$on('filters.disable', () => {
-      setTimeout(() => {
-        this.$refs.input.focus()
-      }, 50)
-    })
+    // TODO: enabled me
+    // this.$events.$on('filters.disable', () => {
+    //   setTimeout(() => {
+    //     this.$refs.input.focus()
+    //   }, 50)
+    // })
+    // TODO: implement me for ipads
     // setTimeout(() => {
     //   if (screen.height > 1024) {
     //     this.$refs.input.focus()

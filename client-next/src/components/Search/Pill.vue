@@ -1,5 +1,5 @@
 <script>
-import FilterIcon from '/@/components/Icons/Filter'
+import FilterIcon from '/@/components/Icons/Filter.vue'
 
 export default {
   name: 'pill',

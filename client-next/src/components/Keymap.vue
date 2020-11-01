@@ -30,6 +30,7 @@ export default {
       // we want to make sure that ESC blurs but doesnt exit modal
       if (ke.type === EVENT.KEY_UP && KEYS[ke.keyCode] === 'ESCAPE') {
         this.$events.emit('modals.search.hide')
+        this.$events.emit('modals.about.hide')
       }
     },
   },

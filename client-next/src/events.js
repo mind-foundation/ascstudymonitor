@@ -1,4 +1,4 @@
-class Event {
+class EventBridge {
   constructor() {
     this.events = {}
   }
@@ -28,4 +28,4 @@ class Event {
   }
 }
 
-export default new Event()
+export default new EventBridge()

@@ -1,27 +1,25 @@
 <template>
-  <div id="app">
-    <div class="container">
-      <logo />
-      <bubbles />
-      <top-navigation />
-      <!--       <hero-wrap>
+  <div class="container">
+    <logo />
+    <bubbles />
+    <top-navigation />
+    <!--       <hero-wrap>
         <router-view name="hero" />
       </hero-wrap>
 
       <router-view name="main" :filters="filters" />
 
  -->
-      <keymap />
-      <!-- <search :filters="filters" /> -->
-    </div>
-    <about-modal />
+    <keymap />
   </div>
+  <about-modal />
+  <search :filters="filters" />
 </template>
 
 <script>
 // import List from './views/List.vue'
 import TopNavigation from '/@/components/TopNavigation.vue'
-// // import Search from '/@/views/Search.vue'
+import Search from '/@/views/Search.vue'
 import Logo from '/@/components/Logo.vue'
 import Bubbles from '/@/components/Bubbles.vue'
 // import HeroWrap from '/@/components/HeroWrap.vue'
@@ -35,16 +33,13 @@ export default {
     Bubbles,
     TopNavigation,
     AboutModal,
-    // Search,
+    Search,
     Logo,
     //     HeroWrap,
     Keymap,
   },
   provide: {
     $events,
-  },
-  created() {
-    console.log(this.showModal)
   },
   data() {
     return {
