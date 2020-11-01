@@ -1,7 +1,7 @@
 <script>
-import MoveUpIcon from '@/components/Icons/MoveUp'
-import MoveDownIcon from '@/components/Icons/MoveDown'
-import RemoveFromQueueIcon from '@/components/Icons/RemoveFromQueue'
+import MoveUpIcon from '/@/components/Icons/MoveUp'
+import MoveDownIcon from '/@/components/Icons/MoveDown'
+import RemoveFromQueueIcon from '/@/components/Icons/RemoveFromQueue'
 
 export default {
   name: 'queue-manager',

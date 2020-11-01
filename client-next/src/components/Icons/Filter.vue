@@ -1,8 +1,8 @@
 <script>
-import AuthorIcon from '@/components/Icons/Author'
-import DisciplineIcon from '@/components/Icons/Discipline'
-import JournalIcon from '@/components/Icons/Journal'
-import KeywordIcon from '@/components/Icons/Keyword'
+import AuthorIcon from '/@/components/Icons/Author'
+import DisciplineIcon from '/@/components/Icons/Discipline'
+import JournalIcon from '/@/components/Icons/Journal'
+import KeywordIcon from '/@/components/Icons/Keyword'
 export default {
   name: 'filter-icon',
   props: {

@@ -1,10 +1,8 @@
 <script>
-import { EventBus } from '@/event-bus'
-
 export default {
   name: 'search-waypoint',
 
-  data: function() {
+  data: function () {
     return {
       intersectionOptions: {
         root: null,
@@ -21,14 +19,14 @@ export default {
         going === this.$waypointMap.GOING_OUT &&
         direction === this.$waypointMap.DIRECTION_TOP
       ) {
-        EventBus.$emit('searchbar.show')
+        this.$events.$emit('searchbar.show')
       }
 
       if (
         going === this.$waypointMap.GOING_IN &&
         direction === this.$waypointMap.DIRECTION_BOTTOM
       ) {
-        EventBus.$emit('searchbar.hide')
+        this.$events.$emit('searchbar.hide')
       }
     },
   },

@@ -1,11 +1,9 @@
 <script>
-import { EventBus } from '@/event-bus'
-
 export default {
   name: 'list-hero',
   methods: {
     clearFilters() {
-      EventBus.$emit('filters.clear')
+      this.$events.$emit('filters.clear')
     },
   },
 }
@@ -14,7 +12,7 @@ export default {
 <template>
   <router-link to="/">
     <div @click="clearFilters" id="logo">
-      <img src="../../assets/logo.png" />
+      <img src="/assets/logo.png" />
     </div>
   </router-link>
 </template>

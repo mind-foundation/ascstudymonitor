@@ -1,6 +1,5 @@
 <script>
-import { EventBus } from '@/event-bus'
-import FilterIcon from '@/components/Icons/Filter'
+import FilterIcon from '/@/components/Icons/Filter'
 
 export default {
   name: 'pill',
@@ -15,7 +14,7 @@ export default {
   },
   methods: {
     removeFilter() {
-      EventBus.$emit('filters.disable', this.filter)
+      this.$events.$emit('filters.disable', this.filter)
     },
   },
 }

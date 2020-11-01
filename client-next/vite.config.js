@@ -8,6 +8,11 @@ module.exports = {
   },
   plugins: [graphqlPlugin],
   optimizeDeps: {
-    allowNodeBuiltins: ['vite-plugin-graphql'],
+    allowNodeBuiltins: [
+      'vite-plugin-graphql',
+      'zen-observable',
+      'fast-json-stable-stringify',
+      '@vue/apollo-composable',
+    ],
   },
 }

@@ -3,18 +3,24 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "postinstall": "node scripts/vue-apollo-patch.js"
   },
   "dependencies": {
+    "@vue/apollo-composable": "^4.0.0-alpha.12",
+    "@vue/composition-api": "^1.0.0-beta.18",
+    "apollo-boost": "^0.4.9",
     "graphql": "^15.4.0",
     "tailwindcss": "^1.9.6",
     "vite-plugin-graphql": "^0.1.0",
-    "vue": "^3.0.2"
+    "vue": "^3.0.2",
+    "vue-apollo": "^3.0.5",
+    "vue-slide-up-down": "^2.0.1"
   },
   "devDependencies": {
     "@vue/compiler-sfc": "^3.0.2",
     "postcss-comment": "^2.0.0",
-    "postcss-nested": "^5.0.1",
+    "postcss-nested": "^4",
     "vite": "^1.0.0-rc.8"
   }
 }

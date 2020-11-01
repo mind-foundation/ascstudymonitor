@@ -1,6 +1,4 @@
 <script>
-import { EventBus } from '@/event-bus'
-
 export default {
   name: 'by-line',
   props: {
@@ -9,7 +7,7 @@ export default {
   },
   methods: {
     applyFilter(field, value) {
-      EventBus.$emit('filters.apply', {
+      this.$events.$emit('filters.apply', {
         field,
         value,
       })

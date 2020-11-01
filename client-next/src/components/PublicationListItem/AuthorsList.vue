@@ -1,6 +1,5 @@
 <script>
-import AuthorIcon from '@/components/Icons/Author.vue'
-import { EventBus } from '@/event-bus'
+import AuthorIcon from '/@/components/Icons/Author.vue'
 
 export default {
   name: 'authors-list',
@@ -17,7 +16,7 @@ export default {
         : author.lastName
     },
     applyFilter(author) {
-      EventBus.$emit('filters.apply', {
+      this.$events.$emit('filters.apply', {
         field: 'authors',
         value: author,
       })

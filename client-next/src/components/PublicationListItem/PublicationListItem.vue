@@ -1,9 +1,9 @@
 <script>
 import SlideUpDown from 'vue-slide-up-down'
-import DownloadIcon from '@/components/Icons/Download.vue'
-import LinkIcon from '@/components/Icons/Link.vue'
-import AbstractIcon from '@/components/Icons/Abstract.vue'
-import PublicationChevronIcon from '@/components/Icons/PublicationChevron.vue'
+import DownloadIcon from '/@/components/Icons/Download.vue'
+import LinkIcon from '/@/components/Icons/Link.vue'
+import AbstractIcon from '/@/components/Icons/Abstract.vue'
+import PublicationChevronIcon from '/@/components/Icons/PublicationChevron.vue'
 import DisciplinesList from './DisciplinesList.vue'
 import AuthorsList from './AuthorsList.vue'
 import KeywordsList from './KeywordsList.vue'
@@ -81,9 +81,7 @@ export default {
             <div class="entry__abstract_text" v-if="publication.abstract">
               {{ publication.abstract }}
             </div>
-            <div class="entry__abstract_text" v-else>
-              Abstract missing.
-            </div>
+            <div class="entry__abstract_text" v-else>Abstract missing.</div>
           </div>
         </div>
       </slide-up-down>

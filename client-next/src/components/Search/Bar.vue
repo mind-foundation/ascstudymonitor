@@ -1,5 +1,5 @@
 <script>
-import SearchButton from '@/components/Search/Button'
+import SearchButton from '/@/components/Search/Button.vue'
 
 export default {
   name: 'search-bar',

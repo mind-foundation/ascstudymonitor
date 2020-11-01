@@ -1,8 +1,8 @@
 <script>
-import PublicationDetail from '@/components/PublicationDetail/PublicationDetail'
-import RelatedBanner from '@/components/PublicationDetail/RelatedBanner'
-import PublicationListItem from '@/components/PublicationListItem/PublicationListItem'
-import PublicationQuery from '@/graphql/queries/Publication.gql'
+import PublicationDetail from '/@/components/PublicationDetail/PublicationDetail'
+import RelatedBanner from '/@/components/PublicationDetail/RelatedBanner'
+import PublicationListItem from '/@/components/PublicationListItem/PublicationListItem'
+import PublicationQuery from '/@/graphql/queries/Publication.gql'
 export default {
   name: 'single',
   components: {

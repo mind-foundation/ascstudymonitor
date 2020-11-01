@@ -1,6 +1,5 @@
 <script>
-import DisciplineIcon from '@/components/Icons/Discipline.vue'
-import { EventBus } from '@/event-bus'
+import DisciplineIcon from '/@/components/Icons/Discipline.vue'
 
 export default {
   name: 'disciplines-list',
@@ -15,7 +14,7 @@ export default {
   },
   methods: {
     applyFilter(discipline) {
-      EventBus.$emit('filters.apply', {
+      this.$events.$emit('filters.apply', {
         field: 'disciplines',
         value: discipline,
       })
@@ -33,7 +32,7 @@ export default {
         :key="d.value"
         v-for="d in disciplines"
         @click="applyFilter(d)"
-        class="inline-block p-1 font-bold  text-aqua hover:text-lightblue cursor-pointer"
+        class="inline-block p-1 font-bold text-aqua hover:text-lightblue cursor-pointer"
       >
         {{ d.value }}
       </li>

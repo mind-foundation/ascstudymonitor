@@ -1,13 +1,13 @@
 <script>
 import SinglePublicationHero from './SinglePublicationHero.vue'
-import BackButton from '@/components/BackButton'
-import AuthorsList from '@/components/PublicationListItem/AuthorsList'
-import DisciplinesList from '@/components/PublicationListItem/DisciplinesList'
-// import SocialBar from '@/components/PublicationListItem/SocialBar'
-import Abstract from '@/components/PublicationListItem/Abstract'
-import ByLine from '@/components/PublicationListItem/ByLine'
-import KeywordsList from '@/components/PublicationListItem/KeywordsList'
-import Links from '@/components/PublicationListItem/Links'
+import BackButton from '/@/components/BackButton'
+import AuthorsList from '/@/components/PublicationListItem/AuthorsList'
+import DisciplinesList from '/@/components/PublicationListItem/DisciplinesList'
+// import SocialBar from '/@/components/PublicationListItem/SocialBar'
+import Abstract from '/@/components/PublicationListItem/Abstract'
+import ByLine from '/@/components/PublicationListItem/ByLine'
+import KeywordsList from '/@/components/PublicationListItem/KeywordsList'
+import Links from '/@/components/PublicationListItem/Links'
 
 export default {
   name: 'publication-detail',

@@ -1,6 +1,6 @@
 <script>
-import LinkIcon from '@/components/Icons/Link.vue'
-import ShareIcon from '@/components/Icons/Share.vue'
+import LinkIcon from '/@/components/Icons/Link.vue'
+import ShareIcon from '/@/components/Icons/Share.vue'
 export default {
   name: 'links',
   props: {

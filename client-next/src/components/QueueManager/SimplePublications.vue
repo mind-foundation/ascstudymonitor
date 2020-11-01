@@ -1,5 +1,5 @@
 <script>
-import AppendToQueueIcon from '@/components/Icons/AppendToQueue'
+import AppendToQueueIcon from '/@/components/Icons/AppendToQueue'
 
 export default {
   name: 'simple-publications',

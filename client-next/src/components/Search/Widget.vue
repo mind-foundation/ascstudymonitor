@@ -92,9 +92,8 @@
 </template>
 
 <script>
-import SearchQuery from '@/graphql/Search.gql'
-import Pill from '@/components/Search/Pill'
-import { EventBus } from '@/event-bus'
+import SearchQuery from '/@/graphql/Search.gql'
+import Pill from '/@/components/Search/Pill'
 
 const valueToLabel = value =>
   value.value ||
@@ -197,11 +196,11 @@ export default {
         this.$refs.input.focus()
       })
 
-      EventBus.$emit('filters.apply', filter)
+      this.$events.$emit('filters.apply', filter)
     },
     showResults() {
       if (this.term !== '') {
-        EventBus.$emit('filters.apply', {
+        this.$events.$emit('filters.apply', {
           field: 'search',
           value: this.term,
         })
@@ -240,7 +239,7 @@ export default {
     },
   },
   mounted() {
-    EventBus.$on('filters.disable', () => {
+    this.$events.$on('filters.disable', () => {
       setTimeout(() => {
         this.$refs.input.focus()
       }, 50)

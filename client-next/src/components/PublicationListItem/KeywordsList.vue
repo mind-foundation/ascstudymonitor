@@ -1,6 +1,5 @@
 <script>
-import KeywordIcon from '@/components/Icons/Keyword'
-import { EventBus } from '@/event-bus'
+import KeywordIcon from '/@/components/Icons/Keyword.vue'
 
 export default {
   name: 'keywords-list',
@@ -15,7 +14,7 @@ export default {
   },
   methods: {
     applyFilter(keyword) {
-      EventBus.$emit('filters.apply', {
+      this.$events.$emit('filters.apply', {
         field: 'keywords',
         value: keyword,
       })

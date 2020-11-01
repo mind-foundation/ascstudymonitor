@@ -1,11 +1,11 @@
 <script>
-import QueueManager from '@/components/QueueManager/QueueManager'
-import SimplePublications from '@/components/QueueManager/SimplePublications'
-import Queue from '@/graphql/queries/Queue.gql'
-import AppendToQueueMutation from '@/graphql/mutations/AppendToQueue.gql'
-import MoveUpInQueueMutation from '@/graphql/mutations/MoveUpInQueue.gql'
-import MoveDownInQueueMutation from '@/graphql/mutations/MoveDownInQueue.gql'
-import RemoveFromQueueMutation from '@/graphql/mutations/RemoveFromQueue.gql'
+import QueueManager from '/@/components/QueueManager/QueueManager'
+import SimplePublications from '/@/components/QueueManager/SimplePublications'
+import Queue from '/@/graphql/queries/Queue.gql'
+import AppendToQueueMutation from '/@/graphql/mutations/AppendToQueue.gql'
+import MoveUpInQueueMutation from '/@/graphql/mutations/MoveUpInQueue.gql'
+import MoveDownInQueueMutation from '/@/graphql/mutations/MoveDownInQueue.gql'
+import RemoveFromQueueMutation from '/@/graphql/mutations/RemoveFromQueue.gql'
 
 const SEARCH_RESULTS_PAGE_SIZE = 10
 

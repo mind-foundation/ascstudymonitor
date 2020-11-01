@@ -37,9 +37,9 @@ export default {
     },
   },
   created() {
-    this.$events.$on('infinityscroller.loadmore', () => {
-      this.showMore()
-    })
+    // this.$events.$on('infinityscroller.loadmore', () => {
+    //   this.showMore()
+    // })
   },
   computed: {
     hasActiveFilters() {

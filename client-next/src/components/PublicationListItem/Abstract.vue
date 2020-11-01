@@ -1,5 +1,5 @@
 <script>
-import AbstractIcon from '@/components/Icons/Abstract.vue'
+import AbstractIcon from '/@/components/Icons/Abstract.vue'
 
 export default {
   name: 'abstract',
