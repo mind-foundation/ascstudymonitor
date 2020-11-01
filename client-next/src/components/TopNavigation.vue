@@ -1,7 +1,15 @@
 <script>
+import { inject, ref } from 'vue'
+import { EventsSymbol } from '/@/symbols.ts'
+
 export default {
   name: 'top-navigation',
-  inject: ['$events'],
+  setup() {
+    const $events = inject(EventsSymbol)
+    return {
+      handleClick: () => $events.emit('modals.about.show'),
+    }
+  },
 }
 </script>
 
@@ -22,7 +30,7 @@ export default {
     <button
       class="pt-3 pb-3 pl-10 pr-10 leading-none border-transparent bg-transparent text-lightblue hover:text-navy text-xs font-bold uppercase"
       tabindex="-1"
-      @click="$events.emit('modals.about.show')"
+      @click="handleClick()"
     >
       About
     </button>

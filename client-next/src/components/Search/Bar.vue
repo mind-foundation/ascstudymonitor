@@ -1,4 +1,7 @@
-<script>
+<script lang="ts">
+import { inject, ref, onMounted, onUnmounted } from 'vue'
+import type { EventBridge } from '/@/events.ts'
+import { EventsSymbol } from '/@/symbols.ts'
 import SearchButton from '/@/components/Search/Button.vue'
 
 export default {
@@ -13,17 +16,33 @@ export default {
         rootMargin: '0px 0px 0px 0px',
         threshold: [0, 1], // [0.25, 0.75] if you want a 25% offset!
       },
-      stuck: false,
     }
   },
 
-  created() {
-    this.$events.$on('searchbar.show', () => {
-      this.stuck = true
+  setup() {
+    const $events: EventBridge = inject(EventsSymbol)
+    const stuck = ref(false)
+
+    onMounted(() => {
+      $events.on('searchbar.show', () => {
+        stuck.value = true
+      })
+      $events.on('searchbar.hide', () => {
+        stuck.value = false
+      })
     })
-    this.$events.$on('searchbar.hide', () => {
-      this.stuck = false
+    onUnmounted(() => {
+      $events.off('searchbar.show', () => {
+        stuck.value = true
+      })
+      $events.off('searchbar.hide', () => {
+        stuck.value = false
+      })
     })
+
+    return {
+      stuck,
+    }
   },
 }
 </script>

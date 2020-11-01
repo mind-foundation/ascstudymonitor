@@ -1,28 +1,20 @@
 <script>
+import { inject, ref } from 'vue'
+import { EventsSymbol } from '/@/symbols.ts'
 import SearchWidget from '/@/components/Search/Widget.vue'
 import CloseIcon from '/@/components/Icons/Close.vue'
 // // import FilterBar from '/@/components/FilterBar.vue'
 import Modal from '/@/components/Modal.vue'
+
 export default {
   name: 'search',
 
-  props: {
-    filters: {
-      type: Object,
-      required: true,
-    },
-  },
-
-  inject: ['$events'],
-  created() {
-    this.$events.on('modals.search.show', () => {
-      this.show = true
-      // window.analytics.page('Search')
-    })
-    this.$events.on('modals.search.hide', () => {
-      this.show = false
-    })
-  },
+  // props: {
+  //   filters: {
+  //     type: Object,
+  //     required: true,
+  //   },
+  // },
 
   components: {
     SearchWidget,
@@ -31,9 +23,21 @@ export default {
     // FilterBar,
   },
 
-  data: () => ({
-    show: false,
-  }),
+  setup() {
+    const $events = inject(EventsSymbol)
+    const show = ref(false)
+    $events.on('modals.search.show', () => {
+      show.value = true
+      // window.analytics.page('About')
+    })
+    $events.on('modals.search.hide', () => {
+      show.value = false
+    })
+
+    return {
+      show,
+    }
+  },
 }
 </script>
 
@@ -47,7 +51,7 @@ export default {
             <!-- <filter-bar :filters="filters" /> -->
 
             <div class="flex flex-grow flex-col items-center w-full h-40 mt-20">
-              <search-widget :filters="filters" />
+              <!-- <search-widget /> -->
             </div>
           </div>
         </div>

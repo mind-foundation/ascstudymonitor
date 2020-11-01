@@ -1,14 +1,16 @@
-class EventBridge {
+export class EventBridge {
+  events: { [index: string]: any }
+
   constructor() {
     this.events = {}
   }
 
-  on(eventName, fn) {
+  on(eventName: string, fn: Function) {
     this.events[eventName] = this.events[eventName] || []
     this.events[eventName].push(fn)
   }
 
-  off(eventName, fn) {
+  off(eventName: string, fn: Function) {
     if (this.events[eventName]) {
       for (var i = 0; i < this.events[eventName].length; i++) {
         if (this.events[eventName][i] === fn) {
@@ -19,7 +21,7 @@ class EventBridge {
     }
   }
 
-  emit(eventName, data) {
+  emit(eventName: string, data: Function) {
     if (this.events[eventName]) {
       this.events[eventName].forEach(function (fn) {
         fn(data)

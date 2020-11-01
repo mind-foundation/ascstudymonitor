@@ -1,4 +1,8 @@
 <script lang="ts">
+import { inject, onMounted, onUnmounted } from 'vue'
+import type { EventBridge } from '/@/events.ts'
+import { EventsSymbol } from '/@/symbols.ts'
+
 const EVENT = {
   KEY_UP: 'keyup',
 }
@@ -10,29 +14,32 @@ const KEYS = {
 
 export default {
   name: 'keymap',
-  inject: ['$events'],
-  mounted() {
-    document.addEventListener('keydown', this.handler)
-    document.addEventListener('keyup', this.handler)
-  },
-  unmounted() {
-    document.removeEventListener('keydown', this.handler)
-    document.removeEventListener('keyup', this.handler)
-  },
-  methods: {
-    handler(ke: KeyboardEvent) {
+
+  setup() {
+    const $events: EventBridge = inject(EventsSymbol)
+
+    function handler(ke: KeyboardEvent) {
       // console.log(ke)
       if (ke.type === EVENT.KEY_UP && KEYS[ke.keyCode] === 'ENTER') {
-        this.$events.emit('modals.search.show')
+        $events.emit('modals.search.show')
       }
 
       // TODO: What if the user focusses an input field in search?
       // we want to make sure that ESC blurs but doesnt exit modal
       if (ke.type === EVENT.KEY_UP && KEYS[ke.keyCode] === 'ESCAPE') {
-        this.$events.emit('modals.search.hide')
-        this.$events.emit('modals.about.hide')
+        $events.emit('modals.search.hide')
+        $events.emit('modals.about.hide')
       }
-    },
+    }
+
+    onMounted(() => {
+      document.addEventListener('keydown', handler)
+      document.addEventListener('keyup', handler)
+    })
+    onUnmounted(() => {
+      document.removeEventListener('keydown', handler)
+      document.removeEventListener('keyup', handler)
+    })
   },
 }
 </script>

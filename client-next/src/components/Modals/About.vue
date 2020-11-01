@@ -1,25 +1,29 @@
 <script>
+import { inject, ref } from 'vue'
+import { EventsSymbol } from '/@/symbols.ts'
 import Modal from '/@/components/Modal.vue'
+
 export default {
   name: 'about-modal',
   components: {
     Modal,
   },
-  inject: ['$events'],
-  created() {
-    this.$events.on('modals.about.show', () => {
-      this.show = true
+  setup() {
+    const $events = inject(EventsSymbol)
+    const show = ref(false)
+    $events.on('modals.about.show', () => {
+      show.value = true
       // window.analytics.page('About')
     })
-    this.$events.on('modals.about.hide', () => {
-      this.show = false
+    $events.on('modals.about.hide', () => {
+      show.value = false
     })
-  },
-  data() {
+
     return {
-      show: false,
+      show,
     }
   },
+
   methods: {
     beforeOpen() {
       window.analytics.page('Modal.About')

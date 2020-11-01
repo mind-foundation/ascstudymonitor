@@ -92,8 +92,10 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 import SearchQuery from '/@/graphql/Search.gql'
 import Pill from '/@/components/Search/Pill.vue'
+import { FiltersSymbol } from '/@/symbols.ts'
 
 const valueToLabel = value =>
   value.value ||
@@ -105,11 +107,17 @@ export default {
   components: {
     Pill,
   },
-  props: {
-    filters: Object,
-  },
+  // props: {
+  //   filters: Object,
+  // },
 
-  inject: ['$events'],
+  setup() {
+    const $filters = inject(FiltersSymbol)
+
+    return {
+      filters: $filters,
+    }
+  },
 
   data: () => ({
     message: null,

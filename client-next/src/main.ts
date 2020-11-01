@@ -1,14 +1,24 @@
-import { createApp } from 'vue'
+import { createApp, h, provide } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import { DefaultApolloClient } from '@vue/apollo-composable'
 import App from './App.vue'
 import './index.css'
-import $events from './events.js'
+import $events from './events.ts'
+import $filters from './filters.ts'
+import { EventsSymbol, FiltersSymbol } from './symbols.ts'
 import List from '/@/views/List.vue'
 import ListHero from '/@/components/ListHero.vue'
+import { apolloClient } from '/@/graphql.js'
+// import { createProvider } from './vue-apollo.js'
 
-const app = createApp(App)
-
-app.provide($events, $events)
+const app = createApp({
+  setup() {
+    provide(DefaultApolloClient, apolloClient)
+    provide(EventsSymbol, $events)
+    provide(FiltersSymbol, $filters)
+  },
+  render: () => h(App),
+})
 
 const router = createRouter({
   history: createWebHistory(),
@@ -26,11 +36,11 @@ const router = createRouter({
     //   props: { main: true },
     // },
     {
-      path: '/:pathMatch(.*)*',
+      path: '/',
       name: 'list',
       components: {
-        hero: ListHero,
         main: List,
+        hero: ListHero,
       },
     },
   ],

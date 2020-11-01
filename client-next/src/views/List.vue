@@ -1,4 +1,7 @@
 <script>
+// helpful for implementation:
+// https://github.com/vuejs/vue-apollo/blob/v4/packages/test-e2e-composable-vue3/src/components/ChannelList.vue
+import { watch, inject } from 'vue'
 import InfiniteScrollingWaypoint from '/@/components/InfiniteScrollingWaypoint.vue'
 import PublicationListItem from '/@/components/PublicationListItem/PublicationListItem.vue'
 import SearchButton from '/@/components/Search/Button.vue'
@@ -6,11 +9,13 @@ import SearchBar from '/@/components/Search/Bar.vue'
 import BackButton from '/@/components/BackButton.vue'
 import SearchWaypoint from '/@/components/Search/Waypoint.vue'
 import PublicationsQuery from '/@/graphql/queries/Publications.gql'
+import { useQuery, useResult } from '@vue/apollo-composable'
+import { FiltersSymbol } from '/@/symbols.ts'
 
 export default {
   name: 'list',
   mounted() {
-    window.analytics.page('List')
+    // window.analytics.page('List')
   },
   components: {
     BackButton,
@@ -24,22 +29,53 @@ export default {
     publications: {},
     cursor: null,
   }),
-  apollo: {
-    publications: {
-      query: PublicationsQuery,
-      variables() {
-        const { search, ...fields } = this.$attrs.filters
-        return {
-          search: search,
-          filters: fields,
-        }
-      },
-    },
+  // apollo: {
+  // publications: {
+  //   query: PublicationsQuery,
+  //   variables() {
+  //     const { search, ...fields } = this.$attrs.filters
+  //     return {
+  //       search: search,
+  //       filters: fields,
+  //     }
+  //   },
+  // },
+  // },
+  setup(props, context) {
+    const $filters = inject(FiltersSymbol)
+    const { search, ...fields } = $filters
+
+    const { result, loading } = useQuery(PublicationsQuery, {
+      search,
+      filters: fields,
+    })
+    const publications = useResult(result, [])
+
+    // watch(result, value => {
+    //   console.log(value)
+    // })
+
+    return {
+      loading,
+      publications,
+    }
+
+    // apolloClient
+    //   .query({
+    //     query: PublicationsQuery, // gql`query DoHello($message: String!) { hello(message: $message) }`,
+    //     variables: {
+    //       search: search,
+    //       filters: fields,
+    //     },
+    //   })
+    //   .then(data => console.log(data))
+    //   .catch(error => console.error(error))
   },
   created() {
     // this.$events.$on('infinityscroller.loadmore', () => {
     //   this.showMore()
     // })
+    //console.log('hi')
   },
   computed: {
     hasActiveFilters() {
@@ -82,7 +118,7 @@ export default {
       mobileBarActivated: false, //$store.state.mobileBarActivated,
     }"
   >
-    <search-bar />
+    <!-- <search-bar />
     <div class="mb-12 mt-2 flex items-center justify-center">
       <search-waypoint>
         <search-button />
@@ -99,21 +135,29 @@ export default {
     </div>
     <div class="relative" v-else>
       <back-button v-if="hasActiveFilters" label="Clear filters" />
-    </div>
+    </div> -->
     <ul>
-      <publication-list-item
+      <li
         v-for="publication in publications.edges"
         :publication="publication.node"
         :slug="publication.node.slug"
         :key="publication.node.id"
-      />
+      >
+        {{ publication.node.slug }}
+      </li>
+      <!-- <publication-list-item
+        v-for="publication in publications.edges"
+        :publication="publication.node"
+        :slug="publication.node.slug"
+        :key="publication.node.id"
+      /> -->
       <!-- <router-link :to="{ path: '/publication/' + publication.slug }">{{
-          publication.title
-        }}</router-link> -->
+        publication.title
+      }}</router-link> -->
     </ul>
-    <infinite-scrolling-waypoint
+    <!-- <infinite-scrolling-waypoint
       v-if="publications.pageInfo && publications.pageInfo.hasNextPage"
-    />
+    /> -->
   </div>
 </template>
 
