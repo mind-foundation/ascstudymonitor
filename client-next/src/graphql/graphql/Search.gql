@@ -1,0 +1,41 @@
+query Search($search: String!, $filters: FilterInput!) {
+  fieldSuggestions(search: $search, first: 5, filters: $filters) {
+    value {
+      __typename
+      ... on Year {
+        year: value
+        publicationCount
+      }
+      ... on Author {
+        firstName
+        lastName
+        publicationCount
+      }
+      ... on Journal {
+        value
+        publicationCount
+      }
+      ... on Discipline {
+        value
+        publicationCount
+      }
+      ... on Keyword {
+        value
+        publicationCount
+      }
+    }
+    field
+    score
+  }
+
+  publications(search: $search, filters: $filters, first: 3) {
+    totalCount
+    edges {
+      node {
+        id
+        title
+        slug
+      }
+    }
+  }
+}
