@@ -1,28 +1,35 @@
-<script>
+<script lang="ts">
+const EVENT = {
+  KEY_UP: 'keyup',
+}
+
+const KEYS = {
+  '13': 'ENTER',
+  '27': 'ESCAPE',
+}
+
 export default {
   name: 'keymap',
-}
-</script>
-
-<script>
-export default {
-  methods: {
-    handleKeyDown() {
-      // if (this.searchWidgetFocused) {
-      // } else {
-      this.$modal.show('search-modal')
-      // }
-    },
+  inject: ['$events'],
+  mounted() {
+    document.addEventListener('keydown', this.handler)
+    document.addEventListener('keyup', this.handler)
   },
-  computed: {
-    // searchWidgetFocused
-    //   return false, //this.$state.search.focused
-    // },
-    keymap() {
-      return {
-        enter: {
-          keydown: this.handleKeyDown,
-        },
+  unmounted() {
+    document.removeEventListener('keydown', this.handler)
+    document.removeEventListener('keyup', this.handler)
+  },
+  methods: {
+    handler(ke: KeyboardEvent) {
+      // console.log(ke)
+      if (ke.type === EVENT.KEY_UP && KEYS[ke.keyCode] === 'ENTER') {
+        this.$events.emit('modals.search.show')
+      }
+
+      // TODO: What if the user focusses an input field in search?
+      // we want to make sure that ESC blurs but doesnt exit modal
+      if (ke.type === EVENT.KEY_UP && KEYS[ke.keyCode] === 'ESCAPE') {
+        this.$events.emit('modals.search.hide')
       }
     },
   },

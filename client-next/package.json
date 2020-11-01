@@ -21,6 +21,7 @@
     "@vue/compiler-sfc": "^3.0.2",
     "postcss-comment": "^2.0.0",
     "postcss-nested": "^4",
+    "typescript": "^4.0.2",
     "vite": "^1.0.0-rc.8"
   }
 }

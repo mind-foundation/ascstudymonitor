@@ -11,7 +11,7 @@
       <router-view name="main" :filters="filters" />
 
  -->
-      <!-- <keymap /> -->
+      <keymap />
       <!-- <search :filters="filters" /> -->
     </div>
     <about-modal />
@@ -21,11 +21,11 @@
 <script>
 // import List from './views/List.vue'
 import TopNavigation from '/@/components/TopNavigation.vue'
-// import Search from '/@/views/Search.vue'
+// // import Search from '/@/views/Search.vue'
 import Logo from '/@/components/Logo.vue'
 import Bubbles from '/@/components/Bubbles.vue'
 // import HeroWrap from '/@/components/HeroWrap.vue'
-// import Keymap from '/@/components/Keymap.vue'
+import Keymap from '/@/components/Keymap.vue'
 import AboutModal from '/@/components/Modals/About.vue'
 import $events from './events.js'
 
@@ -35,10 +35,10 @@ export default {
     Bubbles,
     TopNavigation,
     AboutModal,
-    //     Search,
+    // Search,
     Logo,
     //     HeroWrap,
-    // Keymap,
+    Keymap,
   },
   provide: {
     $events,
