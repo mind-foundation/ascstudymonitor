@@ -282,7 +282,10 @@ def resolve_append_to_queue(*_, channel: str, publication: str) -> Dict[str, Any
     except (ValueError, RuntimeError) as error:
         return {"success": False, "message": str(error)}
 
-    return {"success": True}
+    ids = cast(List[PublicationID], queue.view())
+    publications = publication_store.get_by_ids(ids)
+    
+    return {"success": True, "queue": [pub.as_gql_response() for pub in publications] }
 
 
 @mutation.field("moveUpInQueue")
@@ -298,7 +301,11 @@ def resolve_move_up_in_queue(*_, channel: str, publication: str) -> Dict[str, An
     except (ValueError, RuntimeError) as error:
         return {"success": False, "message": str(error)}
 
-    return {"success": True}
+
+    ids = cast(List[PublicationID], queue.view())
+    publications = publication_store.get_by_ids(ids)
+    
+    return {"success": True, "queue": [pub.as_gql_response() for pub in publications] }
 
 
 @mutation.field("moveDownInQueue")
@@ -314,7 +321,12 @@ def resolve_move_down_in_queue(*_, channel: str, publication: str) -> Dict[str, 
     except (ValueError, RuntimeError) as error:
         return {"success": False, "message": str(error)}
 
-    return {"success": True}
+    
+    ids = cast(List[PublicationID], queue.view())
+    publications = publication_store.get_by_ids(ids)
+    
+    return {"success": True, "queue": [pub.as_gql_response() for pub in publications] }
+
 
 
 @mutation.field("removeFromQueue")
@@ -330,7 +342,10 @@ def resolve_remove_from_queue(*_, channel: str, publication: str) -> Dict[str, A
     except (ValueError, RuntimeError) as error:
         return {"success": False, "message": str(error)}
 
-    return {"success": True}
+    ids = cast(List[PublicationID], queue.view())
+    publications = publication_store.get_by_ids(ids)
+    
+    return {"success": True, "queue": [pub.as_gql_response() for pub in publications] }
 
 
 @mutation.field("post")

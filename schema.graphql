@@ -129,6 +129,7 @@ Response for mutations on a queue
 type QueueMutationResponse {
   success: Boolean!
   message: String
+  queue(channel: String!): [Publication!]
 }
 
 """
