@@ -285,7 +285,11 @@ def resolve_append_to_queue(*_, channel: str, publication: str) -> Dict[str, Any
     ids = cast(List[PublicationID], queue.view())
     publications = publication_store.get_by_ids(ids)
     
-    return {"success": True, "queue": [pub.as_gql_response() for pub in publications] }
+    return {
+        "success": True, 
+        "message": "Successfully added",
+        "queue": [pub.as_gql_response() for pub in publications] 
+    }
 
 
 @mutation.field("moveUpInQueue")
@@ -305,7 +309,11 @@ def resolve_move_up_in_queue(*_, channel: str, publication: str) -> Dict[str, An
     ids = cast(List[PublicationID], queue.view())
     publications = publication_store.get_by_ids(ids)
     
-    return {"success": True, "queue": [pub.as_gql_response() for pub in publications] }
+    return {
+        "success": True, 
+        "message": "Successfully prioritized", 
+        "queue": [pub.as_gql_response() for pub in publications] 
+    }
 
 
 @mutation.field("moveDownInQueue")
@@ -325,7 +333,11 @@ def resolve_move_down_in_queue(*_, channel: str, publication: str) -> Dict[str, 
     ids = cast(List[PublicationID], queue.view())
     publications = publication_store.get_by_ids(ids)
     
-    return {"success": True, "queue": [pub.as_gql_response() for pub in publications] }
+    return {
+        "success": True, 
+        "message": "Successfully deprioritized", 
+        "queue": [pub.as_gql_response() for pub in publications] 
+    }
 
 
 
@@ -345,7 +357,11 @@ def resolve_remove_from_queue(*_, channel: str, publication: str) -> Dict[str, A
     ids = cast(List[PublicationID], queue.view())
     publications = publication_store.get_by_ids(ids)
     
-    return {"success": True, "queue": [pub.as_gql_response() for pub in publications] }
+    return {
+        "success": True, 
+        "message": "Successfully removed", 
+        "queue": [pub.as_gql_response() for pub in publications] 
+    }
 
 
 @mutation.field("post")

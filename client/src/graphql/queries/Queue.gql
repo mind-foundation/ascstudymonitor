@@ -5,16 +5,11 @@ query Queue($channel: String!, $first: Int, $search: String) {
     title
   }
 
-  publications(first: $first, search: $search) {
-    edges {
-      cursor
-      node {
-        id
-        slug
-        created
-        title
-        hasBeenPosted(channel: $channel)
-      }
-    }
+  publicationsByTitle(first: $first, title: $search) {
+    id
+    slug
+    created
+    title
+    hasBeenPosted(channel: $channel)
   }
 }
