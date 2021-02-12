@@ -19,7 +19,7 @@ The ASC Study Monitor is a curated, freely accessible, and regularly updated dat
 
 - Install [conda](https://docs.conda.io/en/latest/)
 - `conda install poetry`
-- `poetry config settings.virtualenvs.in-project true`
+- `poetry config virtualenvs.in-project true`
 - `poetry install`
 
 ## Start
