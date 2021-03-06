@@ -4,14 +4,15 @@ Post a publication via the GraphQL API
 """
 
 import json
-
 import click
+import os
 from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 
-
 def get_secret():
     """ Get the secret from somewhere """
+    return "KS6TKTLt3Kny3aLRLwiGoFmWPG9jzMkHARK7kPtz6U" # TODO remove this
+
     with open("/run/secrets/asc-secret") as f:
         secrets = json.load(f)
     return secrets["POST_SECRET_TOKEN"]

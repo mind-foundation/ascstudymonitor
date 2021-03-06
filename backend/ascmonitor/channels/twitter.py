@@ -42,6 +42,7 @@ class TwitterChannel(Channel):
         """ Connect to twitter """
         auth = tweepy.OAuthHandler(api_key, api_secret)
         auth.set_access_token(access_token, access_secret)
+
         self.twitter = tweepy.API(auth)
         self.twitter.verify_credentials()
 
@@ -67,24 +68,24 @@ class TwitterChannel(Channel):
     def extract_author(publication):
         """ Get author information reliably """
         names = {"first_name": "", "last_name": "", "initial_name": ""}
-        authors = publication.get("authors", [])
+        authors = publication.authors
         if not authors:
             return names
 
         author = authors[0]
 
-        if "last_name" not in author:
+        #if "last_name" not in author:
             # no last name -> no author
-            return names
+            #return names
 
-        names["last_name"] = author["last_name"]
+        names["last_name"] = author.last_name
 
-        if "first_name" in author:
-            first_name = author["first_name"]
-            if first_name.endswith("."):
-                first_name = first_name[:-1]
-            names["first_name"] = first_name
-            names["initial_name"] = first_name[0].upper()
+        #if "first_name" in author:
+        first_name = author.first_name
+        if first_name.endswith("."):
+            first_name = first_name[:-1]
+        names["first_name"] = first_name
+        names["initial_name"] = first_name[0].upper()
 
         return names
 
