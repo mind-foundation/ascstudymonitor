@@ -98,7 +98,7 @@ export default {
   methods: {
     linkFor(network) {
       return (
-        `${location.protocol}://${location.host}/p/` +
+        `${location.protocol}//${location.host}/p/` +
         this.publication.slug +
         '?utm_source=' +
         network +
