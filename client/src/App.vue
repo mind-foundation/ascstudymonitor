@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="w-full">
     <div class="container">
       <logo />
       <top-navigation />
