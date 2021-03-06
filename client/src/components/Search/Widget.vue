@@ -254,7 +254,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .primary-search {
   background-color: transparent;
   outline-style: none !important;

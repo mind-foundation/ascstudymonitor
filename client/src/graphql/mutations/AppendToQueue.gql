@@ -2,5 +2,10 @@ mutation AppendToQueue($channel: String!, $publication: ID!) {
   appendToQueue(channel: $channel, publication: $publication) {
     success
     message
+    queue(channel: $channel) {
+      id
+      slug
+      title
+    }
   }
 }

@@ -47,7 +47,7 @@ class FilterList:
 
     def items(self, as_dict=True) -> Iterable[Tuple[str, List[Any]]]:
         """
-        Return field -> values mapping, where
+        Iterate (field, values) tuples, where
         fields are exactly as in database
         """
         if self.authors:

@@ -19,20 +19,26 @@ The ASC Study Monitor is a curated, freely accessible, and regularly updated dat
 
 - Install [conda](https://docs.conda.io/en/latest/)
 - `conda install poetry`
-- `poetry config settings.virtualenvs.in-project true`
+- `poetry config virtualenvs.in-project true`
 - `poetry install`
 
 ## Start
 
 - Start mongoDB
   - osx: `sudo mongod --dbpath=./data`
-- `export FLASK_APP='ascmonitor.app:app'`
-- `export FLASK_ENV=development`
-- `poetry run flask run`
+- `make backend-run`
 
-#### Expose in network
+### Populate the database
 
-- `poetry run flask run --host=0.0.0.0`
+- In the browser, navigate to exactly `http://localhost:5000/graphql/` (beware of the trailing slash)
+- Run the following query:
+```graphql
+mutation {
+  updatePublications {
+    success
+  }
+}
+```
 
 ## E2E Tests
 

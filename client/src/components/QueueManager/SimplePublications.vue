@@ -19,11 +19,14 @@ export default {
       <li
         v-for="publication in publications"
         :key="publication.id"
-        class="bg-superwhite flex justify-between w-full pt-8 pb-8 mb-8 pr-16"
+        class="bg-superwhite flex justify-between w-full p-4 pr-6 pb-8 mb-8"
       >
-        <a class="w-2/4" :href="link(publication)">{{ publication.title }}</a>
-        <div class="w-2/4">
-          <button @click="$emit('append', publication.id)">
+        <a :href="link(publication)">{{ publication.title }}</a>
+        <div class="ml-4">
+          <button
+            @click="$emit('append', publication.id)"
+            title="Append to queue"
+          >
             <append-to-queue-icon />
           </button>
         </div>

@@ -4,6 +4,12 @@ version = "3.0.0"
 description = ""
 authors = ["Felix Peppert <felix.peppert@gmail.com>"]
 
+[tool.poe.tasks]
+mypy = "mypy ascmonitor"
+pylint = "pylint ascmonitor"
+lint = {sequence = ["mypy", "pylint"], ignore_fail = true}
+test = "pytest -vv -s"
+
 [tool.poetry.dependencies]
 python = "^3.7"
 gunicorn = "^20"

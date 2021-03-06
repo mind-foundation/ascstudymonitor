@@ -3,6 +3,7 @@ from datetime import datetime
 import pytest
 
 from ascmonitor.publication_store import PublicationStore
+from ascmonitor.filter_list import FilterList
 
 
 def test_update(mendeleur, mongo, event_store_mock):
@@ -110,56 +111,65 @@ def test_get_publications__cursor(publication_store, publications):
 
 
 def test_get_publications__filter_authors(publication_store, publications):
-    filters = {"authors": [publications[0].authors[0].as_dict()]}
+    filters = FilterList.from_dict({"authors": [publications[0].authors[0].as_dict()]})
     fetched = publication_store.get_publications(filters=filters)
     assert fetched == [replace(publications[0], _cursor=publications[0].cursor)]
 
 
 def test_get_publications__filter_year(publication_store, publications):
-    filters = {"year": [publications[0].year]}
+    filters = FilterList.from_dict({"year": [publications[0].year]})
     fetched = publication_store.get_publications(filters=filters)
     assert fetched == [replace(pub, _cursor=pub.cursor) for pub in publications]
 
 
 def test_get_publications__filter_disciplines(publication_store, publications):
-    filters = {"disciplines": [publications[0].disciplines[0]]}
+    filters = FilterList.from_dict({"disciplines)": [publications[0].disciplines[0]]})
+    expected = [replace(publications[0], _cursor=publications[0].cursor)]
     fetched = publication_store.get_publications(filters=filters)
-    assert fetched == [replace(publications[0], _cursor=publications[0].cursor)]
+    assert fetched == expected
 
 
 def test_get_publications__filter_unmatched(publication_store):
-    filters = {"disciplines": ["Invalid"]}
+    filters = FilterList.from_dict({"disciplines": ["Invalid"]})
     fetched = publication_store.get_publications(filters=filters)
     assert fetched == []
 
 
 def test_get_publications__filter_combination_hit(publication_store, publications):
-    filters = {
-        "disciplines": [publications[0].disciplines[0]],
-        "keywords": [publications[0].keywords[0]],
-    }
+    filters = FilterList.from_dict(
+        {
+            "disciplines": [publications[0].disciplines[0]],
+            "keywords": [publications[0].keywords[0]],
+        }
+    )
+    expected = [replace(publications[0], _cursor=publications[0].cursor)]
     fetched = publication_store.get_publications(filters=filters)
-    assert fetched == [replace(publications[0], _cursor=publications[0].cursor)]
+    assert fetched == expected
 
 
 def test_get_publications__filter_combination_multiple(publication_store, publications):
-    filters = {
-        "disciplines": [
-            publications[0].disciplines[0],
-            publications[1].disciplines[0],
-        ]
-    }
+    filters = FilterList.from_dict(
+        {
+            "disciplines": [
+                publications[0].disciplines[0],
+                publications[1].disciplines[0],
+            ]
+        }
+    )
+    expected = [replace(pub, _cursor=pub.cursor) for pub in publications]
     fetched = publication_store.get_publications(filters=filters)
-    assert fetched == [replace(pub, _cursor=pub.cursor) for pub in publications]
+    assert fetched == expected
 
 
 def test_get_publications__filter_combination_exclusion(
     publication_store, publications
 ):
-    filters = {
-        "disciplines": [publications[0].disciplines[0]],
-        "keywords": [publications[1].keywords[0]],
-    }
+    filters = FilterList.from_dict(
+        {
+            "disciplines": [publications[0].disciplines[0]],
+            "keywords": [publications[1].keywords[0]],
+        }
+    )
     fetched = publication_store.get_publications(filters=filters)
     assert fetched == []
 

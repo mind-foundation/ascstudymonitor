@@ -22,21 +22,40 @@ export default {
 <template>
   <ul id="queue-manager" class="list-none">
     <li
-      v-for="publication in publications"
+      v-for="(publication, idx) in publications"
       :key="publication.id"
-      class="bg-superwhite flex justify-between w-full pt-4 pb-4 pl-4 mb-8 pr-16 text-lg"
+      class="bg-superwhite flex justify-between w-full pt-4 pb-4 pl-4 mb-8 pr-4 text-lg"
     >
-      <a class="flex-grow" :href="link(publication)" target="blank">{{
-        publication.title
-      }}</a>
-      <div>
-        <button @click="$emit('move-up', publication.id)" class="m-2">
+      <div class="flex-shrink">
+        <a :href="link(publication)" target="blank">
+          {{ publication.title }}
+        </a>
+      </div>
+      <div class="button-wrapper">
+        <button
+          @click="idx !== 0 && $emit('move-up', publication.id)"
+          class="m-2"
+          :class="{ disabled: idx == 0 }"
+          title="Move up in queue"
+        >
           <move-up-icon />
         </button>
-        <button @click="$emit('move-down', publication.id)" class="m-2">
+        <button
+          @click="
+            idx !== publications.length - 1 &&
+              $emit('move-down', publication.id)
+          "
+          class="m-2"
+          :class="{ disabled: idx === publications.length - 1 }"
+          title="Move down in queue"
+        >
           <move-down-icon />
         </button>
-        <button @click="$emit('remove', publication.id)" class="m-2">
+        <button
+          @click="$emit('remove', publication.id)"
+          class="m-2"
+          title="Remove from queue"
+        >
           <remove-from-queue-icon />
         </button>
       </div>
@@ -44,4 +63,13 @@ export default {
   </ul>
 </template>
 
-<style></style>
+<style scoped>
+.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.button-wrapper {
+  min-width: 125px;
+}
+</style>
