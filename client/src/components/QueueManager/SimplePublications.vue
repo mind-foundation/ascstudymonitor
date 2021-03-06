@@ -4,7 +4,7 @@ import AppendToQueueIcon from '@/components/Icons/AppendToQueue'
 export default {
   name: 'simple-publications',
   components: { AppendToQueueIcon },
-  props: ['publications', 'queue'],
+  props: ['publications'],
   methods: {
     link(publication) {
       return '/p/' + publication.slug
