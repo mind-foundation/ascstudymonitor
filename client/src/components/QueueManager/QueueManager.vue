@@ -20,7 +20,7 @@ export default {
 </script>
 
 <template>
-  <ul id="queue-manager" class="list-none">
+  <transition-group name="list" tag="ul" id="queue-manager" class="list-none">
     <li
       v-for="(publication, idx) in publications"
       :key="publication.id"
@@ -60,7 +60,7 @@ export default {
         </button>
       </div>
     </li>
-  </ul>
+  </transition-group>
 </template>
 
 <style scoped>
@@ -71,5 +71,21 @@ export default {
 
 .button-wrapper {
   min-width: 125px;
+}
+
+.list-enter-active, .list-leave-active {
+  transition: all 0.3s;
+}
+.list-enter {
+  opacity: 0;
+  transform: translateY(30px) scale(0.97);
+}
+.list-enter-to {
+  opacity: 1;
+  transform: translateY(0px);
+}
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px) scale(0.97);
 }
 </style>
