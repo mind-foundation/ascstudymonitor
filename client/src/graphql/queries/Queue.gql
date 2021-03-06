@@ -1,4 +1,4 @@
-query Queue($channel: String!, $first: Int, $search: String) {
+query Queue($channel: String!, $first: Int, $search: String!) {
   queue(channel: $channel) {
     id
     slug
