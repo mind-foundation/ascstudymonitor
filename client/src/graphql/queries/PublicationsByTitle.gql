@@ -1,0 +1,9 @@
+query PublicationsByTitle($channel: String!, $first: Int, $search: String!) {
+  publicationsByTitle(first: $first, title: $search) {
+    id
+    slug
+    created
+    title
+    hasBeenPosted(channel: $channel)
+  }
+}

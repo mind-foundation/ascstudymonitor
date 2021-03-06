@@ -2,6 +2,7 @@
 import QueueManager from '@/components/QueueManager/QueueManager'
 import SimplePublications from '@/components/QueueManager/SimplePublications'
 import Queue from '@/graphql/queries/Queue.gql'
+import PublicationsByTitle from '@/graphql/queries/PublicationsByTitle.gql'
 import AppendToQueueMutation from '@/graphql/mutations/AppendToQueue.gql'
 import MoveUpInQueueMutation from '@/graphql/mutations/MoveUpInQueue.gql'
 import MoveDownInQueueMutation from '@/graphql/mutations/MoveDownInQueue.gql'
@@ -139,19 +140,31 @@ export default {
       variables() {
         return {
           channel: this.channel,
+        }
+      },
+      result({ data }) {
+        if (data) {
+          this.queue = data.queue
+        }
+      },
+    },
+    publicationsByTitle: {
+      query: PublicationsByTitle,
+      variables() {
+        return {
+          channel: this.channel,
           first: SEARCH_RESULTS_PAGE_SIZE,
           search: this.search,
         }
       },
-
       result({ data }) {
         if (data) {
-          this.queue = data.queue
-          if (this.search) {
-            this.publications = data.publicationsByTitle
-          }
+          this.publications = data.publicationsByTitle
         }
       },
+      skip() {
+        return !(this.search && this.search.length);
+      }
     },
   },
 }
