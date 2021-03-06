@@ -15,7 +15,7 @@ export default {
 
 <template>
   <div id="simple-publications">
-    <ul class="list-none">
+    <transition-group name="list" tag="ul" class="list-none">
       <li
         v-for="publication in publications"
         :key="publication.id"
@@ -31,8 +31,16 @@ export default {
           </button>
         </div>
       </li>
-    </ul>
+    </transition-group>
   </div>
 </template>
 
-<style></style>
+<style>
+.list-enter-active, .list-leave-active {
+  transition: all 0.2s;
+}
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+</style>
