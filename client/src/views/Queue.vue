@@ -27,7 +27,15 @@ export default {
     searchInput: '',
     search: null,
   }),
-  computed: {},
+  computed: {
+    publicationsWithoutQueue() {
+      return this.publications.filter(
+        publication => !this.queue.some(
+          queuePublication => queuePublication.id === publication.id
+        )
+      );
+    },
+  },
   methods: {
     handleQueueMutationUpdateResponse(responseAccessor, store, response) {
       const { queue, message, success } = responseAccessor(response)
@@ -166,7 +174,7 @@ export default {
     />
     <div class="m-4">
       <simple-publications
-        :publications="publications"
+        :publications="publicationsWithoutQueue"
         @append="appendToQueue"
       />
     </div>
