@@ -1,15 +1,7 @@
-query Queue($channel: String!, $first: Int, $search: String!) {
+query Queue($channel: String!) {
   queue(channel: $channel) {
     id
     slug
     title
-  }
-
-  publicationsByTitle(first: $first, title: $search) {
-    id
-    slug
-    created
-    title
-    hasBeenPosted(channel: $channel)
   }
 }
